@@ -67,6 +67,7 @@ textarea {
 
 /* 搜索框 start */
 .search-section {
+   
     margin-top: 14px;
     margin-bottom: 40px;
 }
@@ -75,8 +76,11 @@ textarea {
     display: flex;
 }
 .search-left {
+
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
     display: flex;
-    width: 877px;
+    width: 837px;
     height: 54px;
     line-height: 20px;
     border: 1px solid rgba(217, 217, 217, 0.96);
@@ -85,7 +89,7 @@ textarea {
     width: 40px;
     align-items: center;
     justify-content: center;
-    background: url("../img/scgoogle.png") center center no-repeat;
+    background: url("../img/scgoogle.png") 15px center no-repeat;
     filter: grayscale(100%);
     -webkit-filter: grayscale(100%);
     -moz-filter: grayscale(100%);
@@ -111,9 +115,9 @@ textarea {
     position: absolute;
     left: 0;
     top: 54px;
-    width: 155px;
-    border: 1px solid rgba(217, 217, 217, 0.96);
-    background-color: #fff;
+    width: 100px;
+    border: 0px solid rgba(217, 217, 217, 0.96);
+    background-color: rgba(255, 255, 255, 0.712);
 }
 .search-methods li {
     padding-left: 39px;
@@ -192,6 +196,7 @@ textarea {
     box-shadow: 0 0 10px #FDA31E;
     } */
 .input-wrap .clear-keyword {
+    border-radius: 27px;
     display: none;
     position: absolute;
     top: 50%;
@@ -203,13 +208,12 @@ textarea {
 }
 
 .search-submit {
-    width: 123px;
+    width: 120px;
     height: 54px;
     line-height: 26px;
-    /* background: url("../img/search.png") #1890ff 48px center no-repeat; */
-    background-color: #1890FF;
-    /* background-image: url("../img/search.png"); 
-    background-size: 48px; */
+    /* background: url("./static/img/search.png") #1890ff 54px center no-repeat; */
+     background-color: #1890FF;
+    background-image: url("./static/img/search.png"); 
     background-repeat: no-repeat;
     background-position: center;
     -webkit-background-size: 35px 35px;
@@ -219,8 +223,10 @@ textarea {
     font-weight: 500;
     text-align: center;
     font-family: Roboto;
-    border: 1px solid #1890ff;
+    border: 0px solid #1890ff;
     cursor: pointer;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
     background: linear-gradient(90deg,#1890FF,#455bfb);
 }
 
@@ -302,7 +308,7 @@ textarea {
     text-align: center;
     line-height: 44px;
     transition: all 0.2s;
-    border-radius: 2px;
+    border-radius: 5px;
 }
 .jj-list-link:hover {
     background: #1890FF 100%;
