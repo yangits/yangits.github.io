@@ -8,72 +8,111 @@
 </head>
 <style>
     .home {
-        /* color: black; */
         font-size: 16px;
         background-color: rgb(220, 220, 220);
         width: 300px;
         text-align: center;
         margin: auto;
         line-height: 40px;
-        border: 100px;
     }
     input {
-        width: 180px;
+        width: 160px;
         height: 25px;
         text-align: right;
         border: 0px;
 
     }
-    #select {
+    #select, #material {
         font-size: 18px;
         border: 0px;
-        background-color: transparent;
-    }
-    .foot {
+        background-color: rgb(220, 220, 220);
         text-align: center;
-        color: rgb(200, 200, 200);
+    }
+    #material{
+        font-size: 14px;
+        
+    }
+    .foot,#PP{
+        text-align: center;
+        color: rgb(160, 160, 160);
         font-size: 8px;
     }
+    a{
+        text-align: center;
+        font-size: 8px;
+        line-height: 8px;
+    }
+    #text_result{
+        color: red;
+    }
+
 </style>
 <body>
     <div class="home">
         品类：
         <select id="select" onchange="select_click();">
-            <option selected>板材</option>
+            <option selected>钢板</option>
             <option>圆钢</option>
             <option>圆管</option>
+
         </select>
-        <div id="TT">*厚度: <input id="T" type="text" value="" placeholder="0" onkeyup="text_input(this);">毫米</div>
-        <div id="WW">*宽度: <input id="W" type="text" value="" placeholder="0" onkeyup="text_input(this);">毫米</div>
-        <div id="DD" style="display: none;">*外径: <input id="D" type="text" placeholder="0" onkeyup="text_input(this);">毫米</div>
-        <div id="LL">*长度: <input id="L" type="text" value="" placeholder="0" onkeyup="text_input(this);">米&nbsp;&nbsp;&nbsp;</div>
+        
         <div>计算结果:<span id="text_result">0.000</span>kg</div>
+        <div id="TT">*厚度: <input id="T" type="text" value="" placeholder="0" onkeyup="repl(this);">mm</div>
+        <div id="WW">*宽度: <input id="W" type="text" value="" placeholder="0" onkeyup="repl(this);">mm</div>
+        <div id="DD" style="display: none;">*外径: <input id="D" type="text" placeholder="0" onkeyup="repl(this);">mm</div>
+        <div id="LL">*长度: <input id="L" type="text" value="" placeholder="0" onkeyup="repl(this);">m&nbsp;&nbsp;&nbsp;</div>
+        <span id="PP">密度:<span id="P">7.85</span>g/mm³。材质为：</span>
+        <select id="material" onchange="P_change();">
+            <option selected>碳钢</option>
+            <option>不锈钢</option>
+            <option>铝合金</option>
+        </select>
+        <br><a href="https://xingyuantv.github.io/cal">排管程序</a>
     </div> 
     <div class="foot">本工具计算结果是理论估算值, <br>与实际测量值存在偏差, 仅供参考</div>
     <script>
-        function text_input(obj){
-            obj.value=obj.value.replace(/[^0-9\.]/g,'');
+        function text_input(){   
+            let P=document.getElementById('P').innerHTML
             let T = parseFloat(document.getElementById('T').value);
             let W = parseFloat(document.getElementById('W').value);
             let D = parseFloat(document.getElementById('D').value);
             let L = parseFloat(document.getElementById('L').value);
             let text = document.getElementById('text_result');
             let select = document.getElementById('select');
-            if (select.value=="板材") {
+            if (select.value=="钢板") {
                 if(isNaN(T)==false && isNaN(W)==false && isNaN(L)==false){
-                    text.innerHTML =Math.floor(T*W*L*0.00785*1000)/1000;
+                    text.innerHTML =Math.round(T*W*L*P)/1000;
                 }
             }
             if (select.value=="圆钢") {
                 if(isNaN(D)==false && isNaN(L)==false){
-                    text.innerHTML =Math.floor(D*D*L*0.00617*1000)/1000;
+                    text.innerHTML =Math.round(D*D*L*3.1415926/4*P)/1000;
                 }
             }
             if (select.value=="圆管") {
                 if(isNaN(T)==false && isNaN(D)==false && isNaN(L)==false){
-                    text.innerHTML =Math.floor(T*(D-T)*L*0.02466*1000)/1000;
+                    text.innerHTML =Math.round(T*(D-T)*L*3.1415926*P)/1000;
                 }
             }
+        }
+        function repl(obj){
+            obj.value=obj.value.replace(/[^0-9\.]/g,'');
+            text_input();
+        }
+        function P_change(){
+            let P=document.getElementById('P');
+            let material = document.getElementById('material');
+            if (material.value=="碳钢"){
+                P.innerHTML=7.85
+            }
+            if (material.value=="不锈钢"){
+                P.innerHTML=7.93
+            }
+            if (material.value=="铝合金"){
+                P.innerHTML=2.73
+            }
+            text_input();
         }
         function select_click(){
             let select = document.getElementById('select');
@@ -86,7 +125,7 @@
             document.getElementById("WW").style.display="";
             document.getElementById("LL").style.display="";
             document.getElementById("DD").style.display="";
-            if (select.value=="板材") {
+            if (select.value=="钢板") {
                 document.getElementById("DD").style.display="none";
             }
             if (select.value=="圆钢") {
