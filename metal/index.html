@@ -18,6 +18,7 @@
     input {
         width: 160px;
         height: 25px;
+        /* text-align: right; */
         border: 0px;
 
     }
@@ -73,11 +74,136 @@
             <option>不锈钢</option>
             <option>铝合金</option>
         </select>
-        <div style="line-height: 18px;"><a href="https://xingyuantv.github.io/cal" target="_blank">排管程序</a><span class="foot">  &nbsp;&nbsp;星愿QQ: 934550145</span></div>
+        <div style="line-height: 18px;"><a href="../calc/index.html" target="_blank">排管程序</a><span class="foot">  &nbsp;&nbsp;星愿QQ: 934550145</span></div>
     </div>
     <div class="foot">本工具计算结果是理论估算值, <br>与实际测量值存在偏差, 仅供参考</div>
     <script>
-function text_input(){var a=document.getElementById("P").innerHTML,b=parseFloat(document.getElementById("T").value),h=parseFloat(document.getElementById("W").value),g=parseFloat(document.getElementById("D").value),c=parseFloat(document.getElementById("L").value),d=parseFloat(document.getElementById("A").value),k=parseFloat(document.getElementById("B").value),e=document.getElementById("text_result"),f=document.getElementById("clas");"\u94a2\u677f"==f.value&&0==isNaN(b)&&0==isNaN(h)&&0==isNaN(c)&&(e.innerHTML=Math.round(b*h*c*a)/1E3);"\u5706\u94a2"==f.value&&0==isNaN(g)&&0==isNaN(c)&&(e.innerHTML=Math.round(g*g*c*3.1415926/4*a)/1E3);"\u5706\u7ba1"==f.value&&0==isNaN(b)&&0==isNaN(g)&&0==isNaN(c)&&(e.innerHTML=Math.round(b*(g-b)*c*3.1415926*a)/1E3);"\u65b9\u7ba1"==f.value&&0==isNaN(b)&&0==isNaN(d)&&0==isNaN(c)&&(e.innerHTML=Math.round(b*(d-b)*4*c*a)/1E3);"\u77e9\u5f62\u7ba1"==f.value&&0==isNaN(b)&&0==isNaN(d)&&0==isNaN(k)&&0==isNaN(c)&&(e.innerHTML=Math.round(b*(d+k-2*b)*2*c*a)/1E3);"\u65b9\u94a2"==f.value&&0==isNaN(d)&&0==isNaN(c)&&(e.innerHTML=Math.round(d*d*c*a)/1E3);"\u89d2\u94a2"==f.value&&0==isNaN(b)&&0==isNaN(h)&&0==isNaN(c)&&(e.innerHTML=Math.round(b*(2*h-b)*c*a)/1E3)}function repl(a){a.value=a.value.replace(/[^0-9\.]/g,"");text_input()}function material_change(){var a=document.getElementById("P"),b=document.getElementById("material");"\u78b3\u94a2"==b.value&&(a.innerHTML=7.85);"\u4e0d\u9508\u94a2"==b.value&&(a.innerHTML=7.93);"\u94dd\u5408\u91d1"==b.value&&(a.innerHTML=2.73);text_input()}function clas_change(){var a=document.getElementById("clas");document.getElementById("text_result").innerHTML="0.000";document.getElementById("T").value="";document.getElementById("W").value="";document.getElementById("D").value="";document.getElementById("L").value="";document.getElementById("A").value="";document.getElementById("B").value="";document.getElementById("TT").style.display="none";document.getElementById("WW").style.display="none";document.getElementById("LL").style.display="none";document.getElementById("DD").style.display="none";document.getElementById("AA").style.display="none";document.getElementById("BB").style.display="none";"\u94a2\u677f"==a.value&&(document.getElementById("t").innerHTML="*\u539a\u5ea6: ",document.getElementById("w").innerHTML="*\u5bbd\u5ea6: ",document.getElementById("TT").style.display="",document.getElementById("WW").style.display="",document.getElementById("LL").style.display="");"\u5706\u7ba1"==a.value&&(document.getElementById("t").innerHTML="*\u58c1\u539a: ",document.getElementById("TT").style.display="",document.getElementById("DD").style.display="",document.getElementById("LL").style.display="");"\u65b9\u7ba1"==a.value&&(document.getElementById("t").innerHTML="*\u58c1\u539a: ",document.getElementById("a").innerHTML="*\u5916\u8fb9\u957f: ",document.getElementById("TT").style.display="",document.getElementById("AA").style.display="",document.getElementById("LL").style.display="");"\u77e9\u5f62\u7ba1"==a.value&&(document.getElementById("t").innerHTML="*\u58c1\u539a: ",document.getElementById("a").innerHTML="*\u5916\u5f84\u957f: ",document.getElementById("TT").style.display="",document.getElementById("AA").style.display="",document.getElementById("BB").style.display="",document.getElementById("LL").style.display="");"\u5706\u94a2"==a.value&&(document.getElementById("DD").style.display="",document.getElementById("LL").style.display="");"\u65b9\u94a2"==a.value&&(document.getElementById("a").innerHTML="*\u5916\u8fb9\u957f: ",document.getElementById("AA").style.display="",document.getElementById("LL").style.display="");"\u89d2\u94a2"==a.value&&(document.getElementById("w").innerHTML="*\u8fb9\u5bbd: ",document.getElementById("t").innerHTML="*\u8fb9\u539a: ",document.getElementById("TT").style.display="",document.getElementById("WW").style.display="",document.getElementById("LL").style.display="")};
+        function text_input(){   
+            let P=document.getElementById('P').innerHTML
+            let T = parseFloat(document.getElementById('T').value);
+            let W = parseFloat(document.getElementById('W').value);
+            let D = parseFloat(document.getElementById('D').value);
+            let L = parseFloat(document.getElementById('L').value);
+            let A = parseFloat(document.getElementById('A').value);
+            let B = parseFloat(document.getElementById('B').value);
+            let text = document.getElementById('text_result');
+            let clas = document.getElementById('clas');
+            if (clas.value=="钢板") {
+                if(isNaN(T)==false && isNaN(W)==false && isNaN(L)==false){
+                    text.innerHTML =Math.round(T*W*L*P)/1000;
+                }
+            }
+            if (clas.value=="圆钢") {
+                if(isNaN(D)==false && isNaN(L)==false){
+                    text.innerHTML =Math.round(D*D*L*3.1415926/4*P)/1000;
+                }
+            }
+            if (clas.value=="圆管") {
+                if(isNaN(T)==false && isNaN(D)==false && isNaN(L)==false){
+                    text.innerHTML =Math.round(T*(D-T)*L*3.1415926*P)/1000;
+                }
+            }
+            if (clas.value=="方管") {
+                if(isNaN(T)==false && isNaN(A)==false && isNaN(L)==false){
+                    text.innerHTML =Math.round(T*(A-T)*4*L*P)/1000;
+                }
+            }
+            if (clas.value=="矩形管") {
+                if(isNaN(T)==false && isNaN(A)==false && isNaN(B)==false && isNaN(L)==false){
+                    text.innerHTML =Math.round(T*(A+B-T*2)*2*L*P)/1000;
+                }
+            }
+            if (clas.value=="方钢") {
+                if(isNaN(A)==false && isNaN(L)==false ){
+                    text.innerHTML =Math.round(A*A*L*P)/1000;
+                }
+            }
+            if (clas.value=="角钢") {
+                if(isNaN(T)==false && isNaN(W)==false && isNaN(L)==false ){
+                    text.innerHTML =Math.round(T*(W*2-T)*L*P)/1000;
+                }
+            }
+        }
+        function repl(obj){
+            obj.value=obj.value.replace(/[^0-9\.]/g,'');
+            text_input();
+        }
+        function material_change(){
+            let P=document.getElementById('P');
+            let material = document.getElementById('material');
+            if (material.value=="碳钢"){
+                P.innerHTML=7.85
+            }
+            if (material.value=="不锈钢"){
+                P.innerHTML=7.93
+            }
+            if (material.value=="铝合金"){
+                P.innerHTML=2.73
+            }
+            text_input();
+        }
+        function clas_change(){
+            let clas = document.getElementById('clas');
+            document.getElementById('text_result').innerHTML="0.000";
+            document.getElementById('T').value="";
+            document.getElementById('W').value="";
+            document.getElementById('D').value="";
+            document.getElementById('L').value="";
+            document.getElementById('A').value="";
+            document.getElementById('B').value="";
+            document.getElementById("TT").style.display="none";
+            document.getElementById("WW").style.display="none";
+            document.getElementById("LL").style.display="none";
+            document.getElementById("DD").style.display="none";
+            document.getElementById("AA").style.display="none";
+            document.getElementById("BB").style.display="none";
+            if (clas.value=="钢板") {
+                document.getElementById("t").innerHTML="*厚度: ";
+                document.getElementById("w").innerHTML="*宽度: ";
+                document.getElementById("TT").style.display="";
+                document.getElementById("WW").style.display="";
+                document.getElementById("LL").style.display="";
+            }
+
+            if (clas.value=="圆管") {
+                document.getElementById("t").innerHTML="*壁厚: "
+                document.getElementById("TT").style.display="";
+                document.getElementById("DD").style.display="";
+                document.getElementById("LL").style.display="";
+            }
+            if (clas.value=="方管") {
+                document.getElementById("t").innerHTML="*壁厚: ";
+                document.getElementById("a").innerHTML="*外边长: ";
+                document.getElementById("TT").style.display="";
+                document.getElementById("AA").style.display="";
+                document.getElementById("LL").style.display="";
+            }
+            if (clas.value=="矩形管") {
+                document.getElementById("t").innerHTML="*壁厚: ";
+                document.getElementById("a").innerHTML="*外径长: ";
+                document.getElementById("TT").style.display="";
+                document.getElementById("AA").style.display="";
+                document.getElementById("BB").style.display="";
+                document.getElementById("LL").style.display="";
+            }
+            if (clas.value=="圆钢") {
+                document.getElementById("DD").style.display="";
+                document.getElementById("LL").style.display="";
+            }
+            if (clas.value=="方钢") {
+                document.getElementById("a").innerHTML="*外边长: ";
+                document.getElementById("AA").style.display="";
+                document.getElementById("LL").style.display="";
+            }
+            if (clas.value=="角钢") {
+                document.getElementById("w").innerHTML="*边宽: ";
+                document.getElementById("t").innerHTML="*边厚: ";
+                document.getElementById("TT").style.display="";
+                document.getElementById("WW").style.display="";
+                document.getElementById("LL").style.display="";
+            }
+        }
     </script>
 </body>
+
 </html>
