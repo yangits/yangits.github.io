@@ -74,6 +74,7 @@
                     for (var i = 0; i < cb.length; i++) {
                         var num = loosen[min_index][0][i];
                         if (num >= 0) continue;
+                        if (getCheckNum(cb, loosen, i)>0)  return false;
                         var check = (getCheckNum(cb, loosen, i)) / num;
                         if (check < min2) {
                             min2 = check;
@@ -254,6 +255,13 @@
             }
             return re;
         }
+        function sum(num1, num2) {    //两个数组对应元素的和
+            let re = [];
+            for (i = 0; i < num1.length; i++) {
+                re.push(num1[i] + num2[i]);
+            }
+            return re;
+        }
         function dellarrys(a) {     //二维数组去重
             let obj = {};
             a.forEach(item => obj[item] = item);
@@ -289,7 +297,7 @@
             let result = getResult(goals, limits);
             //若该线性规划问题无最优解 则将报错提示输出到网页 并退出函数
             if (!result) {
-                text.value += "\n计算停止，该线性规划无解";
+                text.value += "\n计算停止，出现未知错误，请调整原材料长。";
                 return;
             }
             //生成求解后的结果文本
@@ -307,7 +315,8 @@
                         Numbers = sumar(num_arrs[i], re);
                         }
                     else {
-                        Numbers = Numbers.map(function (item, index) { return item + sumar(num_arrs[i], re)[index]; });
+                        Numbers = sum(Numbers ,sumar(num_arrs[i], re))
+                        // Numbers = Numbers.map(function (item, index) { return item + sumar(num_arrs[i], re)[index];});
                     };
                 };
             };
