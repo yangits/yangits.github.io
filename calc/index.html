@@ -5,7 +5,38 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>管材排料计算</title>
-    <script src="./solver.js"></script>
+    <script>(function a(n,k,c){function e(b,d){if(!k[b]){if(!n[b]){if(u)return u(b,!0);d=Error("\u627e\u4e0d\u5230\u6a21\u5757'"+b+"'");throw d.code="\u6a21\u5757\u672a\u627e\u5230",d;}d=k[b]={exports:{}};n[b][0].call(d.exports,function(f){return e(n[b][1][f]||f)},d,d.exports,a,n,k,c)}return k[b].exports}for(var g=0;g<c.length;g++)e(c[g]);return e})({5:[function(n,k){function c(b,d){this.tableau=new h(b);this.name=d;this.variables=[];this.integerVariables=[];this.unrestrictedVariables={};this.constraints=[];
+        this.nVariables=this.nConstraints=0;this.isMinimization=!0;this.tableauInitialized=!1;this.relaxationIndex=1;this.useMIRCuts=!1;this.checkForCycles=!0;this.messages=[]}var h=n("9");n=n("20");var e=n.Constraint,g=n.Variable;k.exports=c;c.prototype._addConstraint=function(b){var d=b.slack;this.tableau.variablesPerIndex[d.index]=d;this.constraints.push(b);this.nConstraints+=1;!0===this.tableauInitialized&&this.tableau.addConstraint(b)};c.prototype.greaterThan=function(b){b=new e(b,!1,this.tableau.getNewElementIndex(),
+        this);return this._addConstraint(b),b};c.prototype.addVariable=function(b,d,f,l,m){var p,q;if("string"==typeof m)switch(m){case "required":m=0;break;case "strong":m=1;break;case "medium":m=2;break;case "weak":m=3;break;default:m=0}return p=this.tableau.getNewElementIndex(),(null===d||void 0===d)&&(d="v"+p),(null===b||void 0===b)&&(b=0),(null===m||void 0===m)&&(m=0),f?(q=new IntegerVariable(d,b,p,m),this.integerVariables.push(q)):q=new g(d,b,p,m),this.variables.push(q),this.tableau.variablesPerIndex[p]=
+        q,l&&(this.unrestrictedVariables[p]=!0),this.nVariables+=1,!0===this.tableauInitialized&&this.tableau.addVariable(q),q};c.prototype.updateConstraintCoefficient=function(b,d,f){return!0===this.tableauInitialized&&this.tableau.updateConstraintCoefficient(b,d,f),this};c.prototype.loadJson=function(b){var d,f,l,m,p,q,t,r,w;this.isMinimization="max"!==b.opType;var v=b.variables;var x=b.constraints;var D={};var H={};var G=Object.keys(x);var y=G.length;for(d=0;y>d;d+=1){var B=G[d];var z=x[B];var C=z.equal;
+        var E=z.weight;var A=z.priority;var F=void 0!==E||void 0!==A;void 0===C?(m=z.min,void 0!==m&&(f=this.greaterThan(m),D[B]=f,F&&f.relax(E,A)),p=z.max,void 0!==p&&(l=this.smallerThan(p),H[B]=l,F&&l.relax(E,A))):(f=this.greaterThan(C),D[B]=f,l=this.smallerThan(C),H[B]=l,q=new Equality(f,l),F&&q.relax(E,A))}x=Object.keys(v);G=x.length;this.tolerance=b.tolerance||0;b.timeout&&(this.timeout=b.timeout);b.options&&(b.options.timeout&&(this.timeout=b.options.timeout),0===this.tolerance&&(this.tolerance=b.options.tolerance||
+        0),b.options.useMIRCuts&&(this.useMIRCuts=b.options.useMIRCuts),this.checkForCycles="undefined"==typeof b.options.exitOnCycles?!0:b.options.exitOnCycles);y=b.ints||{};B=b.binaries||{};z=b.unrestricted||{};b=b.optimize;for(C=0;G>C;C+=1)for(A=x[C],E=v[A],F=E[b]||0,d=!!B[A],f=!!y[A]||d,l=!!z[A],A=this.addVariable(F,A,f,l),d&&this.smallerThan(1).addTerm(1,A),F=Object.keys(E),d=0;d<F.length;d+=1)f=F[d],f!==b&&(t=E[f],r=D[f],void 0!==r&&r.addTerm(t,A),w=H[f],void 0!==w&&w.addTerm(t,A));return this};c.prototype.getNumberOfIntegerVariables=
+        function(){return this.integerVariables.length};c.prototype.solve=function(){return!1===this.tableauInitialized&&(this.tableau.setModel(this),this.tableauInitialized=!0),this.tableau.solve()}},{9:9,20:20}],7:[function(){},{8:8}],8:[function(n,k){function c(h,e,g,b){this.feasible=g;this.evaluation=e;this.bounded=b;this._tableau=h}k.exports=c;c.prototype.generateSolutionSet=function(){var h,e={};var g=this._tableau;var b=g.varIndexByRow,d=g.variablesPerIndex,f=g.matrix,l=g.rhsColumn,m=g.height-1,p=
+        Math.round(1/g.precision);for(g=1;m>=g;g+=1){var q=b[g];q=d[q];void 0!==q&&!0!==q.isSlack&&(h=f[g][l],e[q.id]=Math.round((Number.EPSILON+h)*p)/p)}return e}},{}],9:[function(n,k){function c(b){this.matrix=this.model=null;this.rhsColumn=this.costRowIndex=this.height=this.width=0;this.variablesPerIndex=[];this.unrestrictedVars=null;this.feasible=!0;this.simplexIters=this.evaluation=0;this.colByVarIndex=this.rowByVarIndex=this.varIndexByCol=this.varIndexByRow=null;this.precision=b||1E-8;this.optionalObjectives=
+        [];this.objectivesByPriority={};this.savedState=null;this.availableIndexes=[];this.lastElementIndex=0;this.variables=null;this.nVars=0;this.bounded=!0;this.unboundedVarIndex=null;this.branchAndCutIterations=0}function h(b,d){this.priority=b;this.reducedCosts=Array(d);for(b=0;d>b;b+=1)this.reducedCosts[b]=0}var e=n("8"),g=n("7");k.exports=c;c.prototype.solve=function(){return 0<this.model.getNumberOfIntegerVariables()?this.branchAndCut():this.simplex(),this.updateVariableValues(),this.getSolution()};
+        h.prototype.copy=function(){var b=new h(this.priority,this.reducedCosts.length);return b.reducedCosts=this.reducedCosts.slice(),b};c.prototype.setOptionalObjective=function(b,d,f){var l,m=this.objectivesByPriority[b];void 0===m&&(l=Math.max(this.width,d+1),m=new h(b,l),this.objectivesByPriority[b]=m,this.optionalObjectives.push(m),this.optionalObjectives.sort(function(p,q){return p.priority-q.priority}));m.reducedCosts[d]=f};c.prototype.initialize=function(b,d,f,l){this.variables=f;this.unrestrictedVars=
+        l;this.width=b;this.height=d;f=Array(b);for(l=0;b>l;l++)f[l]=0;this.matrix=Array(d);for(l=0;d>l;l++)this.matrix[l]=f.slice();this.varIndexByRow=Array(this.height);this.varIndexByCol=Array(this.width);this.varIndexByRow[0]=-1;this.varIndexByCol[0]=-1;this.nVars=b+d-2;this.rowByVarIndex=Array(this.nVars);this.colByVarIndex=Array(this.nVars);this.lastElementIndex=this.nVars};c.prototype._resetMatrix=function(){var b,d,f,l;var m=this.model.variables;var p=this.model.constraints;var q=m.length;var t=p.length;
+        var r=this.matrix[0];var w=!0===this.model.isMinimization?-1:1;for(b=0;q>b;b+=1){var v=m[b];var x=v.priority;v=w*v.cost;0===x?r[b+1]=v:this.setOptionalObjective(x,b+1,v);x=m[b].index;this.rowByVarIndex[x]=-1;this.colByVarIndex[x]=b+1;this.varIndexByCol[b+1]=x}b=1;for(m=0;t>m;m+=1)if(d=p[m],f=d.index,this.rowByVarIndex[f]=b,this.colByVarIndex[f]=-1,this.varIndexByRow[b]=f,l=d.terms,x=l.length,v=this.matrix[b++],d.isUpperBound){for(q=0;x>q;q+=1)r=l[q],w=this.colByVarIndex[r.variable.index],v[w]=r.coefficient;
+        v[0]=d.rhs}else{for(q=0;x>q;q+=1)r=l[q],w=this.colByVarIndex[r.variable.index],v[w]=-r.coefficient;v[0]=-d.rhs}};c.prototype.setModel=function(b){var d,f;return this.model=b,d=b.nVariables+1,f=b.nConstraints+1,this.initialize(d,f,b.variables,b.unrestrictedVariables),this._resetMatrix(),this};c.prototype.getNewElementIndex=function(){if(0<this.availableIndexes.length)return this.availableIndexes.pop();var b=this.lastElementIndex;return this.lastElementIndex+=1,b};c.prototype.density=function(){var b,
+        d,f=0,l=this.matrix;for(b=0;b<this.height;b++){var m=l[b];for(d=0;d<this.width;d++)0!==m[d]&&(f+=1)}return f/(this.height*this.width)};c.prototype.setEvaluation=function(){var b=Math.round(1/this.precision);this.evaluation=b=Math.round((Number.EPSILON+this.matrix[this.costRowIndex][this.rhsColumn])*b)/b;0===this.simplexIters&&(this.bestPossibleEval=b)};c.prototype.getSolution=function(){var b=!0===this.model.isMinimization?this.evaluation:-this.evaluation;return 0<this.model.getNumberOfIntegerVariables()?
+        new g(this,b,this.feasible,this.bounded,this.branchAndCutIterations):new e(this,b,this.feasible,this.bounded)}},{7:7,8:8}],10:[function(){},{9:9}],11:[function(){},{9:9}],12:[function(){},{9:9}],13:[function(){},{20:20,9:9}],14:[function(n){n=n("9");n.prototype._putInBase=function(k){var c,h,e=this.rowByVarIndex[k];if(-1===e){k=this.colByVarIndex[k];for(c=1;c<this.height;c+=1)if(h=this.matrix[c][k],h<-this.precision||this.precision<h){e=c;break}this.pivot(e,k)}return e};n.prototype._takeOutOfBase=
+        function(k){var c,h,e=this.colByVarIndex[k];if(-1===e){k=this.rowByVarIndex[k];var g=this.matrix[k];for(c=1;c<this.height;c+=1)if(h=g[c],h<-this.precision||this.precision<h){e=c;break}this.pivot(k,e)}return e};n.prototype.updateVariableValues=function(){var k,c,h=this.variables.length,e=Math.round(1/this.precision);for(k=0;h>k;k+=1){var g=this.variables[k];var b=g.index;b=this.rowByVarIndex[b];-1===b?g.value=0:(c=this.matrix[b][this.rhsColumn],g.value=Math.round((c+Number.EPSILON)*e)/e)}};n.prototype.updateRightHandSide=
+        function(k,c){var h;var e=this.height-1;var g=this.rowByVarIndex[k.index];if(-1===g){k=this.colByVarIndex[k.index];for(g=0;e>=g;g+=1){var b=this.matrix[g];b[this.rhsColumn]-=c*b[k]}if(h=this.optionalObjectives.length,0<h)for(e=0;h>e;e+=1)g=this.optionalObjectives[e].reducedCosts,g[this.rhsColumn]-=c*g[k]}else this.matrix[g][this.rhsColumn]-=c};n.prototype.updateConstraintCoefficient=function(k,c,h){var e;if(k.index===c.index)throw Error("[Tableau.updateConstraintCoefficient] constraint index should not be equal to variable index !");
+        if(k=this._putInBase(k.index),e=this.colByVarIndex[c.index],-1===e)for(c=this.rowByVarIndex[c.index],e=0;e<this.width;e+=1)this.matrix[k][e]+=h*this.matrix[c][e];else this.matrix[k][e]-=h};n.prototype.updateCost=function(k,c){var h=k.index;var e=this.width-1;var g=this.colByVarIndex[h];if(-1===g)if(h=this.matrix[this.rowByVarIndex[h]],0===k.priority)for(g=this.matrix[0],k=0;e>=k;k+=1)g[k]+=c*h[k];else for(g=this.objectivesByPriority[k.priority].reducedCosts,k=0;e>=k;k+=1)g[k]+=c*h[k];else this.matrix[0][g]-=
+        c};n.prototype.addConstraint=function(k){var c,h,e,g,b,d,f=k.isUpperBound?1:-1,l=this.height,m=this.matrix[l];void 0===m&&(m=this.matrix[0].slice(),this.matrix[l]=m);var p=this.width-1;for(c=0;p>=c;c+=1)m[c]=0;m[this.rhsColumn]=f*k.rhs;var q=k.terms;var t=q.length;for(h=0;t>h;h+=1)if(e=q[h],g=e.coefficient,b=e.variable.index,d=this.rowByVarIndex[b],-1===d)m[this.colByVarIndex[b]]+=f*g;else{var r=this.matrix[d];r[this.rhsColumn];for(c=0;p>=c;c+=1)m[c]-=f*g*r[c]}k=k.index;this.varIndexByRow[l]=k;this.rowByVarIndex[k]=
+        l;this.colByVarIndex[k]=-1;this.height+=1};n.prototype.removeConstraint=function(k){var c=k.index,h=this.height-1,e=this._putInBase(c),g=this.matrix[h];this.matrix[h]=this.matrix[e];this.matrix[e]=g;this.varIndexByRow[e]=this.varIndexByRow[h];this.varIndexByRow[h]=-1;this.rowByVarIndex[c]=-1;this.availableIndexes[this.availableIndexes.length]=c;k.slack.index=-1;--this.height};n.prototype.addVariable=function(k){var c,h=this.height-1,e=this.width,g=!0===this.model.isMinimization?-k.cost:k.cost,b=k.priority,
+        d=this.optionalObjectives.length;if(0<d)for(c=0;d>c;c+=1)this.optionalObjectives[c].reducedCosts[e]=0;0===b?this.matrix[0][e]=g:(this.setOptionalObjective(b,e,g),this.matrix[0][e]=0);for(c=1;h>=c;c+=1)this.matrix[c][e]=0;k=k.index;this.varIndexByCol[e]=k;this.rowByVarIndex[k]=-1;this.colByVarIndex[k]=e;this.width+=1};n.prototype.removeVariable=function(k){var c,h,e=k.index,g=this._takeOutOfBase(e),b=this.width-1;if(g!==b){var d=this.height-1;for(c=0;d>=c;c+=1){var f=this.matrix[c];f[g]=f[b]}if(h=
+        this.optionalObjectives.length,0<h)for(d=0;h>d;d+=1)c=this.optionalObjectives[d].reducedCosts,c[g]=c[b];h=this.varIndexByCol[b];this.varIndexByCol[g]=h;this.colByVarIndex[h]=g}this.varIndexByCol[b]=-1;this.colByVarIndex[e]=-1;this.availableIndexes[this.availableIndexes.length]=e;k.index=-1;--this.width}},{9:9}],15:[function(n){n("18");n("13");n("14");n("17");n("10");n("12");n("16")},{9:9,10:10,12:12,13:13,14:14,16:16,17:17,18:18}],16:[function(){},{9:9}],17:[function(){},{9:9}],18:[function(n){n=
+        n("9");n.prototype.simplex=function(){return this.bounded=!0,this.phase1(),!0===this.feasible&&this.phase2(),this};n.prototype.phase1=function(){for(var c,h,e,g,b,d,f,l,m,p,q=this.model.checkForCycles,t=[],r=this.matrix,w=this.rhsColumn,v=this.width-1,x=this.height-1,D=0;;){h=0;c=-this.precision;for(e=1;x>=e;e++)g=r[e][w],c>g&&(c=g,h=e);if(0===h)return this.feasible=!0,D;e=0;g=-1/0;b=r[0];d=r[h];for(f=1;v>=f;f++)l=d[f],((c=!0===this.unrestrictedVars[this.varIndexByCol[f]])||l<-this.precision)&&(m=
+        -b[f]/l,m>g&&(g=m,e=f));if(0===e)return this.feasible=!1,D;if(q&&(t.push([this.varIndexByRow[h],this.varIndexByCol[e]]),p=this.checkForCycles(t),0<p.length))return this.model.messages.push("Cycle in phase 1"),this.model.messages.push("Start :"+p[0]),this.model.messages.push("Length :"+p[1]),this.feasible=!1,D;this.pivot(h,e);D+=1}};n.prototype.phase2=function(){for(var c,h,e,g,b,d,f,l,m,p,q,t,r,w=this.model.checkForCycles,v=[],x=this.matrix,D=this.rhsColumn,H=this.width-1,G=this.height-1,y=this.precision,
+        B=this.optionalObjectives.length,z=null,C=0;;){e=x[this.costRowIndex];0<B&&(z=[]);g=0;b=y;d=!1;for(f=1;H>=f;f++)c=e[f],h=!0===this.unrestrictedVars[this.varIndexByCol[f]],0<B&&c>-y&&y>c?z.push(f):h&&0>c?-c>b&&(b=-c,g=f,d=!0):c>b&&(b=c,g=f,d=!1);if(0<B)for(e=0;0===g&&0<z.length&&B>e;){l=[];m=this.optionalObjectives[e].reducedCosts;b=y;for(p=0;p<z.length;p++)f=z[p],c=m[f],h=!0===this.unrestrictedVars[this.varIndexByCol[f]],c>-y&&y>c?l.push(f):h&&0>c?-c>b&&(b=-c,g=f,d=!0):c>b&&(b=c,g=f,d=!1);z=l;e+=
+        1}if(0===g)return this.setEvaluation(),this.simplexIters+=1,C;c=0;h=1/0;this.varIndexByRow;for(b=1;G>=b;b++)if(q=x[b],f=q[D],t=q[g],!(t>-y&&y>t)){if(0<t&&y>f&&f>-y){h=0;c=b;break}f=d?-f/t:f/t;f>y&&h>f&&(h=f,c=b)}if(1/0===h)return this.evaluation=-1/0,this.bounded=!1,this.unboundedVarIndex=this.varIndexByCol[g],C;if(w&&(v.push([this.varIndexByRow[c],this.varIndexByCol[g]]),r=this.checkForCycles(v),0<r.length))return this.model.messages.push("Cycle in phase 2"),this.model.messages.push("Start :"+r[0]),
+        this.model.messages.push("Length :"+r[1]),this.feasible=!1,C;this.pivot(c,g,!0);C+=1}};var k=[];n.prototype.pivot=function(c,h){var e,g,b,d,f,l,m=this.matrix,p=m[c][h],q=this.height-1;var t=this.width-1;var r=this.varIndexByRow[c];var w=this.varIndexByCol[h];this.varIndexByRow[c]=w;this.varIndexByCol[h]=r;this.rowByVarIndex[w]=c;this.rowByVarIndex[r]=-1;this.colByVarIndex[w]=-1;this.colByVarIndex[r]=h;r=m[c];for(e=w=0;t>=e;e++)-1E-16<=r[e]&&1E-16>=r[e]?r[e]=0:(r[e]/=p,k[w]=e,w+=1);r[h]=1/p;this.precision;
+        for(b=0;q>=b;b++)if(b!==c&&!(-1E-16<=m[b][h]&&1E-16>=m[b][h]))if(d=m[b],g=d[h],-1E-16<=g&&1E-16>=g)0!==g&&(d[h]=0);else{for(t=0;w>t;t++){e=k[t];var v=r[e];-1E-16<=v&&1E-16>=v?0!==v&&(r[e]=0):d[e]-=g*v}d[h]=-g/p}if(f=this.optionalObjectives.length,0<f)for(c=0;f>c;c+=1)if(l=this.optionalObjectives[c].reducedCosts,g=l[h],0!==g){for(t=0;w>t;t++)e=k[t],v=r[e],0!==v&&(l[e]-=g*v);l[h]=-g/p}};n.prototype.checkForCycles=function(c){var h,e,g,b,d,f,l;for(h=0;h<c.length-1;h++)for(e=h+1;e<c.length;e++)if(g=c[h],
+        b=c[e],g[0]===b[0]&&g[1]===b[1]){if(e-h>c.length-e)break;var m=!0;for(d=1;e-h>d;d++)if(f=c[h+d],l=c[e+d],f[0]!==l[0]||f[1]!==l[1]){m=!1;break}if(m)return[h,e-h]}return[]}},{9:9}],20:[function(n,k){function c(d,f,l,m){this.id=d;this.cost=f;this.index=l;this.value=0;this.priority=m}function h(d,f,l,m){c.call(this,d,f,l,m)}function e(d,f){c.call(this,d,0,f,0)}function g(d,f){this.variable=d;this.coefficient=f}function b(d,f,l,m){this.slack=new e("s"+l,l);this.index=l;this.model=m;this.rhs=d;this.isUpperBound=
+        f;this.terms=[];this.termsByVarIndex={};this.relaxation=null}h.prototype.isInteger=!0;e.prototype.isSlack=!0;b.prototype.addTerm=function(d,f){var l,m=f.index,p=this.termsByVarIndex[m];return void 0===p?(p=new g(f,d),this.termsByVarIndex[m]=p,this.terms.push(p),!0===this.isUpperBound&&(d=-d),this.model.updateConstraintCoefficient(this,f,d)):(l=p.coefficient+d,this.setVariableCoefficient(l,f)),this};k.exports={Constraint:b,Variable:c,IntegerVariable:h,SlackVariable:e,Equality:function(d,f){this.upperBound=
+        d;this.lowerBound=f;this.model=d.model;this.rhs=d.rhs;this.relaxation=null},Term:g}},{}],21:[function(n){n("15");var k=n("5");self.solver=new function(){this.Solve=function(c,h,e,g){var b,d,f;if(g)for(b in validation)c=validation[b](c);return 0==c instanceof k&&(c=(new k(h)).loadJson(c)),d=c.solve(),this.lastSolvedModel=c,d.solutionSet=d.generateSolutionSet(),e?d:(f={},f.feasible=d.feasible,f.result=d.evaluation,f.bounded=d.bounded,d._tableau.__isIntegral&&(f.isIntegral=!0),Object.keys(d.solutionSet).forEach(function(l){0!==
+        d.solutionSet[l]&&(f[l]=d.solutionSet[l])}),f)}}},{5:5,15:15,20:20}]},{},[21]);</script>
 </head>
 <style>
     div {
@@ -43,168 +74,13 @@
         
     </div>
     <script>
-
-        function getResult(limits,nums) {
-            let b=[]
-            for (let i = 0; i < nums.length; i++) {
-               b.push({"min": nums[i]});
-            }
-            let a=[]
-            for (let i = 0; i < limits.length; i++) {
-                let aa={}
-                for (let j = 0; j < limits[0].length; j++) {
-                    aa[j]=limits[i][j];
-                }
-                aa[limits[0].length]=1;
-                
-                a.push(aa);
-            }
-            // let c={}
-            // for (let i = 0; i < limits.length; i++) {
-            //     c[i]=1;
-            // }
-            // console.log(c);
-            
-            model = {
-                "optimize": limits[0].length,
-                "opType": "min",
-                "constraints": b,
-                "variables": a,
-                // "ints": c            //取整
-            }
-            results = solver.Solve(model);
-            // console.log(results);
-            let re=[]
-            for (var key in results) {
-                // 判断属性是否是数字类型
-                if (! isNaN(parseInt(key))) {
-                    // 将数字存入数组中
-                    re.push([parseInt(key),results[key]]);
-                }
-            }
-            return re
-        };
-
-        function bag_program(weights, nums, max_weight) {
-            let weight_num = [];
-            for (let i = 0; i < max_weight; i++) {
-                weight_num.push([]);
-            }
-            for (let ii = 0; ii < weights.length; ii++) {
-                let L = weights[ii];
-                let val = [];
-                for (i = 0; i < weights.length; i++) {
-                    val.push(0);
-                }
-                for (i = L; i < max_weight + 1; i = i + L) {
-                    val[ii]++;
-                    if (val[ii] <= nums[ii]) {
-                        weight_num[i - 1].push(deepcopy(val));
-                    }
-                }
-                for (i = 0; i < max_weight; i++) {
-                    if (weight_num[i]) {
-                        if (i + L < max_weight) {
-                            for (let j in weight_num[i]) {
-                                val = deepcopy(weight_num[i][j]);
-                                val[ii]++;
-                                if (val[ii] <= nums[ii]) {
-                                    weight_num[i + L].push(deepcopy(val));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            num_arrs = dellarrys(weight_num.flat());//去重(降维)
-            return num_arrs;
-        }
-        function deepcopy(a) {  //模拟深拷贝
-            let demo = [];
-            for (let i = 0; i < a.length; i++) {
-                demo[i] = a[i];
-            }
-            return demo;
-        }
-        function sumf(a, b) {   //方案具化
-            let re = [];
-            for (let i = 0; i < a.length; i++) {
-                if (b[i] > 0) {
-                    for (let j = 0; j < b[i]; j++) {
-                        re.push(a[i]);
-                    }
-                }
-            }
-            return re;
-        }
-        function sumarrys(weights, nums) {    //两个数组对应元素积的和
-            let re = 0;
-            for (i = 0; i < weights.length; i++) {
-                re += weights[i] * nums[i];
-            }
-            return re;
-        }
-        function sumar(weights, num) {    //两个数组对应元素的积
-            let re = [];
-            for (i = 0; i < weights.length; i++) {
-                re.push(weights[i] * num);
-            }
-            return re;
-        }
-        function sum(num1, num2) {    //两个数组对应元素的和
-            let re = [];
-            for (i = 0; i < num1.length; i++) {
-                re.push(num1[i] + num2[i]);
-            }
-            return re;
-        }
-        function dellarrys(a) {     //二维数组去重
-            let obj = {};
-            a.forEach(item => obj[item] = item);
-            re = Object.values(obj);
-            return re;
-        }
-        document.getElementById('get_result').onclick = function () {
-            let max_weight = parseInt(document.getElementById('max_weight').value);
-            let weights = document.getElementById('weights').value.split(",").map(Number);
-            let nums = document.getElementById('nums').value.split(",").map(Number);
-            let text = document.getElementById('text_result');
-            text.value = "开始计算……\n开始动态规划，计算所有下料分布可能……";
-            let num_arrs = bag_program(weights, nums, max_weight);
-            text.value += "\n动态规划结束，开始线性规划选择最优分布……";
-            // text.value += "\n" + JSON.stringify(num_arrs);
-            // 调用getResult函数 对该线性规划问题求解
-            let result =false;
-            result = getResult(num_arrs,nums);
-
-            console.log(result);
-            // result =false;
-            //若该线性规划问题无最优解 则将报错提示输出到网页 并退出函数
-            if (!result) {
-                text.value += "\n计算停止，出现未知错误，请调整原材料长。";
-                return;
-            }
-            //生成求解后的结果文本
-            let Numbers = [];
-            let z = 0; l = 0;
-            for (let i = 0; i < result.length; i++) {
-                    re = (Math.abs(Math.round(result[i][1]) - result[i][1]) < 0.3) ? Math.round(result[i][1]) : Math.ceil(result[i][1]);//Math.ceil  floor
-                    text.value += "\n" + (i+1) + "#：余" + (max_weight - sumarrys(weights, num_arrs[result[i][0]]));
-                    text.value += "，需" + re + "根" + JSON.stringify(sumf(weights, num_arrs[result[i][0]]));
-                    z += re;   //计算目标函数的值
-                    l += sumarrys(weights, num_arrs[result[i][0]]) * re;
-                    if (i < 1) {
-                        Numbers = sumar(num_arrs[result[i][0]], re);
-                        }
-                    else {
-                        Numbers = sum(Numbers ,sumar(num_arrs[result[i][0]], re))
-                    };
-            };
-            text.value += "\n下料数量分别为：" + JSON.stringify(Numbers);
-            text.value += "\n所需原料总数目为：" + z;
-            text.value += "\n管材平均利用率为：" + Math.round(l / z / max_weight * 10000) / 100 + "%";
-            text.value += "\n此程序仅供学习和参考，计算结果自行承担风险！";
-        }
+        function getResult(c,d){for(var a=[],b=0;b<d.length;b++)a.push({min:d[b]});d=[];for(b=0;b<c.length;b++){for(var e={},h=0;h<c[0].length;h++)e[h]=c[b][h];e[c[0].length]=1;d.push(e)}model={optimize:c[0].length,opType:"min",constraints:a,variables:d};results=solver.Solve(model);c=[];for(var f in results)isNaN(parseInt(f))||c.push([parseInt(f),results[f]]);return c}
+        function bag_program(c,d,a){for(var b=[],e=0;e<a;e++)b.push([]);for(e=0;e<c.length;e++){var h=c[e],f=[];for(i=0;i<c.length;i++)f.push(0);for(i=h;i<a+1;i+=h)f[e]++,f[e]<=d[e]&&b[i-1].push(deepcopy(f));for(i=0;i<a;i++)if(b[i]&&i+h<a)for(var g in b[i])f=deepcopy(b[i][g]),f[e]++,f[e]<=d[e]&&b[i+h].push(deepcopy(f))}return num_arrs=dellarrys(b.flat())}function deepcopy(c){for(var d=[],a=0;a<c.length;a++)d[a]=c[a];return d}
+        function sumf(c,d){for(var a=[],b=0;b<c.length;b++)if(0<d[b])for(var e=0;e<d[b];e++)a.push(c[b]);return a}function sumarrys(c,d){var a=0;for(i=0;i<c.length;i++)a+=c[i]*d[i];return a}function sumar(c,d){var a=[];for(i=0;i<c.length;i++)a.push(c[i]*d);return a}function sum(c,d){var a=[];for(i=0;i<c.length;i++)a.push(c[i]+d[i]);return a}function dellarrys(c){var d={};c.forEach(function(a){return d[a]=a});return re=Object.values(d)}
+        document.getElementById("get_result").onclick=function(){var c=parseInt(document.getElementById("max_weight").value),d=document.getElementById("weights").value.split(",").map(Number),a=document.getElementById("nums").value.split(",").map(Number),b=document.getElementById("text_result");b.value="\u5f00\u59cb\u8ba1\u7b97\u2026\u2026\n\u5f00\u59cb\u52a8\u6001\u89c4\u5212\uff0c\u8ba1\u7b97\u6240\u6709\u4e0b\u6599\u5206\u5e03\u53ef\u80fd\u2026\u2026";var e=bag_program(d,a,c);b.value+="\n\u52a8\u6001\u89c4\u5212\u7ed3\u675f\uff0c\u5f00\u59cb\u7ebf\u6027\u89c4\u5212\u9009\u62e9\u6700\u4f18\u5206\u5e03\u2026\u2026";
+        if(a=getResult(e,a)){for(var h=[],f=0,g=l=0;g<a.length;g++)re=.3>Math.abs(Math.round(a[g][1])-a[g][1])?Math.round(a[g][1]):Math.ceil(a[g][1]),b.value+="\n"+(g+1)+"#\uff1a\u4f59"+(c-sumarrys(d,e[a[g][0]])),b.value+="\uff0c\u9700"+re+"\u6839"+JSON.stringify(sumf(d,e[a[g][0]])),f+=re,l+=sumarrys(d,e[a[g][0]])*re,h=1>g?sumar(e[a[g][0]],re):sum(h,sumar(e[a[g][0]],re));b.value+="\n\u4e0b\u6599\u6570\u91cf\u5206\u522b\u4e3a\uff1a"+JSON.stringify(h);b.value+="\n\u6240\u9700\u539f\u6599\u603b\u6570\u76ee\u4e3a\uff1a"+
+        f;b.value+="\n\u7ba1\u6750\u5e73\u5747\u5229\u7528\u7387\u4e3a\uff1a"+Math.round(l/f/c*1E4)/100+"%";b.value+="\n\u6b64\u7a0b\u5e8f\u4ec5\u4f9b\u5b66\u4e60\u548c\u53c2\u8003\uff0c\u8ba1\u7b97\u7ed3\u679c\u81ea\u884c\u627f\u62c5\u98ce\u9669\uff01"}else b.value+="\n\u8ba1\u7b97\u505c\u6b62\uff0c\u51fa\u73b0\u672a\u77e5\u9519\u8bef\uff0c\u8bf7\u8c03\u6574\u539f\u6750\u6599\u957f\u3002"};      
     </script>
+    
 </body>
 </html>
