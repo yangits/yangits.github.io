@@ -16,16 +16,16 @@
 
 "caijizhan": [
 {"name":"七七","url":"http://api.tyun77.cn/api.php"},
-//{"name":"量子资源","url":"https://cj.lziapi.com/api.php"},
+{"name":"量子资源","url":"https://cj.lziapi.com/api.php"},
 //{"name":"1080zy","url":"https://api.1080zyku.com/inc/api_mac10.php"}
 ],
 
 "zhujiexi": [
-{"name":"xifanys","url":"http://www.pandown.pro/app/tkys/tkysjx.php?url="},
 {"name":"主解1","url":"http://27.124.4.42:4567/jhjson/ceshi.php?url="}
 ],
 
 "beiyongjiexi": [
+{"name":"json","url":"https://jx.jsonplayer.com/player/?url="}, 
 {"name":"左岸","url":"https://jx.bozrc.com:4433/player/?url="},
 {"name":"盘古解析","url":"https://www.pangujiexi.cc/jiexi.php?url="},
 {"name":"夜幕解析","url":"https://www.yemu.xyz/?url="},
