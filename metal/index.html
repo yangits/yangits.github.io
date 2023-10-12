@@ -114,13 +114,13 @@
                 }
             }
             if (clas.value=="方钢") {
-                if(isNaN(A)==false && isNaN(L)==false ){
-                    text.innerHTML =Math.round(A*A*L*P)/1000;
+                if(isNaN(A)==false && isNaN(L)==false && isNaN(B)==false ){
+                    text.innerHTML =Math.round(A*B*L*P)/1000;
                 }
             }
             if (clas.value=="角钢") {
-                if(isNaN(T)==false && isNaN(W)==false && isNaN(L)==false ){
-                    text.innerHTML =Math.round(T*(W*2-T)*L*P)/1000;
+                if(isNaN(T)==false && isNaN(A)==false && isNaN(B)==false && isNaN(L)==false ){
+                    text.innerHTML =Math.round(T*(A+B-T)*L*P)/1000;
                 }
             }
         }
@@ -193,13 +193,15 @@
             if (clas.value=="方钢") {
                 document.getElementById("a").innerHTML="*外边长: ";
                 document.getElementById("AA").style.display="";
+                document.getElementById("BB").style.display="";
                 document.getElementById("LL").style.display="";
             }
             if (clas.value=="角钢") {
-                document.getElementById("w").innerHTML="*边宽: ";
+                document.getElementById("a").innerHTML="*外边长: ";
                 document.getElementById("t").innerHTML="*边厚: ";
                 document.getElementById("TT").style.display="";
-                document.getElementById("WW").style.display="";
+                document.getElementById("AA").style.display="";
+                document.getElementById("BB").style.display="";
                 document.getElementById("LL").style.display="";
             }
         }
