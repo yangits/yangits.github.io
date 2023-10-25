@@ -71,7 +71,7 @@ header h1 {
 	padding:0px 15px;
 	font-size:15px;}
 .tem_head nav ul li a:hover {
-	background:#23B7E5 url("../images/ico.png")no-repeat bottom center;
+	background:#23B7E5 url("")no-repeat bottom center;
 	color:#fff;
 	border-radius:2px;
 }
@@ -135,7 +135,7 @@ header h1 {
 .service .text p.title{font-size:26px;padding-bottom:10px;}
 
 .service{width:100%;padding-bottom:40px;
-        background: url("../images/bg456.png") repeat;}
+        background: url("") repeat;}
 .service ul{width:1200px;margin:0 auto;
             height:275px;margin-top:45px;
 }
@@ -151,7 +151,7 @@ header h1 {
 .mysection_s {
 	padding:0 20px;
 }
-.news{width:100%;height:500px;background:url("../images/bigbg.jpg") no-repeat;}
+.news{width:100%;height:500px;background:url("") no-repeat;}
 .piclist{width:1200px;margin:0 auto;}
 .piclist ul li{margin:35px 0 0 75px;float:left;}
 .piclist ul li:first-child{margin-left:0;}
@@ -589,7 +589,7 @@ header h1 {
 	overflow:hidden;
 	width:44px;
 	height:44px;
-	background:url(../images/pnt.png) no-repeat left top;
+	background:url() no-repeat left top;
 	color:#646363;
 	font-size:0;
 }
@@ -603,7 +603,7 @@ header h1 {
 	background-position:-165px top!important;
 }
 .tem_index_footer_attention li:hover a {
-	background:url(../images/pnthover.png) no-repeat;
+	background:url() no-repeat;
 }
 .tem_index_footer_attention img {
 	margin-top:8px;
@@ -654,7 +654,7 @@ header h1 {
 .met_section aside .met_aside dl dt {
 	height:45px;
 	line-height:45px;
-	background:url("../images/list_bg1.png") no-repeat 40px center;
+	background:url("") no-repeat 40px center;
 }
 .met_section aside .met_aside dl dt a {
 	display:block;
@@ -1202,7 +1202,7 @@ button,input,select,textarea {
 	font-size:14px;
 	font-weight:bold;
 	padding:8px 5px 8px 0;
-	background:url(../images/dt-9.gif) no-repeat 5px 11px
+	background:url() no-repeat 5px 11px
 }
 #downloadlist .metlist dd {
 	color:#999;
@@ -2049,7 +2049,7 @@ select {
 	width:43px;
 	margin:0 0 0 16px;
 	background:0 0;
-	background:url(../head-ico.png) -43px 0;
+	background:url() -43px 0;
 	text-indent:-9999px;
 	overflow:hidden;
 	-webkit-border-radius:50%;
@@ -2069,7 +2069,7 @@ select {
 	height:43px;
 	width:43px;
 	margin:0 0 0 16px;
-	background:url(../head-ico.png) 0 0;
+	background:url() 0 0;
 	-webkit-border-radius:50%;
 	-moz-border-radius:50%;
 	-ms-border-radius:50%;
@@ -2094,7 +2094,7 @@ select {
 	text-align:center;
 	text-indent:-9999px;
 	overflow:hidden;
-	background:url(../head-ico.png) 0 -43px;
+	background:url() 0 -43px;
 	-webkit-border-radius:50%;
 	-moz-border-radius:50%;
 	-ms-border-radius:50%;
@@ -2119,7 +2119,7 @@ select {
 	height:43px;
 	width:43px;
 	margin:0 0 0 16px;
-	background:url(../head_lang.png) -46px -46px;
+	background:url() -46px -46px;
 	border:1px #CECECE solid;
 	background-color:#666;
 	-webkit-border-radius:50%;
@@ -2882,7 +2882,7 @@ select {
 	color: #008cd6;
 }
 .my_news ul li .readmore a b {
-	background: url(../read_more.png) no-repeat;
+	background: url() no-repeat;
 }
 .my_news ul li .readmore a b {
 	width: 15px;

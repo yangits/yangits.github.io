@@ -38,11 +38,11 @@ a {
 }
 #small_pre {
 	margin-right:17px;
-	background:url(../images/leftright.png) no-repeat 0 center
+	
 }
 #small_next {
 	margin-left:17px;
-	background:url(../images/leftright.png) no-repeat -44px center
+	
 }
 #small_pre:hover {
 	background-position:-22px center
@@ -69,10 +69,4 @@ a {
 	width:288px;
 	height:180px;
 	border:1px solid #ddd;
-}
-#small_imgs .item .active {
-	background:url(../images/banner_bg_a.png) no-repeat center bottom
-}
-#small_imgs .item .img:hover {
-	background:url(../images/banner_bg.png) no-repeat center bottom
 }
