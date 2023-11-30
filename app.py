@@ -13,7 +13,7 @@ html0="""<html>
         <body style="display: flex; justify-content: center; background-color: aliceblue;">
             <div>
                 <table border='3'>
-                <caption style="height:30px;">文件共享列表</caption>
+                <caption style="height:50px;line-height: 50px;">文件共享列表</caption>
                 <tr>
                     <td width=380px>文件或文件夹</td>
                     <td width=80px>文件大小</td>
@@ -39,13 +39,12 @@ def index():
                         <td><a href="/dload_file/%s">下载</a></td>
                     </tr>""" %(file2,file1,size,mtime,file)
     html=html+ """</table>
-                <form action="/upload_file/path_file" enctype='multipart/form-data' method='POST'>
-                    <input type="file" name="file">
-                    <input type="submit" value="点击上传">
-                </form>
-            </div>
-        </body>
-        </html>"""
+        <form  style="height:50px;line-height: 50px;" action="/upload_file/path_file" enctype='multipart/form-data' method='POST'>
+            <input type="file" name="file">
+            <input type="submit" value="点击上传">
+        </form></div>
+    </body>
+    </html>"""
     return html
 @app.route("/path_file/<path:path>")
 def path_file(path):
@@ -64,10 +63,10 @@ def path_file(path):
                         <td><a href="/dload_file/%s/%s">下载</a></td>
                     </tr>""" %(path1,file,file1,size,mtime,path,file)
     html=html+ """</table>
-            <form action="/upload_file/%s" enctype='multipart/form-data' method='POST'>
-            <input type="file" name="file">
-            <input type="submit" value="点击上传">
-            </form>
+            <form style="height:50px;line-height: 50px;" action="/upload_file/%s" enctype='multipart/form-data' method='POST'>
+                <input type="file" name="file">
+                <input type="submit" value="点击上传">
+            </form></div>
         </body>
         </html>"""%(path)
     return html
@@ -88,16 +87,16 @@ def download_file(downpath):
 @app.route('/upload_file/<path:ulpath>', methods=['POST', 'GET'])
 def upload_file(ulpath):
     if request.method == 'POST':
-        if ulpath=="path_file":
-            upload_file = request.files['file']
+        upload_file = request.files['file']
+        print(upload_file)
+        if upload_file.filename =="":
+            return "上传失败,未选择文件"
+        if ulpath=="path_file": 
             upload_file_name =upload_file.filename
-            print(upload_file)
         else:
-            upload_file = request.files['file']
-            upload_file_name =filepath +"/" + ulpath+"/"+upload_file.filename
+            upload_file_name =ulpath+"/"+upload_file.filename
         upload_file.save(upload_file_name)
-        return '上传成功'
-
+        return "上传成功"
 def get_size_time(path):# 获取文件信息的函数
     size =0
     if os.path.isdir(path):
