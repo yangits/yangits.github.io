@@ -1,4 +1,5 @@
-from flask import Flask,send_file
+from flask import Flask,send_file, request
+from werkzeug.utils import secure_filename
 import os,time
 import sys
 import zipfile
@@ -6,10 +7,9 @@ from io import BytesIO
 #   pyinstaller -F app.py
 filepath =os.path.dirname(os.path.realpath(sys.argv[0]))
 app = Flask(__name__, static_url_path='', static_folder=filepath, template_folder=filepath)
-html1="""<html>
+html0="""<html>
         <head>
           <title>共享文件列表</title>
-          <br>
         </head>
         <body style="display: flex; justify-content: center; background-color: aliceblue;">
             <div>
@@ -26,13 +26,13 @@ html1="""<html>
 def index():
     # return render_template("./index.html")
     file_list = os.listdir(filepath)
-    html=html1
+    html=html0
     for file in file_list:
         size,mtime=get_size_time(filepath+"/"+file)
         if os.path.isfile(filepath+"/"+file):
-            file1=file;file2=file
+            file2=file;file1=file
         else:
-            file1=file+"/";file2="path_file/"+file
+            file2="path_file/"+file;file1=file+"/"
         html=html+ """<tr>
                         <td><a href="/%s">%s</a></td>
                         <td>%s</td>
@@ -40,7 +40,10 @@ def index():
                         <td><a href="/dload_file/%s">下载</a></td>
                     </tr>""" %(file2,file1,size,mtime,file)
     html=html+ """</table>
-                <a href="/">上传文件</a>
+                <form action="/upload_file/path_file" enctype='multipart/form-data' method='POST'>
+                    <input type="file" name="file">
+                    <input type="submit" value="点击上传">
+                </form>
             </div>
         </body>
         </html>"""
@@ -48,7 +51,7 @@ def index():
 @app.route("/path_file/<path:path>")
 def path_file(path):
     file_list = os.listdir(filepath +"/" + path)
-    html=html1
+    html=html0
     for file in file_list:
         size,mtime=get_size_time(filepath+"/"+path+"/"+file)
         if os.path.isfile(filepath+"/"+path+"/"+file):
@@ -62,9 +65,12 @@ def path_file(path):
                         <td><a href="/dload_file/%s/%s">下载</a></td>
                     </tr>""" %(path1,file,file1,size,mtime,path,file)
     html=html+ """</table>
-            <a href="/">上传文件</a>
+            <form action="/upload_file/%s" enctype='multipart/form-data' method='POST'>
+            <input type="file" name="file">
+            <input type="submit" value="点击上传">
+            </form>
         </body>
-        </html>"""
+        </html>"""%(path)
     return html
 @app.route("/dload_file/<path:downpath>")
 def download_file(downpath):
@@ -80,6 +86,18 @@ def download_file(downpath):
                     zf.write(file_path)#, arcname=file)# 将文件添加到zip文件中
         in_memory_zip.seek(0)# 将内存文件指针移动到文件开头
         return send_file(in_memory_zip, download_name=downpath+'.zip', as_attachment=True)
+@app.route('/upload_file/<path:ulpath>', methods=['POST', 'GET'])
+def upload_file(ulpath):
+    if request.method == 'POST':
+        if ulpath=="path_file":
+            upload_file = request.files['file']
+            upload_file_name =upload_file.filename
+            print(upload_file)
+        else:
+            upload_file = request.files['file']
+            upload_file_name =filepath +"/" + ulpath+"/"+upload_file.filename
+        upload_file.save(upload_file_name)
+        return '上传成功'
 
 def get_size_time(path):# 获取文件信息的函数
     size =0
