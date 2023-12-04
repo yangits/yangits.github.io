@@ -9,11 +9,28 @@ app = Flask(__name__, static_url_path='', static_folder=filepath, template_folde
 html0="""<html>
         <head>
           <title>共享文件列表</title>
+          <script>
+            function upload() {
+                const f = document.querySelector('#file');
+                const fdata = new FormData();
+                fdata.append('file', f.files[0]);
+                post('/upload_file/path_file', fdata)
+            }
+            function post(url, data) {
+                const xhr = new XMLHttpRequest();
+                xhr.open('post', url, true);
+                xhr.upload.addEventListener("progress", function (e) {
+                    if (e.lengthComputable) {
+                    let percentComplete = e.loaded / e.total; // 计算上传进度（比例）
+                    document.getElementById("myElement").innerHTML = Math.round(percentComplete*10000)/100
+                    } })
+                xhr.send(data);}
+          </script>
         </head>
         <body style="display: flex; justify-content: center; background-color: aliceblue;">
             <div>
                 <table border='3'>
-                <caption style="height:50px;line-height: 50px;">文件共享列表</caption>
+                <caption style="height:40px;line-height: 40px;">文件共享列表</caption>
                 <tr>
                     <td width=380px>文件或文件夹</td>
                     <td width=80px>文件大小</td>
@@ -38,10 +55,11 @@ def index():
                         <td>%s</td>
                         <td><a href="/dload_file/%s">下载</a></td>
                     </tr>""" %(file2,file1,size,mtime,file)
-    html=html+ """</table>
-        <form  style="height:50px;line-height: 50px;" action="/upload_file/path_file" enctype='multipart/form-data' method='POST'>
-            <input type="file" name="file">
-            <input type="submit" value="点击上传">
+    html=html+ """</table> <br>
+        <form action="/upload_file/path_file" enctype='multipart/form-data' method='POST'>
+            <input type="file" name="file"  id="file">
+            <input type="submit" value="点击上传"  id="upload-btn" onclick="upload()">
+            <span>上传进度<span id="myElement">0</span>%</span>
         </form></div>
     </body>
     </html>"""
@@ -62,13 +80,14 @@ def path_file(path):
                         <td>%s</td>
                         <td><a href="/dload_file/%s/%s">下载</a></td>
                     </tr>""" %(path1,file,file1,size,mtime,path,file)
-    html=html+ """</table>
-            <form style="height:50px;line-height: 50px;" action="/upload_file/%s" enctype='multipart/form-data' method='POST'>
-                <input type="file" name="file">
-                <input type="submit" value="点击上传">
-            </form></div>
-        </body>
-        </html>"""%(path)
+    html=html+ """</table> <br>
+        <form action='/upload_file/"""+path+"""' enctype='multipart/form-data' method='POST'>
+            <input type='file' name='file'  id='file'>
+            <input type='submit' value='点击上传'  id='upload-btn' onclick='upload()'>
+            <span>上传进度<span id="myElement">0</span>%</span>
+        </form></div>
+    </body>
+    </html>"""
     return html
 @app.route("/dload_file/<path:downpath>")
 def download_file(downpath):
@@ -88,15 +107,15 @@ def download_file(downpath):
 def upload_file(ulpath):
     if request.method == 'POST':
         upload_file = request.files['file']
-        print(upload_file)
         if upload_file.filename =="":
             return "上传失败,未选择文件"
         if ulpath=="path_file": 
-            upload_file_name =upload_file.filename
+            upload_file.save(upload_file.filename)
+            return "上传成功"
         else:
-            upload_file_name =ulpath+"/"+upload_file.filename
-        upload_file.save(upload_file_name)
-        return "上传成功"
+            upload_file.save(ulpath+"/"+upload_file.filename)
+            return "上传成功"
+        
 def get_size_time(path):# 获取文件信息的函数
     size =0
     if os.path.isdir(path):
