@@ -1,4 +1,4 @@
-from flask import Flask,send_file, request
+from flask import Flask,send_file, request,redirect
 import os,time
 import sys
 import zipfile
@@ -14,17 +14,14 @@ html0="""<html>
                 const f = document.querySelector('#file');
                 const fdata = new FormData();
                 fdata.append('file', f.files[0]);
-                post('/upload_file/path_file', fdata)
-            }
-            function post(url, data) {
                 const xhr = new XMLHttpRequest();
-                xhr.open('post', url, true);
+                xhr.open('post', '/upload_file', true);
                 xhr.upload.addEventListener("progress", function (e) {
                     if (e.lengthComputable) {
                     let percentComplete = e.loaded / e.total; // 计算上传进度（比例）
                     document.getElementById("myElement").innerHTML = Math.round(percentComplete*10000)/100
                     } })
-                xhr.send(data);}
+                xhr.send(fdata);}
           </script>
         </head>
         <body style="display: flex; justify-content: center; background-color: aliceblue;">
@@ -111,10 +108,12 @@ def upload_file(ulpath):
             return "上传失败,未选择文件"
         if ulpath=="path_file": 
             upload_file.save(upload_file.filename)
-            return "上传成功"
+            print("1")
+            return redirect("/")
         else:
             upload_file.save(ulpath+"/"+upload_file.filename)
-            return "上传成功"
+            print("2")
+            return redirect("/path_file/"+ulpath)
         
 def get_size_time(path):# 获取文件信息的函数
     size =0
