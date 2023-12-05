@@ -108,11 +108,9 @@ def upload_file(ulpath):
             return "上传失败,未选择文件"
         if ulpath=="path_file": 
             upload_file.save(upload_file.filename)
-            print("1")
             return redirect("/")
         else:
             upload_file.save(ulpath+"/"+upload_file.filename)
-            print("2")
             return redirect("/path_file/"+ulpath)
         
 def get_size_time(path):# 获取文件信息的函数
