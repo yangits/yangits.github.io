@@ -10,7 +10,6 @@ github_ip=re.findall('/" target="_blank">([0-9]*.[0-9]*.[0-9]*.[0-9]*)</a>',gith
 for ip in github_ip:
     with open("C:/Windows/System32/drivers/etc/hosts", "w") as f:
         f.write(ip+"        github.com\n")
-    with open("C:/Windows/System32/drivers/etc/hosts", "a") as f:
         f.write(hosts)
     f.close()
     dos = "ipconfig /flushdns"
