@@ -4,22 +4,22 @@
     <title>聊天室</title>
 </head>
 <body>
-    <div class="card">
-        <div class="card-header">
-            聊天室
-        </div>
-        <div class="card-body" id="chat">
-        </div>
-        <div class="card-footer">
-            <input type="text" id="username" placeholder="输入您的用户名" class="form-control mb-2">
-            <input type="text" id="room" placeholder="输入聊天室名称" class="form-control mb-2">
-            <button class="btn btn-warning mb-2" onclick="joinRoom()">加入聊天室</button>
-            <textarea id="message" class="form-control mb-2" placeholder="输入您的消息"></textarea>
-            <button class="btn btn-primary" onclick="sendMessage()">发送</button>
-        </div>
+<div class="">
+    <div class="">
+        聊天室
     </div>
-
-
+    <div>
+        <input type="text" id="username" placeholder="输入您的用户名" class="">
+        <input type="text" id="room" placeholder="输入聊天室名称" class="">
+        <button class="" onclick="joinRoom()">加入聊天室</button>
+    </div>
+    <div class="card-body" id="chat">
+    </div>
+    <div class="card-footer">
+        <textarea id="message" class="" placeholder="输入您的消息"></textarea>
+        <button class="" onclick="sendMessage()">发送</button>
+    </div>
+</div>
 <script>
     // 连接WebSocket
     var socket = io.connect('http://' + document.domain + ':' + location.port + '/chat');

@@ -1,7 +1,7 @@
 import requests  
 import re,os
-urls=["github.com","maxcdn.bootstrapcdn.com","api.github.com","github.io"]
-url_hosts = 'https://raw.hellogithub.com/hosts'  
+urls=["api.github.com","github.io","github.com"]
+url_hosts = "https://raw.hellogithub.com/hosts"
 hosts=""""""
 headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0"}  
 # 在请求头中带上User-Agent，模拟浏览器发送请求  
@@ -15,16 +15,8 @@ for url in urls:
             f.write(ip+"        "+url+"\n")
         f.close()
         dos = "ipconfig /flushdns"
-        cmd = os.system(dos)
-        print("***********************************")
-        # dos_url = "ping "+url
-        # cmd_url = os.system(dos_url)
-        # if cmd_url == 0:
-        #     print(" ping "+ url + ip + "成功")
-        #     hosts = hosts +ip+"""        """+url+"""\n"""
-        #     break
-        # else:
-        #     print(" ping "+ url + ip + "失败...")                
+        cmd = os.system(dos) 
+        print("***********************************")               
         try:
             github = requests.get("https://"+url, headers=headers,timeout=15)
             if github.status_code==200:
