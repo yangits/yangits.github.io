@@ -10,7 +10,7 @@ for url in urls:
     url_ip138 = 'https://site.ip138.com/'  + url
     ip138_html = requests.get(url_ip138, headers=headers).text
     ip138_ips=re.findall('/" target="_blank">([0-9]*.[0-9]*.[0-9]*.[0-9]*)</a>',ip138_html)
-    for ip in ip138_ips:
+    for ip in ip138_ips[:5]:
         with open("C:/Windows/System32/drivers/etc/hosts", "w") as f:
             f.write(ip+"        "+url+"\n")
         f.close()
