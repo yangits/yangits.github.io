@@ -1,8 +1,8 @@
 {
 "Home": [
-{"key":"采集","title":"七七资源","pic":"https://notabug.org/xingyuan/tv/raw/main/jpg/77.png"},
 {"key":"网页","title":"网页资源","pic":"https://notabug.org/xingyuan/tv/raw/main/jpg/wangye.png"},
 {"key":"APP","title":"APP资源","pic":"https://notabug.org/xingyuan/tv/raw/main/jpg/app.png"},
+{"key":"采集","title":"七七资源","pic":"https://notabug.org/xingyuan/tv/raw/main/jpg/77.png"},
 {"key":"直播","title":"电视直播","pic":"https://notabug.org/xingyuan/tv/raw/main/jpg/live.png"},
 {"key":"历史","title":"历史","pic":"https://notabug.org/xingyuan/tv/raw/main/jpg/jilu.png"},
 {"key":"收藏","title":"收藏","pic":"https://notabug.org/xingyuan/tv/raw/main/jpg/shoucang.png"},
@@ -10,6 +10,7 @@
 //{"key": "自选网页","title": "待添加","pic": "","custom": ""}
 ],
 "zhuyejiekou": [
+{"name":"UM影院","url":"https://www.umkan.cc/mogai_api.php/v1.vod"},
 {"name":"大猫影视","url":"http://app.ishen520.com/api.php/v1.vod"},
 {"name":"阿里","url":"http://aliys.cn:90/api.php/v1.vod"}
 ],
@@ -18,11 +19,13 @@
 {"name":"七七","url":"http://api.tyun77.cn/api.php"},
 {"name":"量子资源","url":"https://cj.lziapi.com/api.php"},
 {"name":"KK快看","url":"https://www.kplay.top/api.php/"},
+{"name":"U酷","url":"https://api.ukuapi.com/api.php"},
+{"name":"非凡","url":"http://www.ffzy.tv/api.php"},
+{"name":"卧龙","url":"https://collect.wolongzyw.com/api.php"},
 {"name":"1080zy","url":"https://api.1080zyku.com/inc/api_mac10.php"}
 ],
 
 "zhujiexi": [ 
-{"name":"无","url":""}
 ],
 "beiyongjiexi": [
 {"name":"777","url":"https://jx.777jiexi.com/player/?url="},
