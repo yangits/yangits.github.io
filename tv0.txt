@@ -1,5 +1,5 @@
 {
-"spider":"./Yoursmile.jar;md5;588566F43EC22A1C87D02C78E1C4B5ED",
+"spider":"./Yoursmile.jar;md5;D1BD4073B5485768E739A712610AE8D4",
 "wallpaper":"http://www.kf666888.cn/api/tvbox/img",
 "lives":[{"group":"redirect","channels":[{"name":"live","urls":
 ["proxy://do=live&type=txt&ext=https://notabug.org/xingyuan/tv/raw/main/live.txt"]}]}],
