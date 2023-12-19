@@ -23,14 +23,11 @@ for url in urls:
         for ip in ip138_ips[:5]:
             try:
                 github = requests.get("http://"+ip, headers={'Host':url},timeout=5)
-                if github.status_code==200:
-                    print("登录 "+url+" ["+ip+"] 成功")
-                    hosts_ip = ip+"""        """+url+"""\n""" + hosts_ip
-                    break
-                else:
-                    print("登录 "+url+" ["+ip+"] 失败...")
+                print("访问 "+url+" ["+ip+"] 成功")
+                hosts_ip = ip+"""        """+url+"""\n""" + hosts_ip
+                break
             except:
-                print("登录 "+url+" ["+ip+"] 失败...")
+                print("访问 "+url+" ["+ip+"] 失败...")
 with open("C:/Windows/System32/drivers/etc/hosts", "w") as hosts:
     hosts.write(hosts_ip)
     hosts.write(hosts_hello)
