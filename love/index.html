@@ -20,7 +20,7 @@
 
 <body>
 
-    <canvas id="heart" width="1920" height="947"></canvas>
+    <canvas id="heart"></canvas>
     <script>
         window.requestAnimationFrame =
             window.__requestAnimationFrame ||
@@ -74,7 +74,7 @@
             var traceCount = mobile ? 20 : 50;
             var pointsOrigin = [];
             var i;
-            var dr = mobile ? 0.3 : 0.1;
+            var dr = mobile ? 0.2 : 0.5;
             for (i = 0; i < Math.PI * 2; i += dr) pointsOrigin.push(scaleAndTranslate(heartPosition(i), 210, 13, 0, 0));
             for (i = 0; i < Math.PI * 2; i += dr) pointsOrigin.push(scaleAndTranslate(heartPosition(i), 150, 9, 0, 0));
             for (i = 0; i < Math.PI * 2; i += dr) pointsOrigin.push(scaleAndTranslate(heartPosition(i), 90, 5, 0, 0));
@@ -101,7 +101,7 @@
                     q: ~~(rand() * heartPointsCount),
                     D: 2 * (i % 2) - 1,
                     force: 0.2 * rand() + 0.7,
-                    f: "hsla(0," + ~~(40 * rand() + 60) + "%," + ~~(60 * rand() + 20) + "%,.3)",   //修改颜色
+                    f: "hsla(0," + ~~(40 * rand() + 60) + "%," + ~~(60 * rand() + 40) + "%,.3)",   //修改颜色
                     trace: []
                 };
                 for (var k = 0; k < traceCount; k++) e[i].trace[k] = { x: x, y: y };
