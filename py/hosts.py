@@ -1,6 +1,6 @@
 import requests 
 import re,os
-urls=["api.github.com","github.io","github.global.ssl.fastly.net","assets-cdn.github.com","github.com"]
+urls=["api.github.com","github.com"]#"github.io","github.global.ssl.fastly.net","assets-cdn.github.com",
 url_hosts = "https://raw.hellogithub.com/hosts"
 hosts_ip=""""""
 header = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0"}  
@@ -20,7 +20,7 @@ for url in urls:
             else:
                 print("ping "+url+" ["+ip+"] 失败...")
     if url=="github.com":
-        for ip in ip138_ips[:5]:
+        for ip in ip138_ips[:10]:
             try:
                 github = requests.get("http://"+ip, headers={'Host':url},timeout=5)
                 print("访问 "+url+" ["+ip+"] 成功")
