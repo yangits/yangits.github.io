@@ -12,7 +12,8 @@ class DataBase:
                 user=user,
                 password=password,
                 host="localhost",
-                database="practice",
+                db = 'data1', 
+                # database="practice",
                 port=3306,
                 charset="utf8"
             )
