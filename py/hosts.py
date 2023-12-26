@@ -1,6 +1,7 @@
 import requests 
 import re,os
-urls=["github.com"]#"github.global.ssl.fastly.net","assets-cdn.github.com",
+import subprocess
+urls=["github.com"]
 url_hosts = "https://raw.hellogithub.com/hosts"
 hosts_ip=""""""
 header = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0"}  
@@ -11,23 +12,22 @@ for url in urls:
     ip138_html = requests.get(url_ip138, headers=header).text
     ip138_ips=re.findall('/" target="_blank">([0-9]*.[0-9]*.[0-9]*.[0-9]*)</a>',ip138_html)
     for ip in ip138_ips[:5]:
-        if ip != "0.0.0.0" and ip != "127.0.0.1":  
-            cmd_ip = os.system("ping "+ip+" > "+ os.devnull)
-            if cmd_ip==0:
-                hosts_ip = hosts_ip +ip+"""        """+url+"""\n"""
-                print("ping "+url+" ["+ip+"] 成功")
-                break
-            else:
-                print("ping "+url+" ["+ip+"] 失败...")
-    if url=="github.com":
-        for ip in ip138_ips[:5]:
-            try:
-                github = requests.get("http://"+ip, headers={'Host':url},timeout=5)
-                print("访问 "+url+" ["+ip+"] 成功")
-                hosts_ip = ip+"""        """+url+"""\n""" + hosts_ip
-                break
-            except:
-                print("访问 "+url+" ["+ip+"] 失败...")
+        try:
+            github = requests.get("http://"+ip, headers={'Host':url,"User-Agent": header["User-Agent"]},timeout=2)
+            print("访问 "+url+" ["+ip+"] 成功")
+            hosts_ip = ip+"""        """+url+"""\n""" + hosts_ip
+            break
+        except:
+            print("访问 "+url+" ["+ip+"] 失败...")
+            if ip != "0.0.0.0" and ip != "127.0.0.1" and ip==ip138_ips[4]:  
+                for ip in ip138_ips[:5]:
+                    cmd_ip = res = subprocess.run(['ping', '-n', '2', '-w', '500', ip], stdout=subprocess.PIPE).returncode
+                    if cmd_ip==0:
+                        hosts_ip = hosts_ip +ip+"""        """+url+"""\n"""
+                        print("ping "+url+" ["+ip+"] 成功")
+                        break
+                    else:
+                        print("ping "+url+" ["+ip+"] 失败...")
 with open("C:/Windows/System32/drivers/etc/hosts", "w") as hosts:
     hosts.write(hosts_ip)
     hosts.write(hosts_hello)
