@@ -1,6 +1,5 @@
 import requests 
 import re,os
-import subprocess
 urls=["github.com"]
 url_hosts = "https://raw.hellogithub.com/hosts"
 hosts_ip=""""""
@@ -21,7 +20,7 @@ for url in urls:
             print("访问 "+url+" ["+ip+"] 失败...")
             if ip != "0.0.0.0" and ip != "127.0.0.1" and ip==ip138_ips[4]:  
                 for ip in ip138_ips[:5]:
-                    cmd_ip = res = subprocess.run(['ping', '-n', '2', '-w', '500', ip], stdout=subprocess.PIPE).returncode
+                    cmd_ip =os.system("ping -n 4 -w 5 "+ip+" > "+ os.devnull)
                     if cmd_ip==0:
                         hosts_ip = hosts_ip +ip+"""        """+url+"""\n"""
                         print("ping "+url+" ["+ip+"] 成功")
