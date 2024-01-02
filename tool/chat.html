@@ -32,14 +32,15 @@
     <b>输入昵称:</b><input type="text" id="nickname" value="">
     <button type="button" id="join" onclick="joinroom()">加入聊天室</button>
     <button type="button" id="leave" onclick="leaveroom()" disabled="true">退出聊天室</button>
-    <textarea id="input" cols="50" rows="3"></textarea>
+    <textarea id="chatroom" cols="50" rows="20" readonly="true" disabled="true"> </textarea>
+    <textarea id="input" cols="50" rows="2"></textarea>
     <button type="button" id="send" onclick="sendMsg()" disabled="true">发送</button>
-    <textarea id="chatroom" cols="50" rows="25" readonly="true" disabled="true"> </textarea>
   </div>
   <script type="text/javascript">
     var nickname = document.getElementById("nickname");
     var input = document.getElementById("input");
     var chatroom = document.getElementById("chatroom");
+
     var send =document.getElementById("send")
     var processID
     var xmlhttp;
@@ -57,6 +58,7 @@
                 xmlhttp_text=xmlhttp.responseText
                 if(xmlhttp_text != chatroom.value){
                     chatroom.innerHTML=xmlhttp_text; 
+                    chatroom.scrollTop = chatroom.scrollHeight;
                 }}
         }
     }
@@ -107,6 +109,7 @@
         xmlhttpmsg.onreadystatechange = function(){
             if (xmlhttpmsg.readyState==4){
                 chatroom.innerHTML=xmlhttpmsg.responseText; 
+                chatroom.scrollTop = chatroom.scrollHeight;
             }
         }
     }

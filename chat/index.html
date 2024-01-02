@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="loadlose"></div>
+    <script>
+        var loadlose = document.getElementById("loadlose");
+        var xmlhttp;
+        if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp=new XMLHttpRequest();
+            }else{// code for IE6, IE5
+                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+            }
+        var headers = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0"
+        xmlhttp.open("GET","https://b2c5lsb7-666.asse.devtunnels.ms",true);
+        xmlhttp.send();
+        loadlose.innerHTML="正在访问服务器，请稍后... \n如果访问服务器失败,请联系管理员，启动服务器"
+        console.log(xmlhttp.status);
+        xmlhttp.onreadystatechange = function(){
+            console.log(xmlhttp.status);
+                window.location.replace("https://b2c5lsb7-666.asse.devtunnels.ms");
+        }
+    </script>
+</body>
+</html>

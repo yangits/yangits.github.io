@@ -4,7 +4,7 @@ import sqlite3
 import sys
 import time
 
-from flask import Flask, jsonify, redirect, render_template, request, send_file
+from flask import Flask,redirect, render_template
 
 #   pyinstaller -F app.py
 filepath =os.path.dirname(os.path.realpath(sys.argv[0]))
@@ -52,4 +52,4 @@ conn_data.commit()
 cur_data.close() 
 conn_data.close() 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=888)
+    app.run(host='0.0.0.0', port=666)
