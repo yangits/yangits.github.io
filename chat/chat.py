@@ -1,14 +1,11 @@
 
-import os
 import sqlite3
-import sys
 import time
-
 from flask import Flask , redirect, render_template , request
 
 #   pyinstaller -F app.py
-filepath =os.path.dirname(os.path.realpath(sys.argv[0]))
-app = Flask(__name__, static_url_path='', static_folder=filepath, template_folder=filepath)
+
+app = Flask(__name__)
 def add_db(nickname,input):
     conn_data = sqlite3.connect('data.db') 
     cur_data = conn_data.cursor()  
@@ -21,7 +18,7 @@ def add_db(nickname,input):
 
 @app.route("/" , methods=['GET'])
 def index():
-    return render_template("socket.html")
+    return render_template("chat.html")
 @app.route("/connect" , methods=['GET'])# 连接
 def connect():
     conn_data = sqlite3.connect('data.db') 
