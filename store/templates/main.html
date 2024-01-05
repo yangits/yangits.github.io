@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>登录窗口</title>
+    <link rel="stylesheet" href="../static/main.css">
+    <style></style>
+</head>
+<body id="login" class="login">
+    <!-- 登录窗口 -->
+    <div >
+        <span class="close" onclick="hideLogin()">&times;</span><!-- 关闭按钮 -->
+        <h2>用户登录</h2>
+        <div id="msg" class="msg"> </div>
+        <form action="/" method="POST" enctype="multipart/form-data" ></form>
+            <label for="username">用户名:</label>
+            <input type="text" name="username" id="username"><br><br>
+            
+            <label for="password">密码:</label>
+            <input type="password" name="password" id="password"><br><br>
+            
+            <input type="submit" value="提交"  onclick="Login()">
+        </form>
+    </div>
+    
+    <script type="text/javascript" src="../static/main.js"></script>
+</body>
+</html>

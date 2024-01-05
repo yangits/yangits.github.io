@@ -1,7 +1,6 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO, join_room, leave_room, send
-
-import socket
+import webbrowser
 
 app = Flask(__name__)
 app.secret_key = 'secret'
@@ -33,6 +32,5 @@ def left(message):
     send({'msg': message['username'] + " 离开了聊天室."}, room=room)
 
 if __name__ == '__main__':
-    ip = socket.gethostbyname(socket.gethostname())
-    print("http://"+ip+":666")
+    webbrowser.open("http://127.0.0.1:666/")
     socketio.run(app , host='0.0.0.0', port=666)

@@ -72,7 +72,7 @@
             send.disabled=false
             join.disabled=true
             leave.disabled=false
-            msg="/sendMsg/"+nickname.value+"/加入聊天室"
+            msg="/sendMsg?nickname="+nickname.value+"&input=加入聊天室"
             xmlhttpmsg(msg)
             processID=self.setInterval("loadXMLDoc()",1000)
         }
@@ -83,7 +83,7 @@
         send.disabled=true
         join.disabled=false
         leave.disabled=true
-        msg="/sendMsg/"+nickname.value+"/退出聊天室"
+        msg="/sendMsg?nickname="+nickname.value+"&input=退出聊天室"
         xmlhttpmsg(msg)
 
     }
@@ -92,7 +92,7 @@
             alert("发送信息不能为空！")
         }
         else{
-            msg="/sendMsg/"+nickname.value+"/"+input.value
+            msg="/sendMsg?nickname="+nickname.value+"&input="+input.value
             xmlhttpmsg(msg)
             input.value=""
         }

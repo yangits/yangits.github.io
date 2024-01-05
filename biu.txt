@@ -48,7 +48,7 @@
 ],
 
 
-"dianshizhibo": "https://notabug.org/xingyuan/tv/raw/main/live.txt",
+"dianshizhibo": "./tool/live.txt",
  
 "嗅探词":"m3u8?#ixigua#.czspp#.m3u8#.mp4#.flv#.mp3#.m4a#?video_id=#.htm",
 

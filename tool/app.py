@@ -3,6 +3,7 @@ import os,time
 import sys
 import zipfile
 from io import BytesIO
+import webbrowser
 #   pyinstaller -F app.py
 filepath =os.path.dirname(os.path.realpath(sys.argv[0]))
 app = Flask(__name__, static_url_path='', static_folder=filepath, template_folder=filepath)
@@ -142,4 +143,5 @@ def file_size_fomat(size):
     else:
         return '%.1f' % float(size/1073741824) + 'GB'
 if __name__ == '__main__':
+    webbrowser.open("http://127.0.0.1:666/")
     app.run(host='0.0.0.0', port=666)

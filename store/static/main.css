@@ -1,0 +1,25 @@
+.login {
+    position: fixed; /* 设置为fixed使其保持在页面上 */
+    left: 0;
+    right: 0;
+    top: 20px;
+    width: 300px; /* 宽度 */
+    height: 300px; /* 高度 */
+    background-color: #fff; /* 背景色 */
+    border: 1px solid #ccc; /* 边框样式 */
+    padding: 10px; /* 内边距 */
+    text-align: center;
+    margin: auto;
+    border-radius: 6px;
+}
+
+.close {
+    float: right; /* 将关闭按钮放到右侧 */
+    cursor: pointer; /* 光标变成手型 */
+}
+.msg{
+    min-height: 14px;
+    font-size:10px;
+    color: red;
+    
+}
