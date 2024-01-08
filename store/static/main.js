@@ -6,7 +6,6 @@ var storename = document.getElementById("storename");
 var text = document.getElementById("text");
 var goods_table = document.getElementById("goods_table");
 var goods_table_biao = document.getElementById("goods_table_biao");
-
 var xmlhttpmsg;
 if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
     xmlhttpmsg=new XMLHttpRequest();
@@ -19,8 +18,6 @@ if (localStorage.getItem('username') && localStorage.getItem('password')) {
     Login()
 }
 
-get_goods()
-
 function Login(){
     if ( username.value == "" ){
         timsg.innerHTML="用户名不能为空！"
@@ -32,7 +29,6 @@ function Login(){
         localStorage.setItem('password', password.value);
         hideLogin()
     }
-
 }
 
 function showLogin() { // 显示登录窗口的函数
@@ -43,19 +39,13 @@ function hideLogin() { // 隐藏登录窗口的函数
     login.style.display = "none";
 }
 
-function httpmsg(msg){
-    
-
-    xmlhttpmsg.open("post",msg,true);
-    // xmlhttpmsg.overrideMimeType("text/html;charset=gb2312");
-    xmlhttpmsg.send();
-}
 function new_add(){
     if (storename.value==""){
         alert("仓库名称不能为空")
     }else{
         msg="/new_add?storename="+storename.value
-        httpmsg(msg)
+        xmlhttpmsg.open("post",msg,true);
+        xmlhttpmsg.send();
         xmlhttpmsg.onreadystatechange = function(){
             if (xmlhttpmsg.readyState==4){
                 if(xmlhttpmsg.status==200)
@@ -74,7 +64,8 @@ function new_add(){
 }
 function get_goods(){
     msg="/goods?storename="+storename.value
-    httpmsg(msg)
+    xmlhttpmsg.open("post",msg,true);
+    xmlhttpmsg.send();
     xmlhttpmsg.onreadystatechange = function(){
         if (xmlhttpmsg.readyState==4){
             console.log(xmlhttpmsg.responseText);

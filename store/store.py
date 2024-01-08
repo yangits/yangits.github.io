@@ -20,7 +20,6 @@ def create_db():
     cur_data = conn_data.cursor()  
     cur_data.execute("SELECT name FROM sqlite_master WHERE type='table'")
     tables = cur_data.fetchall() # Tables 为元组列表
-    print (tables)
     if (storename,) not in tables:
         cur_data.execute(f'create table  {storename} (id integer primary key autoincrement ,name text ,specs text ,notes text,price text,num float)')
         for i in range(1,50):
@@ -48,5 +47,5 @@ def goods():
 
     
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=666)
+    app.run(host='0.0.0.0', port=888)
 
