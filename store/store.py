@@ -1,15 +1,51 @@
-from flask import Flask,request,redirect,render_template,jsonify
 #   pyinstaller -F app.py
-import webbrowser
+import sqlite3
+import time
+
+from flask import Flask, jsonify, redirect, render_template, request
 
 app = Flask(__name__)
 
+app.json.ensure_ascii = False
 @app.route('/', methods = ['GET','POST'])
 def login():
     if request.method == 'POST':
-        return jsonify()
+        return []
     else:
         return render_template("main.html")
+@app.route('/new_add', methods = ['POST'])
+def create_db():
+    storename=request.args["storename"]
+    conn_data = sqlite3.connect('store.db') 
+    cur_data = conn_data.cursor()  
+    cur_data.execute("SELECT name FROM sqlite_master WHERE type='table'")
+    tables = cur_data.fetchall() # Tables 为元组列表
+    print (tables)
+    if (storename,) not in tables:
+        cur_data.execute(f'create table  {storename} (id integer primary key autoincrement ,name text ,specs text ,notes text,price text,num float)')
+        for i in range(100):
+            cur_data.execute(f'insert into {storename}(name,specs,notes,price,num) values(?,?,?,?,?)',("螺栓",f"M10*{i*10}","空",f"{i*1}",i*100))
+        conn_data.commit() 
+        cur_data.close() 
+        conn_data.close() 
+        return tables
+    else:
+        cur_data.close() 
+        conn_data.close() 
+        return "0"
+@app.route("/goods" , methods=['post'])# 连接
+def goods():
+    conn_data = sqlite3.connect('store.db') 
+    cur_data = conn_data.cursor()  
+    cur_data.execute("select * from 仓库1")
+    data=cur_data.fetchall()
+    cur_data.close() 
+    conn_data.close() 
+    return data
+
+
+
+    
 if __name__ == '__main__':
-    webbrowser.open("http://127.0.0.1:668/")
-    app.run(host='0.0.0.0', port=668)
+    app.run(host='0.0.0.0', port=666)
+

@@ -6,23 +6,44 @@
     <link rel="stylesheet" href="../static/main.css">
     <style></style>
 </head>
-<body id="login" class="login">
+<body>
     <!-- 登录窗口 -->
-    <div >
-        <span class="close" onclick="hideLogin()">&times;</span><!-- 关闭按钮 -->
-        <h2>用户登录</h2>
-        <div id="msg" class="msg"> </div>
-        <form action="/" method="POST" enctype="multipart/form-data" ></form>
-            <label for="username">用户名:</label>
-            <input type="text" name="username" id="username"><br><br>
-            
-            <label for="password">密码:</label>
-            <input type="password" name="password" id="password"><br><br>
-            
-            <input type="submit" value="提交"  onclick="Login()">
-        </form>
+    <div id="login" class="login">
+        <div class="background" id="background" >
+            <!-- <span class="close" onclick="hideLogin()">&times;</span> -->
+            <h3>用户登录</h3>
+            <div id="msg" class="msg"> </div>
+            <form action="/" method="POST" enctype="multipart/form-data" ></form>
+                <label>用户名:</label>
+                <input type="text" name="username" id="username"><br><br>
+                <label for="password">密  码:</label>
+                <input type="password" name="password" id="password"><br><br>
+                <input type="submit" value="提交"  onclick="Login()">
+            </form>
+        </div>
     </div>
-    
+    <div class="mainbody">
+        <input type="button" value="登录" onclick="showLogin()">
+        <input type="text" id="storename">
+        <input type="button" value="新建仓库" onclick="new_add()">
+        <!-- <textarea name="" id="text" cols="30" rows="10"></textarea> -->
+        <div>库存清单</div>
+        <div class="goods_table">
+            <table border='3' id="goods_table">
+                <tr>
+                    <td width=50px>序号</td>
+                    <td width=200px>名称</td>
+                    <td width=200px>规格</td>
+                    <td width=100px>备注</td>
+                    <td width=50px>价格</td>
+                    <td width=100px>数量</td>
+                </tr>
+                
+            </table>
+        </div>
+
+    </div>
+
     <script type="text/javascript" src="../static/main.js"></script>
 </body>
 </html>

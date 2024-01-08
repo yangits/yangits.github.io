@@ -40,7 +40,6 @@
     var nickname = document.getElementById("nickname");
     var input = document.getElementById("input");
     var chatroom = document.getElementById("chatroom");
-
     var send =document.getElementById("send")
     var processID
     var xmlhttp;
@@ -50,7 +49,7 @@
             xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
         }
     function loadXMLDoc(){
-        xmlhttp.open("GET","/connect",true);
+        xmlhttp.open("post","/connect",true);
         xmlhttp.send();
         xmlhttp.onreadystatechange = function(){
             // console.log(xmlhttp.responseText);
@@ -64,9 +63,7 @@
     }
 
     function joinroom(){
-        if (nickname.value == ""){
-            alert("昵称不能为空！")
-        }
+        if (nickname.value == ""){alert("昵称不能为空！")}
         else{
             nickname.disabled = "disabled"
             send.disabled=false
@@ -85,13 +82,9 @@
         leave.disabled=true
         msg="/sendMsg?nickname="+nickname.value+"&input=退出聊天室"
         xmlhttpmsg(msg)
-
     }
     function sendMsg(){
-        if (input.value == ""){
-            alert("发送信息不能为空！")
-        }
-        else{
+        if (input.value != ""){
             msg="/sendMsg?nickname="+nickname.value+"&input="+input.value
             xmlhttpmsg(msg)
             input.value=""

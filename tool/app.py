@@ -1,14 +1,18 @@
-from flask import Flask,send_file, request,redirect
-import os,time
+import os
 import sys
+import time
+import webbrowser
 import zipfile
 from io import BytesIO
-import webbrowser
+
+from flask import Flask, redirect, request, send_file
+
 #   pyinstaller -F app.py
 filepath =os.path.dirname(os.path.realpath(sys.argv[0]))
 app = Flask(__name__, static_url_path='', static_folder=filepath, template_folder=filepath)
 html0="""<html>
         <head>
+            <meta name="viewport" content="width=device-width, initial-scale=0.8">
             <title>共享文件列表</title>
             <script>
                 function upload() {
