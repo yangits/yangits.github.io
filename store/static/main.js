@@ -1,26 +1,33 @@
 var username= document.getElementById("username")
 var password= document.getElementById("password")
-var msg= document.getElementById("msg")
+var timsg= document.getElementById("timsg")
 var login = document.getElementById("login");
 var storename = document.getElementById("storename");
 var text = document.getElementById("text");
 var goods_table = document.getElementById("goods_table");
-var xmlhttpmsg;
+var goods_table_biao = document.getElementById("goods_table_biao");
 
-if (localStorage.getItem('username')) {
+var xmlhttpmsg;
+if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+    xmlhttpmsg=new XMLHttpRequest();
+}else{// code for IE6, IE5
+    xmlhttpmsg=new ActiveXObject("Microsoft.XMLHTTP");
+}
+if (localStorage.getItem('username') && localStorage.getItem('password')) {
     username.value = (localStorage.getItem('username'))
+    password.value = (localStorage.getItem('password')) // hideLogin()
+    Login()
 }
-if (localStorage.getItem('password')) {
-    password.value = (localStorage.getItem('password'))
-    // hideLogin()
-}
-Login()
+
 get_goods()
 
 function Login(){
     if ( username.value == "" ){
-        msg.innerHTML="用户名不能为空！"
+        timsg.innerHTML="用户名不能为空！"
+        localStorage.setItem('username', username.value);
+        localStorage.setItem('password', password.value);
     }else{
+        timsg.innerHTML=""
         localStorage.setItem('username', username.value);
         localStorage.setItem('password', password.value);
         hideLogin()
@@ -38,39 +45,49 @@ function hideLogin() { // 隐藏登录窗口的函数
 
 function httpmsg(msg){
     
-    if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttpmsg=new XMLHttpRequest();
-    }else{// code for IE6, IE5
-        xmlhttpmsg=new ActiveXObject("Microsoft.XMLHTTP");
-    }
+
     xmlhttpmsg.open("post",msg,true);
     // xmlhttpmsg.overrideMimeType("text/html;charset=gb2312");
     xmlhttpmsg.send();
 }
 function new_add(){
-    msg="/new_add?storename="+String(storename.value)
-    httpmsg(msg)
-    xmlhttpmsg.onreadystatechange = function(){
-        if (xmlhttpmsg.readyState==4){
-            text.innerHTML=xmlhttpmsg.responseText;
-            if(xmlhttpmsg.status==200)
-                if  (xmlhttpmsg.responseText!="0"){
-                    alert("仓库<"+storename.value+">创建成功")
-                }else{
-                    alert("仓库<"+storename.value+">已存在")}
-            else{
-                alert("仓库创建失败，仓库名避免数字开头")
+    if (storename.value==""){
+        alert("仓库名称不能为空")
+    }else{
+        msg="/new_add?storename="+storename.value
+        httpmsg(msg)
+        xmlhttpmsg.onreadystatechange = function(){
+            if (xmlhttpmsg.readyState==4){
+                if(xmlhttpmsg.status==200)
+                    if  (xmlhttpmsg.responseText!="0"){
+                        alert("仓库<"+storename.value+">创建成功")
+                    }else{
+                        get_goods()
+                    }
+                else{
+                    alert("仓库创建失败，仓库名避免数字开头")
+                }
             }
         }
     }
+
 }
 function get_goods(){
-    msg="/goods"
+    msg="/goods?storename="+storename.value
     httpmsg(msg)
     xmlhttpmsg.onreadystatechange = function(){
         if (xmlhttpmsg.readyState==4){
             console.log(xmlhttpmsg.responseText);
             if(xmlhttpmsg.status==200){
+                goods_table_biao.innerHTML="<"+storename.value+">库存清单"
+                goods_table.innerHTML="<tr>"+
+                "<td width=50px>序号</td>"+
+                "<td width=100px>名称</td>"+
+                "<td width=200px>规格</td>"+
+                "<td width=100px>备注</td>"+
+                "<td width=50px>价格</td>"+
+                "<td width=100px>数量</td>"+
+                "</tr>"
                 var goods_lists=JSON.parse(xmlhttpmsg.responseText)
                 for (let i = 0; i < goods_lists.length; i++) {   
                     var tr = document.createElement("tr");

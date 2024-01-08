@@ -23,8 +23,10 @@ def create_db():
     print (tables)
     if (storename,) not in tables:
         cur_data.execute(f'create table  {storename} (id integer primary key autoincrement ,name text ,specs text ,notes text,price text,num float)')
-        for i in range(100):
-            cur_data.execute(f'insert into {storename}(name,specs,notes,price,num) values(?,?,?,?,?)',("螺栓",f"M10*{i*10}","空",f"{i*1}",i*100))
+        for i in range(1,50):
+            cur_data.execute(f'insert into {storename}(name,specs,notes,price,num) values(?,?,?,?,?)',("螺栓",f"M10*{i*10}","",f"{i*1}",i*100))
+        for i in range(1,50):
+            cur_data.execute(f'insert into {storename}(name,specs,notes,price,num) values(?,?,?,?,?)',("燕尾丝",f"M10*{i*10}","",f"{i*1}",i*100))
         conn_data.commit() 
         cur_data.close() 
         conn_data.close() 
@@ -35,15 +37,14 @@ def create_db():
         return "0"
 @app.route("/goods" , methods=['post'])# 连接
 def goods():
+    storename=request.args["storename"]
     conn_data = sqlite3.connect('store.db') 
     cur_data = conn_data.cursor()  
-    cur_data.execute("select * from 仓库1")
+    cur_data.execute(f"select * from {storename}")
     data=cur_data.fetchall()
     cur_data.close() 
     conn_data.close() 
     return data
-
-
 
     
 if __name__ == '__main__':

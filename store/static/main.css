@@ -22,7 +22,7 @@
     float: right; /* 将关闭按钮放到右侧 */
     cursor: pointer; /* 光标变成手型 */
 }
-.msg{
+.timsg{
     min-height: 14px;
     font-size:10px;
     color: red;
@@ -30,12 +30,44 @@
 }
 .goods_table{
     height: 500px;
-    width: 800px;
+    width: 600px;
     overflow-x:auto;
     text-align: center;
     margin: auto;
+
+}
+.goods_table table{
+    border-spacing: 0px;
 }
 .mainbody{
+    padding:20px;
     text-align: center;
     margin: auto;
+}
+.top_row{
+    padding:20px;
+    width: 100%; /* 宽度 */
+    height: 40px; /* 高度 */
+    background-color: rgb(0, 0, 0); /* 背景色 */
+    color: rgb(255, 255, 255);
+    font-size:25px;
+}
+.top_row label{
+    margin-left: 50px;
+    margin-right: 100px;
+    
+}
+.top_row_bt{
+    background-color: rgb(0, 0, 0); /* 背景色 */
+    color: rgb(255, 255, 255);
+    font-size:20px;
+    font-weight: bold;
+    padding: 5px;
+    border: 0px;
+    margin-left: 30px;
+}
+.top_row_bt:hover{
+    background:rgba(230, 247, 255, 0.96);
+    color: rgb(0, 0, 0);
+    
 }

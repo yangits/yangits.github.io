@@ -12,7 +12,7 @@
         <div class="background" id="background" >
             <!-- <span class="close" onclick="hideLogin()">&times;</span> -->
             <h3>用户登录</h3>
-            <div id="msg" class="msg"> </div>
+            <div id="timsg" class="timsg"></div>
             <form action="/" method="POST" enctype="multipart/form-data" ></form>
                 <label>用户名:</label>
                 <input type="text" name="username" id="username"><br><br>
@@ -22,28 +22,38 @@
             </form>
         </div>
     </div>
+    <div class="top_row">
+        <label >仓库管理系统</label>
+        <button class="top_row_bt">库存管理</button>
+        <button class="top_row_bt">出入库管理</button>
+
+
+
+    </div>
     <div class="mainbody">
         <input type="button" value="登录" onclick="showLogin()">
-        <input type="text" id="storename">
-        <input type="button" value="新建仓库" onclick="new_add()">
+        <input type="text" id="storename" list="storelist">
+        <datalist id="storelist">
+            <option selected>仓库1</option>
+            <option>仓库2</option>
+            <option>仓库3</option>
+        </datalist>
+        <input type="button" value="新建/打开仓库" onclick="new_add()">
         <!-- <textarea name="" id="text" cols="30" rows="10"></textarea> -->
-        <div>库存清单</div>
+        <div id="goods_table_biao">库存清单</div>
         <div class="goods_table">
             <table border='3' id="goods_table">
                 <tr>
                     <td width=50px>序号</td>
-                    <td width=200px>名称</td>
+                    <td width=100px>名称</td>
                     <td width=200px>规格</td>
                     <td width=100px>备注</td>
                     <td width=50px>价格</td>
                     <td width=100px>数量</td>
                 </tr>
-                
             </table>
         </div>
-
     </div>
-
     <script type="text/javascript" src="../static/main.js"></script>
 </body>
 </html>
