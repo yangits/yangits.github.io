@@ -1,6 +1,5 @@
 #   pyinstaller -F app.py
 import sqlite3
-import time
 
 from flask import Flask, jsonify, redirect, render_template, request
 
@@ -33,13 +32,15 @@ def create_db():
     else:
         cur_data.close() 
         conn_data.close() 
-        return "0"
+        return ""
 @app.route("/goods" , methods=['post'])# 连接
 def goods():
     storename=request.args["storename"]
+    select_name=request.args["select_name"]
+    select_specs=request.args["select_specs"]
     conn_data = sqlite3.connect('store.db') 
     cur_data = conn_data.cursor()  
-    cur_data.execute(f"select * from {storename}")
+    cur_data.execute(f"select * from {storename} where name like ? and specs like ?",("%"+select_name+"%","%"+select_specs+"%"))
     data=cur_data.fetchall()
     cur_data.close() 
     conn_data.close() 

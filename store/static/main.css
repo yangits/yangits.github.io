@@ -1,3 +1,7 @@
+body{
+    white-space: nowrap;
+}
+
 .background {
     position: fixed; /* 设置为fixed使其保持在页面上 */
     left: 0;
@@ -30,22 +34,44 @@
 }
 .goods_table{
     height: 500px;
-    width: 600px;
     overflow-x:auto;
     text-align: center;
-    margin: auto;
-
+    margin: 0 10%;
+    width: 80%;
+    background-color: #ffffff;
+}
+.main_top{
+    text-align: center; 
+    /* margin: auto; */
+    padding: 0 10%;
+    width: 80%;
+}
+.main_top input{
+    width: 100px;
+}
+.mainbody{
+    text-align: center;
+    padding: 20px 0;
+    width: 100%;
+    height: 100%;
+    background-color: #dddddd;
+}
+.left {
+    float: right; /* 将关闭按钮放到右侧 */
 }
 .goods_table table{
     border-spacing: 0px;
+    /* text-align: center; */
+    /* margin: auto; */
+    width: 100%;
 }
 .mainbody{
-    padding:20px;
     text-align: center;
     margin: auto;
 }
 .top_row{
-    padding:20px;
+    text-align: center;
+    padding: 15px 0 15px 0;
     width: 100%; /* 宽度 */
     height: 40px; /* 高度 */
     background-color: rgb(0, 0, 0); /* 背景色 */
@@ -69,5 +95,4 @@
 .top_row_bt:hover{
     background:rgba(230, 247, 255, 0.96);
     color: rgb(0, 0, 0);
-    
 }

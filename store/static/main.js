@@ -6,6 +6,8 @@ var storename = document.getElementById("storename");
 var text = document.getElementById("text");
 var goods_table = document.getElementById("goods_table");
 var goods_table_biao = document.getElementById("goods_table_biao");
+var select_name = document.getElementById("select_name");
+var select_specs = document.getElementById("select_specs");
 var xmlhttpmsg;
 if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
     xmlhttpmsg=new XMLHttpRequest();
@@ -49,9 +51,11 @@ function new_add(){
         xmlhttpmsg.onreadystatechange = function(){
             if (xmlhttpmsg.readyState==4){
                 if(xmlhttpmsg.status==200)
-                    if  (xmlhttpmsg.responseText!="0"){
+                    if  (xmlhttpmsg.responseText!=""){
                         alert("仓库<"+storename.value+">创建成功")
                     }else{
+                        select_name.value="";
+                        select_specs.value="";
                         get_goods()
                     }
                 else{
@@ -60,10 +64,9 @@ function new_add(){
             }
         }
     }
-
 }
 function get_goods(){
-    msg="/goods?storename="+storename.value
+    msg="/goods?storename="+storename.value+"&select_name="+select_name.value+"&select_specs="+select_specs.value
     xmlhttpmsg.open("post",msg,true);
     xmlhttpmsg.send();
     xmlhttpmsg.onreadystatechange = function(){
@@ -78,6 +81,7 @@ function get_goods(){
                 "<td width=100px>备注</td>"+
                 "<td width=50px>价格</td>"+
                 "<td width=100px>数量</td>"+
+                "<td width=150px>操作</td>"+
                 "</tr>"
                 var goods_lists=JSON.parse(xmlhttpmsg.responseText)
                 for (let i = 0; i < goods_lists.length; i++) {   
@@ -87,6 +91,9 @@ function get_goods(){
                         td.innerHTML=goods_lists[i][j]
                         tr.appendChild(td);
                     }
+                    var td = document.createElement("td");
+                    td.innerHTML="<button onclick='chuku("+goods_lists[i][0]+")'>出库</button><button onclick='ruku("+goods_lists[i][0]+")'>入库</button>"
+                    tr.appendChild(td);
                     goods_table.appendChild(tr);
                 }
             }
@@ -94,4 +101,9 @@ function get_goods(){
     }
 }
 
-
+function chuku(i){
+    alert(i+"号产品已出库")
+}
+function ruku(i){
+    alert(i+"号产品已入库")
+}
