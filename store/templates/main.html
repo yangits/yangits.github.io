@@ -15,34 +15,36 @@
             <h3>用户登录</h3>
             <div id="timsg" class="timsg"></div>
             <form action="/" method="POST" enctype="multipart/form-data" ></form>
-                <label>用户名:</label><input type="text" name="username" id="username"><br><br>
-                <label for="password">密  码:</label><input type="password" name="password" id="password"><br><br>
+                <label>账  户: </label><input type="text" name="username" id="username"><br><br>
+                <label for="password">密  码: </label><input type="password" name="password" id="password"><br><br>
                 <input type="submit" value="提交"  onclick="Login()">
             </form>
         </div>
     </div>
     <div class="top_row">
         <label >仓库管理系统</label>
-        <button class="top_row_bt">库存管理</button>
-        <button class="top_row_bt">出入库管理</button>
-        <button class="top_row_bt" onclick="showLogin()">登录</button>
+        <a class="top_row_bt">库存管理</a>
+        <a class="top_row_bt">出入库记录</a>
+        <a class="top_row_bt" onclick="showLogin()">登录</a>
     </div>
     <div class="mainbody">
         <div class="main_top">
             <input type="text" id="storename" list="storelist">
             <datalist id="storelist">
-                <option selected>仓库1</option>
-                <option>仓库2</option>
+                <option selected>栏位</option>
+                <option>标准件</option>
                 <option>仓库3</option>
             </datalist>
             <input type="button" value="打开仓库" onclick="new_add()">
             <label>搜索名称:</label><input type="text" id="select_name">
             <label>搜索规格:</label><input type="text" id="select_specs">
-            <input type="button" value="搜索" onclick="get_goods()">
-            <h2 id="goods_table_biao">库存清单</h2>
+            <input type="button" value="搜索" onclick="get_goods()"><br><br>
+            <!-- <h2 id="goods_table_biao">库存清单</h2> -->
             <button class="left">新建名称</button>
             <button class="left">表格导出</button>
-            <button class="left">表格导入</button>
+            <button class="left" id="up_excel" onclick="up_excel()">表格导入</button>
+            <input type='file' name='file' accept="text/csv,text/plain" id='file_excel' style="display: none;"  onchange="file_excel()">
+            
         </div>
         <div class="goods_table">
             <table border='3' id="goods_table">

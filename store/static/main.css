@@ -40,6 +40,9 @@ body{
     width: 80%;
     background-color: #ffffff;
 }
+.goods_table tr:hover{
+    background-color: #cefdff;
+}
 .main_top{
     text-align: center; 
     /* margin: auto; */
@@ -91,6 +94,7 @@ body{
     padding: 5px;
     border: 0px;
     margin-left: 30px;
+    cursor: pointer; /* 光标变成手型 */
 }
 .top_row_bt:hover{
     background:rgba(230, 247, 255, 0.96);
