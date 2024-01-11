@@ -1,19 +1,24 @@
-var username= document.getElementById("username")
-var password= document.getElementById("password")
+var username= document.getElementById("username");
+var password= document.getElementById("password");
 var storename = document.getElementById("storename");
-var timsg= document.getElementById("timsg")
+var timsg= document.getElementById("timsg");
 var login = document.getElementById("login");
 var text = document.getElementById("text");
 var goods_table = document.getElementById("goods_table");
 var select_name = document.getElementById("select_name");
 var select_specs = document.getElementById("select_specs");
-var xhr;
-if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
-    xhr=new XMLHttpRequest();
-}else{// code for IE6, IE5
-    xhr=new ActiveXObject("Microsoft.XMLHTTP");
+if (window.screen.width < 500) {
+    // 当前设备是移动设备 goods_table
+    document.getElementById("goods_table_id").style.maxHeight="1500px"
 }
-password.value=="";select_name.value="";select_specs.value="";
+
+if (window.XMLHttpRequest){
+    // code for IE7+, Firefox, Chrome, Opera, Safari
+    var xhr=new XMLHttpRequest();
+}else{// code for IE6, IE5
+    var xhr=new ActiveXObject("Microsoft.XMLHTTP");
+}
+password.value==""//;select_name.value="";select_specs.value="";
 if (localStorage.getItem('username') && localStorage.getItem('storename')) {
     username.options[localStorage.getItem('username')].selected = true;
     storename.options[localStorage.getItem('storename')].selected = true;
@@ -74,8 +79,8 @@ function get_goods(){
         if (xhr.readyState==4){
             console.log(xhr.responseText);
             if(xhr.status==200){
-                goods_table.innerHTML="<tr>"+"<td>序号</td>"+"<td>名称</td>"+"<td>规格</td>"+
-                "<td>备注</td>"+"<td>价格</td>"+"<td>数量</td>"+"<td>操作</td>"+"</tr>"
+                goods_table.innerHTML="<tr><td></td><td>代码</td><td>名称</td>"+
+                "<td>规格</td><td>单价</td><td>单重</td><td>数量</td><td>备注</td><td>操作</td></tr>"
                 var goods_lists=JSON.parse(xhr.responseText)
                 for (let i = 0; i < goods_lists.length; i++) {   
                     var tr = document.createElement("tr");
@@ -94,6 +99,7 @@ function get_goods(){
     }
 }
 
+
 function chuku(i){
     alert(i+"号产品已出库")
 }
@@ -106,20 +112,20 @@ function up_excel(){
 }
 function file_excel(){
     var file_excel= document.getElementById("file_excel");
-    msg="/up_excel?storename="+storename.value;
+    msg="/up_excel"
     var fdata = new FormData();
     fdata.append('up_file_excel', file_excel.files[0]);
+    fdata.append('storename', storename.value);
     xhr.open("post",msg,true);
     xhr.send(fdata);
-    
     xhr.onreadystatechange = function(){
         if (xhr.readyState==4){
             if(xhr.status==200){
                 if  (xhr.responseText=="success"){
-                    alert(file_excel.files[0].name+"上传成功")
+                    alert(file_excel.files[0].name+"上传成功");
+                    new_add()
                 }else{alert(file_excel.files[0].name+"上传失败")}
             }else{alert("上传失败,服务器响应错误")}
             file_excel.value=null
         }}
-
 }

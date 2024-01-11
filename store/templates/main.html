@@ -45,17 +45,18 @@
             <label>搜索规格:</label><input type="text" id="select_specs">
             <input type="button" value="搜索" onclick="get_goods()"><br><div class="timsg"></div>
             <!-- <h2 id="goods_table_biao">库存清单</h2> -->
-            <button class="left">新建名称</button>
+            <button class="left" onclick="get_goods()">新建名称</button>
             <button class="left">表格导出</button>
             <button class="left" id="up_excel" onclick="up_excel()">表格导入</button>
             <input type='file' name='file' accept="text/csv,text/plain" id='file_excel' style="display: none;"  onchange="file_excel()">
             
         </div>
-        <div class="goods_table">
+        <div class="goods_table" id="goods_table_id">
             <table border='1' id="goods_table">
             </table>
         </div>
     </div>
+    <footer><span>账户</span><span>-----</span><span>河南瑞牧农牧设备有限公司</span></footer>
     <script type="text/javascript" src="../static/main.js"></script>
 </body>
 </html>

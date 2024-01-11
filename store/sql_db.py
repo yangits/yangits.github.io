@@ -188,9 +188,9 @@ if __name__ == '__main__':
     conn = sqlite3.connect("sqlite3Test.db")
     # 创建游标
     cur = conn.cursor()
-    result_one = cur.execute("select * from info where name=:myname ", {"myname": 'Tom'})
-    print(result_one.fetchall())
-    print(result_one)
+    # result_one = cur.execute("select * from info where name=myname ", {"myname": 'Tom'})
+    # print(result_one.fetchall())
+    # print(result_one)
     result_many = mySqlite.query_many(select_sql, (23, 'Tom'))
     print(result_many)
     # 删除数据
