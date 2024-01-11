@@ -1,6 +1,13 @@
 body{
     white-space: nowrap;
 }
+footer{
+    position: fixed; /* 设置为fixed使其保持在页面上 */
+    width: 100%;
+    background-color: rgb(255, 255, 255); /* 背景色 */
+    bottom: 0px;
+    text-align: center;
+}
 /* login界面设置 */
 .background {
     position: fixed; /* 设置为fixed使其保持在页面上 */
