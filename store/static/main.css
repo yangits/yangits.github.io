@@ -1,7 +1,7 @@
 body{
     white-space: nowrap;
 }
-
+/* login界面设置 */
 .background {
     position: fixed; /* 设置为fixed使其保持在页面上 */
     left: 0;
@@ -16,6 +16,9 @@ body{
     margin: auto;
     border-radius: 6px;
 }
+.background select{
+    width: 170px; height: 22px;
+}
 .login{
     position: fixed; /* 设置为fixed使其保持在页面上 */
     width: 100%; /* 宽度 */
@@ -29,15 +32,15 @@ body{
 .timsg{
     min-height: 14px;
     font-size:10px;
-    color: red;
-    
+    color: red; 
 }
+/* main主界面设置 */
 .goods_table{
-    height: 500px;
+    max-height: 500px;
     overflow-x:auto;
     text-align: center;
-    margin: 0 10%;
-    width: 80%;
+    margin: 0 5%;
+    width: 90%;
     background-color: #ffffff;
 }
 .goods_table tr:hover{
@@ -53,14 +56,17 @@ body{
     width: 100px;
 }
 .mainbody{
+    margin: auto;
     text-align: center;
-    padding: 20px 0;
+    padding: 10px 0 20px 0;
+    min-height: 580px;
     width: 100%;
     height: 100%;
     background-color: #dddddd;
 }
 .left {
-    float: right; /* 将关闭按钮放到右侧 */
+    float: right; /* 将按钮放到右侧 */
+    cursor: pointer; /* 光标变成手型 */
 }
 .goods_table table{
     border-spacing: 0px;
@@ -68,10 +74,7 @@ body{
     /* margin: auto; */
     width: 100%;
 }
-.mainbody{
-    text-align: center;
-    margin: auto;
-}
+/* 顶黑条设置 */
 .top_row{
     text-align: center;
     padding: 15px 0 15px 0;
@@ -81,19 +84,14 @@ body{
     color: rgb(255, 255, 255);
     font-size:25px;
 }
-.top_row label{
-    margin-left: 50px;
-    margin-right: 100px;
-    
-}
 .top_row_bt{
-    background-color: rgb(0, 0, 0); /* 背景色 */
+    background-color: rgba(0, 0, 0, 0); /* 背景色 */
     color: rgb(255, 255, 255);
     font-size:20px;
     font-weight: bold;
     padding: 5px;
     border: 0px;
-    margin-left: 30px;
+    margin-left: 3%;
     cursor: pointer; /* 光标变成手型 */
 }
 .top_row_bt:hover{
