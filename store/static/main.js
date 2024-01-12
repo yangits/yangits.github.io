@@ -73,7 +73,6 @@ function get_goods(){
     xhr.send(data);
     xhr.onreadystatechange = function(){
         if (xhr.readyState==4){
-            console.log(xhr.responseText);
             if(xhr.status==200){
                 goods_table.innerHTML="<tr><td></td><td>代码</td><td>名称</td>"+
                 "<td>规格</td><td>单价</td><td>单重</td><td>数量</td><td>备注</td><td>操作</td></tr>"
@@ -106,22 +105,60 @@ function up_excel(){
     var file_excel= document.getElementById("file_excel");
     file_excel.click()
 }
-function file_excel(){
-    var file_excel= document.getElementById("file_excel");
-    msg="/up_excel"
-    var fdata = new FormData();
-    fdata.append('up_file_excel', file_excel.files[0]);
-    fdata.append('storename', storename.value);
-    xhr.open("post",msg,true);
-    xhr.send(fdata);
-    xhr.onreadystatechange = function(){
-        if (xhr.readyState==4){
-            if(xhr.status==200){
-                if  (xhr.responseText=="success"){
-                    alert(file_excel.files[0].name+"上传成功");
-                    get_goods()
-                }else{alert(file_excel.files[0].name+"上传失败")}
-            }else{alert("上传失败,服务器响应错误")}
-            file_excel.value=null
-        }}
+function checkutf(str){
+    for (let b = 0; b < str.length; b++) {
+        if (str[b] === "�") {return false;}}
+    return true;
 }
+function up_file_excel(){
+    var file_csv= document.getElementById("file_excel");
+    var reader_csv= new FileReader()
+    reader_csv.readAsText(file_csv.files[0],"gb2312")//,"ansi"utf-8
+
+
+    reader_csv.onload=function(){
+        
+        var csv_str=reader_csv.result;
+        // var csv_str=reader_csv.result;
+        msg="/up_excel"
+        var fdata = new FormData();
+        fdata.append('storename', storename.value);
+        fdata.append('csv_str', csv_str);
+        xhr.open("post",msg,true);
+        xhr.send(fdata);
+        xhr.onreadystatechange = function(){
+            if (xhr.readyState==4){
+                if(xhr.status==200){
+                    if  (xhr.responseText=="success"){
+                        alert(file_csv.files[0].name+"上传成功");
+                        get_goods()
+                    }else{alert(file_csv.files[0].name+"上传失败,参考导出表格")}
+                }else{alert("上传失败,服务器响应错误")}
+                file_csv.value=null
+            }}
+    }
+}
+function tabledown() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = ('0' + (now.getMonth() + 1)).slice(-2);
+    const day = ('0' + now.getDate()).slice(-2);
+    const nowTime = year + month + day;
+    var csv = [];
+    var rows = document.querySelectorAll("table tr");
+    for (var i = 0; i < rows.length; i++) {
+      var row = [], cols = rows[i].querySelectorAll("td, th");
+
+      for (var j = 1; j < cols.length-1; j++) {
+        row.push(cols[j].innerText);
+      }
+      csv.push(row.join(","));
+    }
+    var csvFile = new Blob([csv.join("\n")], {type: "text/csv;charset=ansi"});//;charset=gb2312
+    var downloadLink = document.createElement("a");
+    downloadLink.download = storename.value+nowTime+".csv";
+    downloadLink.href = window.URL.createObjectURL(csvFile);
+    downloadLink.style.display = "none";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+  }

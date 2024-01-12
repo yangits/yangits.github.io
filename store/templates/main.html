@@ -45,10 +45,9 @@
             <label>搜索规格:</label><input type="text" id="select_specs">
             <input type="button" value="搜索" onclick="get_goods()"><br><div class="timsg"></div>
             <!-- <h2 id="goods_table_biao">库存清单</h2> -->
-            <button class="left" onclick="add_goods()">新建名称</button>
-            <button class="left">表格导出</button>
+            <button class="left" onclick="tabledown()">表格导出</button>
             <button class="left" id="up_excel" onclick="up_excel()">表格导入</button>
-            <input type='file' name='file' accept="text/csv,text/plain" id='file_excel' style="display: none;"  onchange="file_excel()">
+            <input type='file' name='file' accept="text/csv" id='file_excel' style="display: none;"  onchange="up_file_excel()">
             
         </div>
         <div class="goods_table" id="goods_table_id">
