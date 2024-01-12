@@ -22,7 +22,7 @@ def create_db():
     if (storename,) not in tables:
         try:
             cur_data.execute(f'create table if not exists {storename} (id integer primary key autoincrement ,代码 text,名称 text,规格 text,单价 text,单重 text,数量 text,备注 text)')
-            for i in range(1,3):
+            for i in range(1,200):
                 cur_data.execute(f'insert into {storename}(代码,名称,规格,单价,单重,数量,备注) values(?,?,?,?,?,?,?)',(f"rm{i}","外六角螺栓",f"M10*{i*5}",f"{i*3}",f"{i*2}",i*6,""))
             conn_data.commit() 
             cur_data.close() 
@@ -75,5 +75,5 @@ def up_excel():
         return "error"
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=888)
+    app.run(host='0.0.0.0', port=666)
 

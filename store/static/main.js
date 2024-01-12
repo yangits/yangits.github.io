@@ -7,6 +7,8 @@ var text = document.getElementById("text");
 var goods_table = document.getElementById("goods_table");
 var select_name = document.getElementById("select_name");
 var select_specs = document.getElementById("select_specs");
+var zhanghu = document.getElementById("zhanghu");
+
 if (window.screen.width < 500) {
     // 当前设备是移动设备 goods_table
     document.getElementById("goods_table_id").style.maxHeight="1500px"
@@ -18,28 +20,22 @@ if (window.XMLHttpRequest){
 }else{// code for IE6, IE5
     var xhr=new ActiveXObject("Microsoft.XMLHTTP");
 }
-password.value==""//;select_name.value="";select_specs.value="";
+password.value=="";
 if (localStorage.getItem('username') && localStorage.getItem('storename')) {
     username.options[localStorage.getItem('username')].selected = true;
     storename.options[localStorage.getItem('storename')].selected = true;
-}
-function Login(){
-    if ( username.value == "" ){
-        timsg.innerHTML="用户名不能为空！"
-    }else{
-        timsg.innerHTML=""
-    }
-    localStorage.setItem('username', username.selectedIndex);
-    localStorage.setItem('storename', storename.selectedIndex);
 }
 function showLogin() { // 显示登录窗口的函数
     login.style.display = "block";
 }
 function hideLogin() { // 隐藏登录窗口的函数
+    zhanghu.innerText=username.value
     login.style.display = "none";
 }
-function new_add(){
-    Login()
+function Login(){
+    select_name.value="";select_specs.value="";
+    localStorage.setItem('username', username.selectedIndex);
+    localStorage.setItem('storename', storename.selectedIndex);
     if (storename.value==""){
         alert("仓库名称不能为空")
     }else{
@@ -123,7 +119,7 @@ function file_excel(){
             if(xhr.status==200){
                 if  (xhr.responseText=="success"){
                     alert(file_excel.files[0].name+"上传成功");
-                    new_add()
+                    get_goods()
                 }else{alert(file_excel.files[0].name+"上传失败")}
             }else{alert("上传失败,服务器响应错误")}
             file_excel.value=null
