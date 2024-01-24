@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+    <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="shortcut icon" href="../static/main.ico">
     <title>仓库管理系统</title>
     <link rel="stylesheet" href="../static/main.css">
-    <style></style>
 </head>
 <body>
     <!-- 登录窗口 -->
@@ -14,13 +14,12 @@
         <div class="background" id="background" >
             <h3>用户登录</h3>
             <div class="timsg"></div>
-            <label>账  户: </label>
-            <select id="username"></select><br>
+            <label>账  户: </label><select id="username"></select><br>
             <div id="password_msg" class="timsg"></div>
             <label>密  码: </label><input type="password" id="password" onkeyup="Id('password_msg').innerHTML=''"><br>
             <div  class="timsg"></div>
-            <label>仓  库: </label>
-            <select id="storename"></select><br><div class="timsg"></div>
+            <label>仓  库: </label><select id="storename"></select><br>
+            <div class="timsg"></div>
             <button onclick="Login()">登录</button>
         </div>
     </div>
@@ -71,40 +70,55 @@
             <button id="name_top_bt" onclick="clickok_name()">新建确认</button>
         </div>
     </div>
-    <div class="top_row">
+    <div class="top_row" id="store_goods_li">
         <label >仓库管理系统</label>
-        <span class="top_row_bt" onclick="get_store_goods()">仓库管理</span>
+        <span  class="top_row_bt" onclick="get_store_goods()" >仓库管理
+        <ul>
+            <li><a href="#">出库单</a></li>
+            <li><a href="#">入库单</a></li>
+            <li><a href="#">新建仓库</a></li>
+            <li><a href="#">删除仓库</a></li>
+        </ul>
+        </span>
         <span class="top_row_bt" onclick="get_good_outin()">出入库记录</span>
+        <span class="top_row_bt" onclick="get_path_file()">公共云盘</span>
         <span class="top_row_bt" onclick="get_account_set()">账户设置</span>
         <span class="top_row_bt" onclick="showLogin()">退出</span>
+        
     </div>
     <div class="mainbody">
         <div class="main_top">
             <div style="display: none;" id="select_all">
-                <label>搜索品类:</label><input type="text" id="select_row1" onkeydown="keyup_submit(event);">
-                <label>搜索名称:</label><input type="text" id="select_row2" onkeydown="keyup_submit(event);">
-                <label>搜索材质:</label><input type="text" id="select_row3" onkeydown="keyup_submit(event);">
-                <label>搜索规格:</label><input type="text" id="select_row4" onkeydown="keyup_submit(event);">
-                <span id="select_into">
-                    <label>搜索操作:</label><input type="text" id="select_row5" onkeydown="keyup_submit(event);">
-                    <label>搜索操作员:</label><input type="text" id="select_row6" onkeydown="keyup_submit(event);">
-                </span>
+                <label>品类:</label><input type="text" id="select_row1" onkeydown="keyup_submit(event);">
+                <label>名称:</label><input type="text" id="select_row2" onkeydown="keyup_submit(event);">
+                <label>材质:</label><input type="text" id="select_row3" onkeydown="keyup_submit(event);">
+                <label>规格:</label><input type="text" id="select_row4" onkeydown="keyup_submit(event);">
+                <label>操作:</label><input type="text" id="select_row5" onkeydown="keyup_submit(event);">
+                <label>操作员:</label><input type="text" id="select_row6" onkeydown="keyup_submit(event);">
                 <div class="timsg"></div>
             </div>
-            <input type='file' name='file' accept="text/csv" id='file_excel' style="display: none;"  onchange="up_file_excel()">
-            <button class="left" onclick="tabledown()">表格导出</button>
+            
+            <button class="right" onclick="tabledown()">表格导出</button>
+            <input type='file' name='file' accept="text/csv" id='file_excel' style="display: none;"  onchange="upfile_or_uploud()">
+            <button class="right" id="up_excel" onclick="up_excel()">表格导入</button>
             <span id="in_add_good">
-                <button class="left" id="up_excel" onclick="up_excel()">表格导入</button>
-                <button class="left"  onclick="show_goods_top('')">新增物料</button>
-                <button class="left" onclick="add_store()">新增仓库</button>
+                <button class="right"  onclick="show_goods_top('')">新增物料</button>
+                <button class="right" onclick="add_store()">新增仓库</button>
             </span>
-            <button class="left" onclick="show_name_top('')" id="add_name_bt">新增账户</button>
-            <button class="left" onclick="show_select()" id="select_bt">打开搜索</button>
+            <button class="right" onclick="show_name_top('')" id="add_name_bt">新增账户</button>
+            <button class="right" onclick="add_dirs()" id="add_dirs_bt">新建文件夹</button>
+            <button class="right" onclick="show_select()" id="select_bt">打开搜索</button>
+            <span style="float: right;" id="myElement"></span>
+            <span style="float: left;cursor: pointer;" id="path_show">
+                <button onclick="Id('path').innerHTML='/';get_path_file()">返回根目录</button> 
+                <span id="path" onclick="up_path()">/</span>
+            </span>
             
         </div>
         <div class="goods_table" id="goods_table_id">
-            <table border='1' id="goods_table">
-            </table>
+            <table border='1' id="goods_table"></table>
+            <div class="right" onclick="hide_show_rows()" id="hide_show_rows">点击加载全部</div>
+            <span style="display: none;" id="show_rows">200</span>
         </div>
     </div>
     <footer><span id="foot_username">**</span>------<span id="foot_storename">**</span>------<span>河南瑞牧农牧设备有限公司</span></footer>
