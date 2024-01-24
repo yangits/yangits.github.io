@@ -3,8 +3,10 @@ import time
 
 from flask import Flask, render_template, request
 
-app = Flask(__name__)
+from Cloud import Cloud_blue
 
+app = Flask(__name__)
+app.register_blueprint(Cloud_blue)
 def goods_list_num():
     lists_text="品类 text,名称 text,材质 text,规格 text,备注 text,单价 text,单重 text,单位 text,数量 text,操作 text"
     lists=lists_text.replace(" text","")
@@ -125,7 +127,6 @@ def add_edit_goods():
     cur_data = conn_data.cursor()  
     lists_text,lists,val_num=goods_list_num()
     if add_edit=="新增":
-        print(goods_rows)
         cur_data.execute(f'insert into {storename} ({lists}) values({val_num})',goods_rows+("",))
         cur_data.execute(f"select * from {storename}");good_id=cur_data.lastrowid
     else:
@@ -221,8 +222,9 @@ def up_excel():
     cur_data = conn_data.cursor() 
     up_excel_list=[]
     for each in csv_str.splitlines():
-        up_excel_list.append((each+",").split(","))
+        up_excel_list.append((each+",").split(",")[1:])
     lists_text,lists,val_num=goods_list_num()
+    print(up_excel_list[1:][0])
     if up_excel_list[0][0:-1] == lists.split(",")[0:-1]:
         try:
             cur_data.executemany(f'insert into {storename} ({lists}) values({val_num})',up_excel_list[1:])
@@ -236,7 +238,7 @@ def up_excel():
         return "error"
 def dtime():
     t=time.localtime()
-    dtime="{}/{:02d}/{:02d}".format(t.tm_year,t.tm_mon,t.tm_mday)
+    dtime="{}/{:02d}/{:02d}-{:02d}:{:02d}".format(t.tm_year,t.tm_mon,t.tm_mday,t.tm_hour,t.tm_min)
     return dtime
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=666)
