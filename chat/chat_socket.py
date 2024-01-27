@@ -1,4 +1,4 @@
-
+﻿
 from flask import Flask, render_template
 from flask_socketio import SocketIO, join_room, leave_room, send
 
@@ -32,5 +32,5 @@ def leave(message):
     leave_room(room)
 
 if __name__ == '__main__':
-    print("http://localhost:666/")
-    socketio.run(app , host='0.0.0.0', port=666)
+    print("http://localhost:888/")
+    socketio.run(app , host='0.0.0.0', port=888)

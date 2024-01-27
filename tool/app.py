@@ -17,6 +17,7 @@ html0="""<html>
             <script>
                 function upload() {
                     const f = document.querySelector('#file');
+                    
                     const fdata = new FormData();
                     fdata.append('file', f.files[0]);
                     const xhr = new XMLHttpRequest();
@@ -60,13 +61,14 @@ def index():
                         </tr>""" %(file2,file1,size,mtime,file)
         html=html+ """</table> <br>
             <form action="/upload_file/path_file" enctype='multipart/form-data' method='POST'>
-                <input type="file" name="file"  id="file">
+                <input type="file" name="file"  id="file" multiple>
                 <input type="submit" value="上传/首页"  id="upload-btn" onclick="upload()">
                 <span>上传进度<span id="myElement">0</span>%</span>
             </form></div>
         </body>
         </html>"""
         return html
+        
 @app.route("/path_file/<path:path>")
 def path_file(path):
     file_list = os.listdir(filepath +"/" + path)
