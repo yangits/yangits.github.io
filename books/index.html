@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图库</title>
+</head>
+<style>
+    .home {
+        width: 372px;
+        text-align: center;
+        margin: auto;
+    }
+</style>
+<body>
+    <div class="home" id="AA">
+    <img src="./E.jpg" width=372px height=448px title="点击寻找答案" onclick="answer()">
+    </div>    
+    <div class="home" id="answer" style="display: none;">
+    <img id="img" src="" width=372px height=448px  title="点击返回" onclick="aa()">
+    </div>
+    <script>
+        function answer(){
+            var num=Math.floor(Math.random()*318)+1;
+            console.log(num);
+            document.getElementById('img').src="./answer ("+ num +").jpg";
+            document.getElementById('answer').style.display="";
+            document.getElementById("AA").style.display="none";
+        }
+        function aa(){
+            document.getElementById('answer').style.display="none";
+            document.getElementById("AA").style.display="";
+        }
+    </script>
+</body>
+</html>
