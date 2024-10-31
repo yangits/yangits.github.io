@@ -1,0 +1,254 @@
+main{
+    min-width: 1200px;
+    height: 600px;
+    min-height: 100vh;
+    background-image: url('../img/bg.jpg');
+    background-size: 100% 100%;
+    padding-top: 140px;
+    box-sizing: border-box;
+    overflow: hidden;
+    // width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    // transform: translateX(-30px);
+}
+audio{
+    display: none;
+}
+div.wanduoda{
+    position: absolute;
+    top: 16vh;
+    left: 56%;
+    transform: translateX(-50%);
+    color: #ff9100;
+    box-shadow: 0 0 6px #ffff33;
+    padding: 4px 6px;
+    border-radius: 10px;
+}
+div.beishu{
+    position: absolute;
+    top: 16vh;
+    left: 48%;
+    transform: translateX(-50%);
+    color: #ff9100;
+    box-shadow: 0 0 6px #ffff33;
+    padding: 4px 6px;
+    border-radius: 10px;
+}
+div.btnBox{
+    position: absolute;
+    bottom: 30vh;
+    left: 50%;
+    transform: translateX(-50%);
+    >input{
+        padding: 10px 30px;
+        background-color: #ffff33;
+        border-width: 0;
+        border-radius: 20px;
+        color: #972b00;
+        outline-width: 0;
+        cursor: pointer;
+    }
+    >input:last-child, >input:nth-child(2){
+        display: none;
+    }
+}
+@keyframes txtRun{
+    0%{
+        transform: scale(1);
+        color: #ffff33;
+    }
+    50%{
+        transform: scale(1.2);
+        color: #ff6d33;
+    }
+    100%{
+        transform: scale(1);
+        color: #ffff33;
+    }
+}
+div.whatPlayer{
+    >div{
+        position: absolute;
+        color: #ffff33;
+        animation: txtRun linear 2s infinite;
+        display: none;
+        >h3{
+            font-size: 20px;
+        }
+    }
+    >div.p1{
+        top: 20vh;
+        left: 26%;
+    }
+    >div.p2{
+        top: 20vh;
+        right: 26%;
+    }
+    >div.p3{
+        bottom: 34vh;
+        left: 30%;
+    }
+}
+@keyframes jiantourun{
+    from{
+        height: 0;
+    }
+    to{
+        height: 200px;
+    }
+}
+@keyframes tanchuang{
+    from{
+        transform: translateX(100px);
+    }
+    to{
+        transform: translateX(0);
+    }
+}
+div.iconShow{
+    >img{
+        position: absolute;
+        display: none;
+        animation: jiantourun .4s;
+    }
+    >img:nth-child(1){
+        transform: rotate(-50deg);
+        width: 60px;
+        height: 200px;
+        top: 16%;
+        left: 30%;
+    }
+    >img:nth-child(2){
+        transform: rotateX(180deg) rotateZ(150deg);
+        width: 60px;
+        height: 200px;
+        top: 16%;
+        right: 24%;
+    }
+    >img:nth-child(3){
+        transform: rotate(260deg);
+        width: 60px;
+        height: 200px;
+        bottom: 18%;
+        left: 30%;
+    }
+}
+div.user{
+    >div{
+        width: 100px;
+        height: 100px;
+        position: absolute;
+        text-align: center;
+        color: #ffff33;
+        >img{
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 0 10px #f7ffdc;
+            width: 100%;
+        }
+        >div{
+            position: absolute;
+            top: 20px;
+            display: none;
+            >h6{
+                font-size: 12px;
+            }
+            >img{
+                width: 60px;
+            }
+        }
+    }
+    >div.p1{
+        >div{
+            right: -70px;
+        }
+        top: 18vh;
+        left: 2%;
+    }
+    >div.p2{
+        >div{
+            left: -70px;
+        }
+        top: 18vh;
+        right: 2%;
+    }
+    >div.p3{
+        bottom: 10vh;
+        left: 14%;
+    }
+}
+@mixin publicCardSet {
+    >div.card{
+        width: 140px;
+        height: 200px;
+        border: 1px solid #000000;
+        margin-left: -100px;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f7ffdc;
+        user-select: none;
+        transition: .2s all;
+        >div.absBox{
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            font-size: 20px
+        }
+        >div.card-leftTitle{
+            left: 4px;
+            top: 4px;
+        }
+        >div.card-rightTitle{
+            bottom: 4px;
+            right: 4px;
+            transform: rotate(180deg);
+        }
+        >div.card-content{
+            font-size: 80px;
+        }
+    }
+    >div.card:first-child{
+        margin: 0;
+    }
+}
+div.box{
+    margin-top: -180px;
+    display: flex;
+    justify-content: space-between;
+    >div.box-left,>div.box-right{
+        height: 80vh;
+        @include publicCardSet();
+        >div.card{
+            transform: rotate(90deg);
+            margin-left: 0;
+            margin-top: -180px;
+            transform-origin: left bottom;
+            background-color: #f7ffdc;
+            background-image: url('../img/pai.jpg');
+            background-size: 100% 100%;
+        }
+    }
+    div.box-left{
+        transform: rotate(30deg) translate(120px, -70px);
+    }
+    div.box-right{
+        transform: rotate(-212deg) translate(200px, 70px);
+        transform-origin: right 440px;
+    }
+    >div.box-mid{
+        width: 800px;
+        margin-top: 240px;
+        margin-left: 60px;
+        // background-color: #ffdab7;
+    }
+}
+div.my,div.box-mid{
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+    padding-left: 60px;
+    @include publicCardSet();
+}
