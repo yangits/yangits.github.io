@@ -3,7 +3,7 @@ import re
 
 import requests
 
-urls=["github.com","devv.ai"]
+urls=["github.com"]
 url_hosts = "https://raw.hellogithub.com/hosts"
 hosts_ip=""
 header = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0"}  
@@ -21,9 +21,9 @@ for url in urls:
             break
         except:
             print("访问 "+url+" ["+ip+"] 失败...")
-hosts_hello = requests.get(url_hosts, headers=header).text
+# hosts_hello = requests.get(url_hosts, headers=header).text
 with open("C:/Windows/System32/drivers/etc/hosts", "w") as hosts:
     hosts.write(hosts_ip)
-    hosts.write(hosts_hello)
+    # hosts.write(hosts_hello)
 hosts.close()
 os.system("ipconfig /flushdns")
