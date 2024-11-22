@@ -18,8 +18,10 @@
         z-index: 1;
         left:0;
         right: 0;
-        top:210px;
+        top:200px;
         width: 150px;
+        font-size: 20px;
+        text-shadow: 2px 2px 5px #919090;
         text-align: center;
         margin: auto;
         word-wrap: break-word;
@@ -27,8 +29,8 @@
     }
 </style>
 <body>
-    <div class="home" id="AA">
-    <img src="./E.jpg" width=372px height=448px title="点击寻找答案" onclick="answer()">
+    <div class="home" id="home">
+    <img src="./home.jpg" width=372px height=448px title="点击寻找答案" onclick="answer()">
     </div>    
     <div class="home" id="answer" style="display: none;">
         <img id="img" src="./answer.jpg" width=372px height=448px  title="点击返回" onclick="re()">
@@ -47,12 +49,12 @@
             console.log(num);
             document.getElementById('txt').innerText=lines[num]
             document.getElementById('answer').style.display="";
-            document.getElementById("AA").style.display="none";
+            document.getElementById("home").style.display="none";
         }
 
         function re(){
             document.getElementById('answer').style.display="none";
-            document.getElementById("AA").style.display="";
+            document.getElementById("home").style.display="";
         }
 
     </script>
