@@ -34,9 +34,9 @@
 </style>
 <body>
     <div>
-        <br>原材料长: <input id="max_weight" type="text" value="6000" onkeyup="this.value=this.value.replace(/[^0-9\.]/g,'');">
-        <br>下料尺寸: <input id="weights" type="text" value="2300,1988,1050,601,503,459,359" onkeyup="this.value=this.value.replace(/[^0-9\.\,]/g,'');">
-        <br>下料数量: <input id="nums" type="text" value="912,320,1248,320,912,320,1248" onkeyup="this.value=this.value.replace(/[^0-9\.\,]/g,'');">
+        <br>原材料长: <input id="max_weight" type="text" value="6000" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');">
+        <br>下料尺寸: <input id="weights" type="text" value="2300,1988,1050,601,503,459,359" onkeyup="this.value=this.value.replace(/[^0-9\,]/g,'');">
+        <br>下料数量: <input id="nums" type="text" value="912,320,1248,320,912,320,1248" onkeyup="this.value=this.value.replace(/[^0-9\,]/g,'');">
         <br><br><button type="button" id="get_result">开始计算</button>
         <br>计算结果:
         <br><textarea id="text_result"></textarea>
@@ -182,7 +182,7 @@
             // console.log(result);
             //若该线性规划问题无最优解 则将报错提示输出到网页 并退出函数
             if (!result) {
-                text.value += "\n计算停止，出现未知错误，请调整原材料长。";
+                text.value += "\n计算停止，出现未知错误，请调整数据。";
                 return;
             }
             //生成求解后的结果文本

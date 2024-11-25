@@ -13,7 +13,7 @@ for url in urls:
     url_ip138 = 'https://site.ip138.com/'  + url
     ip138_html = requests.get(url_ip138, headers=header).text
     ip138_ips=re.findall('/" target="_blank">([0-9]*.[0-9]*.[0-9]*.[0-9]*)</a>',ip138_html)
-    for ip in ip138_ips[:8]:
+    for ip in ip138_ips[:15]:
         try:
             github = requests.get("http://"+ip, headers={'Host':url,"User-Agent": header["User-Agent"]},timeout=3)
             print("访问 "+url+" ["+ip+"] 成功")
