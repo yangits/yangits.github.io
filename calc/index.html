@@ -60,18 +60,13 @@
                 
                 a.push(aa);
             }
-            // let c={}
-            // for (let i = 0; i < limits.length; i++) {
-            //     c[i]=1;
-            // }
-            // console.log(c);
+
             
             model = {
                 "optimize": limits[0].length,
                 "opType": "min",
                 "constraints": b,
                 "variables": a,
-                // "ints": c            //取整
             }
             results = solver.Solve(model);
             // console.log(results);
@@ -172,6 +167,9 @@
             let nums = document.getElementById('nums').value.split(",").map(Number);
             let text = document.getElementById('text_result');
             text.value = "开始计算……\n开始动态规划，计算所有下料分布可能……";
+            for (let j = 0; j < weights.length; j++) {
+                if(weights[j]>max_weight){text.value += "\n计算停止，出现未知错误，请调整数据。";return;}
+            }
             let num_arrs = bag_program(weights, nums, max_weight);
         //    console.log( num_arrs);
             text.value += "\n动态规划结束，开始线性规划选择最优分布……";
@@ -206,7 +204,6 @@
             text.value += "\n管材平均利用率为：" + Math.round(l / z / max_weight * 10000) / 100 + "%";
             text.value += "\n此程序仅供学习和参考，计算结果自行承担风险！";
         }
-    </script>
-    
+    </script> 
 </body>
 </html>
