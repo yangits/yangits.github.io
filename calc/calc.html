@@ -72,6 +72,7 @@
                     for (var i = 0; i < cb.length; i++) {
                         var num = loosen[min_index][0][i];
                         if (num >= 0) continue;
+                        if (getCheckNum(cb, loosen, i) >= 0) continue;
                         var check = (getCheckNum(cb, loosen, i)) / num;
                         if (check < min2) {
                             min2 = check;
@@ -174,9 +175,9 @@
             var loosen = limit.slice(0);
             for (var i = 0; i < limit.length; i++) {
                 //插入松弛变量
-                // for (var j = 0; j < limit.length; j++) {
-                //     limit[i][0].push(i == j ? 1 : 0);
-                // }
+                for (var j = 0; j < limit.length; j++) {
+                    limit[i][0].push(i == j ? 1 : 0);
+                }
                 //插入决策变量
                 limit[i].push(i + goal.length);
                 //插入价值系数
