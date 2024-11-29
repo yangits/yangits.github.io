@@ -1,13 +1,36 @@
 {
     "pages": [
+        "metal/index",
+        "calc/index",
         "huarongdao/index"
     ],
     "window": {
         "backgroundColor": "#F6F6F6",
         "backgroundTextStyle": "light",
         "navigationBarBackgroundColor": "#F6F6F6",
-        "navigationBarTitleText": "数字华容道",
+        "navigationBarTitleText": "星愿",
         "navigationBarTextStyle": "black"
+    },
+    "tabBar": {
+      "selectedColor": "#f00",
+      "list": [{
+        "pagePath": "metal/index",
+        "text": "金属计算",
+        "iconPath": "img/11.png",
+        "selectedIconPath": "img/22.png"
+      },
+      {
+        "pagePath": "calc/index",
+        "text": "排管计算",
+        "iconPath": "img/11.png",
+        "selectedIconPath": "img/22.png"
+      },
+      {
+        "pagePath": "huarongdao/index",
+        "text": "数字华容道",
+        "iconPath": "img/11.png",
+        "selectedIconPath": "img/22.png"
+      }]
     },
     "sitemapLocation": "sitemap.json"
 }

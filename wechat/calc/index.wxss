@@ -1,0 +1,35 @@
+page {
+    align-items: center;
+    background-color: rgb(206, 203, 203);
+}
+.body{
+  background-color: rgb(206, 203, 203);
+  text-align: center;
+
+}
+
+.hang {
+  color: black;
+  height: 60rpx;
+  display:flex;
+  align-items:center;
+  font-size:30rpx ;
+}
+button {
+  width: 200rpx;
+  background-color: rgb(255, 255, 255);
+  font-size:30rpx ;
+}
+input {
+  text-align: left;
+  width: 550rpx;
+  background-color: rgb(255, 255, 255);
+}
+textarea {
+  height: 1500rpx;
+  width: 680rpx;
+  resize: none;
+  background-color: rgb(255, 255, 255);
+  text-align: left;
+  margin-top: 1px;
+}

@@ -1,7 +1,9 @@
 const app = getApp();
+
 Page({
   data: {
     windowWidth: app.windowWidth, // 屏幕宽度
+
     numData: [],
     m: '00',   // 分
     s: '00',   // 秒
@@ -105,7 +107,6 @@ Page({
         // Es6 解构赋值
         [numData[i], numData[x]] = [numData[x], numData[i]];
         step += 1;
-
         break;
       }
     }
