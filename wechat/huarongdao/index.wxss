@@ -20,7 +20,7 @@ page {
     font-size: 50rpx;
     font-weight: 600;
     position: relative;
-    background-color: #b9b9b9;
+    background-color: #bebebe;
 }
 
 .v1 view {
