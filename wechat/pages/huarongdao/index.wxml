@@ -1,6 +1,6 @@
 <view class="container" style="width:calc({{windowWidth}}px - 60rpx + {{(nowDifficulty-1)*2}}rpx);height:calc({{windowWidth}}px - 60rpx + {{(nowDifficulty-1)*2}}rpx);">
     <block wx:for='{{numData}}' wx:key='{{index}}'>
-        <image wx:if="{{!item.isEmpty}}" style="width:calc(({{windowWidth}}px - 60rpx) / {{nowDifficulty}});height:calc(({{windowWidth}}px - 60rpx) / {{nowDifficulty}})" catchtouchstart="goMove" data-index='{{index}}' class="v1" >
+        <image wx:if="{{!item.isEmpty}}" style="width:calc(({{windowWidth}}px - 60rpx) / {{nowDifficulty}});height:calc(({{windowWidth}}px - 60rpx) / {{nowDifficulty}});font-size: calc(300rpx / {{nowDifficulty}}); " catchtouchstart="goMove" data-index='{{index}}' class="v1" >
             <view class="f_center">{{item.num}}</view>
         </image>
 

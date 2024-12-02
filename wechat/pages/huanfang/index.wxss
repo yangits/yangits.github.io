@@ -43,10 +43,7 @@ page {
     margin: 20rpx 0;
 }
 
-.v4 {
-    font-size: 32rpx;
-    margin-bottom: 40rpx;
-}
+
 
 .game {
     width: 400rpx;
@@ -55,14 +52,4 @@ page {
     color: #fff;
     border-radius: 10rpx;
     font-size: 36rpx;
-}
-
-.reset {
-    width: 400rpx;
-    height: 80rpx;
-    background: #808a2d;
-    color: #fff;
-    border-radius: 10rpx;
-    font-size: 36rpx;
-    margin: 20rpx 0;
 }

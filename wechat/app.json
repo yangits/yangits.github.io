@@ -2,6 +2,7 @@
   "pages": [
     "pages/metal/index",
     "pages/calc/index",
+    "pages/huanfang/index",
     "pages/huarongdao/index"
   ],
   "window": {
@@ -29,6 +30,12 @@
       {
         "pagePath": "pages/huarongdao/index",
         "text": "数字华容道",
+        "iconPath": "img/11.png",
+        "selectedIconPath": "img/22.png"
+      },
+      {
+        "pagePath": "pages/huanfang/index",
+        "text": "幻方",
         "iconPath": "img/11.png",
         "selectedIconPath": "img/22.png"
       }

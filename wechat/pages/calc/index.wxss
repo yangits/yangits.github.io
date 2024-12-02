@@ -7,7 +7,7 @@ page {
   flex-direction:column;
   text-align: center;
   align-items: center;
-  margin-top: 10rpx;
+  margin-top: 20rpx;
 }
 
 .center view {
@@ -18,10 +18,10 @@ page {
   font-size:30rpx ;
 }
 button {
-  width: 200rpx;
+  width: 300rpx;
   background-color: rgb(255, 255, 255);
-  font-size:30rpx ;
-  line-height: 50rpx;
+  font-size:35rpx ;
+  line-height: 60rpx;
 }
 input {
   text-align: left;
@@ -34,6 +34,6 @@ textarea {
   resize: none;
   background-color: rgb(255, 255, 255);
   text-align: left;
-  margin-top: 2rpx;
+  margin-top: 6rpx;
   font-size:30rpx ;
 }
