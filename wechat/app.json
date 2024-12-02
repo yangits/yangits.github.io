@@ -3,6 +3,7 @@
     "pages/metal/index",
     "pages/calc/index",
     "pages/huanfang/index",
+    "pages/shudu/index",
     "pages/huarongdao/index"
   ],
   "window": {
@@ -29,7 +30,13 @@
       },
       {
         "pagePath": "pages/huarongdao/index",
-        "text": "数字华容道",
+        "text": "华容道",
+        "iconPath": "img/11.png",
+        "selectedIconPath": "img/22.png"
+      },
+      {
+        "pagePath": "pages/shudu/index",
+        "text": "数独",
         "iconPath": "img/11.png",
         "selectedIconPath": "img/22.png"
       },
