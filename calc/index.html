@@ -25,6 +25,7 @@
         width: 330px;
         height: 400px;
         resize: none;
+        margin-top: 10px;
     }
     a{
         text-align: center;
@@ -38,8 +39,7 @@
         <br>下料尺寸: <input id="weights" type="text" value="2300,1988,1050,601,503,459,359" onkeyup="this.value=this.value.replace(/[^0-9\,]/g,'');">
         <br>下料数量: <input id="nums" type="text" value="912,320,1248,320,912,320,1248" onkeyup="this.value=this.value.replace(/[^0-9\,]/g,'');">
         <br><br><button type="button" id="get_result">开始计算</button>
-        <br>计算结果:
-        <br><textarea id="text_result"></textarea>
+        <br><textarea id="text_result">计算结果:</textarea>
         <br><a href="../metal/index.html" target="_blank">金属计算器</a>
         
     </div>

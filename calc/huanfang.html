@@ -5,9 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>幻方</title>
 </head>
+<style>
+    body {
+        font-size: 16px;
+        background-color: rgb(220, 220, 220);
+        width: 380px;
+        text-align: center;
+        margin: auto;
+        line-height: 40px;
+    }
+    textarea{
+        width: 380px;
+        height: 380px;
+    }
+</style>
 <body>
-    <input id="nn" type="text" value="9">
-    <button type="button" id="get_result">开始计算</button>
+    <div>
+        <input id="nn" type="text" value="9">
+        <button type="button" id="get_result">开始计算</button>
+    </div>
+
     <textarea id="text_result"></textarea>
     <script>
         document.getElementById('get_result').onclick = function () {

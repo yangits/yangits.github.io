@@ -12,7 +12,7 @@
 <view class="v3">步数：{{step}}</view>
 <view class="v4">耗时：{{m}}:{{s}}</view>
 
-<view bindtap="goGame" class="f_center game">开始游戏</view>
+<view bindtap="goGame" class="f_center game">开始</view>
 <view bindtap="reset" class="f_center reset">重置</view>
 <view bindtap="choose" class='f_center game'>选择难度 {{nowDifficulty}}×{{nowDifficulty}}</view>
       
