@@ -46,7 +46,7 @@ input {
     text-align: center;
     color: rgb(160, 160, 160);
     font-size: 30rpx;
-    width: 420rpx;
+    width: 450rpx;
 }
 
 .text_result{
