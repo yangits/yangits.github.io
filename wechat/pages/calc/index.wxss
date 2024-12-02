@@ -1,14 +1,16 @@
 page {
     align-items: center;
-    background-color: rgb(206, 203, 203);
+    background-color: rgb(199, 199, 199);
 }
 .body{
-  background-color: rgb(206, 203, 203);
+  display:flex;
+  flex-direction:column;
   text-align: center;
-
+  align-items: center;
+  margin-top: 10rpx;
 }
 
-.hang {
+.center view {
   color: black;
   height: 60rpx;
   display:flex;
@@ -19,6 +21,7 @@ button {
   width: 200rpx;
   background-color: rgb(255, 255, 255);
   font-size:30rpx ;
+  line-height: 50rpx;
 }
 input {
   text-align: left;
@@ -26,10 +29,11 @@ input {
   background-color: rgb(255, 255, 255);
 }
 textarea {
-  height: 1500rpx;
+  height: 1000rpx;
   width: 680rpx;
   resize: none;
   background-color: rgb(255, 255, 255);
   text-align: left;
-  margin-top: 1px;
+  margin-top: 2rpx;
+  font-size:30rpx ;
 }

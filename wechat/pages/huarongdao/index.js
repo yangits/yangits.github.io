@@ -1,16 +1,14 @@
 const app = getApp();
-
 Page({
   data: {
     windowWidth: app.windowWidth, // 屏幕宽度
-
     numData: [],
     m: '00',   // 分
     s: '00',   // 秒
     step: 0,   // 步数
     nowDifficultyDef: 3, // 默认当前难度系数 -- 注意这个值要和初始的 当前难度系数的值一样
-    nowDifficulty: 3,    // 当前难度系数 5*5 6*6 7*7
-    maxDifficulty: 10,   // 最大难度系数
+    nowDifficulty: 3,    // 当前难度系数 
+    maxDifficulty: 8,   // 最大难度系数
   },
 
   onLoad() {
@@ -107,6 +105,7 @@ Page({
         // Es6 解构赋值
         [numData[i], numData[x]] = [numData[x], numData[i]];
         step += 1;
+
         break;
       }
     }
@@ -223,8 +222,8 @@ Page({
 
   onShareAppMessage(e) {
     return {
-      title: '最强大脑 《数字华容道》谁敢来战？',
-      path: 'pages/index/index'
+      title: '数字华容道',
+      path: 'huarongdao/index'
     }
   }
 })
