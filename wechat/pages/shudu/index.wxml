@@ -18,7 +18,6 @@
 <view class="import">
   <view>
     <view bindtap="gameFresh">
-      <!-- <image src="../../../images/sudoku/fresh.png"></image> -->
       刷新
     </view>
     <button size="mini" id="stop" bindtap="gameStop">{{stopText}}</button>
@@ -28,9 +27,7 @@
         <image src="../../img/time.png"></image>
         <text>{{timer}}</text>
       </view>
-      <view bindtap="gameExplain">
-        <image src="../../img/ask.png"></image>
-      </view>
+
   </view>
 </view>
 
@@ -68,14 +65,7 @@
 <!-- 按钮组 -->
 <view id="dashboard" class="dashboard">
   <view class="buttons">
-    <button size="mini" id="pre" bindtap="gameClear">
-      <!-- <image src="../../../images/sudoku/next.png"></image> -->
-      清空
-    </button>
-    <button size="mini" id="back" bindtap="gameCheck">
-      <!-- <image src="../../../images/sudoku/next.png"></image> -->
-      检查
-    </button>
+    <button size="mini" id="back" bindtap="gameCheck">检查</button>
     <button size="mini" id="clear" bindtap='gameCellRemark'>标记</button>
     <button size="mini" id="rebuild" bindtap='gameCellDelete'>删除</button>
     <button size="mini" class="null"></button>

@@ -7,7 +7,7 @@ Page({
     sumnum:0,
   },
 
-  onLoad() {
+  onReady() {
     this.initNum(this.data.nownum);
   },
   // 重置

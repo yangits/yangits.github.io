@@ -52,7 +52,7 @@ Page({
     hours: 0,
     minutes: 0,
     seconds: 0,
-    stopText: '暂停'
+    stopText: '开始'
   },
 
   /**
@@ -68,11 +68,10 @@ Page({
   gameFresh: function () {
     this.initGame(this.data.gameLevel)
     this.timeCalculate()
-    // gameTimer = setInterval(this.timeCalculate, 1000)
     this.clearGameTime()
-    gameTimer = setInterval(this.timeCalculate, 1000)
+    // gameTimer = setInterval(this.timeCalculate, 1000)
     this.setData({
-      isClick: false
+      isClick: false,stopText: '开始'
     })
   },
 
@@ -94,40 +93,12 @@ Page({
    */
   gameStop: function () {
     clearInterval(gameTimer)
-    let _self = this
-    if (this.data.stopText === '暂停') {
-      wx.showModal({
-        title: '暂停',
-        content: '继续挑战？',
-        confirmText: '是的',
-        showCancel: false,
-        confirmColor: '#ffa042',
-        success: function (res) {
-          if (res.confirm) {
-            gameTimer = setInterval(_self.timeCalculate, 1000)
-            _self.setData({
-              stopText: '暂停'
-            })
-          } else {
-            clearInterval(gameTimer)
-            _self.setData({
-              stopText: '继续'
-            })
-          }
-        }
-      })
-    } else if (this.data.stopText === '继续') { // 继续和开始
-      gameTimer = setInterval(_self.timeCalculate, 1000)
-      _self.setData({
-        stopText: '暂停'
-      })
-    } else if(this.data.stopText === '开始') {
-      _self.initGame(this.data.gameLevel)
-      _self.setData({
-        stopText: '暂停'
-      })
+    if (this.data.stopText === '暂停') { // 继续和开始
+      this.setData({stopText: '继续'})
+    } else {
+      gameTimer = setInterval(this.timeCalculate, 1000)
+      this.setData({stopText: '暂停'})
     }
-    
   },
 
   /**
@@ -140,43 +111,10 @@ Page({
       gameLevel: el.dataset.level
     })
     this.clearGameTime()
-    // let _self = this
     clearInterval(gameTimer)
     this.gameFresh()
-    // wx.showModal({
-    //   title: '欢迎挑战数独游戏',
-    //   content: '尽情的展示你的魅力吧，让数独来见证此刻！',
-    //   confirmText: '挑战',
-    //   cancelText: '休战',
-    //   showCancel: false,
-    //   confirmColor: '#ffa042',
-    //   success(res) {
-    //     if (res.confirm) {
-    //       _self.initGame(el.dataset.level)
-    //       _self.timeCalculate()
-    //       gameTimer = setInterval(_self.timeCalculate, 1000)
-    //       _self.setData({
-    //         stopText: '暂停'
-    //       })
-    //     } else if (res.cancel) {
-    //       clearInterval(gameTimer)
-    //       _self.setData({
-    //         stopText: '继续'
-    //       })
-    //     }
-    //   }
-    // })
   },
 
-  /**
-   * 清空
-   */
-  gameClear: function () {
-    this.setData({
-      isCheck: false,
-      sudokuNumbers: this.data.cloneSudokuNumbers
-    })
-  },
 
   /**
    * 检查
@@ -223,8 +161,9 @@ Page({
    */
   gameCellDelete: function () {
     let data = this.data.sudokuNumbers
-    if (this.data.cloneSudokuNumbers[this.data.selectRowIndex][this.data.selectCellIndex] === 0
-      && data[this.data.selectRowIndex][this.data.selectCellIndex] !== 0) {
+    if (
+      // this.data.cloneSudokuNumbers[this.data.selectRowIndex][this.data.selectCellIndex] === 0 && 
+      data[this.data.selectRowIndex][this.data.selectCellIndex] !== 0) {
       data[this.data.selectRowIndex][this.data.selectCellIndex] = 0
     }
     let flagData = this.data.flagNumbers
@@ -381,32 +320,7 @@ Page({
     })
   },
 
-  /**
-   * 初始化时间莫模态
-   */
-  initGameTime: function () {
-    this.setData({stopText: '开始'});
-    // let _self = this
-    // wx.showModal({
-    //   title: '欢迎挑战数独游戏',
-    //   content: '尽情的展示你的魅力吧，让数独来见证此刻！',
-    //   confirmText: '挑战',
-    //   cancelText: '休战',
-    //   showCancel: false,
-    //   confirmColor: '#ffa042',
-    //   success(res) {
-    //     if (res.confirm) {
-    //       _self.initGame(_self.data.gameLevel)
-    //       _self.timeCalculate()
-    //       gameTimer = setInterval(_self.timeCalculate, 1000)
-    //     } else if (res.cancel) {
-    //       _self.setData({
-    //         stopText: '开始'
-    //       })
-    //     }
-    //   }
-    // })
-  },
+  
   /**
    * 计时
    */
@@ -450,6 +364,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+       
     
   },
 
@@ -457,7 +372,8 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    this.initGameTime()
+    // this.initGameTime()
+    this.gameFresh()
   },
 
   /**

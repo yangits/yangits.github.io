@@ -29,12 +29,6 @@
         "selectedIconPath": "img/22.png"
       },
       {
-        "pagePath": "pages/huarongdao/index",
-        "text": "华容道",
-        "iconPath": "img/11.png",
-        "selectedIconPath": "img/22.png"
-      },
-      {
         "pagePath": "pages/shudu/index",
         "text": "数独",
         "iconPath": "img/11.png",
@@ -43,6 +37,12 @@
       {
         "pagePath": "pages/huanfang/index",
         "text": "幻方",
+        "iconPath": "img/11.png",
+        "selectedIconPath": "img/22.png"
+      },
+      {
+        "pagePath": "pages/huarongdao/index",
+        "text": "华容道",
         "iconPath": "img/11.png",
         "selectedIconPath": "img/22.png"
       }

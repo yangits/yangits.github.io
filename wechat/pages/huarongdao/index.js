@@ -11,7 +11,7 @@ Page({
     maxDifficulty: 8,   // 最大难度系数
   },
 
-  onLoad() {
+  onReady() {
     this.initNum(this.data.nowDifficulty);
   },
 

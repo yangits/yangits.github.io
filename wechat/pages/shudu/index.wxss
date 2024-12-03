@@ -1,4 +1,4 @@
-/**sudoku.wxss**/
+
 .level {
   height: 80rpx;
   line-height: 80rpx;
@@ -10,14 +10,14 @@
   margin: 20rpx 0;
 }
 .level .buttons button {
-  border: 4rpx solid #ffa042;
-  background: #ffa042;
+  border: 4rpx solid #42c3ff;
+  background: #42c3ff;
   color: #fff;
 }
 .level .buttons button.active {
   background: #fff;
-  border: 4rpx solid #ffa042;
-  color: #ffa042;
+  border: 4rpx solid #42c3ff;
+  color: #42c3ff;
 }
 
 .import {
@@ -39,7 +39,7 @@
 }
 .import view > view:first-child {
   color: #fff;
-  font-size: 24rpx;
+  /* font-size: 24rpx; */
   text-align: center;
   padding: 0rpx 16rpx;
 }
@@ -51,13 +51,15 @@
   height: 32rpx;
   width: 32rpx;
   padding: 0rpx 16rpx;
-  margin-top: 20rpx;
+  /* margin-top: 20rpx; */
 }
 .import view > button {
   background: #989ddd;
   color: #fff;
   text-align: center;
-  padding: 0 8rpx;
+  padding: 10rpx  20rpx;
+  height: 80rpx;
+  margin-left: 60rpx;
 }
 .import > view:last-child {
   flex: 1;
