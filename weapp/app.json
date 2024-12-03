@@ -1,0 +1,52 @@
+{
+  "pages": [
+    "pages/metal/index",
+    "pages/calc/index",
+    "pages/huanfang/index",
+    "pages/shudu/index",
+    "pages/huarongdao/index"
+  ],
+  "window": {
+    "backgroundColor": "#F6F6F6",
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#F6F6F6",
+    "navigationBarTitleText": "星愿工具箱",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "selectedColor": "#f00",
+    "list": [
+      {
+        "pagePath": "pages/metal/index",
+        "text": "金属计算",
+        "iconPath": "img/11.png",
+        "selectedIconPath": "img/22.png"
+      },
+      {
+        "pagePath": "pages/calc/index",
+        "text": "排管计算",
+        "iconPath": "img/11.png",
+        "selectedIconPath": "img/22.png"
+      },
+      {
+        "pagePath": "pages/shudu/index",
+        "text": "数独",
+        "iconPath": "img/11.png",
+        "selectedIconPath": "img/22.png"
+      },
+      {
+        "pagePath": "pages/huanfang/index",
+        "text": "幻方",
+        "iconPath": "img/11.png",
+        "selectedIconPath": "img/22.png"
+      },
+      {
+        "pagePath": "pages/huarongdao/index",
+        "text": "华容道",
+        "iconPath": "img/11.png",
+        "selectedIconPath": "img/22.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json"
+}

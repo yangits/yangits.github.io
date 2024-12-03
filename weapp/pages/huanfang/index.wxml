@@ -1,0 +1,11 @@
+<view class="container" style="width:calc({{windowWidth}}px - 60rpx + {{(nownum-1)*2}}rpx);height:calc({{windowWidth}}px - 60rpx + {{(nownum-1)*2}}rpx);">
+    <block wx:for='{{numData}}' wx:key='{{index}}'>
+        <view  style="width:calc(({{windowWidth}}px - 60rpx) / {{nownum}});height:calc(({{windowWidth}}px - 60rpx) / {{nownum}});font-size: calc(300rpx / {{nownum}}); "  data-index='{{index}}' class="v1" >
+            <view class="f_center">{{item.num}}</view>
+        </view>
+    </block>
+</view>
+
+<view class="v3">幻方和：{{sumnum}}</view>
+<view bindtap="choose" class='f_center game'>幻方{{nownum}}×{{nownum}}</view>
+      
