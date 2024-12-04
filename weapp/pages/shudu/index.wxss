@@ -93,7 +93,7 @@
   width: 10.65%;
   height: 48rpx;
   line-height: 48rpx;
-  border: 2rpx solid #ffa042;
+  border: 2rpx solid #42baff;
   border-right-width: 0;
   border-bottom-width: 0;
   color: forestgreen;
@@ -112,7 +112,7 @@
   border-right-width: 4rpx;
 }
 .contain .row > text.tips {
-  color: firebrick;
+  color: rgb(212, 84, 84);
   font-weight: bolder;
 }
 .contain .row.selectRow {

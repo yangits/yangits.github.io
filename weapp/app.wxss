@@ -12,7 +12,7 @@ page {
     justify-content: center;
 }
 
-button {
+/* button {
     background: initial;
 }
 
@@ -22,4 +22,4 @@ button:focus {
 
 button::after {
     border: none;
-}
+} */

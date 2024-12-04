@@ -114,6 +114,15 @@ Page({
     clearInterval(gameTimer)
     this.gameFresh()
   },
+  /**
+   * 清空
+   */
+  gameClear: function () {
+    this.setData({
+      isCheck: false,
+      sudokuNumbers: this.data.cloneSudokuNumbers
+    })
+  },
 
 
   /**
@@ -161,18 +170,11 @@ Page({
    */
   gameCellDelete: function () {
     let data = this.data.sudokuNumbers
-    if (
-      // this.data.cloneSudokuNumbers[this.data.selectRowIndex][this.data.selectCellIndex] === 0 && 
-      data[this.data.selectRowIndex][this.data.selectCellIndex] !== 0) {
-      data[this.data.selectRowIndex][this.data.selectCellIndex] = 0
-    }
-    let flagData = this.data.flagNumbers
-    if (flagData.length) {
-      flagData[this.data.selectRowIndex][this.data.selectCellIndex] = false
+    if (data[this.data.selectRowIndex][this.data.selectCellIndex] !== 0) {
+      data[this.data.selectRowIndex][this.data.selectCellIndex] = this.data.cloneSudokuNumbers[this.data.selectRowIndex][this.data.selectCellIndex]
     }
     this.setData({
       sudokuNumbers: data,
-      flagNumbers: flagData
     })
   },
 
@@ -273,7 +275,7 @@ Page({
     const matrix = sudoku.puzzleMatrix
     this.setData({
       sudokuNumbers: matrix,
-      cloneSudokuNumbers: matrix
+      cloneSudokuNumbers: JSON.parse(JSON.stringify(matrix))
     })
   },
   
@@ -281,7 +283,6 @@ Page({
    * 点击单个
    */
   clickCell: function (e) {
-    let that = this
     const el = e.currentTarget
     this.setData({
       selectPopNumber: 0,
