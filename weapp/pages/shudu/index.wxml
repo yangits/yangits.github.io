@@ -20,14 +20,12 @@
     <view bindtap="gameFresh">
       刷新
     </view>
-
   </view>
   <view>
     <button size="mini" id="stop" bindtap="gameStop">{{stopText}}</button>
     <view>
       <image src="../../img/time.png"></image>
       <text>{{timer}}</text>
- 
     </view>
 
   </view>
@@ -58,7 +56,7 @@
         data-alls="{{item}}"
         class="{{cell===0?'empty':'tips'}} {{colGroupClass[cellIndex % 3]}} {{selectCellIndex === cellIndex ? 'selectCell' : ''}} {{(selectRowIndex === rowIndex && selectCellIndex === cellIndex && cell) ? 'markText' : ''}} {{selectRowIndex === rowIndex && selectCellIndex === cellIndex && !cell ? 'mark2' : ''}} {{isClick && equalNumbers[rowIndex][cellIndex] && cell ? 'markText' : ''}} {{isClick && sudokuNumbers[rowIndex][cellIndex] !== cloneSudokuNumbers[rowIndex][cellIndex] && cell ? 'fill' : ''}} {{isFlag && flagNumbers[rowIndex][cellIndex] ? 'mark1' : ''}} {{isCheck && ((!checkNumbers[rowIndex][cellIndex] && sudokuNumbers[rowIndex][cellIndex] !== cloneSudokuNumbers[rowIndex][cellIndex]) || !cell) ? 'error' : ''}}"
         style="height: {{cellWidth}};line-height: {{cellWidth}};"
-        bindtap="clickCell"
+        bindtap="{{stopText==='暂停'?'clickCell':''}}" 
         >{{cell ? cell : selectPopNumber}}</text>
     </view>
   </block>
@@ -67,16 +65,16 @@
 <!-- 按钮组 -->
 <view id="dashboard" class="dashboard "   >
   <view class="buttons">
-    <button size="mini" id="pre" bindtap="gameClear">清空</button>
-    <button size="mini" id="back" bindtap="gameCheck">检查</button>
-    <button size="mini" id="clear" bindtap='gameCellRemark'>标记</button>
-    <button size="mini" id="rebuild" bindtap='gameCellDelete' >删除</button>
+    <button size="mini" id="pre" bindtap="{{selectRowIndex===null?'':'gameClear'}}">清空</button>
+    <button size="mini" id="back" bindtap="{{selectRowIndex===null?'':'gameCheck'}}">检查</button>
+    <button size="mini" id="clear" bindtap="{{selectRowIndex===null?'':'gameCellRemark'}}">标记</button>
+    <button size="mini" id="rebuild" bindtap="{{selectRowIndex===null?'':'gameCellDelete'}}">删除</button>
     <button size="mini" class="null"></button>
     <button size="mini"
       wx:for="{{fixedNumbers_top}}"
       wx:key="{{item}}"
       data-number="{{item}}"
-      bindtap="gameCellNumber">{{item}}</button>
+      bindtap="{{selectRowIndex===null?'':'gameCellNumber'}}">{{item}}</button>
   </view>
 
   <view class="buttons">
@@ -84,6 +82,6 @@
       wx:for="{{fixedNumbers_bottom}}"
       wx:key="{{item}}"
       data-number="{{item}}"
-      bindtap="gameCellNumber">{{item}}</button>
+      bindtap="{{selectRowIndex===null?'':'gameCellNumber'}}">{{item}}</button>
   </view>
 </view>

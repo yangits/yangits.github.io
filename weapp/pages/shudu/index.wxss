@@ -3,7 +3,7 @@
   height: 80rpx;
   line-height: 80rpx;
   width: 100%;
-  margin-bottom: 20rpx;
+  margin-bottom: 35rpx;
 }
 .level .buttons {
   display: flex;

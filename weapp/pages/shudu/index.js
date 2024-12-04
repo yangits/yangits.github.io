@@ -95,9 +95,12 @@ Page({
     clearInterval(gameTimer)
     if (this.data.stopText === '暂停') { // 继续和开始
       this.setData({stopText: '继续'})
+      this.setData({selectRowIndex: null}),
+      this.setData({selectCellIndex: null})
     } else {
       gameTimer = setInterval(this.timeCalculate, 1000)
       this.setData({stopText: '暂停'})
+
     }
   },
 
@@ -118,10 +121,21 @@ Page({
    * 清空
    */
   gameClear: function () {
-    this.setData({
-      isCheck: false,
-      sudokuNumbers: JSON.parse(JSON.stringify(this.data.cloneSudokuNumbers))
+    let _self = this
+    wx.showModal({
+      title: '警告！！！',
+      content: '将会清空所有已填数据，请确认。',
+      success: function (res) {
+        if (res.confirm) {
+          _self.setData({
+            isCheck: false,
+            sudokuNumbers: JSON.parse(JSON.stringify(_self.data.cloneSudokuNumbers))
+          })
+        }
+
+      }
     })
+
   },
 
 
