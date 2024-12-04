@@ -71,7 +71,7 @@ Page({
     this.clearGameTime()
     // gameTimer = setInterval(this.timeCalculate, 1000)
     this.setData({
-      isClick: false,stopText: '开始'
+      isClick: false,stopText: '开始',selectRowIndex: null,selectCellIndex: null
     })
   },
 
@@ -94,9 +94,7 @@ Page({
   gameStop: function () {
     clearInterval(gameTimer)
     if (this.data.stopText === '暂停') { // 继续和开始
-      this.setData({stopText: '继续'})
-      this.setData({selectRowIndex: null}),
-      this.setData({selectCellIndex: null})
+      this.setData({stopText: '继续',selectRowIndex: null,selectCellIndex: null})
     } else {
       gameTimer = setInterval(this.timeCalculate, 1000)
       this.setData({stopText: '暂停'})
@@ -111,7 +109,9 @@ Page({
     let el = e.currentTarget
     this.setData({
       sudokuType: el.dataset.type,
-      gameLevel: el.dataset.level
+      gameLevel: el.dataset.level,
+      selectRowIndex: null,
+      selectCellIndex: null
     })
     this.clearGameTime()
     clearInterval(gameTimer)
