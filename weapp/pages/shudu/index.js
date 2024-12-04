@@ -71,7 +71,8 @@ Page({
     this.clearGameTime()
     // gameTimer = setInterval(this.timeCalculate, 1000)
     this.setData({
-      isClick: false,stopText: '开始',selectRowIndex: null,selectCellIndex: null
+      isClick: false,stopText: '开始',selectRowIndex: null,selectCellIndex: null,
+      flagNumbers:JSON.parse(JSON.stringify(this.data.flagInitNumbers))
     })
   },
 
@@ -129,7 +130,8 @@ Page({
         if (res.confirm) {
           _self.setData({
             isCheck: false,
-            sudokuNumbers: JSON.parse(JSON.stringify(_self.data.cloneSudokuNumbers))
+            sudokuNumbers: JSON.parse(JSON.stringify(_self.data.cloneSudokuNumbers)),
+            flagNumbers:JSON.parse(JSON.stringify(_self.data.flagInitNumbers))
           })
         }
 
@@ -170,11 +172,11 @@ Page({
    */
   gameCellRemark: function () {
     if (this.checkNumberisChecked(this.data.selectRowIndex, this.data.selectCellIndex)) {
-      let arr = this.data.flagInitNumbers && this.data.flagInitNumbers.length ? this.data.flagInitNumbers : this.data.flagInitNumbers
+      let arr = this.data.flagNumbers
       arr[this.data.selectRowIndex][this.data.selectCellIndex] = !arr[this.data.selectRowIndex][this.data.selectCellIndex]
       this.setData({
         isFlag: true,
-        flagNumbers: arr
+        flagNumbers:  JSON.parse(JSON.stringify(arr))
       })
     }
   },
@@ -184,11 +186,17 @@ Page({
    */
   gameCellDelete: function () {
     let data = this.data.sudokuNumbers
-    if (data[this.data.selectRowIndex][this.data.selectCellIndex] !== 0 && this.data.cloneSudokuNumbers[this.data.selectRowIndex][this.data.selectCellIndex] === 0) {
+    if (this.data.cloneSudokuNumbers[this.data.selectRowIndex][this.data.selectCellIndex] === 0
+      && data[this.data.selectRowIndex][this.data.selectCellIndex] !== 0) {
       data[this.data.selectRowIndex][this.data.selectCellIndex] = 0
+    }
+    let flagData = this.data.flagNumbers
+    if (flagData.length) {
+      flagData[this.data.selectRowIndex][this.data.selectCellIndex] = false
     }
     this.setData({
       sudokuNumbers: data,
+      flagNumbers: flagData
     })
   },
 
@@ -246,7 +254,7 @@ Page({
         success: function (res) {
           if (res.confirm) {
             _self.gameFresh()
-          } else { }
+          }
         }
       })
     } else {
