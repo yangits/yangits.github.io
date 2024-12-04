@@ -20,13 +20,15 @@
     <view bindtap="gameFresh">
       刷新
     </view>
-    <button size="mini" id="stop" bindtap="gameStop">{{stopText}}</button>
+
   </view>
   <view>
-     <view>
-        <image src="../../img/time.png"></image>
-        <text>{{timer}}</text>
-      </view>
+    <button size="mini" id="stop" bindtap="gameStop">{{stopText}}</button>
+    <view>
+      <image src="../../img/time.png"></image>
+      <text>{{timer}}</text>
+ 
+    </view>
 
   </view>
 </view>

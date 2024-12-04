@@ -12,7 +12,7 @@ Page({
       {
         label: '入门',
         value: 'init',
-        level: 2
+        level: 3
       },
       {
         label: '中等',
@@ -26,7 +26,7 @@ Page({
       }
     ],
     sudokuType: 'init', // init(入门), medium(中等), master(大师)
-    gameLevel: 2,
+    gameLevel: 3,
     sudokuNumbers: [],
     cloneSudokuNumbers: [],
     fixedNumbers_top: [1, 2],
@@ -120,7 +120,7 @@ Page({
   gameClear: function () {
     this.setData({
       isCheck: false,
-      sudokuNumbers: this.data.cloneSudokuNumbers
+      sudokuNumbers: JSON.parse(JSON.stringify(this.data.cloneSudokuNumbers))
     })
   },
 
@@ -170,8 +170,8 @@ Page({
    */
   gameCellDelete: function () {
     let data = this.data.sudokuNumbers
-    if (data[this.data.selectRowIndex][this.data.selectCellIndex] !== 0) {
-      data[this.data.selectRowIndex][this.data.selectCellIndex] = this.data.cloneSudokuNumbers[this.data.selectRowIndex][this.data.selectCellIndex]
+    if (data[this.data.selectRowIndex][this.data.selectCellIndex] !== 0 && this.data.cloneSudokuNumbers[this.data.selectRowIndex][this.data.selectCellIndex] === 0) {
+      data[this.data.selectRowIndex][this.data.selectCellIndex] = 0
     }
     this.setData({
       sudokuNumbers: data,

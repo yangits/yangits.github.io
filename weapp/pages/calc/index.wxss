@@ -21,7 +21,7 @@ button {
   width: 300rpx;
   background-color: rgb(255, 255, 255);
   font-size:35rpx ;
-  line-height: 60rpx;
+  line-height: 70rpx;
 }
 input {
   text-align: left;
