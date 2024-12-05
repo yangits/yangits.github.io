@@ -32,7 +32,7 @@
 </view>
 
 <!-- 九宫格 -->
-<view id="container" class="contain grid">
+<view id="container" class="contain">
   <block >
     <view
       wx:for="{{sudokuNumbers}}"

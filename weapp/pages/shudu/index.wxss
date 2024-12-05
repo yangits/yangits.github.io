@@ -26,6 +26,7 @@ page {
 }
 
 .import {
+  width: 80%;
   display: flex;
   margin: 0 38rpx 20rpx;
   height: 80rpx;
