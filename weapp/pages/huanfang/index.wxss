@@ -1,7 +1,3 @@
-page {
-    align-items: center;
-}
-
 .container {
     width: 454rpx;
     height: 454rpx;
