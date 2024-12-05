@@ -31,7 +31,6 @@ Page({
     cloneSudokuNumbers: [],
     fixedNumbers_top: [1, 2],
     fixedNumbers_bottom: [3, 4, 5, 6, 7, 8, 9],
-    cellWidth: '70rpx',
     rowGroupClass: ['row_g_top', 'row_g_middle', 'row_g_bottom'],
     colGroupClass: ['col_g_left', 'col_g_center', 'col_g_right'],
     selectRowIndex: null,

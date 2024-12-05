@@ -55,7 +55,6 @@
         data-number="{{cell}}"
         data-alls="{{item}}"
         class="{{cell===0?'empty':'tips'}} {{colGroupClass[cellIndex % 3]}} {{selectCellIndex === cellIndex ? 'selectCell' : ''}} {{(selectRowIndex === rowIndex && selectCellIndex === cellIndex && cell) ? 'markText' : ''}} {{selectRowIndex === rowIndex && selectCellIndex === cellIndex && !cell ? 'mark2' : ''}} {{isClick && equalNumbers[rowIndex][cellIndex] && cell ? 'markText' : ''}} {{isClick && sudokuNumbers[rowIndex][cellIndex] !== cloneSudokuNumbers[rowIndex][cellIndex] && cell ? 'fill' : ''}} {{isFlag && flagNumbers[rowIndex][cellIndex] ? 'mark1' : ''}} {{isCheck && ((!checkNumbers[rowIndex][cellIndex] && sudokuNumbers[rowIndex][cellIndex] !== cloneSudokuNumbers[rowIndex][cellIndex]) || !cell) ? 'error' : ''}}"
-        style="height: {{cellWidth}};line-height: {{cellWidth}};"
         bindtap="{{stopText==='暂停'?'clickCell':''}}" 
         >{{cell ? cell : selectPopNumber}}</text>
     </view>
