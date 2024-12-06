@@ -60,7 +60,6 @@ Page({
     this.initGame(this.data.gameLevel)
     this.timeCalculate()
     this.clearGameTime()
-    // gameTimer = setInterval(this.timeCalculate, 1000)
     this.setData({
       isClick: false,stopText: '开始',selectRowIndex: null,selectCellIndex: null,
       flagNumbers:JSON.parse(JSON.stringify(this.data.flagInitNumbers))
@@ -85,7 +84,7 @@ Page({
     clearInterval(gameTimer)
     if (this.data.stopText === '暂停') { 
       this.setData({stopText: '继续',selectRowIndex: null,selectCellIndex: null})
-    } else {// 继续和开始
+    } else if (this.data.stopText !== '结束') { // 继续和开始
       gameTimer = setInterval(this.timeCalculate, 1000)
       this.setData({stopText: '暂停'})
     }
@@ -128,7 +127,6 @@ Page({
    * 检查
    */
   gameCheck: function () {
-    let _self = this
     const checker = new Checker(this.data.sudokuNumbers)
     if (checker.check()) {
       return true
@@ -184,10 +182,10 @@ Page({
         sudokuNumbers: data
       })
     }
+    this.checkNumberIsEqual(this.data.selectRowIndex, this.data.selectCellIndex)
     if (this.isFillAll()) {
       this.checkFillNumbers()
     }
-    this.checkNumberIsEqual(this.data.selectRowIndex, this.data.selectCellIndex)
   },
   /**
    * 判断是否全部填写完成
@@ -211,7 +209,6 @@ Page({
    * 2. 如果检查不通过，提示不通过且标记出错误的填写数字
    */
   checkFillNumbers () {
-    let _self = this
     const checker = new Checker(this.data.sudokuNumbers)
     if (checker.check()) {
       clearInterval(gameTimer),
@@ -219,12 +216,17 @@ Page({
         title: '提示',
         content: '您已过关啦！',
         showCancel: false
+      }),
+      this.setData({
+        selectRowIndex: null,
+        selectCellIndex: null,
+        stopText: '结束'
       })
     } else {
       wx.showToast({
-        title: '失败了哦, 请继续挑战一下下吧, 加油！',
+        title: '失败了哦, 再检查一下下吧, 加油！',
         icon: 'none',
-        duration: 3000
+        duration: 2000
       })
       this.setData({
         isCheck: true,
