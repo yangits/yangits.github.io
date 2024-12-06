@@ -1,4 +1,4 @@
-// sudoku.js
+
 const Sudoku = require('./core/sudoku')
 const Checker = require('./core/checker')
 const Toolkit = require('./core/tooltik')
@@ -12,21 +12,21 @@ Page({
       {
         label: '入门',
         value: 'init',
-        level: 3
+        level: 2
       },
       {
         label: '中等',
         value: 'medium',
-        level: 5
+        level: 4
       },
       {
         label: '大师',
         value: 'master',
-        level: 7
+        level: 6
       }
     ],
     sudokuType: 'init', // init(入门), medium(中等), master(大师)
-    gameLevel: 3,
+    gameLevel: 2,
     sudokuNumbers: [],
     cloneSudokuNumbers: [],
     fixedNumbers_top: [1, 2],
@@ -53,14 +53,6 @@ Page({
     seconds: 0,
     stopText: '开始'
   },
-
-  /**
-   * 游戏说明
-   */
-  gameExplain: function () {
-    
-  },
-
   /**
    * 重置刷新游戏
    */
@@ -74,7 +66,6 @@ Page({
       flagNumbers:JSON.parse(JSON.stringify(this.data.flagInitNumbers))
     })
   },
-
   /**
    * clearTime
    */
@@ -87,21 +78,18 @@ Page({
       timer: '00:00:00'
     })
   },
-
   /**
    * 暂停游戏
    */
   gameStop: function () {
     clearInterval(gameTimer)
-    if (this.data.stopText === '暂停') { // 继续和开始
+    if (this.data.stopText === '暂停') { 
       this.setData({stopText: '继续',selectRowIndex: null,selectCellIndex: null})
-    } else {
+    } else {// 继续和开始
       gameTimer = setInterval(this.timeCalculate, 1000)
       this.setData({stopText: '暂停'})
-
     }
   },
-
   /**
    * 选择数独类型
    */
@@ -133,13 +121,9 @@ Page({
             flagNumbers:JSON.parse(JSON.stringify(_self.data.flagInitNumbers))
           })
         }
-
       }
     })
-
   },
-
-
   /**
    * 检查
    */
@@ -147,15 +131,6 @@ Page({
     let _self = this
     const checker = new Checker(this.data.sudokuNumbers)
     if (checker.check()) {
-      wx.showModal({
-        title: '恭喜您，通过！',
-        content: '重新玩一局？',
-        success: function (res) {
-          if (res.confirm) {
-            _self.gameFresh()
-          } else {}
-        }
-      })
       return true
     }
     this.setData({
@@ -163,10 +138,7 @@ Page({
       checkNumbers: checker.matrixMarks
     })
   },
-
-  /**
-   * 标记
-   * 当前选中的cell标记
+  /* 当前选中的cell标记
    * 如果标记，当前数组对应的位置显示为true
    */
   gameCellRemark: function () {
@@ -179,7 +151,6 @@ Page({
       })
     }
   },
-
   /**
    * 删除已填写的
    */
@@ -198,7 +169,6 @@ Page({
       flagNumbers: flagData
     })
   },
-
   /**
    * 填写数独
    */
@@ -207,7 +177,6 @@ Page({
     this.setData({
       selectPopNumber: el.dataset.number
     })
-   
     if (this.checkNumberisChecked(this.data.selectRowIndex, this.data.selectCellIndex)) {
       let data = this.data.sudokuNumbers
       data[this.data.selectRowIndex][this.data.selectCellIndex] = this.data.selectPopNumber
@@ -220,7 +189,6 @@ Page({
     }
     this.checkNumberIsEqual(this.data.selectRowIndex, this.data.selectCellIndex)
   },
-
   /**
    * 判断是否全部填写完成
    */
@@ -237,7 +205,6 @@ Page({
     }
     return _return
   },
-
   /**
    * 当全部完成后，自动检查是否填写正确
    * 1. 如果检查通过，则弹出通过
@@ -247,14 +214,11 @@ Page({
     let _self = this
     const checker = new Checker(this.data.sudokuNumbers)
     if (checker.check()) {
+      clearInterval(gameTimer),
       wx.showModal({
-        title: '恭喜您，通过！',
-        content: '重新玩一局？',
-        success: function (res) {
-          if (res.confirm) {
-            _self.gameFresh()
-          }
-        }
+        title: '提示',
+        content: '您已过关啦！',
+        showCancel: false
       })
     } else {
       wx.showToast({
@@ -268,14 +232,12 @@ Page({
       })
     }
   },
-
   checkNumberisChecked (x, y) {
      /**
      * 1. 如果选中未填写的cell，填写
      * 2. 如果选中已填写的cell或没有选中，return
      * 3. 如果选中的位置有原始数据，则return
      */
-
     if (x === null || x === undefined || x === '') {
       return false
     } else if (y === null || y === undefined || y === '') {
@@ -286,7 +248,6 @@ Page({
       return true
     }
   },
-
   /**
    * 初始化游戏 入门级
    */
@@ -299,7 +260,6 @@ Page({
       cloneSudokuNumbers: JSON.parse(JSON.stringify(matrix))
     })
   },
-  
   /**
    * 点击单个
    */
@@ -324,7 +284,6 @@ Page({
     }
     this.checkNumberIsEqual(el.dataset.row, el.dataset.cell)
   },
-
   /**
    * 检查所选择数据与所有数据相同，如果相同，该索引所对应的值为true
    */
@@ -341,8 +300,6 @@ Page({
       equalNumbers: arr
     })
   },
-
-  
   /**
    * 计时
    */
@@ -381,15 +338,12 @@ Page({
       return n
     }
   },
-
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-       
-    
+         
   },
-
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -397,7 +351,6 @@ Page({
     // this.initGameTime()
     this.gameFresh()
   },
-
   /**
    * 生命周期函数--监听页面显示
    */
@@ -437,6 +390,9 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-
+    return {
+      title: '数独',
+      path: 'shudu/index'
+    }
   }
 })

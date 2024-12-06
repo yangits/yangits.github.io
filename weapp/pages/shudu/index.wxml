@@ -1,5 +1,4 @@
-<!--sudoku.wxml-->
-<!-- headers -->
+
 <view id="level" class="level">
   <view class="buttons">
     <block wx:for="{{sudokuTypes}}" wx:key="{{item.value}}">
@@ -27,7 +26,6 @@
       <image src="../../img/time.png"></image>
       <text>{{timer}}</text>
     </view>
-
   </view>
 </view>
 
