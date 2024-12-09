@@ -3,7 +3,7 @@ html,body {
     padding: 0;
     height: 100%;
     background: #019CD6;
-    user-select: none;
+    /* user-select: none; */
     /* overflow: hidden; */
 }
 .full-window-height {
@@ -113,7 +113,7 @@ tr td {
 
 .game .game-head {
     text-align: center;
-    padding: 70px 0;
+    padding: 20px 0;
     white-space: nowrap;
 }
 .game .game-head .leftdoc {margin-right: 15px;}
@@ -122,7 +122,7 @@ tr td {
     display: inline-block;
 }
 .game .game-head .leftdoc img, .game .game-head .rightdoc img{
-    height: 320px;
+    height: 300px;
 }
 
 .game .game-head #screen {
@@ -157,7 +157,7 @@ tr td {
 .game .game-head .centerdoc .logo .text{
     background: #019CD6;
     display: inline-block;
-    padding: 0 20px;
+    padding: 0 10px;
 }
 .game .game-head .centerdoc .logo .text a {
     color: black;
@@ -165,7 +165,7 @@ tr td {
 }
 
 .game .game-body {
-    padding:  0 0 50px 0;
+    padding:  0 0 30px 0;
     text-align: center;
 }
 
@@ -189,7 +189,7 @@ tr td {
     justify-content: space-between;
     -webkit-justify-content: space-between;
 
-    margin: 0 30px;
+    margin: 0 50px;
 }
 
 .game .game-body .controller-right{
@@ -207,7 +207,7 @@ tr td {
     -webkit-transform: rotate(-45deg);
 }
 .game .game-body .controller-left-row .btn-parent {
-    padding: 15px;
+    padding: 5px;
 }
 .game .game-body .controller-left-row {
     display: -webkit-flex;
