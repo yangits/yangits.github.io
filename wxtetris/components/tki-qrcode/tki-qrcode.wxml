@@ -1,0 +1,4 @@
+<view class="tki-qrcode">
+    <canvas canvasId="{{cid}}" class="tki-qrcode-canvas" style="{{'width:'+cpSize+'px'+';'+'height:'+cpSize+'px'+';'}}"></canvas>
+    <image hidden="{{!show}}" src="{{result}}" style="{{'width:'+cpSize+'px'+';'+'height:'+cpSize+'px'+';'}}"></image>
+</view>

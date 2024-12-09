@@ -15,18 +15,22 @@ page {
   display:flex;
   align-items:center;
   font-size:30rpx ;
+  margin-top: 10rpx;
 }
 button {
   width: 300rpx;
   background-color: rgb(255, 255, 255);
   font-size:35rpx ;
   line-height: 70rpx;
+  border-radius: 20rpx;
+  margin-top: 10rpx;
 }
 input {
   text-align: left;
   width: 550rpx;
   background-color: rgb(255, 255, 255);
-  height: 50rpx;
+  height: 60rpx;
+  border-radius: 10rpx;
 }
 textarea {
   height: 1000rpx;
@@ -36,4 +40,5 @@ textarea {
   text-align: left;
   margin-top: 6rpx;
   font-size:30rpx ;
+
 }

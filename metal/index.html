@@ -91,6 +91,8 @@
             if (clas.value=="钢板") {
                 if(isNaN(T)==false && isNaN(W)==false && isNaN(L)==false){
                     text.innerHTML =Math.round(T*W*L*P)/1000;
+                }else{
+                    text.innerHTML ="0.000";
                 }
             }
             if (clas.value=="圆钢") {
@@ -101,26 +103,34 @@
             if (clas.value=="圆管") {
                 if(isNaN(T)==false && isNaN(D)==false && isNaN(L)==false){
                     text.innerHTML =Math.round(T*(D-T)*L*3.1415926*P)/1000;
+                }else{
+                    text.innerHTML ="0.000";
                 }
             }
             if (clas.value=="方管") {
                 if(isNaN(T)==false && isNaN(A)==false && isNaN(L)==false){
                     text.innerHTML =Math.round(T*(A-T)*4*L*P)/1000;
+                }else{
+                    text.innerHTML ="0.000";
                 }
             }
             if (clas.value=="矩形管") {
                 if(isNaN(T)==false && isNaN(A)==false && isNaN(B)==false && isNaN(L)==false){
-                    text.innerHTML =Math.round(T*(A+B-T*2)*2*L*P)/1000;
+                    text.innerHTML =Math.round(T*(A-B*(-1)-T*2)*2*L*P)/1000;
                 }
             }
             if (clas.value=="方钢") {
                 if(isNaN(A)==false && isNaN(L)==false && isNaN(B)==false ){
                     text.innerHTML =Math.round(A*B*L*P)/1000;
+                }else{
+                    text.innerHTML ="0.000";
                 }
             }
             if (clas.value=="角钢") {
                 if(isNaN(T)==false && isNaN(A)==false && isNaN(B)==false && isNaN(L)==false ){
-                    text.innerHTML =Math.round(T*(A+B-T)*L*P)/1000;
+                    text.innerHTML =Math.round(T*(A-B*(-1)-T)*L*P)/1000;
+                }else{
+                    text.innerHTML ="0.000";
                 }
             }
         }

@@ -1,0 +1,5 @@
+<view class="next _div">
+    <view class="_div" wx:for="{{block}}" wx:key="index">
+        <view class="{{['_b',e?'c':'']}}" wx:for="{{item}}" wx:for-index="itemIndex" wx:for-item="e" wx:key="itemIndex"></view>
+    </view>
+</view>

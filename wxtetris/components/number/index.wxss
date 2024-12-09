@@ -1,0 +1,63 @@
+.number {
+    height: 24px;
+    font-size: 14px;
+    float: right;
+}
+
+.number ._span {
+    float: left;
+    width: 14px;
+    height: 24px;
+}
+
+.number .s_0 {
+    background-position: -75px -25px;
+}
+
+.number .s_1 {
+    background-position: -89px -25px;
+}
+
+.number .s_2 {
+    background-position: -103px -25px;
+}
+
+.number .s_3 {
+    background-position: -117px -25px;
+}
+
+.number .s_4 {
+    background-position: -131px -25px;
+}
+
+.number .s_5 {
+    background-position: -145px -25px;
+}
+
+.number .s_6 {
+    background-position: -159px -25px;
+}
+
+.number .s_7 {
+    background-position: -173px -25px;
+}
+
+.number .s_8 {
+    background-position: -187px -25px;
+}
+
+.number .s_9 {
+    background-position: -201px -25px;
+}
+
+.number .s_n {
+    background-position: -215px -25px;
+}
+
+.number .s_d {
+    background-position: -243px -25px;
+}
+
+.number .s_d_c {
+    background-position: -229px -25px;
+}

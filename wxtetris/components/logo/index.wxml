@@ -1,0 +1,4 @@
+<view class="logo _div" style="{{'display:'+display}}">
+    <view class="{{['bg dragon _div',style]}}"></view>
+    <view class="_p">{{titleCenter}}</view>
+</view>

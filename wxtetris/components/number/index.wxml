@@ -1,0 +1,3 @@
+<view class="number _div">
+    <label class="{{['_span','bg s_'+item]}}" wx:for="{{data}}" wx:key="index"></label>
+</view>

@@ -1,6 +1,6 @@
 
 <view class="body">
-    <view class="show" >品类:
+    <view class="show" >品类： 
     <picker mode="selector" range="{{clas_array}}" value="{{clas_index}}" bindchange="clas_Change">
         <text>{{clas_array[clas_index]}}></text>
     </picker></view>
@@ -9,7 +9,7 @@
     <view class="{{TT}}" ><text >*厚度: </text><input type="digit" value="{{T}}" bindinput="T_set" placeholder="0"/>mm</view>
     <view class="{{WW}}" ><text >*宽度: </text><input type="digit" value="{{W}}" bindinput="W_set" placeholder="0"/>mm</view>
     <view  class="{{AA}}" ><text class="a">*外长: </text><input type="digit" value="{{A}}" bindinput="A_set" placeholder="0"/>mm</view>
-    <view  class="{{BB}}" ><text class="b">*外宽: </text><input id="B" type="digit" value="{{T}}" bindinput="B_set" placeholder="0"/>mm</view>
+    <view  class="{{BB}}" ><text class="b">*外宽: </text><input id="B" type="digit" value="{{B}}" bindinput="B_set" placeholder="0"/>mm</view>
     <view class="{{DD}}" >*外径: <input type="digit" value="{{D}}" bindinput="D_set" placeholder="0"/>mm</view>
     <view  class="{{LL}}" decode="true">*长度: <input  type="digit" value="{{L}}" bindinput="L_set" placeholder="0"/>m<text decode="true">&ensp;&ensp;</text></view>
     <view class="show"><text class="PP">密度: <text>{{P}}</text>g/cm³。材质为: </text>

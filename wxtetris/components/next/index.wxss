@@ -1,0 +1,5 @@
+.next ._div {
+    height: 22px;
+    width: 88px;
+    float: right;
+}

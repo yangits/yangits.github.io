@@ -56,36 +56,50 @@ Page({
         if (clas_index == 0) {
             if(T != "" && W != "" && L != ""){
                 this.setData({text_result : Math.round(T*W*L*P)/1000}) ;
+            }else{
+              this.setData({text_result : "0.000"}) ;
             }
         }
         if (clas_index==1) {
             if(T != "" && D != "" && L != ""){
                 this.setData({text_result : Math.round(T*(D-T)*L*3.1415926*P)/1000});
+            }else{
+              this.setData({text_result : "0.000"}) ;
             }
         }
         if (clas_index==2) {
             if(T != "" && A != "" && L != ""){
                 this.setData({text_result : Math.round(T*(A-T)*4*L*P)/1000});
+            }else{
+              this.setData({text_result : "0.000"}) ;
             }
         }
         if (clas_index==3) {
             if(T != "" && A != ""  && B != "" && L != ""){
-                this.setData({text_result : Math.round(T*(A+B-T*2)*2*L*P)/1000});
+                this.setData({text_result : Math.round(T*(A-B*(-1)-T*2)*2*L*P)/1000});
+            }else{
+              this.setData({text_result : "0.000"}) ;
             }
         }
         if (clas_index==4) {
             if(D != "" && L != ""){
                 this.setData({text_result : Math.round(D*D*L*3.1415926/4*P)/1000});
+            }else{
+              this.setData({text_result : "0.000"}) ;
             }
         }
         if (clas_index==5) {
             if(A != ""  && B != "" && L != ""){
                 this.setData({text_result :Math.round(A*B*L*P)/1000});
+            }else{
+              this.setData({text_result : "0.000"}) ;
             }
         }
         if (clas_index==6) {
             if(T != "" && A != ""  && B != "" && L != ""){
-                this.setData({text_result :Math.round(T*(A+B-T)*L*P)/1000});
+                this.setData({text_result :Math.round(T*(A-B*(-1)-T)*L*P)/1000});
+            }else{
+              this.setData({text_result : "0.000"}) ;
             }
         }
     },

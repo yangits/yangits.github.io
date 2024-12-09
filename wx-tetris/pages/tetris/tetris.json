@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "俄罗斯方块",
+  "navigationBarBackgroundColor": "#F8F9FA",
+  "navigationBarTextStyle": "black",
+  "disableScroll": true,
+  "usingComponents": {},
+  "pageOrientation": "portrait"
+}

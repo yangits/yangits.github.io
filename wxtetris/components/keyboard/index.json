@@ -1,0 +1,6 @@
+{
+    "usingComponents": {
+        "vbutton": "/components/keyboard/button/index"
+    },
+    "component": true
+}
