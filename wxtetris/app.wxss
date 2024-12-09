@@ -20,17 +20,19 @@ button::after{
 }
 
 page {
-  background: #f6f6f6;
+  background: #4fbeff;
+  background-color: #4fbeff;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  align-items: center;
 }
 
 .userinfo, .uploader, .tunnel {
   margin-top: 40rpx;
   height: 140rpx;
   width: 100%;
-  background: #fff;
+  background: #4fbeff;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-left: none;
   border-right: none;
@@ -46,7 +48,7 @@ page {
   margin: 20rpx;
   border-radius: 50%;
   background-size: cover;
-  background-color: white;
+  background-color: #4fbeff;
 }
 
 .userinfo-avatar:after {
@@ -56,7 +58,7 @@ page {
 .userinfo-nickname {
   font-size: 32rpx;
   color: #007aff;
-  background-color: white;
+  background-color: #4fbeff;
   background-size: cover;
 }
 
