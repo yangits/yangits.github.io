@@ -253,7 +253,6 @@ Page({
         }
       }
     })
-    console.log(this.nownum);
   },
 
   reset_hf() {

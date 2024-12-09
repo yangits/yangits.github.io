@@ -31,9 +31,6 @@
 }
 
 .v1 {
-    /* width: 150rpx; */
-    /* height: 150rpx; */
-    /* font-size: 50rpx; */
     font-weight: 600;
     position: relative;
     background-color: #b8c0ce;
@@ -49,8 +46,6 @@
 }
 
 .v2 {
-    width: 150rpx;
-    height: 150rpx;
     background: #fff;
 }
 
