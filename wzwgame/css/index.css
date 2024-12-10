@@ -3,8 +3,10 @@ html,body {
     padding: 0;
     height: 100%;
     background: #019CD6;
-    /* user-select: none; */
-    /* overflow: hidden; */
+    user-select: none;
+    overflow: hidden;
+    text-align: center;
+    margin: auto;
 }
 .full-window-height {
     height: 100vh; 
@@ -27,7 +29,6 @@ tr td {
     width: 50px;
     height: 50px;
     cursor: pointer;
-    /* display-role: button; */
 
 
     box-shadow:  4px 4px 8px #555555,
@@ -104,11 +105,11 @@ tr td {
     background: #019CD6;
     width: 430px;
 
-    border-radius: 12px 12px 12px 12px;
+    /* border-radius: 12px 12px 12px 12px; */
 
-    box-shadow:
+    /* box-shadow:
             3px 4px 10px rgba(0, 0, 0, 0.8),
-            -3px -4px 10px rgba(232, 232, 232, 0.55);
+            -3px -4px 10px rgba(232, 232, 232, 0.55); */
 }
 
 .game .game-head {

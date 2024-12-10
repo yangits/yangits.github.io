@@ -1419,9 +1419,7 @@
       var C = document.querySelector("#zjtip");
       C && (C.innerText = "转载请注明出处。"),
         (window.author = function () {
-          console.log(
-            "Design By Microanswer. WebSite: https://www.microanswer.cn",
-          ),
+
             C && (C.style.color = "#FFFFFF");
         }),
         setTimeout(function () {
@@ -1504,7 +1502,7 @@
             return s < e || s >= t.screen.option.atomRowCount - e ? 1 : 0;
           })),
           o.mergeArr(o.LETTER.M, t.emptyArr, e + 1, 2),
-          console.log("目前还没有注册任何游戏。"),
+
           this.emptyArr
         );
       }
