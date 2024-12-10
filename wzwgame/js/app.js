@@ -1248,11 +1248,11 @@
           r = new o("#screen", { testspan: document.querySelector("#testspan") }),
           h = "ABCDEFGHIJKLMN".split(""),
           a = [
+            new n.Tetris(),  // 俄罗斯方块
             new n.Tank(),
             new n.Speed(),
             new n.Speed2(),
             new n.Shooter(),
-            new n.Tetris(),
             new n.Snake(),
             new n.Copyor(),
           ],
