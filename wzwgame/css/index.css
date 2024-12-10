@@ -29,12 +29,16 @@ tr td {
 .btn.small {
     width: 22px;
     height: 22px;
-    margin: 0 6px;
-
+    margin: 0 20px;
     box-shadow:  3px 3px 6px #555555,
     -3px -3px 6px #7ed2d2;
 }
-
+.btn.big {
+    width: 80px;
+    height: 80px;
+    box-shadow:  8px 8px 20px #555555,
+    -8px -8px 20px #7ed2d2;
+}
 
 .btn.active, .btn:active {
     background: linear-gradient(145deg, #a69700, #c5b400);
@@ -43,7 +47,7 @@ tr td {
 }
 .text-center {
     text-align: center;
-    margin-right: 30px;
+
 }
 .text-center.small {
     font-size: 12px;
@@ -69,8 +73,8 @@ tr td {
 .game {
     background: #019CD6;
     width: 430px;
-    /* border-radius: 12px 12px 12px 12px; */
-    /* box-shadow:
+    /* border-radius: 12px 12px 12px 12px;
+    box-shadow:
             3px 4px 10px rgba(0, 0, 0, 0.8),
             -3px -4px 10px rgba(232, 232, 232, 0.55); */
 }
@@ -90,15 +94,12 @@ tr td {
     width: 197px;
     height: 259px;
 }
-.game .game-head #screen canvas {
-    border: 2px solid black;
-}
 
 .game .game-head .centerdoc {
     position: relative;
     display: inline-block;
     border: 4px solid #280000;
-    /* padding: 20px 20px 40px 20px; */
+
 }
 .game .game-head .centerdoc .logo{
     position: absolute;
@@ -116,13 +117,9 @@ tr td {
     display: inline-block;
     padding: 0 10px;
 }
-.game .game-head .centerdoc .logo .text a {
-    color: black;
-    text-decoration: none;
-}
+
 
 .game .game-body {
-    padding:  0 0 30px 0;
     text-align: center;
 }
 
@@ -142,11 +139,9 @@ tr td {
 .game .game-body .controller-flex {
     display: flex;
     display: -webkit-flex;
-
     justify-content: space-between;
     -webkit-justify-content: space-between;
-
-    margin: 0 40px;
+    margin: 0 30px;
 }
 
 .game .game-body .controller-right{
@@ -164,7 +159,7 @@ tr td {
     -webkit-transform: rotate(-45deg);
 }
 .game .game-body .controller-left-row .btn-parent {
-    padding: 5px;
+    padding: 8px;
 }
 .game .game-body .controller-left-row {
     display: -webkit-flex;
