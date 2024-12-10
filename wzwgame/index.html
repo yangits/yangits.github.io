@@ -8,15 +8,34 @@
         <link rel="stylesheet" href="./css/index.css">
     </head>
     <body>
-        <div class="main flex-page">
+        <div class="flex-page">
             <div class="game">
                 <div class="game-head">
                     <div class="centerdoc">
                         <div id="screen"></div>
-
                     </div>
                 </div>
                 <div class="game-body">
+                    <table>
+                        <tr>
+                            <td colspan="7">
+                                <div>
+                                    <div class="d-inline">
+                                        <button class="btn controller-div small" key="start"></button>
+                                        <div class=" text-center small">开始</div>
+                                    </div>
+                                    <div class="d-inline">
+                                        <button class="btn controller-div small" key="onoff"></button>
+                                        <div class="text-center small">开关</div>
+                                    </div>
+                                    <div class="d-inline">
+                                        <button class="btn controller-div small" key="reset"></button>
+                                        <div class="text-center small">复位</div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
                     <div class="controller-flex">
                         <div class="controller-left">
                             <div class="controller-left-row">
@@ -40,32 +59,10 @@
                             <button class="big btn controller-div rotate" key="rotate">旋转</button>
                         </div>
                     </div>
-                    <table><tr>
-                        <td colspan="7">
-                            <div style="height: 30px;color: #019CD6" key="zjtip"></div>
-                        </td>
-                    </tr><tr>
-                        <td colspan="7">
-                            <div>
-                                <div class="d-inline">
-                                    <button class="btn controller-div small" key="start"></button>
-                                    <div class=" text-center small">开始</div>
-                                </div>
-                                <div class="d-inline">
-                                    <button class="btn controller-div small" key="onoff"></button>
-                                    <div class="text-center small">开关</div>
-                                </div>
-                                <div class="d-inline">
-                                    <button class="btn controller-div small" key="reset"></button>
-                                    <div class="text-center small">复位</div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
+
+                </div>
             </div>
         </div>
-
         <script src="./js/app.js"></script>
-        </body>
-        </html>
+    </body>
+</html>

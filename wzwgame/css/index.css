@@ -1,4 +1,4 @@
-html,body {
+body {
     height: 100%;
     width: 100%;
     background: #019CD6;
@@ -6,6 +6,9 @@ html,body {
     overflow: hidden;
     text-align: center;
     margin: auto;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .d-inline {
@@ -29,7 +32,7 @@ tr td {
 .btn.small {
     width: 22px;
     height: 22px;
-    margin: 0 20px;
+    margin: 0 15px;
     box-shadow:  3px 3px 6px #555555,
     -3px -3px 6px #7ed2d2;
 }
@@ -65,14 +68,14 @@ tr td {
     flex-wrap: wrap;
     -webkit-flex-wrap: wrap;
 
-    align-items: flex-start;
+    align-items: center;
     -webkit-align-items: flex-start;
 }
 
 
 .game {
     background: #019CD6;
-    width: 430px;
+    width:100%;
     /* border-radius: 12px 12px 12px 12px;
     box-shadow:
             3px 4px 10px rgba(0, 0, 0, 0.8),
@@ -81,7 +84,7 @@ tr td {
 
 .game .game-head {
     text-align: center;
-    padding: 20px 0;
+    padding-top: 20px;
     white-space: nowrap;
 }
 
@@ -104,10 +107,12 @@ tr td {
 
 .game .game-body {
     text-align: center;
+    padding-top: 5px;
 }
 
 .game .game-body table {
-    margin: 0 auto;
+    margin: 0px auto;
+    padding-left: 80px;
 }
 
 .game .game-body [key] {
@@ -120,19 +125,24 @@ tr td {
     -webkit-transition-duration: 0ms;
 }
 .game .game-body .controller-flex {
+    padding-top: 20px;
     display: flex;
     display: -webkit-flex;
     justify-content: space-between;
     -webkit-justify-content: space-between;
-    margin: 0 30px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
 .game .game-body .controller-right{
     display: flex;
     display: -webkit-flex;
     align-items: center;
+    margin: 0 30px;
 }
 .game .game-body .controller-left{
+    margin: 0 30px;
     transform: rotate(45deg);
     -webkit-transform: rotate(45deg);
 }
