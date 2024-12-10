@@ -8,10 +8,6 @@ html,body {
     text-align: center;
     margin: auto;
 }
-.full-window-height {
-    height: 100vh; 
-
-  }
 
 .d-inline {
     display: inline-block;
@@ -29,7 +25,7 @@ tr td {
     width: 50px;
     height: 50px;
     cursor: pointer;
-
+    
 
     box-shadow:  4px 4px 8px #555555,
     -4px -4px 8px #7ed2d2;
@@ -61,6 +57,7 @@ tr td {
 }
 .text-center {
     text-align: center;
+    margin-right: 30px;
 }
 .text-center.small {
     font-size: 12px;
