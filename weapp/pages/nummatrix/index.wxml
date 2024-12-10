@@ -1,14 +1,14 @@
 <view class="f_center">
+  <view bindtap="home_hf" class="f_center {{home==='幻方'? 'home_active' :'home'}}">幻方</view>
     <view bindtap="home_hrd" class="f_center {{home==='华容道'? 'home_active' :'home'}}">华容道</view>
-    <view bindtap="home_hf" class="f_center {{home==='幻方'? 'home_active' :'home'}}">幻方</view>
 </view>
 <!-- 华容道 -->
-<view class="container" style="width:calc({{windowWidth}}px - 60rpx + {{(nowDifficulty-1)*2}}rpx);height:calc({{windowWidth}}px - 60rpx + {{(nowDifficulty-1)*2}}rpx); display: {{home==='华容道'? '' :'none'}};">
+<view class="container" style="width:calc({{windowWidth}}px - 90rpx + {{(nowDifficulty-1)*2}}rpx);height:calc({{windowWidth}}px - 90rpx + {{(nowDifficulty-1)*2}}rpx); display: {{home==='华容道'? '' :'none'}};">
     <block wx:for='{{numData}}' wx:key='{{index}}'>
-        <view wx:if="{{!item.isEmpty}}" style="width:calc(({{windowWidth}}px - 70rpx) / {{nowDifficulty}});height:calc(({{windowWidth}}px - 70rpx) / {{nowDifficulty}});font-size: calc(350rpx / {{nowDifficulty}}); " catchtouchstart="goMove" data-index='{{index}}' class="v1" >
+        <view wx:if="{{!item.isEmpty}}" style="width:calc(({{windowWidth}}px - 100rpx) / {{nowDifficulty}});height:calc(({{windowWidth}}px - 100rpx) / {{nowDifficulty}});font-size: calc(350rpx / {{nowDifficulty}}); " catchtouchstart="goMove" data-index='{{index}}' class="v1" >
             <view class="f_center">{{item.num}}</view>
         </view>
-        <view wx:if='{{item.isEmpty}}' style="width:calc(({{windowWidth}}px - 70rpx) / {{nowDifficulty}});height:calc(({{windowWidth}}px - 70rpx) / {{nowDifficulty}});" class="v2"></view>
+        <view wx:if='{{item.isEmpty}}' style="width:calc(({{windowWidth}}px - 100rpx) / {{nowDifficulty}});height:calc(({{windowWidth}}px - 100rpx) / {{nowDifficulty}});" class="v2"></view>
     </block>
 </view>
 <view class="v3" style="display: {{home==='华容道'? '' :'none'}};"> 步数：{{step}}</view>
@@ -16,9 +16,9 @@
 <view bindtap="botton_click" class="f_center game" style="display: {{home==='华容道'? '' :'none'}};">{{bottun}}</view>
 <view bindtap="choose_hrd" class='f_center game' style="display: {{home==='华容道'? '' :'none'}};">选择难度 {{nowDifficulty}}×{{nowDifficulty}}</view>
 <!-- 幻方 -->
-<view class="container" style="width:calc({{windowWidth}}px - 60rpx + {{(nownum-1)*2}}rpx);height:calc({{windowWidth}}px - 60rpx + {{(nownum-1)*2}}rpx); display: {{home==='幻方'? '' :'none'}};">
+<view class="container" style="width:calc({{windowWidth}}px - 90rpx + {{(nownum-1)*2}}rpx);height:calc({{windowWidth}}px - 90rpx + {{(nownum-1)*2}}rpx); display: {{home==='幻方'? '' :'none'}};">
     <block wx:for='{{numData}}' wx:key='{{index}}'>
-        <view  style="width:calc(({{windowWidth}}px - 70rpx) / {{nownum}});height:calc(({{windowWidth}}px - 70rpx) / {{nownum}});font-size: calc(350rpx / {{nownum}}); "   class="v1" >
+        <view  style="width:calc(({{windowWidth}}px - 100rpx) / {{nownum}});height:calc(({{windowWidth}}px - 100rpx) / {{nownum}});font-size: calc(350rpx / {{nownum}}); "   class="v1" >
             <view class="f_center">{{item.num}}</view>
         </view>
     </block>

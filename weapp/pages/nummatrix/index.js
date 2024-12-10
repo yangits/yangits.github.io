@@ -10,14 +10,14 @@ Page({
     nowDifficultyDef: 3, // 华容道默认当前难度系数 -- 注意这个值要和初始的 当前难度系数的值一样
     nowDifficulty: 3,    // 华容道当前难度系数 
     maxDifficulty: 8,   // 华容道最大难度系数
-    home: "华容道",
+    home: "幻方",
     bottun: "开始",
     nownum: 3,    // 幻方当前系数 
     sumnum:0,     // 幻方和
   },
 
   onReady() {
-    this.initNum(this.data.nowDifficulty);
+    this.home_hf()
   },
   home_hrd() {
     this.initNum(this.data.nowDifficulty);
