@@ -1474,7 +1474,7 @@
             this.screen.updateAtomArr(null),
             this.screen.updateStatusAtoms(null),
             this.screen.setScore(0),
-            this.screen.setLevel(0),
+            this.screen.setLevel(0),  //首页等级
             this.screen.setBest(0),
             void this.screen.setPause(!1)
           );
@@ -1792,7 +1792,7 @@
               if (
                 (this.food &&
                   this.snakeHead.isAtomsIn(this.food[0], this.food[1]) &&
-                  ((this.score += 1),
+                  ((this.score += 100),
                   this.launch.screen.setScore(this.score),
                   this.score >= this.best &&
                     ((this.best = this.score),
@@ -2967,7 +2967,7 @@
             }, 200);
         }),
         (T.prototype.onEofKill = function () {
-          (this.score += 1),
+          (this.score += 100),
             (this.shotCount += 1),
             this.launch.screen.setScore(this.score),
             this.score >= this.best &&
@@ -3027,7 +3027,7 @@
         }),
         (e.Tank = T);
     },
-    function (t, e, s) {
+    function (t, e, s) {    //俄罗斯方块
       var o = s(0).WzwScreen,
         i = "playing",
         n = "pause",
@@ -3206,7 +3206,7 @@
           800, 700, 600, 550, 500, 450, 400, 350, 300, 250, 200, 150, 130, 100,
           90, 80, 70, 60, 50, 40, 30, 20, 10, 5,
         ],
-        f = [
+        f = [//得分升级
           100, 100, 110, 110, 120, 120, 130, 140, 150, 160, 170, 180, 180, 190,
           190, 200,
         ];
@@ -3239,7 +3239,7 @@
             }
           i &&
             ((t.succAniming = !0),
-            (t.score += 1),
+            (t.score += 100),
             void 0 === t.succLineCount
               ? (t.succLineCount = 1)
               : ((t.succLineCount = t.succLineCount + 1),
@@ -3692,7 +3692,7 @@
         (l.prototype.reset = function () {
           (this.atoms = this.launch.screen.makeNewArr()),
             (this.atomsed = this.launch.screen.makeNewArr()),
-            (this.level = 0),
+            (this.level = 0),//等级
             (this.succAniming = !1),
             (this.score = 0),
             (this.stuffOffsetRow = -3),
@@ -3821,7 +3821,7 @@
             this.launch.exitCurentGame();
         }),
         (e.Tetris = l);
-    },
+    },   //俄罗斯方块
     function (t, e, s) {
       var o = s(0).WzwScreen,
         i = [
@@ -3964,7 +3964,7 @@
                 r = !0;
               }
               if (r)
-                (this.score += 1),
+                (this.score += 100),
                   this.screen.setScore(this.score),
                   (this.levelDissCount += 1),
                   this.score >= this.best &&
@@ -4177,7 +4177,7 @@
         r = (o.Road, s(0)),
         h = r.WzwScreen,
         a = r.WzwBomb,
-        f = [150, 140, 130, 120, 110, 100, 90, 80, 70, 60, 50, 40],
+        f = [150, 140, 130, 120, 110, 100, 90, 80, 70, 60, 50, 40],//ffffff
         l = [50, 50, 60, 60, 70, 70, 80, 80, 90, 90],
         u = 0,
         c = 1,
@@ -4725,7 +4725,7 @@
             this.offsetRow <= e &&
               !this.disabled &&
               ((this.disabled = !1),
-              (this.score = 1),
+              (this.score = 100),
               (this.wall[e][this.offsetCol] = 0),
               this.disabledListener && this.disabledListener(this)),
               this.offsetRow < 0 &&

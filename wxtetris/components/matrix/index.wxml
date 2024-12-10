@@ -1,5 +1,0 @@
-<view class="matrix _div">
-    <view class="_p" wx:for="{{matrix}}" wx:for-item="m" wx:key="index">
-        <view class="{{['_b',item===1?'c':''+item===2?'d':'']}}" wx:for="{{m}}" wx:for-index="itemIndex" wx:key="itemIndex"></view>
-    </view>
-</view>

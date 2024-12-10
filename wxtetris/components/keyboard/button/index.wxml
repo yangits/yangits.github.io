@@ -1,6 +1,0 @@
-<view catchtouchend="__e" catchtouchstart="__e" class="{{['button _div',color+' '+size]}}" data-event-opts="{{[ [ 'touchstart',[ [ '$emit',['m_touchstart'] ] ] ],[ 'touchend',[ [ '$emit',['m_touchend'] ] ] ] ]}}" style="{{'top:'+top+'px;'+'left:'+left+'px'}}">
-   
-    <view class="_em" hidden="{{!(size==='s1')}}" style="{{'transform:'+arrow+' scale(1,2)'}}"></view>
-    <view class="{{['_i',active?'active':'']}}"></view>
-    <label class="{{['_span',position?'position':'']}}">{{''+label+''}}</label>
-</view>

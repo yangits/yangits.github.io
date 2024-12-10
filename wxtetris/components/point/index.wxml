@@ -1,4 +1,0 @@
-<view class="_div">
-    <view class="_p">{{label}}</view>
-    <number bind:__l="__l" number="{{number}}" vueId="1"></number>
-</view>

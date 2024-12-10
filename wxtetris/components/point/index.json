@@ -1,6 +1,0 @@
-{
-    "usingComponents": {
-        "number": "/components/number/index"
-    },
-    "component": true
-}

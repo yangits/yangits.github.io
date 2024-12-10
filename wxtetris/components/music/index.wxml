@@ -1,1 +1,0 @@
-<view class="{{['bg music _div',dat?'':'c']}}"></view>
