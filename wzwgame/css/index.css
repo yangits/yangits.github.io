@@ -1,7 +1,6 @@
 html,body {
-    margin: 0;
-    padding: 0;
     height: 100%;
+    width: 100%;
     background: #019CD6;
     user-select: none;
     overflow: hidden;
@@ -21,12 +20,9 @@ tr td {
     border-radius: 50%;
     background: linear-gradient(145deg, #decb02, #c1b002);
     transition-duration: 30ms;
-
     width: 50px;
     height: 50px;
     cursor: pointer;
-    
-
     box-shadow:  4px 4px 8px #555555,
     -4px -4px 8px #7ed2d2;
 }
@@ -39,17 +35,7 @@ tr td {
     -3px -3px 6px #7ed2d2;
 }
 
-.btn.hide {
-    opacity: 0;
-    /*display: none;*/
-    width: 30px;
-}
-.btn.big {
-    width: 80px;
-    height: 80px;
-    box-shadow:  8px 8px 20px #555555,
-    -8px -8px 20px #7ed2d2;
-}
+
 .btn.active, .btn:active {
     background: linear-gradient(145deg, #a69700, #c5b400);
     box-shadow:  2px 2px 4px #555555,
@@ -63,25 +49,7 @@ tr td {
     font-size: 12px;
 }
 
-.pt-50 {
-    padding-top: 50px!important;
-}
 
-.pb-50 {
-    padding-bottom: 50px!important;
-}
-.mt-20 {
-    margin-top: 20px!important;
-}
-.mt-15 {
-    margin-top: 15px!important;
-}
-.border-top-right-12 {
-    border-top-right-radius: 12px!important;
-}
-.border-bottom-right-12 {
-    border-bottom-right-radius: 12px!important;
-}
 
 .flex-page {
     display: flex;
@@ -101,9 +69,7 @@ tr td {
 .game {
     background: #019CD6;
     width: 430px;
-
     /* border-radius: 12px 12px 12px 12px; */
-
     /* box-shadow:
             3px 4px 10px rgba(0, 0, 0, 0.8),
             -3px -4px 10px rgba(232, 232, 232, 0.55); */
@@ -114,14 +80,7 @@ tr td {
     padding: 20px 0;
     white-space: nowrap;
 }
-.game .game-head .leftdoc {margin-right: 15px;}
-.game .game-head .rightdoc {margin-left: 15px;}
-.game .game-head .leftdoc, .game .game-head .rightdoc {
-    display: inline-block;
-}
-.game .game-head .leftdoc img, .game .game-head .rightdoc img{
-    height: 300px;
-}
+
 
 .game .game-head #screen {
     border: 20px inset;
@@ -139,7 +98,7 @@ tr td {
     position: relative;
     display: inline-block;
     border: 4px solid #280000;
-    padding: 20px 20px 40px 20px;
+    /* padding: 20px 20px 40px 20px; */
 }
 .game .game-head .centerdoc .logo{
     position: absolute;
@@ -187,7 +146,7 @@ tr td {
     justify-content: space-between;
     -webkit-justify-content: space-between;
 
-    margin: 0 30px;
+    margin: 0 40px;
 }
 
 .game .game-body .controller-right{
