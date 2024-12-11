@@ -9,6 +9,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    -webkit-text-size-adjust: none !important;
 }
 
 .d-inline {

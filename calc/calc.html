@@ -3,27 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=0.8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>管材排料计算</title>
 </head>
 <style>
     div {
         color: black;
-        font-size: 16px;
+        font-size: 12px;
         background-color: rgb(206, 203, 203);
-        width: 380px;
+        max-width:450px;
         text-align: center;
         margin: auto;
+    
     }
     button,input {
-        width: 250px;
+        width: 70%;
         height: 25px;
+        font-size: 12px;
+        margin-bottom: 5px;
+        border: 0px;
+        border-radius: 3px;
+    }
+    button{
+        margin-top: 5px;
+        height: 30px;
+        width: 180px;
+
     }
     textarea {
-        width: 330px;
+        width: 90%;
         height: 400px;
         resize: none;
-        margin: 10px;
+        font-size: 12px;
+        border: 0px;
+        background-color: rgb(255, 255, 255);
     }
     a{
         text-align: center;
@@ -36,8 +49,8 @@
         <br>原材料长: <input id="max_weight" type="text" value="6000" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');">
         <br>下料尺寸: <input id="weights" type="text" value="2300,1988,1050,601,503,459,359" onkeyup="this.value=this.value.replace(/[^0-9\,]/g,'');">
         <br>下料数量: <input id="nums" type="text" value="912,320,1248,320,912,320,1248" onkeyup="this.value=this.value.replace(/[^0-9\,]/g,'');">
-        <br><br><button type="button" id="get_result">开始计算</button>
-        <br><textarea id="text_result">计算结果:</textarea>
+        <br><button type="button" id="get_result">开始计算</button>
+        <br><textarea id="text_result" disabled>计算结果:</textarea>
         <br><a href="../metal/index.html" target="_blank">金属计算器</a>
     </div>
     <script>

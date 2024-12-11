@@ -8,8 +8,8 @@
 </head>
 <style>
     .page {
-        width: 372px;
-        height: 448px;
+        max-width: 400px;
+        max-height: 600px;
         text-align: center;
         margin: auto;
     }
@@ -18,7 +18,7 @@
         z-index: 1;
         left: 0;
         right: 0;
-        top: 200px;
+        top: 180px;
         width: 150px;
         font-size: 20px;
         text-shadow: 2px 2px 5px #ffaaaa;
@@ -27,13 +27,17 @@
         word-wrap: break-word;
         word-break: break-all;
     }
+    img{
+        width: 100%;
+        height: 100%;
+    }
 </style>
 <body>
     <div class="page" id="home">
-    <img src="./home.jpg" width=372px height=448px title="点击寻找答案" onclick="answer()">
+    <img src="./home.jpg" title="点击寻找答案" onclick="answer()">
     </div>    
     <div class="page" id="answer" style="display: none;">
-        <img id="img" src="./answer.jpg" width=372px height=448px  title="点击返回" onclick="re()">
+        <img id="img" src="./answer.jpg"title="点击返回" onclick="re()">
         <span id="txt"></span>
     </div>
     <script>
