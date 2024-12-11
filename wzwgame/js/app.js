@@ -297,7 +297,7 @@
           (t.fillStyle = s),
           (t.lineWidth = o);
       }
-      function w(t, e, s) {
+      function w(t, e, s) {/////
         var o = this;
         if (e < t.animArr.length) {
           var i = function (e) {
@@ -829,7 +829,7 @@
         (e.WzwBomb = y),
         (e.WzwScreen = n);
     },
-    function (t, e, s) {
+    function (t, e, s) {//速度
       var o = s(0),
         i = o.WzwScreen,
         n = o.WzwBomb,
@@ -1239,7 +1239,7 @@
         (e.Car = p),
         (e.Road = m),
         (e.NAME_FREE = "free");
-    },
+    },//速度
     function (t, e, s) {
       for (
         var o = s(3).WzwLauncher,
@@ -1661,7 +1661,7 @@
         Shooter: f,
       };
     },
-    function (t, e, s) {
+    function (t, e, s) {///贪吃蛇
       var o = s(0),
         i = o.WzwScreen,
         n = o.WzwBomb,
@@ -2096,8 +2096,8 @@
           });
         }),
         (e.Snake = c);
-    },
-    function (t, e, s) {
+    },///贪吃蛇
+    function (t, e, s) {//坦克
       var o = s(0),
         i = o.WzwScreen,
         n = o.WzwBomb,
@@ -3026,7 +3026,7 @@
             (this.hreo = void 0);
         }),
         (e.Tank = T);
-    },
+    },//坦克
     function (t, e, s) {    //俄罗斯方块
       var o = s(0).WzwScreen,
         i = "playing",
@@ -3678,148 +3678,148 @@
       (l.prototype.onRegLaunch = function (t) {
         this.launch = t;
       }),
-        (l.prototype.getPreviewAtoms = function () {
-          return (
-            Date.now() - this.preview_lasttime >= this.preview_timespace &&
-              (this.preview_index++,
-              this.preview_index >= this.previewAtom.length - 1 &&
-                (this.preview_index = 0),
-              (this.preview_lasttime = Date.now())),
-            this.previewAtom[this.preview_index]
-          );
-        }),
-        (l.prototype.reset = function () {
-          (this.atoms = this.launch.screen.makeNewArr()),
-            (this.atomsed = this.launch.screen.makeNewArr()),
-            (this.level = 0),//等级
-            (this.succAniming = !1),
-            (this.score = 0),
-            (this.stuffOffsetRow = -3),
-            (this.stuffOffsetCol = 3),
-            (this.gameLastTime = 0),
-            (this.status = r),
-            (this.turbo = !1),
-            this.launch.screen.setLevel(this.level),
-            this.launch.screen.setScore(this.score),
-            this.launch.screen.setBest(this.best);
-        }),
-        (l.prototype.turboModeON = function () {
-          this.canTurbo && ((this.canTurbo = !1), (this.turbo = !0));
-        }),
-        (l.prototype.turboModeOFF = function () {
-          this.turbo = !1;
-        }),
-        (l.prototype.onLaunch = function () {
-          this.reset(),
-            (this.stuff = y.call(this)),
-            (this.nextStuff = y.call(this)),
-            (this.status = i),
-            (this.canTurbo = !0);
-        }),
-        (l.prototype.onUpdate = function () {
-          var t = this;
-          if (t.atoms) {
-            if (
-              Date.now() - t.gameLastTime >= (t.turbo ? 10 : a[t.level]) &&
-              !t.succAniming
-            ) {
-              if (t.status === i)
-                try {
-                  var e = !1;
+      (l.prototype.getPreviewAtoms = function () {
+        return (
+          Date.now() - this.preview_lasttime >= this.preview_timespace &&
+            (this.preview_index++,
+            this.preview_index >= this.previewAtom.length - 1 &&
+              (this.preview_index = 0),
+            (this.preview_lasttime = Date.now())),
+          this.previewAtom[this.preview_index]
+        );
+      }),
+      (l.prototype.reset = function () {
+        (this.atoms = this.launch.screen.makeNewArr()),
+          (this.atomsed = this.launch.screen.makeNewArr()),
+          (this.level = 0),//等级
+          (this.succAniming = !1),
+          (this.score = 0),
+          (this.stuffOffsetRow = -3),
+          (this.stuffOffsetCol = 3),
+          (this.gameLastTime = 0),
+          (this.status = r),
+          (this.turbo = !1),
+          this.launch.screen.setLevel(this.level),
+          this.launch.screen.setScore(this.score),
+          this.launch.screen.setBest(this.best);
+      }),
+      (l.prototype.turboModeON = function () {
+        this.canTurbo && ((this.canTurbo = !1), (this.turbo = !0));
+      }),
+      (l.prototype.turboModeOFF = function () {
+        this.turbo = !1;
+      }),
+      (l.prototype.onLaunch = function () {
+        this.reset(),
+          (this.stuff = y.call(this)),
+          (this.nextStuff = y.call(this)),
+          (this.status = i),
+          (this.canTurbo = !0);
+      }),
+      (l.prototype.onUpdate = function () {
+        var t = this;
+        if (t.atoms) {
+          if (
+            Date.now() - t.gameLastTime >= (t.turbo ? 10 : a[t.level]) &&
+            !t.succAniming
+          ) {
+            if (t.status === i)
+              try {
+                var e = !1;
+                t.stuff ||
+                  ((t.stuff = t.nextStuff),
+                  (t.nextStuff = null),
+                  (e = !!t.stuff)),
                   t.stuff ||
-                    ((t.stuff = t.nextStuff),
+                    ((t.stuff = y.call(t)),
                     (t.nextStuff = null),
                     (e = !!t.stuff)),
-                    t.stuff ||
-                      ((t.stuff = y.call(t)),
-                      (t.nextStuff = null),
-                      (e = !!t.stuff)),
-                    t.nextStuff || ((t.nextStuff = y.call(t)), (e = !!t.stuff)),
-                    e && t.turboModeOFF();
-                  var s = C.call(
-                    t,
-                    t.stuffOffsetCol,
-                    t.stuffOffsetRow,
+                  t.nextStuff || ((t.nextStuff = y.call(t)), (e = !!t.stuff)),
+                  e && t.turboModeOFF();
+                var s = C.call(
+                  t,
+                  t.stuffOffsetCol,
+                  t.stuffOffsetRow,
+                  t.stuff,
+                  t.atomsed,
+                );
+                s ||
+                  ((t.stuffOffsetRow += 1),
+                  (t.atoms = o.mergeArr2(
                     t.stuff,
                     t.atomsed,
-                  );
-                  s ||
-                    ((t.stuffOffsetRow += 1),
-                    (t.atoms = o.mergeArr2(
-                      t.stuff,
-                      t.atomsed,
-                      t.stuffOffsetRow,
-                      t.stuffOffsetCol,
-                      function (e, s, o, i) {
-                        return 1 === t.stuff[o][i]
-                          ? t.stuff[o][i]
-                          : t.atomsed[e][s];
-                      },
-                    ))),
-                    s &&
-                      ((t.atomsed = (function (t) {
-                        for (var e = [], s = 0; s < t.length; s++) {
-                          e[s] = [];
-                          for (var o = 0; o < t[o].length; o++) e[s][o] = t[s][o];
-                        }
-                        return e;
-                      })(t.atoms)),
-                      (t.stuff = void 0),
-                      (t.stuffOffsetRow = -3),
-                      (t.stuffOffsetCol = 3),
-                      w.call(t));
-                } catch (e) {
-                  "gameover" === e.message
-                    ? ((t.status = r), u.call(t))
-                    : console.error(e);
-                }
-              else t.status === n || t.status;
-              t.gameLastTime = Date.now();
-            }
-            return t.atoms;
+                    t.stuffOffsetRow,
+                    t.stuffOffsetCol,
+                    function (e, s, o, i) {
+                      return 1 === t.stuff[o][i]
+                        ? t.stuff[o][i]
+                        : t.atomsed[e][s];
+                    },
+                  ))),
+                  s &&
+                    ((t.atomsed = (function (t) {
+                      for (var e = [], s = 0; s < t.length; s++) {
+                        e[s] = [];
+                        for (var o = 0; o < t[o].length; o++) e[s][o] = t[s][o];
+                      }
+                      return e;
+                    })(t.atoms)),
+                    (t.stuff = void 0),
+                    (t.stuffOffsetRow = -3),
+                    (t.stuffOffsetCol = 3),
+                    w.call(t));
+              } catch (e) {
+                "gameover" === e.message
+                  ? ((t.status = r), u.call(t))
+                  : console.error(e);
+              }
+            else t.status === n || t.status;
+            t.gameLastTime = Date.now();
           }
-        }),
-        (l.prototype.onUpdateStatus = function () {
-          return this.nextStuff;
-        }),
-        (l.prototype.pause = function () {
-          this.status === i
-            ? ((this.status = n),
-              (this.tempNextStuff = this.nextStuff),
-              (this.nextStuff = null),
-              this.launch.screen.setPause(!0))
-            : ((this.status = i),
-              (this.nextStuff = this.tempNextStuff),
-              (this.tempNextStuff = null),
-              this.launch.screen.setPause(!1));
-        }),
-        (l.prototype.onKeyup = function (t) {
-          "down" === t && (this.turboModeOFF(), (this.canTurbo = !0));
-        }),
-        (l.prototype.onKeyDown = function (t) {
-          if ("reset" === t || "start" === t) this.pause();
-          else if ("left" === t) {
-            if (this.status === n) return;
-            v.call(this, -1);
-          } else if ("right" === t) {
-            if (this.status === n) return;
-            v.call(this, 1);
-          } else if ("rotate" === t || "up" === t) {
-            if (this.status === n) return;
-            d.call(this);
-          } else if ("down" === t) {
-            if (this.status === n) return;
-            this.turboModeON();
-          }
-        }),
-        (l.prototype.onDestroy = function () {
-          this.reset(),
-            this.launch.screen.setBest(0),
-            this.launch.screen.setScore(0),
-            this.launch.screen.setPause(!1),
-            this.launch.exitCurentGame();
-        }),
-        (e.Tetris = l);
+          return t.atoms;
+        }
+      }),
+      (l.prototype.onUpdateStatus = function () {
+        return this.nextStuff;
+      }),
+      (l.prototype.pause = function () {
+        this.status === i
+          ? ((this.status = n),
+            (this.tempNextStuff = this.nextStuff),
+            (this.nextStuff = null),
+            this.launch.screen.setPause(!0))
+          : ((this.status = i),
+            (this.nextStuff = this.tempNextStuff),
+            (this.tempNextStuff = null),
+            this.launch.screen.setPause(!1));
+      }),
+      (l.prototype.onKeyup = function (t) {
+        "down" === t && (this.turboModeOFF(), (this.canTurbo = !0));
+      }),
+      (l.prototype.onKeyDown = function (t) {
+        if ("reset" === t || "start" === t) this.pause();
+        else if ("left" === t) {
+          if (this.status === n) return;
+          v.call(this, -1);
+        } else if ("right" === t) {
+          if (this.status === n) return;
+          v.call(this, 1);
+        } else if ("rotate" === t || "up" === t) {
+          if (this.status === n) return;
+          d.call(this);
+        } else if ("down" === t) {
+          if (this.status === n) return;
+          this.turboModeON();
+        }
+      }),
+      (l.prototype.onDestroy = function () {
+        this.reset(),
+          this.launch.screen.setBest(0),
+          this.launch.screen.setScore(0),
+          this.launch.screen.setPause(!1),
+          this.launch.exitCurentGame();
+      }),
+      (e.Tetris = l);
     },   //俄罗斯方块
     function (t, e, s) {
       var o = s(0).WzwScreen,

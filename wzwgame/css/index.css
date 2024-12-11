@@ -14,8 +14,10 @@ body {
 .d-inline {
     display: inline-block;
 }
-tr td {
+.sline {
     text-align: center;
+    margin: 0px auto;
+    padding-left: 80px;
 }
 .btn {
     outline: none;
@@ -56,8 +58,6 @@ tr td {
     font-size: 12px;
 }
 
-
-
 .flex-page {
     display: flex;
     display: -webkit-flex;
@@ -72,14 +72,9 @@ tr td {
     -webkit-align-items: flex-start;
 }
 
-
 .game {
     background: #019CD6;
     width:100%;
-    /* border-radius: 12px 12px 12px 12px;
-    box-shadow:
-            3px 4px 10px rgba(0, 0, 0, 0.8),
-            -3px -4px 10px rgba(232, 232, 232, 0.55); */
 }
 
 .game .game-head {
@@ -87,7 +82,6 @@ tr td {
     padding-top: 20px;
     white-space: nowrap;
 }
-
 
 .game .game-head #screen {
     border: 20px inset;
@@ -110,10 +104,6 @@ tr td {
     padding-top: 5px;
 }
 
-.game .game-body table {
-    margin: 0px auto;
-    padding-left: 80px;
-}
 
 .game .game-body [key] {
     transition-duration: 0ms;
