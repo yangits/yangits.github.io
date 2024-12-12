@@ -979,7 +979,7 @@
           (this.atoms = this.wzwScreen.makeNewArr()),
             (this.status = l),
             (this.turbo = !1),
-            (this.level = 1),
+            (this.level = 1),////速度等级
             (this.score = 0),
             (this.count = 0),
             (this.best = i.storeGet("speed_best") || 0),
@@ -1416,12 +1416,6 @@
                 ? t.preventDefault()
                 : ((t.returnValue = !1), (window.event.returnValue = !1));
           });
-      var C = document.querySelector("#zjtip");
-      C && (C.innerText = "转载请注明出处。"),
-        (window.author = function () {
-
-            C && (C.style.color = "#FFFFFF");
-        }),
         setTimeout(function () {
           r.reboot();
         }, 300);
@@ -1458,11 +1452,13 @@
             if (this.currentGame)
               this.currentGame.onKeyup && this.currentGame.onKeyup(t);
             else {
+              if ("left" === t) {ininlevel !=0 ? ininlevel -= 1:ininlevel = 16; return this.screen.setLevel(ininlevel)};//按键
+              if ("right" === t) {ininlevel !=16 ? ininlevel += 1:ininlevel = 0; return this.screen.setLevel(ininlevel)};//按键
               if ("rotate" === t)
                 return void (this.current >= this.games.length - 1
                   ? (this.current = 0)
                   : this.current++);
-              if ("start" === t) return void this.start();
+              if ("start" === t) {return void this.start()} ;
             }
             if ("reset" === t) return void this.reboot();
           }
@@ -2357,7 +2353,7 @@
           ]);
       }
       function O() {
-        (this.level = 0),
+        (this.level = 0),////坦克等级
           (this.shotCount = 0),
           (this.score = 0),
           (this.best = i.storeGet("tankBest") || 0),
@@ -3295,6 +3291,7 @@
                           h >= 1;
                           h--
                         )
+                        
                           r(h);
                         s && s();
                       },
@@ -3691,7 +3688,7 @@
       (l.prototype.reset = function () {
         (this.atoms = this.launch.screen.makeNewArr()),
           (this.atomsed = this.launch.screen.makeNewArr()),
-          (this.level = 0),//等级
+          (this.level = ininlevel),//俄罗斯方块等级
           (this.succAniming = !1),
           (this.score = 0),
           (this.stuffOffsetRow = -3),
@@ -3799,12 +3796,10 @@
       (l.prototype.onKeyDown = function (t) {
         if ("reset" === t || "start" === t) this.pause();
         else if ("left" === t) {
-          if (this.status === n) {this.level!=0?this.level -= 1:this.level = 16;
-            this.launch.screen.setLevel(this.level );return};//俄罗斯方块按键
+          if (this.status === n) {return};//俄罗斯方块按键
           v.call(this, -1);
         } else if ("right" === t) {
-          if (this.status === n) {this.level!=16?this.level += 1:this.level = 0;
-            this.launch.screen.setLevel(this.level );return};
+          if (this.status === n) {return};
           v.call(this, 1);
         } else if ("rotate" === t || "up" === t) {
           if (this.status === n) return;
@@ -4013,7 +4008,7 @@
         (a.prototype.onDestroy = function () {
           (this.blocks = void 0),
             (this.life = 0),
-            (this.level = 0),
+            (this.level = 0),//对对朋结束
             (this.levelDissCount = 0),
             (this.blocks = void 0),
             (this.checkBlocks = void 0),
@@ -4836,9 +4831,9 @@
             (this.boom = void 0),
             (this.score = 0),
             (this.bestScore = i.storeGet("shooter_best") || 0),
-            (this.level = 0),
+            (this.level = ininlevel),//////消消消  等级
             (this.wallShootedCount = 0),
-            this.screen.setLevel(this.level + 1),
+            this.screen.setLevel(this.level),
             this.screen.setBest(this.bestScore),
             this.startNewGame();
         }),
@@ -5190,6 +5185,6 @@
             ]);
         }),
         (e.Shooter = w);
-    },
+    },    ininlevel=0,
   ]);
   
