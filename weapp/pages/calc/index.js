@@ -239,17 +239,17 @@ Page({
         var Numbers = [];
         var z = 0; var l = 0; var re = 0;
         for (let i = 0; i < result.length; i++) {
-                re = (Math.abs(Math.round(result[i][1]) - result[i][1]) < 0.3) ? Math.round(result[i][1]) : Math.ceil(result[i][1]);//Math.ceil  floor
-                texts += "\n" + (i+1) + "#：余" + (max_weight - this.sumarrys(weights, num_arrs[result[i][0]]));
-                texts += "，需" + re + "根" + JSON.stringify(this.sumf(weights, num_arrs[result[i][0]]));
-                z += re;   //计算目标函数的值
-                l += this.sumarrys(weights, num_arrs[result[i][0]]) * re;
-                if (i < 1) {
-                    Numbers = this.sumar(num_arrs[result[i][0]], re);
-                    }
-                else {
-                    Numbers = this.sum(Numbers ,this.sumar(num_arrs[result[i][0]], re))
-                };
+          re = Math.round(result[i][1]+0.2);
+          texts += "\n" + (i+1) + "#：余" + (max_weight - this.sumarrys(weights, num_arrs[result[i][0]]));
+          texts += "，需" + re + "根" + JSON.stringify(this.sumf(weights, num_arrs[result[i][0]]));
+          z += re;   //计算目标函数的值
+          l += this.sumarrys(weights, num_arrs[result[i][0]]) * re;
+          if (i < 1) {
+              Numbers = this.sumar(num_arrs[result[i][0]], re);
+              }
+          else {
+              Numbers = this.sum(Numbers ,this.sumar(num_arrs[result[i][0]], re))
+          };
         };
         texts += "\n下料数量分别为：" + JSON.stringify(Numbers);
         texts += "\n所需原料总数目为：" + z;
