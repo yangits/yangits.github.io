@@ -16,69 +16,69 @@ class Mywindow(QWidget):
         self.edit1 = QLineEdit("6000",self)
         self.edit2 = QLineEdit("2300,1988,1050,601,503,459,359",self)
         self.edit3 = QLineEdit("912,320,1248,320,912,320,1248",self)
-        self.edit6 = QTextEdit(self)
+        self.edit4 = QTextEdit(self)
+        self.edit4.setText("计算结果：")
         self.edit1.setGeometry(150, 10, 220, 35)
         self.edit2.setGeometry(150, 50, 600, 35)
         self.edit3.setGeometry(150, 90, 600, 35)
-        self.edit6.setGeometry(50, 180, 700, 400)
-        self.edit6.setText("计算结果：")
+        self.edit4.setGeometry(50, 180, 700, 400)
         btn = QPushButton("开始计算",self)
         btn.setGeometry(50, 130, 700, 35)
         btn.clicked.connect(self.run)     #点击按钮连接运行程序
     def run(self):  
-        self.edit6.clear()
+        self.edit4.clear()
         try:
             max_weight = eval(self.edit1.text())
             weights = eval(self.edit2.text())
             nums = eval(self.edit3.text())
         except:
-            self.edit6.append('输入框不是整数或逗号格式错误,请参考默认数值')
+            self.edit4.append('输入框不是整数或逗号格式错误,请参考默认数值')
             return
         if not ( isinstance(max_weight, int)):
-            self.edit6.append('输入框不是整数或逗号格式错误,请参考默认数值')
+            self.edit4.append('输入框不是整数或逗号格式错误,请参考默认数值')
             return 
-        self.edit6.append("开始计算...\n开始动态规划, 计算所有下料分布可能...")    
-        self.edit6.repaint()
+        self.edit4.append("开始计算...\n开始动态规划, 计算所有下料分布可能...")    
+        self.edit4.repaint()
         try:
             num_arrs= bag_program(weights, nums, max_weight)     #计算可能下料方案
         except:
-            self.edit6.append('动态规划失败，请检查数据!!!') 
+            self.edit4.append('动态规划失败，请检查数据!!!') 
             return         
         weight_num=[]
         for vals in num_arrs:
             weight_num.extend([vals])
         num_arrs=weight_num
-        self.edit6.append("动态规划结束,开始线性规划选择最优分布...")
-        self.edit6.repaint()
+        self.edit4.append("动态规划结束,开始线性规划选择最优分布...")
+        self.edit4.repaint()
         print(list(zip(*num_arrs)),nums)
         try:
             re=integer_program(list(zip(*num_arrs)),nums)        #求解最优方案
         except:
-            self.edit6.append('线性规划失败，请检查数据!!!') 
+            self.edit4.append('线性规划失败，请检查数据!!!') 
             return
         if sum(re) <= 0 :
-            self.edit6.append('没有任何方案，请修改参数!!!') 
+            self.edit4.append('没有任何方案，请修改参数!!!') 
             return 
-        self.edit6.append("线性规划完成, 等待输出结果...")
+        self.edit4.append("线性规划完成, 等待输出结果...")
        
         numbers=[]
-        self.edit6.repaint()
-        j=1;l=0;z=[]
+        self.edit4.repaint()
+        j=0;l=0;z=[]
         for i in range(len(re)):
             if re[i] != 0:
                 z.append(round(re[i]+0.2))
-                self.edit6.append(f'{j}#: 余{max_weight-sumarrys(weights,num_arrs[i])},需{z[j-1]}根*{sumf(weights,num_arrs[i])}')
-                l += sumarrys(weights,num_arrs[i])*z[j-1]
-                if j==1:
-                    numbers=sumar(num_arrs[i],z[j-1])
+                self.edit4.append(f'{j+1}#: 余{max_weight-sumarrys(weights,num_arrs[i])},需{z[j]}根*{sumf(weights,num_arrs[i])}')
+                l += sumarrys(weights,num_arrs[i])*z[j]
+                if j==0:
+                    numbers=sumar(num_arrs[i],z[j])
                 else:
-                    numbers=sumnums(numbers,sumar(num_arrs[i],z[j-1]))
+                    numbers=sumnums(numbers,sumar(num_arrs[i],z[j]))
                 j += 1
-        self.edit6.append(f'下料数量分别为: {numbers}')        
-        self.edit6.append(f'所需原料总数目为: {sum(z)}根') 
-        self.edit6.append('管材平均利用率为: {:.2f}%'.format(l/sum(re)/max_weight*100)) 
-        self.edit6.append("此程序仅供学习和参考，计算结果自行承担风险!!!\n")        
-        self.edit6.repaint()
+        self.edit4.append(f'下料数量分别为: {numbers}')        
+        self.edit4.append(f'所需原料总数目为: {sum(z)}根') 
+        self.edit4.append('管材平均利用率为: {:.2f}%'.format(l/sum(re)/max_weight*100)) 
+        self.edit4.append("此程序仅供学习和参考，计算结果自行承担风险!!!\n")        
+        self.edit4.repaint()
 
 
 def bag_program(weights, nums, max_weight):
