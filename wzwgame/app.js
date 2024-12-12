@@ -1101,7 +1101,7 @@
           this.status !== f
             ? ("rotate" === t && (this.turbo = !0),
               this.status === l &&
-                ("left" === t
+                ("left" === t//速度按键
                   ? this.player.left()
                   : "right" === t
                     ? this.player.right()
@@ -1240,7 +1240,7 @@
         (e.Road = m),
         (e.NAME_FREE = "free");
     },//速度
-    function (t, e, s) {
+    function (t, e, s) {   
       for (
         var o = s(3).WzwLauncher,
           i = s(4).Clicker,
@@ -1871,7 +1871,7 @@
               this.launch.screen.setPause(this.paused)),
             this.snakeHead)
           ) {
-            if (this.paused) return;
+            if (this.paused) return;//贪吃蛇按键
             switch (t) {
               case "up":
                 this.snakeHead.turnTo(r);
@@ -3799,10 +3799,12 @@
       (l.prototype.onKeyDown = function (t) {
         if ("reset" === t || "start" === t) this.pause();
         else if ("left" === t) {
-          if (this.status === n) return;
+          if (this.status === n) {this.level!=0?this.level -= 1:this.level = 16;
+            this.launch.screen.setLevel(this.level );return};//俄罗斯方块按键
           v.call(this, -1);
         } else if ("right" === t) {
-          if (this.status === n) return;
+          if (this.status === n) {this.level!=16?this.level += 1:this.level = 0;
+            this.launch.screen.setLevel(this.level );return};
           v.call(this, 1);
         } else if ("rotate" === t || "up" === t) {
           if (this.status === n) return;
@@ -4028,7 +4030,7 @@
               ? ((this.status = "playing"), void this.screen.setPause(!1))
               : void (
                   "playing" === this.status &&
-                  ("left" === t
+                  ("left" === t//对对碰按键
                     ? this.blocks[0].change()
                     : "up" === t
                       ? this.blocks[1].change()
@@ -4400,7 +4402,7 @@
             return (this.status = p), void this.screen.setPause(!1);
           this.status === p &&
             this.player &&
-            ("left" === t
+            ("left" === t//速度2按键
               ? this.player.left()
               : "right" === t
                 ? this.player.right()
@@ -4913,7 +4915,7 @@
             this.status === a &&
             ("left" === t
               ? this.player.left()
-              : "right" === t
+              : "right" === t//消方块按键
                 ? this.player.right()
                 : "rotate" === t && this.player.shoot());
         }),
