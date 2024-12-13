@@ -979,7 +979,7 @@
           (this.atoms = this.wzwScreen.makeNewArr()),
             (this.status = l),
             (this.turbo = !1),
-            (this.level = 1),////速度等级
+            (this.level = ininlevel+1),////速度开始等级
             (this.score = 0),
             (this.count = 0),
             (this.best = i.storeGet("speed_best") || 0),
@@ -1086,7 +1086,8 @@
           if (this.life) return this.life;
         }),
         (w.prototype.onDestroy = function () {
-          this.wzwScreen.setLevel(0),
+          this.wzwScreen.setLevel(0),//////速度1结束等级
+          ininlevel=0,
             this.wzwScreen.setScore(0),
             this.wzwScreen.setPause(!1),
             this.wzwScreen.setBest(0),
@@ -1452,8 +1453,8 @@
             if (this.currentGame)
               this.currentGame.onKeyup && this.currentGame.onKeyup(t);
             else {
-              if ("left" === t) {ininlevel !=0 ? ininlevel -= 1:ininlevel = 16; return this.screen.setLevel(ininlevel)};//按键
-              if ("right" === t) {ininlevel !=16 ? ininlevel += 1:ininlevel = 0; return this.screen.setLevel(ininlevel)};//按键
+              if ("left" === t) {ininlevel !=0 ? ininlevel -= 1:ininlevel = 15; return this.screen.setLevel(ininlevel)};//按键
+              if ("right" === t) {ininlevel !=15 ? ininlevel += 1:ininlevel = 0; return this.screen.setLevel(ininlevel)};//按键
               if ("rotate" === t)
                 return void (this.current >= this.games.length - 1
                   ? (this.current = 0)
@@ -1560,6 +1561,7 @@
           (this.status = i.STATUS.BOOTED), (this.currentGame = void 0);
         }),
         (i.prototype.reboot = function () {
+          ininlevel=0;
           var t = this;
           (t.status = i.STATUS.BOOTING),
             t.screen.playAnim(o.ANIM.CIRCLE, function (e, s) {
@@ -1842,12 +1844,13 @@
             this.atoms
           );
         }),
-        (c.prototype.onUpdateStatus = function () {}),
+        (c.prototype.onUpdateStatus = function () {this.launch.screen.setLevel(0)}),////贪吃蛇开始
         (c.prototype.onDestroy = function () {
           this.launch.screen.setScore(0),
             this.launch.screen.setBest(0),
             this.launch.screen.setPause(!1),
-            this.launch.screen.setLevel(0),
+            this.launch.screen.setLevel(0),////贪吃蛇结束等级
+            (ininlevel= 0),
             (this.snakeHead = void 0),
             (this.bomb = void 0),
             (this.live = !1),
@@ -2353,7 +2356,7 @@
           ]);
       }
       function O() {
-        (this.level = 0),////坦克等级
+        (this.level = ininlevel),////坦克开始等级
           (this.shotCount = 0),
           (this.score = 0),
           (this.best = i.storeGet("tankBest") || 0),
@@ -2911,7 +2914,8 @@
         (T.prototype.onDestroy = function () {
           (this.hreo = void 0),
             (this.score = 0),
-            (this.level = 0),
+            (ininlevel = 0),
+            (this.level = 0),//////坦克结束等级
             (this.tankers = []),
             (this.bomb = void 0),
             (this.status = b),
@@ -2920,7 +2924,7 @@
             (this.best = 0),
             this.launch.screen.setBest(0),
             this.launch.screen.setScore(0),
-            this.launch.screen.setLevel(0),
+            this.launch.screen.setLevel(this.level),
             this.launch.screen.setPause(!1);
         }),
         (T.prototype.onKeyup = function (t) {
@@ -3767,7 +3771,7 @@
                     w.call(t));
               } catch (e) {
                 "gameover" === e.message
-                  ? ((t.status = r), u.call(t))
+                  ? ((t.status = r), u.call(t),ininlevel=0)////俄罗斯方块结束
                   : console.error(e);
               }
             else t.status === n || t.status;
@@ -4166,7 +4170,7 @@
         }),
         (e.Copyor = a);
     },
-    function (t, e, s) {
+    function (t, e, s) {////////速度2
       var o = s(1),
         i = o.Car,
         n = o.NAME_FREE,
@@ -4216,7 +4220,7 @@
       }
       function y() {
         (this.score = 0),
-          (this.level = 1),
+          (this.level = 1),//weizhi
           (this.bestScore = 0),
           (this.status = u),
           this.initPreview();
@@ -4306,7 +4310,7 @@
             this.screen.setBest(this.bestScore),
             (this.boom = void 0),
             (this.turbo = !1),
-            (this.level = 1),
+            (this.level = ininlevel+1),//开始等级速度2
             (this.status = u),
             (this.life = [
               [0, 0, 0, 0],
@@ -4381,7 +4385,8 @@
             (this.bestScore = 0),
             (this.boom = void 0),
             (this.turbo = !1),
-            (this.level = 1),
+            (this.level = 1),//结束显示等级速度2
+            (ininlevel=0),
             (this.player = void 0),
             this.screen.setPause(!1),
             this.screen.setBest(0),
@@ -4652,8 +4657,8 @@
             ]);
         }),
         (e.Speed2 = y);
-    },
-    function (t, e, s) {
+    },///////速度2
+    function (t, e, s) {/////消消消
       var o = s(0),
         i = o.WzwScreen,
         n = o.WzwBomb,
@@ -4895,7 +4900,8 @@
             this.screen.setPause(!1),
             this.screen.setScore(0),
             this.screen.setBest(0),
-            this.screen.setLevel(0),
+            ininlevel=0,
+            this.screen.setLevel(0),/////消消消结束等级
             i.storeSet("shooter_best", this.bestScore);
         }),
         (w.prototype.onKeyup = function (t) {
@@ -5184,7 +5190,7 @@
               ],
             ]);
         }),
-        (e.Shooter = w);
-    },    ininlevel=0,
+      (e.Shooter = w);
+    },ininlevel=0,
   ]);
   
