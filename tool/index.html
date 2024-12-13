@@ -18,9 +18,10 @@
       height: 25px;
   }
   textarea{
-    width: 90%;
+      width: 90%;
       resize: none;
       margin: 5px;
+      background-color: rgb(255, 255, 255);
   }
   p{
         text-align: center;
@@ -37,7 +38,7 @@
     </select>
     <textarea id="text_input" cols="50" rows="5" placeholder="输入关键词"></textarea>
     <button type="button" id="get_result">获取结果</button>
-    <textarea id="text_result" cols="50" rows="25"> </textarea>
+    <textarea id="text_result" cols="50" rows="25" disabled> </textarea>
   </div>
   <script>
     document.getElementById('get_result').onclick= function(){
