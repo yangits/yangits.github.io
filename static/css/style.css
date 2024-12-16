@@ -30,13 +30,13 @@ html, body {
 
 
 input[type="button"], input[type="submit"], input[type="reset"] {
-    -webkit-appearance: none;
+    /* -webkit-appearance: none; */
     outline: 0;
 }
 
-textarea {
-    -webkit-appearance: none;
-}
+/* textarea { */
+    /* -webkit-appearance: none; */
+/* } */
 
 /* ================ reset 样式 end  ================ */
 

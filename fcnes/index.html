@@ -1,0 +1,214 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>红白机</title>
+    <link href="./css/jsnes.css" rel="stylesheet" type="text/css"/>
+    <link rel="shortcut icon" href="./favicon.ico">
+    <style>
+
+    </style>
+</head>
+<body>
+<div class="main">
+    <div class="panel">
+        <div class="controller-area">
+            <div class="controller">
+                <div id="controls-direction">
+                    <div id="controls-rocker"></div>
+                    <button role="BUTTON_UP" class="up joydirection" id="joystick_btn_up">up</button>
+                    <button role="BUTTON_RIGHT" class="right joydirection" id="joystick_btn_right">right</button>
+                    <button role="BUTTON_DOWN" class="down joydirection" id="joystick_btn_down">down</button>
+                    <button role="BUTTON_LEFT" class="left joydirection" id="joystick_btn_left">left</button>
+                </div>
+            </div>
+        </div>
+        <div class="function-area">
+            <div class="screen">
+                <div id="emulator" align="center" style="width:100%;height:100%"></div>
+            </div>
+
+        </div>
+        <div class="action-area">
+            <div class="function">
+                <button class="controls-center-select joybtn" id="joystick_btn_select" role="BUTTON_SELECT">Select
+                </button>
+                <button class="controls-center-start joybtn" id="joystick_btn_start" role="BUTTON_START">Pause</button>
+            </div>
+            <div class="action">
+                <div id="controls-fire">
+                    <button class="a joybtn" role="BUTTON_A" id="joystick_btn_A">A</button>
+                    <button class="b joybtn" role="BUTTON_B" id="joystick_btn_B">B</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div>
+    <table class="gt_table" >
+        <tbody>
+        <tr>
+            <td >按键</td>
+            <td >player1</td>
+            <td >player2</td>
+        </tr>
+        <tr>
+            <td >Left</td>
+            <td >A</td>
+            <td >Num-4</td>
+        </tr>
+        <tr>
+            <td >Right</td>
+            <td >D</td>
+            <td >Num-6</td>
+        </tr>
+        <tr>
+            <td >Up</td>
+            <td >W</td>
+            <td >Num-8</td>
+        </tr>
+        <tr>
+            <td >Down</td>
+            <td >S</td>
+            <td >Num-2</td>
+        </tr>
+        <tr>
+            <td >A</td>
+            <td >J</td>
+            <td >Num-7</td>
+        </tr>
+        <tr>
+            <td >B</td>
+            <td >K</td>
+            <td >Num-9</td>
+        </tr>
+        <tr>
+            <td >AA</td>
+            <td >Z</td>
+            <td >Num-/</td>
+        </tr>
+        <tr>
+            <td >BB</td>
+            <td >X</td>
+            <td >Num-*</td>
+        </tr>
+        <tr>
+            <td >Start</td>
+            <td >Enter</td>
+            <td >Num-1</td>
+        </tr>
+        <tr>
+            <td >Select</td>
+            <td >Ctrl</td>
+            <td >Num-3</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+<script src="./lib/jquery-1.4.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="./lib/dynamicaudio-min.js" type="text/javascript" charset="utf-8"></script>
+<script src="./js/nes.js" type="text/javascript" charset="utf-8"></script>
+<script src="./js/utils.js" type="text/javascript" charset="utf-8"></script>
+<script src="./js/cpu.js" type="text/javascript" charset="utf-8"></script>
+<script src="./js/keyboard.js" type="text/javascript" charset="utf-8"></script>
+<script src="./js/mappers.js" type="text/javascript" charset="utf-8"></script>
+<script src="./js/papu.js" type="text/javascript" charset="utf-8"></script>
+<script src="./js/ppu.js" type="text/javascript" charset="utf-8"></script>
+<script src="./js/rom.js" type="text/javascript" charset="utf-8"></script>
+<script src="./js/ui.js" type="text/javascript" charset="utf-8"></script>
+<script src="./lib/debug.mini.js" type="text/javascript" charset="utf-8"></script>
+<script src="./lib/nipplejs.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="./lib/joystick.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+    var nes;
+    $(function () {
+        nes = new JSNES({
+            'ui': $('#emulator').JSNESUI({
+                "经典热门": [
+                    ['超级马里奥1', 'roms/Super Mario Bros.nes'],
+                    ['坦克', 'roms/Battle City.nes'],
+                    ['魂斗罗1-30S', 'roms/Contra1(U)30S.nes'],
+                    ['双截龙2', 'roms/Double Dragon2.nes'],
+                    ['冒险岛1', 'roms/maoixandao.nes'],
+                    ['淘金者', 'roms/TaoJinZhe.nes'],
+                    ['中国象棋', 'roms/Zhong Guo Xiang Qi.nes'],
+                    ['五子棋', 'roms/5.nes'],
+                    ['炸弹人1', 'roms/zhadanren.nes'],
+                ],
+                "冒险岛": [
+                    ['冒险岛1', 'roms/maoixandao1.nes'],
+                    ['冒险岛2', 'roms/maoixandao2.nes'],
+                    ['冒险岛3', 'roms/maoixandao3.nes'],
+                ],
+                "魂斗罗": [
+                    ['魂斗罗1-30S', 'roms/Contra1(U)30S.nes'],
+                    ['魂斗罗2', 'roms/Contra2.nes'],
+                    ['魂斗罗3', 'roms/Contra3.nes'],
+                    ['魂斗罗6', 'roms/Contra6.nes'],
+                    ['魂斗罗7', 'roms/Contra7.nes'],
+                    ['魂斗罗8', 'roms/Contra8.nes'],
+                ],
+                "双截龙": [
+                    ['双截龙2', 'roms/Double Dragon2.nes'],
+                    ['双截龙1', 'roms/Double Dragon1.nes'],
+                    ['双截龙3', 'roms/Double Dragon3.nes'],
+                    ['双截龙4', 'roms/Double Dragon4.nes'],
+                ],
+                "角色类": [
+                    ['小美人鱼', 'roms/meirenyu.nes'],
+                    ['米老鼠 大冒险', 'roms/milaoshu.nes'],
+                    ['洛克人x', 'roms/luokerenX.nes'],
+                    ['洛克人', 'roms/luokeren.nes'],
+                ],
+
+                "桌面类": [
+                    ['围棋大战', 'roms/weiqi.nes'],
+                    ['玛丽医生', 'roms/maliyis.nes'],
+                    ['吃豆小精灵', 'roms/chidou.nes'],
+                ],
+                "其他": [
+                    ['敲冰块', 'roms/Ice Climber.nes'],
+                    ['水管工马里奥', 'roms/shuiguangong.nes'],
+                ],
+            })
+        });
+    });
+</script>
+<script>
+    function touchDwon(evt) {
+        nes.keyboard.keyDown({
+            keyCode: evt.keyCode
+        });
+    };
+
+    function touchUp(evt) {
+        nes.keyboard.keyUp({
+            keyCode: evt.keyCode
+        });
+    };
+
+    function select(val) {
+        if (val.substring(0, 1) == "#") {
+            return document.querySelector(val);
+        } else {
+            return document.getElementById(val);
+        }
+    }
+
+    var joystick = new Joystick({
+        el: select("controls-rocker"),
+        mode: 'static',
+        color: "#808080",
+        size: 150,
+        isFourBtn: false,
+        keyCodes: [87, 83, 65, 68],
+        btn_down_fn: touchDwon,
+        btn_up_fn: touchUp,
+        relative: true,
+    });
+    joystick.init();
+</script>
+</html>
