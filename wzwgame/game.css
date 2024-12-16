@@ -89,8 +89,7 @@ body {
     border-color: #0a90bf #4dbde3 #59c6e8 #019CD6;
     overflow: hidden;
     background-color: #9facaa;
-    width: 197px;
-    height: 259px;
+    /* width: 100%; */
 }
 
 .game .game-head .centerdoc {
