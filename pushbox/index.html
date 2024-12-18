@@ -45,8 +45,10 @@
 		<div class="game">
 			<canvas id="canvas" width="560" height="560"></canvas>
 			<div id="msg"></div>
+			<input type="button" value="上十关" onclick="NextLevel(-10)">
 			<input type="button" value="上一关" onclick="NextLevel(-1)">
 			<input type="button" value="下一关" onclick="NextLevel(1)">
+			<input type="button" value="下十关" onclick="NextLevel(10)">
 			<input type="button" value="重玩本关" onclick="NextLevel(0)">
 			<input type="button" value="游戏说明" onclick="showHelp()">
 			<div class="cen">
@@ -186,6 +188,9 @@
 			if (iCurlevel<0)
 			{
 				iCurlevel = 0;
+				initLevel();//初始当前等级关卡
+				moveTimes = 0;//游戏关卡移动步数清零
+				showMoveInfo();//初始化当前关卡数据
 				return;
 			}
 			var len = levels.length;
