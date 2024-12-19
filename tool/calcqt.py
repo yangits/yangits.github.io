@@ -1,7 +1,7 @@
 ﻿import pulp as lp
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QLineEdit, QTextEdit
-#pyinstaller -F -w cal.py --collect-data pulp
+#pyinstaller -F -w calcqt.py --collect-data pulp
 class Mywindow(QWidget):
     def __init__(self):
         super(Mywindow, self).__init__()
@@ -50,7 +50,6 @@ class Mywindow(QWidget):
         num_arrs=weight_num
         self.edit4.append("动态规划结束,开始线性规划选择最优分布...")
         self.edit4.repaint()
-        print(list(zip(*num_arrs)),nums)
         try:
             re=integer_program(list(zip(*num_arrs)),nums)        #求解最优方案
         except:
