@@ -8,52 +8,47 @@
         <link rel="stylesheet" href="./game.css">
     </head>
     <body>
-        <div class="flex-page">
-            <div class="game">
-                <div class="game-head">
-                    <div class="centerdoc">
-                        <div id="screen" width="197" height="259"></div>
+        <div class="game">
+            <div class="game-head ">
+                    <div id="screen"></div>
+            </div>
+            <div class="game-body">
+                <div class="sline">
+                    <div class="d-inline">
+                        <button class="btn controller-div small" key="start"></button>
+                        <div class=" text-center small">开始</div>
+                    </div>
+                    <div class="d-inline">
+                        <button class="btn controller-div small" key="onoff"></button>
+                        <div class="text-center small">开关</div>
+                    </div>
+                    <div class="d-inline">
+                        <button class="btn controller-div small" key="reset"></button>
+                        <div class="text-center small">复位</div>
                     </div>
                 </div>
-                <div class="game-body">
-                    <div class="sline">
-                        <div class="d-inline">
-                            <button class="btn controller-div small" key="start"></button>
-                            <div class=" text-center small">开始</div>
-                        </div>
-                        <div class="d-inline">
-                            <button class="btn controller-div small" key="onoff"></button>
-                            <div class="text-center small">开关</div>
-                        </div>
-                        <div class="d-inline">
-                            <button class="btn controller-div small" key="reset"></button>
-                            <div class="text-center small">复位</div>
-                        </div>
-                    </div>
-                    <div class="controller-flex">
-                        <div class="controller-left">
-                            <div class="controller-left-row">
-                                <div class="btn-parent controller-div" key="up">
-                                    <button class="btn">上</button>
-                                </div>
-                                <div class="btn-parent controller-div" key="right">
-                                    <button class="btn">右</button>
-                                </div>
+                <div class="controller-flex">
+                    <div class="controller-left">
+                        <div class="controller-left-row">
+                            <div class="btn-parent controller-div" key="up">
+                                <button class="btn">上</button>
                             </div>
-                            <div class="controller-left-row">
-                                <div class="btn-parent controller-div" key="left">
-                                    <button class="btn">左</button>
-                                </div>
-                                <div class="btn-parent controller-div" key="down">
-                                    <button class="btn">下</button>
-                                </div>
+                            <div class="btn-parent controller-div" key="right">
+                                <button class="btn">右</button>
                             </div>
                         </div>
-                        <div class="controller-right">
-                            <button class="big btn controller-div rotate" key="rotate">旋转</button>
+                        <div class="controller-left-row">
+                            <div class="btn-parent controller-div" key="left">
+                                <button class="btn">左</button>
+                            </div>
+                            <div class="btn-parent controller-div" key="down">
+                                <button class="btn">下</button>
+                            </div>
                         </div>
                     </div>
-
+                    <div class="controller-right">
+                        <button class="big btn controller-div rotate" key="rotate">旋转</button>
+                    </div>
                 </div>
             </div>
         </div>

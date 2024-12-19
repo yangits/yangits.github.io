@@ -98,7 +98,6 @@
           t.jquery && t.length > 0 ? (this.dom = t[0]) : (this.dom = t);
         }
         (this.option = n.assign({}, o, e || {})),
-          (this.testspan = this.option.testspan),
           r.call(this),
           h.call(this),
           a.call(this),
@@ -164,20 +163,7 @@
                   window.webkitRequestAnimationFrame(o))
                 : ((s = "setTimeout"), setTimeout(o, 16));
             var h = Date.now();
-            t.testspan &&
-              (t.testspan.innerText =
-                "逻辑耗时：" +
-                (n - i) +
-                "ms, 绘制耗时：" +
-                (r - n) +
-                "ms, 帧请求(" +
-                s +
-                ")耗时：" +
-                (h - r) +
-                "ms, 帧间隔:" +
-                (i - t.lastttime) +
-                "ms"),
-              (t.lastttime = Date.now());
+
           })();
       }
       function u(t) {
@@ -1246,7 +1232,7 @@
         var o = s(3).WzwLauncher,
           i = s(4).Clicker,
           n = s(5),
-          r = new o("#screen", { testspan: document.querySelector("#testspan") }),
+          r = new o("#screen"),
           h = "ABCDEFGHIJKLMN".split(""),
           a = [
             new n.Tetris(),  // 俄罗斯方块
