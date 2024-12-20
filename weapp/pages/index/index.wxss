@@ -2,6 +2,7 @@ page {
     background-color: rgb(199, 199, 199);
 }
 .show{
+    height: 100rpx;
     display: flex;
 }
 .hide{
@@ -12,17 +13,28 @@ page {
     flex-direction:column;
     text-align: center;
     align-items: center;
-    margin-top: 80rpx;
   }
 .body view{
-    color: black;
-    height: 100rpx;
-    /* display: flex; */
-    text-align: center;
-    align-items:center;
     font-size:45rpx ;
   }
-.result{
+  .home {
+    width: 200rpx;
+    height: 80rpx;
+    background: rgb(130, 130, 130);
+    color: rgb(255, 255, 255);
+    border: 2rpx solid #000000;
+    border-radius: 20rpx;
+    margin: 50rpx 30rpx 40rpx 30rpx;
+}
+.home_active {
+    width: 200rpx;
+    height: 80rpx;
+    background: #fff;
+    border: 2rpx solid #030303;
+    border-radius: 20rpx;
+    margin: 50rpx 30rpx 40rpx 30rpx;
+}
+.kg_result{
     margin-top: 40rpx;
     margin-bottom: 20rpx;
     font-size: 35rpx;
@@ -35,22 +47,20 @@ input {
     height: 65rpx;
     border-radius: 10rpx;
 }
-
 .material {
     font-size: 35rpx;
 }
 .PP{
-    color: rgb(160, 160, 160);
+    color: rgb(130, 130, 130);
     font-size: 30rpx;
 }
 .foot{
     text-align: center;
-    color: rgb(160, 160, 160);
+    color: rgb(130, 130, 130);
     font-size: 30rpx;
     width: 450rpx;
 }
-
-.text_result{
-    color: red;
+.red{
+    color: rgb(255, 0, 0);
 }
 

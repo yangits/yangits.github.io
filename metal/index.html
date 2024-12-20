@@ -18,15 +18,12 @@
         padding-top: 10px;
     }
     input {
-        width: 50%;
+        width:50%;
         height: 25px;
         /* text-align: right; */
         border: 0px;
         border-radius: 3px;
 
-    }
-    #A,#B{
-        width: 145px;
     }
     #clas, #material {
         font-size: 18px;
@@ -68,8 +65,8 @@
         <div>计算结果:<span id="text_result">0.000</span>kg</div>
         <div id="TT"><span id="t">*厚度: </span><input id="T" type="text" value="" placeholder="0" onkeyup="repl(this);">mm</div>
         <div id="WW"><span id="w">*宽度: </span><input id="W" type="text" value="" placeholder="0" onkeyup="repl(this);">mm</div>
-        <div id="AA" style="display: none;"><span id="a">*外径长: </span><input id="A" type="text" value="" placeholder="0" onkeyup="repl(this);">mm</div>
-        <div id="BB" style="display: none;"><span id="b">*外径宽: </span><input id="B" type="text" value="" placeholder="0" onkeyup="repl(this);">mm</div>
+        <div id="AA" style="display: none;"><span id="a">*外长: </span><input id="A" type="text" value="" placeholder="0" onkeyup="repl(this);">mm</div>
+        <div id="BB" style="display: none;"><span id="b">*外宽: </span><input id="B" type="text" value="" placeholder="0" onkeyup="repl(this);">mm</div>
         <div id="DD" style="display: none;">*外径: <input id="D" type="text" placeholder="0" onkeyup="repl(this);">mm</div>
         <div id="LL">*长度: <input id="L" type="text" value="" placeholder="0" onkeyup="repl(this);">m&nbsp;&nbsp;&nbsp;</div>
         <span id="PP">密度: <span id="P">7.85</span>g/cm³。材质为: </span>
@@ -187,14 +184,14 @@
             }
             if (clas.value=="方管") {
                 document.getElementById("t").innerHTML="*壁厚: ";
-                document.getElementById("a").innerHTML="*外边长: ";
+                document.getElementById("a").innerHTML="*外长: ";
                 document.getElementById("TT").style.display="";
                 document.getElementById("AA").style.display="";
                 document.getElementById("LL").style.display="";
             }
             if (clas.value=="矩形管") {
                 document.getElementById("t").innerHTML="*壁厚: ";
-                document.getElementById("a").innerHTML="*外径长: ";
+                document.getElementById("a").innerHTML="*外长: ";
                 document.getElementById("TT").style.display="";
                 document.getElementById("AA").style.display="";
                 document.getElementById("BB").style.display="";
@@ -205,13 +202,13 @@
                 document.getElementById("LL").style.display="";
             }
             if (clas.value=="方钢") {
-                document.getElementById("a").innerHTML="*外边长: ";
+                document.getElementById("a").innerHTML="*外长: ";
                 document.getElementById("AA").style.display="";
                 document.getElementById("BB").style.display="";
                 document.getElementById("LL").style.display="";
             }
             if (clas.value=="角钢") {
-                document.getElementById("a").innerHTML="*外边长: ";
+                document.getElementById("a").innerHTML="*外长: ";
                 document.getElementById("t").innerHTML="*边厚: ";
                 document.getElementById("TT").style.display="";
                 document.getElementById("AA").style.display="";

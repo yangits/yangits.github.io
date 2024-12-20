@@ -33,7 +33,7 @@ input {
   border-radius: 10rpx;
 }
 textarea {
-  height: 1000rpx;
+  height: 980rpx;
   width: 680rpx;
   resize: none;
   background-color: rgb(255, 255, 255);

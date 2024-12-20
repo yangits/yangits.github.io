@@ -1,6 +1,6 @@
 {
   "pages": [
-    "pages/metal/index",
+    "pages/index/index",
     "pages/calc/index",
     "pages/shudu/index",
     "pages/nummatrix/index"
@@ -16,7 +16,7 @@
     "selectedColor": "#f00",
     "list": [
       {
-        "pagePath": "pages/metal/index",
+        "pagePath": "pages/index/index",
         "text": "金属计算",
         "iconPath": "img/11.png",
         "selectedIconPath": "img/22.png"
@@ -40,6 +40,5 @@
         "selectedIconPath": "img/22.png"
       }
     ]
-  },
-  "sitemapLocation": "sitemap.json"
+  }
 }
