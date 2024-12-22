@@ -30,8 +30,8 @@
 			width:96%;
 		}
 		.cen input{
-			width: 60px;
-			height: 60px;
+			width: 70px;
+			height: 70px;
 			border-radius: 50%;
 			margin-left: 2px;
 			margin-right: 2px;
@@ -64,7 +64,6 @@
 					<input type="button" value="下" onclick="go('down')">
 				</div>
 			</div>
-
 		</div>
 	</body>
 	<script src="js/mapdata100.js"></script>
@@ -76,59 +75,71 @@
 		var curLevel;//当前等级的地图
 		var iCurlevel = 0;//关卡数
 		var moveTimes = 0;//移动了多少次
-		var perPosition = [0,0]//小人的初始值
-		cxt.translate(5,5);
-        var n=35;a=25,b=5
+		var perPosition = [0,0];//小人的初始值
+		cxt.translate(5,5);//画布基准位置
+        var n=35;a=25,b=4;
         initLevel();//初始化对应等级的游戏
         showMoveInfo();//初始化对应等级的游戏数据
         function drawhui0(i,j,a,b){//背景绘制
 			cxt.beginPath();
             cxt.strokeStyle = "rgb(190, 190, 190)";
+			cxt.fillStyle="rgb(190, 190, 190)";
             cxt.lineWidth=b
             cxt.strokeRect(j*n,i*n,a,a);
-            cxt.fillStyle="rgb(190, 190, 190)";
             cxt.fillRect(j*n+a/4,i*n+a/4,a/2,a/2);
         }
         function drawhui1(i,j,a,b){//墙绘制
 			cxt.beginPath();
             cxt.strokeStyle = "rgb(0, 0, 0)";
+			cxt.fillStyle="rgb(0, 0, 0)";
             cxt.lineWidth=b
             cxt.strokeRect(j*n,i*n,a,a);
-            cxt.fillStyle="rgb(0, 0, 0)";
             cxt.fillRect(j*n+a/4,i*n+a/4,a/2,a/2);
         }
         function drawhui2(i,j,a,b){//小球绘制
 			cxt.beginPath();
 			cxt.strokeStyle = "rgb(190, 190, 190)";
+			cxt.fillStyle = 'rgb(0, 0, 0)';
             cxt.lineWidth=b
             cxt.strokeRect(j*n,i*n,a,a);
-
 			cxt.arc(j*n+ a/2,i*n+ a/2, a/3, 0, 2 * Math.PI, false);
-			cxt.fillStyle = 'rgb(0, 0, 0)';
 			cxt.fill();
         }
         function drawhui3(i,j,a,b){//箱子绘制
 			cxt.beginPath();
             cxt.strokeStyle = "rgb(0, 0, 0)";
+			cxt.fillStyle="rgb(190, 190, 190)";
             cxt.lineWidth=b;
             cxt.strokeRect(j*n,i*n,a,a);
-			cxt.fillStyle="rgb(190, 190, 190)";
-            cxt.fillRect(j*n+a/4,i*n+a/4,a/2,a/2);        
+			cxt.moveTo(j*n+a/4, i*n+a/4); // 起点
+			cxt.lineTo(j*n+3*a/4, i*n+3*a/4); // 线
+			cxt.moveTo(j*n+3*a/4, i*n+a/4); // 起点
+			cxt.lineTo(j*n+a/4, i*n+3*a/4); // 线
+			cxt.stroke();     
         }
         function drawhui4(i,j,a,b){//人物绘制
 			cxt.beginPath();
-            cxt.fillStyle = "rgb(0, 0, 0)";
-            cxt.fillRect(j*n,i*n,a,a);
-			
+            cxt.lineWidth=b;
+			cxt.strokeStyle = "rgb(0, 0, 0)";
+			cxt.fillStyle = 'rgb(0, 0, 0)';
+			cxt.arc(j*n+ a/2,i*n+ a/2, a/2, 0, 2 * Math.PI, true);
+			cxt.stroke();  
+			cxt.beginPath();
+			cxt.arc(j*n+ a/2,i*n+ a/2, a/4, 0,Math.PI, false);
+			cxt.stroke(); 
+			cxt.beginPath(); 
+			cxt.arc(j*n+ a/3,i*n+ a/3, a/8, 0, 2 * Math.PI, false);
+			cxt.fill();
+			cxt.arc(j*n+ 2*a/3,i*n+ a/3, a/8, 0, 2 * Math.PI, false);
+			cxt.fill();
         }
 		function drawhui5(i,j,a,b){//小球和箱子重合绘制
 			cxt.beginPath();
             cxt.strokeStyle = "rgb(0, 0, 0)";
             cxt.lineWidth=b;
             cxt.strokeRect(j*n,i*n,a,a);
-			cxt.arc(j*n+ a/2,i*n+ a/2, a/3, 0, 2 * Math.PI, false);
+			cxt.arc(j*n+ a/2,i*n+ a/2, a/4, 0, 2 * Math.PI, false);
 			cxt.fillStyle = 'rgb(0, 0, 0)';
-			cxt.lineWidth=5
 			cxt.stroke();        
         }
 		//绘制每个游戏关卡地图
@@ -154,7 +165,6 @@
 			curMap = copyArray(levels[iCurlevel]);//当前移动过的游戏地图
 			curLevel = levels[iCurlevel];//当前等级的初始地图
 			DrawMap(curMap);//绘制出当前等级的地图
-
 		}
 		//下一关
 		function NextLevel(i){
