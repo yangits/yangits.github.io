@@ -92,26 +92,17 @@
         showMoveInfo();//初始化对应等级的游戏数据
         function drawhui0(i,j,a,b){//背景绘制
 			cxt.beginPath();
-            // cxt.strokeStyle = "rgb(190, 190, 190)";
 			cxt.fillStyle="rgb(190, 190, 190)";
-            // cxt.lineWidth=b
             cxt.fillRect(j*n,i*n,a,a);
-            // cxt.fillRect(j*n+a/4,i*n+a/4,a/2,a/2);
         }
         function drawhui1(i,j,a,b){//墙绘制
 			cxt.beginPath();
-            // cxt.strokeStyle = "rgb(0, 0, 0)";
 			cxt.fillStyle="rgb(100, 100, 100)";
-            // cxt.lineWidth=b
             cxt.fillRect(j*n,i*n,a,a);
-            // cxt.fillRect(j*n+a/4,i*n+a/4,a/2,a/2);
         }
         function drawhui2(i,j,a,b){//小球绘制
 			cxt.beginPath();
-			// cxt.strokeStyle = "rgb(190, 190, 190)";
 			cxt.fillStyle = 'rgb(0, 0, 0)';
-            // cxt.lineWidth=b
-            // cxt.strokeRect(j*n,i*n,a,a);
 			cxt.arc(j*n+ a/2,i*n+ a/2, a/3, 0, 2 * Math.PI, false);
 			cxt.fill();
         }
@@ -150,7 +141,6 @@
             cxt.lineWidth=b;
             cxt.fillRect(j*n,i*n,a,a);
 			cxt.arc(j*n+ a/2,i*n+ a/2, a/4, 0, 2 * Math.PI, false);
-
 			cxt.stroke();        
         }
 		//绘制每个游戏关卡地图
@@ -161,7 +151,6 @@
 				for (var j=0;j<level[i].length ;j++ )
 				{	
 					switch (level[i][j]){
-					// case 0:   drawhui0(i,j,a,b);break;//背景
 					case 1:   drawhui1(i,j,a,b);break;//墙
 					case 2:   drawhui2(i,j,a,b);break;//小球
 					case 3:   drawhui3(i,j,a,b);break;//箱子
