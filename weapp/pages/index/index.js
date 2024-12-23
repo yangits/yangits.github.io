@@ -70,7 +70,6 @@ Page({
       let clas_index = this.data.clas_index;
       if (home=="计算重量"){
         if (N == "" || N == "0"){N=1};
-
         switch(clas_index){
           case "0":
             if(T != "" && W != "" && L != ""){
@@ -101,9 +100,8 @@ Page({
                 this.setData({kg_result :(T*(A-B*(-1)-T)*L*P*N/1000).toFixed(3)});
             }else{this.setData({kg_result : "0.000"}) ;};break;
         };
-      }else if (KG == "" || KG == "0"){
-        this.setData({N_result : "0.000"});
       }else{
+        if (KG == ""){KG=0};
         switch(clas_index){
           case "0":
             if(T != "" && W != "" && L != ""){
