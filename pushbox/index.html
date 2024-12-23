@@ -50,22 +50,29 @@
 			text-align: center;
        		margin: auto;
 		}
+		.back{
+			width: 35px;
+			height: 35px;
+			border-radius: 50%;
+			position: fixed;
+			left: 0;
+			margin-left: 5px;
+		}
 		</style>
 	</head>
 	<body onkeydown="doKeyDown(event)"><!--身体-->
 		<div class="game">
 			<div id="msg"></div>	
-			<input type="button" value="上十关" onclick="NextLevel(-10)">
 			<input type="button" value="上一关" onclick="NextLevel(-1)">
 			<input type="button" value="下一关" onclick="NextLevel(1)">
-			<input type="button" value="下十关" onclick="NextLevel(10)">
+			<input type="number" id="vel" min="1" max="100" oninput="this.value=this.value.replace(/[^0-9]/g,'');">
+			<input type="button" value="GO" onclick="GO();">
 			<input type="button" value="重玩本关" onclick="NextLevel(0)">
 			<input type="button" value="游戏说明" onclick="showHelp()">
 			<canvas id="canvas" width="560" height="560"></canvas>
-
 		</div>
 		<div class="cen">
-
+			<input class="back" type="button" value="退" onclick="back()">
 			<div class="bt">
 				<input type="button" value="左" onclick="go('left')">
 				<input type="button" value="上" onclick="go('up')">	
@@ -73,6 +80,7 @@
 			</div>
 			<div class="bt">
 				<input type="button" value="下" onclick="go('down')">
+
 			</div>
 		</div>
 	</body>
@@ -86,6 +94,7 @@
 		var iCurlevel = 0;//关卡数
 		var moveTimes = 0;//移动了多少次
 		var perPosition = [0,0];//小人的初始值
+		var step=[]//移动记录
 		cxt.translate(5,5);//画布基准位置
         var n=35;a=33,b=4;
         initLevel();//初始化对应等级的游戏
@@ -160,11 +169,22 @@
                 }
             }
         }
+		function GO(){//跳转关卡
+			var vel=document.getElementById('vel').value;
+			if(vel=="0"||vel==""){vel=1};
+			document.getElementById('vel').value=""
+			iCurlevel = parseInt(vel)-1;//iCurlevel当前的地图关数
+			console.log(iCurlevel);
+			if(iCurlevel>99){iCurlevel=99};
+			initLevel();//初始当前等级关卡
+		}
 		//初始化游戏等级
 		function initLevel(){
 			curMap = copyArray(levels[iCurlevel]);//当前移动过的游戏地图
 			curLevel = levels[iCurlevel];//当前等级的初始地图
 			DrawMap(curMap);//绘制出当前等级的地图
+			step=[];moveTimes = 0;//游戏关卡移动步数清零
+			showMoveInfo();//初始化当前关卡数据
 		}
 		//下一关
 		function NextLevel(i){
@@ -174,8 +194,6 @@
 			{
 				iCurlevel = 0;
 				initLevel();//初始当前等级关卡
-				moveTimes = 0;//游戏关卡移动步数清零
-				showMoveInfo();//初始化当前关卡数据
 				return;
 			}
 			var len = levels.length;
@@ -183,9 +201,7 @@
 			{
 				iCurlevel = len-1;
 			}
-			initLevel();//初始当前等级关卡
-			moveTimes = 0;//游戏关卡移动步数清零
-			showMoveInfo();//初始化当前关卡数据
+			initLevel();//初始当前等级关卡	
 		}
 		//小人移动
 		function go(dir){
@@ -211,13 +227,11 @@
 				break;
 			}
 			//若果小人能够移动的话，更新游戏数据，并重绘地图
-			if (Trygo(p1,p2))
-			{
-				moveTimes ++;
-				showMoveInfo();
-			}
+			if (Trygo(p1,p2)){step.push(copyArray(curMap));
+				moveTimes ++;showMoveInfo();}
 			//重绘当前更新了数据的地图
 			DrawMap(curMap);
+
 			//若果移动完成了进入下一关
 			if (checkFinish())
 			{
@@ -225,8 +239,15 @@
                 setTimeout(()=>{
                 	alert("恭喜过关！！");NextLevel(1);
                 },0)
-				
 			}
+		}
+		function back(){
+			step.pop()
+			if(step.length<=0){initLevel();return}
+			curMap=copyArray(step[step.length-1])
+			DrawMap(curMap);
+			
+			moveTimes --;showMoveInfo();
 		}
 		//判断是否推成功
 		function checkFinish(){
@@ -303,12 +324,15 @@
       		case 83:
 				go("down");
 				break;
+			case 90:
+				back();
+				break;
 			}
 
 		}
 		//完善关卡数据及游戏说明
 		function showMoveInfo(){
-			msg.innerHTML = "第" + (iCurlevel+1) +"/100关 移动次数: "+ moveTimes;
+			msg.innerHTML = "第" + (iCurlevel+1) +"/100关 移动次数: "+ moveTimes;showhelp =false;
 		}
 		//游戏说明
 		var showhelp = false;
@@ -316,7 +340,7 @@
 			showhelp = !showhelp;
 			if (showhelp)
 			{
-				msg.innerHTML = "用键盘上的上、下、左、右键移动小人，把箱子全部推到小球的位置即可过关。箱子只可向前推，不能往后拉，并且小人一次只能推动一个箱子。";
+				msg.innerHTML = "用键盘上的上(w)、下(s)、左(a)、右(d)键移动小人，把箱子全部推到小球的位置即可过关。箱子只可向前推，不能往后拉，并且小人一次只能推动一个箱子,z可以回退。";
 			}else{
 				showMoveInfo();
 			}
@@ -331,5 +355,6 @@
 			}
 			return b;
 		}
+
 	</script>
 </html>
