@@ -24,12 +24,17 @@
 			max-width: 500px;
 			padding-top: 10px;
 		}
+		.game input{
+			height: 35px;
+		}
 		.game canvas{
+			margin-top: 20px;
 			background-color: rgb(200, 200, 200);
             border: 5px  solid #280000;
 			width:96%;
 		}
-		.cen input{
+		.bt input{
+
 			width: 70px;
 			height: 70px;
 			border-radius: 50%;
@@ -39,6 +44,9 @@
 			font-size: 20px;
 		}
 		.cen{
+			position: fixed;
+			left: 0;
+			right: 0;
 			text-align: center;
        		margin: auto;
 		}
@@ -46,27 +54,29 @@
 	</head>
 	<body onkeydown="doKeyDown(event)"><!--身体-->
 		<div class="game">
-			<canvas id="canvas" width="560" height="560"></canvas>
-			<div id="msg"></div>
+			<div id="msg"></div>	
 			<input type="button" value="上十关" onclick="NextLevel(-10)">
 			<input type="button" value="上一关" onclick="NextLevel(-1)">
 			<input type="button" value="下一关" onclick="NextLevel(1)">
 			<input type="button" value="下十关" onclick="NextLevel(10)">
 			<input type="button" value="重玩本关" onclick="NextLevel(0)">
 			<input type="button" value="游戏说明" onclick="showHelp()">
-			<div class="cen">
-				<div>
-					<input type="button" value="左" onclick="go('left')">
-					<input type="button" value="上" onclick="go('up')">	
-					<input type="button" value="右" onclick="go('right')">
-				</div>
-				<div>
-					<input type="button" value="下" onclick="go('down')">
-				</div>
+			<canvas id="canvas" width="560" height="560"></canvas>
+
+		</div>
+		<div class="cen">
+
+			<div class="bt">
+				<input type="button" value="左" onclick="go('left')">
+				<input type="button" value="上" onclick="go('up')">	
+				<input type="button" value="右" onclick="go('right')">
+			</div>
+			<div class="bt">
+				<input type="button" value="下" onclick="go('down')">
 			</div>
 		</div>
 	</body>
-	<script src="js/mapdata100.js"></script>
+	<script src="./mapdata100.js"></script>
 	<script>
 		var can = document.getElementById("canvas");
 		var msg = document.getElementById("msg");
@@ -77,40 +87,40 @@
 		var moveTimes = 0;//移动了多少次
 		var perPosition = [0,0];//小人的初始值
 		cxt.translate(5,5);//画布基准位置
-        var n=35;a=25,b=4;
+        var n=35;a=33,b=4;
         initLevel();//初始化对应等级的游戏
         showMoveInfo();//初始化对应等级的游戏数据
         function drawhui0(i,j,a,b){//背景绘制
 			cxt.beginPath();
-            cxt.strokeStyle = "rgb(190, 190, 190)";
+            // cxt.strokeStyle = "rgb(190, 190, 190)";
 			cxt.fillStyle="rgb(190, 190, 190)";
-            cxt.lineWidth=b
-            cxt.strokeRect(j*n,i*n,a,a);
-            cxt.fillRect(j*n+a/4,i*n+a/4,a/2,a/2);
+            // cxt.lineWidth=b
+            cxt.fillRect(j*n,i*n,a,a);
+            // cxt.fillRect(j*n+a/4,i*n+a/4,a/2,a/2);
         }
         function drawhui1(i,j,a,b){//墙绘制
 			cxt.beginPath();
-            cxt.strokeStyle = "rgb(0, 0, 0)";
-			cxt.fillStyle="rgb(0, 0, 0)";
-            cxt.lineWidth=b
-            cxt.strokeRect(j*n,i*n,a,a);
-            cxt.fillRect(j*n+a/4,i*n+a/4,a/2,a/2);
+            // cxt.strokeStyle = "rgb(0, 0, 0)";
+			cxt.fillStyle="rgb(100, 100, 100)";
+            // cxt.lineWidth=b
+            cxt.fillRect(j*n,i*n,a,a);
+            // cxt.fillRect(j*n+a/4,i*n+a/4,a/2,a/2);
         }
         function drawhui2(i,j,a,b){//小球绘制
 			cxt.beginPath();
-			cxt.strokeStyle = "rgb(190, 190, 190)";
+			// cxt.strokeStyle = "rgb(190, 190, 190)";
 			cxt.fillStyle = 'rgb(0, 0, 0)';
-            cxt.lineWidth=b
-            cxt.strokeRect(j*n,i*n,a,a);
+            // cxt.lineWidth=b
+            // cxt.strokeRect(j*n,i*n,a,a);
 			cxt.arc(j*n+ a/2,i*n+ a/2, a/3, 0, 2 * Math.PI, false);
 			cxt.fill();
         }
         function drawhui3(i,j,a,b){//箱子绘制
 			cxt.beginPath();
             cxt.strokeStyle = "rgb(0, 0, 0)";
-			cxt.fillStyle="rgb(190, 190, 190)";
+			cxt.fillStyle="rgb(204, 170, 102)";
             cxt.lineWidth=b;
-            cxt.strokeRect(j*n,i*n,a,a);
+            cxt.fillRect(j*n,i*n,a,a);
 			cxt.moveTo(j*n+a/4, i*n+a/4); // 起点
 			cxt.lineTo(j*n+3*a/4, i*n+3*a/4); // 线
 			cxt.moveTo(j*n+3*a/4, i*n+a/4); // 起点
@@ -136,10 +146,11 @@
 		function drawhui5(i,j,a,b){//小球和箱子重合绘制
 			cxt.beginPath();
             cxt.strokeStyle = "rgb(0, 0, 0)";
+			cxt.fillStyle = 'rgb(204, 170, 102)';
             cxt.lineWidth=b;
-            cxt.strokeRect(j*n,i*n,a,a);
+            cxt.fillRect(j*n,i*n,a,a);
 			cxt.arc(j*n+ a/2,i*n+ a/2, a/4, 0, 2 * Math.PI, false);
-			cxt.fillStyle = 'rgb(0, 0, 0)';
+
 			cxt.stroke();        
         }
 		//绘制每个游戏关卡地图
@@ -150,7 +161,7 @@
 				for (var j=0;j<level[i].length ;j++ )
 				{	
 					switch (level[i][j]){
-					case 0:   drawhui0(i,j,a,b);break;//背景
+					// case 0:   drawhui0(i,j,a,b);break;//背景
 					case 1:   drawhui1(i,j,a,b);break;//墙
 					case 2:   drawhui2(i,j,a,b);break;//小球
 					case 3:   drawhui3(i,j,a,b);break;//箱子
