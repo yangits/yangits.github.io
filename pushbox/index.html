@@ -22,19 +22,17 @@
 			text-align: center;
         	margin: auto;
 			max-width: 500px;
-			padding-top: 10px;
 		}
 		.game input{
-			height: 35px;
+			height: 30px;
 		}
 		.game canvas{
-			margin-top: 20px;
+			margin-top: 10px;
 			background-color: rgb(200, 200, 200);
             border: 5px  solid #280000;
 			width:96%;
 		}
 		.bt input{
-
 			width: 70px;
 			height: 70px;
 			border-radius: 50%;
@@ -50,29 +48,21 @@
 			text-align: center;
        		margin: auto;
 		}
-		.back{
-			width: 35px;
-			height: 35px;
-			border-radius: 50%;
-			position: fixed;
-			left: 0;
-			margin-left: 5px;
-		}
 		</style>
 	</head>
 	<body onkeydown="doKeyDown(event)"><!--身体-->
-		<div class="game">
-			<div id="msg"></div>	
+		<div class="game">	
+			<canvas id="canvas" width="560" height="560"></canvas>
+			<div id="msg"></div>
 			<input type="button" value="上一关" onclick="NextLevel(-1)">
 			<input type="button" value="下一关" onclick="NextLevel(1)">
-			<input type="number" id="vel" min="1" max="100" oninput="this.value=this.value.replace(/[^0-9]/g,'');">
+			<input type="number" id="vel" min="1" max="100" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');">
 			<input type="button" value="GO" onclick="GO();">
-			<input type="button" value="重玩本关" onclick="NextLevel(0)">
-			<input type="button" value="游戏说明" onclick="showHelp()">
-			<canvas id="canvas" width="560" height="560"></canvas>
+			<input type="button" value="重置"  onclick="NextLevel(0)">
+			<input type="button" value="说明" onclick="showHelp()">
+			<input type="button" value="回退" onclick="back()">
 		</div>
 		<div class="cen">
-			<input class="back" type="button" value="退" onclick="back()">
 			<div class="bt">
 				<input type="button" value="左" onclick="go('left')">
 				<input type="button" value="上" onclick="go('up')">	
@@ -80,7 +70,6 @@
 			</div>
 			<div class="bt">
 				<input type="button" value="下" onclick="go('down')">
-
 			</div>
 		</div>
 	</body>
@@ -99,11 +88,6 @@
         var n=35;a=33,b=4;
         initLevel();//初始化对应等级的游戏
         showMoveInfo();//初始化对应等级的游戏数据
-        function drawhui0(i,j,a,b){//背景绘制
-			cxt.beginPath();
-			cxt.fillStyle="rgb(190, 190, 190)";
-            cxt.fillRect(j*n,i*n,a,a);
-        }
         function drawhui1(i,j,a,b){//墙绘制
 			cxt.beginPath();
 			cxt.fillStyle="rgb(100, 100, 100)";
@@ -174,8 +158,7 @@
 			if(vel=="0"||vel==""){vel=1};
 			document.getElementById('vel').value=""
 			iCurlevel = parseInt(vel)-1;//iCurlevel当前的地图关数
-			console.log(iCurlevel);
-			if(iCurlevel>99){iCurlevel=99};
+			if(iCurlevel>levels.length-1){iCurlevel=levels.length-1};
 			initLevel();//初始当前等级关卡
 		}
 		//初始化游戏等级
@@ -228,17 +211,11 @@
 			}
 			//若果小人能够移动的话，更新游戏数据，并重绘地图
 			if (Trygo(p1,p2)){step.push(copyArray(curMap));
-				moveTimes ++;showMoveInfo();}
-			//重绘当前更新了数据的地图
-			DrawMap(curMap);
-
-			//若果移动完成了进入下一关
-			if (checkFinish())
-			{
-                //定时器解决渲染地图后再弹窗
-                setTimeout(()=>{
-                	alert("恭喜过关！！");NextLevel(1);
-                },0)
+				moveTimes ++;showMoveInfo();DrawMap(curMap);//重绘当前更新了数据的地图
+				//若果移动完成了进入下一关
+				if (checkFinish()){//定时器解决渲染地图后再弹窗
+					setTimeout(()=>{alert("恭喜过关！！");NextLevel(1);},0)
+				}
 			}
 		}
 		function back(){
@@ -246,7 +223,6 @@
 			if(step.length<=0){initLevel();return}
 			curMap=copyArray(step[step.length-1])
 			DrawMap(curMap);
-			
 			moveTimes --;showMoveInfo();
 		}
 		//判断是否推成功
@@ -276,25 +252,18 @@
 				if (curMap[p2[0]][p2[1]]==1 || curMap[p2[0]][p2[1]]==3|| curMap[p2[0]][p2[1]]==5)
 				{
 					return false;
-				}else if (curMap[p2[0]][p2[1]]==2){
-					curMap[p2[0]][p2[1]] = 5;//更改地图对应坐标点的值
-				}else{
-				//若果判断不成功小人前面的箱子前进一步
-				curMap[p2[0]][p2[1]] = 3;//更改地图对应坐标点的值
+				}else {
+					curMap[p2[0]][p2[1]] += 3;//更改地图对应坐标点的值
 				}
 			}
-			//若果都没判断成功小人前进一步
-			curMap[p1[0]][p1[1]] = 4;//更改地图对应坐标点的值
+			curMap[p1[0]][p1[1]] = 4;//小人前进一步更改地图对应坐标点的值
 			//若果小人前进了一步，小人原来的位置如何显示
 			var v = curLevel[perPosition[0]][perPosition[1]];
-			if (v!=2)//若果刚开始小人位置不是陷进的话
+			if (v==2||v==5)//可能是5 既有箱子又陷进
 			{
-				if (v==5)//可能是5 既有箱子又陷进
-				{
-					v=2;//若果小人本身就在陷进里面的话移开之后还是显示陷进
-				}else{
-					v=0;//小人移开之后之前小人的位置改为地板
-				}
+				v=2;//若果小人本身就在陷进里面的话移开之后还是显示陷进
+			}else{
+				v=0;//小人移开之后之前小人的位置改为地板
 			}
 			//重置小人位置的地图参数
 			curMap[perPosition[0]][perPosition[1]] = v;
@@ -325,6 +294,7 @@
 				go("down");
 				break;
 			case 90:
+			case 8:
 				back();
 				break;
 			}
@@ -340,7 +310,7 @@
 			showhelp = !showhelp;
 			if (showhelp)
 			{
-				msg.innerHTML = "用键盘上的上(w)、下(s)、左(a)、右(d)键移动小人，把箱子全部推到小球的位置即可过关。箱子只可向前推，不能往后拉，并且小人一次只能推动一个箱子,z可以回退。";
+				msg.innerHTML = "用键盘上的上(w)、下(s)、左(a)、右(d)键移动小人,Backspace(z)可以回退，把箱子全部推到小球的位置即可过关。箱子只可向前推，不能往后拉，并且小人一次只能推动一个箱子。";
 			}else{
 				showMoveInfo();
 			}
