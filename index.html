@@ -138,12 +138,8 @@
     search_botton.href=search_href+encodeURIComponent(search_input.value);
     if(search_input.value!=""){
       clear_keyword.style.display="";
-    }else{
-      clear_keyword.style.display="none";
-    };
-    if (event.keyCode==13){
-      search_botton.click();
-    };
+    }else{clear_keyword.style.display="none";};
+    if (event.keyCode==13){search_botton.click();};
   }
   function clear_input(){
     search_botton.href=search_href;
@@ -153,8 +149,7 @@
   function change_href(){
     if (search_href==bing_href){
       search_logo.style.background='url("./static/img/scbaidu.png") 15px center no-repeat';
-      search_input.placeholder="百度网页搜索";
-      search_href=baidu_href;
+      search_href=baidu_href;search_input.placeholder="百度网页搜索";
       search_botton.href=search_href+encodeURIComponent(search_input.value);
     }else{
       search_logo.style.background='url("./static/img/scbing.png") 15px center no-repeat';
