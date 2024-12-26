@@ -12,7 +12,7 @@ filepath =os.path.dirname(os.path.realpath(sys.argv[0]))
 app = Flask(__name__, static_url_path='', static_folder=filepath, template_folder=filepath)
 html0="""<html>
         <head>
-            <meta name="viewport" content="width=device-width, initial-scale=0.8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>共享文件列表</title>
             <script>
                 function upload() {
@@ -36,10 +36,10 @@ html0="""<html>
                 <table border='3'>
                 <caption style="height:40px;line-height: 40px;">文件共享列表</caption>
                 <tr>
-                    <td width=380px>文件或文件夹</td>
-                    <td width=80px>文件大小</td>
-                    <td width=100px>修改日期</td>
-                    <td width=38px>链接</td>
+                    <td >文件或文件夹</td>
+                    <td >文件大小</td>
+                    <td >修改日期</td>
+                    <td >链接</td>
                 </tr>
         """
 @app.route("/" , methods=['GET','post'])
