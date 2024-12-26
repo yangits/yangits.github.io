@@ -3,7 +3,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>不懂就搜，一搜就懂</title>
-    <meta name="keywords" content="不懂就搜,实用网址,主页导航,简单网址导航">
     <link rel="shortcut icon" href="./static/img/favicon.ico">
     <link href="./static/style.css" rel="stylesheet" type="text/css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,138 +25,142 @@
         .jj-list:nth-of-type(3n) {padding-right: 0;}
       }
     </style>
-
 </head>
 <body>
 <div class="inner-center">
-  <div id="search_form" class="search-section"target="_blank">
+  <div class="search-section">
     <div class="search-left">
-      <div id="search_logo" data-type="google" class="search-logo" onclick="change_search()"></div>
+      <div class="search-logo" id="search_logo" onclick="change_href()"></div>
       <div class="input-wrap">
-        <input id="search_input"
-              class="search-input"
-              type="text"
-              placeholder="不懂就搜，给老子搜！" 
-              onkeyup="search_input(this);">
-        <div class="clear-keyword" id="clear_keyword" title="清空" style="display: none;" onclick="clear_keyword()">×</div>
+        <input class="search-input" id="search_input" type="text" placeholder="百度网页搜索" onkeyup="change_input(event);">
+        <div class="clear-keyword" id="clear_keyword" style="display: none;" onclick="clear_input()">×</div>
       </div>
     </div>
-    <a href="https://www.baidu.com/s?wd=" class="search-submit" id="search_submit"  target="_blank" onclick="search_submit()">搜一下</a>
+    <a href="https://www.baidu.com/s?wd=" class="search-botton" id="search_botton"  target="_blank">搜一下</a>
   </div>
   <div>
     <div class="jj-list">
       <div class="jj-list-tit">AI引擎</div>
       <ul class="jj-list-con">
-        <li><a href="https://www.doubao.com/chat/" class="jj-list-link" target="_blank">豆包AI</a></li>
-        <li><a href="https://zhida.zhihu.com/" class="jj-list-link" target="_blank">知乎直答</a></li>
-        <li><a href="https://yiyan.baidu.com/" class="jj-list-link" target="_blank">文心一言</a></li>
-        <li><a href="https://xinghuo.xfyun.cn/" class="jj-list-link" target="_blank">讯飞星火</a></li>
-        <li><a href="https://aishenqi.net/" class="jj-list-link" target="_blank">AI神器</a></li>
-        <li><a href="https://tongyi.aliyun.com/" class="jj-list-link" target="_blank">通义千问</a></li>
-        <li><a href="https://hailuoai.com/" class="jj-list-link" target="_blank">海螺AI</a></li>
-        <li><a href="https://metaso.cn/" class="jj-list-link" target="_blank">秘塔AI</a></li>
-        <li><a href="https://iflow.cn/" class="jj-list-link" target="_blank">心流AI</a></li>
+        <li><a href="https://www.doubao.com/chat/" target="_blank">豆包AI</a></li>
+        <li><a href="https://zhida.zhihu.com/" target="_blank">知乎直答</a></li>
+        <li><a href="https://yiyan.baidu.com/" target="_blank">文心一言</a></li>
+        <li><a href="https://xinghuo.xfyun.cn/" target="_blank">讯飞星火</a></li>
+        <li><a href="https://aishenqi.net/" target="_blank">AI神器</a></li>
+        <li><a href="https://tongyi.aliyun.com/" target="_blank">通义千问</a></li>
+        <li><a href="https://hailuoai.com/" target="_blank">海螺AI</a></li>
+        <li><a href="https://metaso.cn/" target="_blank">秘塔AI</a></li>
+        <li><a href="https://iflow.cn/" target="_blank">心流AI</a></li>
       </ul>
     </div>
     <div class="jj-list">
       <div class="jj-list-tit">社区论坛</div>
       <ul class="jj-list-con">
-        <li><a href="https://www.zhihu.com/" class="jj-list-link" target="_blank">知乎</a></li>
-        <li><a href="https://www.right.com.cn/" class="jj-list-link" target="_blank">恩山论坛</a></li>
-        <li><a href="http://www.mjtd.com/" class="jj-list-link" target="_blank">明经CAD</a></li>
-        <li><a href="https://tieba.baidu.com/" class="jj-list-link" target="_blank">贴吧</a></li>
-        <li><a href="https://www.mh160.cc/" class="jj-list-link" target="_blank">漫画</a></li>
-        <li><a href="https://www.douban.com/" class="jj-list-link" target="_blank">豆瓣</a></li>
-        <li><a href="https://pypi.tuna.tsinghua.edu.cn/simple/" class="jj-list-link" target="_blank">清华镜像源</a></li>
-        <li><a href="https://www.ip138.com/" class="jj-list-link" target="_blank">iP查询</a></li>
-        <li><a href="https://panel.chmlfrp.cn/" class="jj-list-link" target="_blank">Chmlfrp</a></li>
+        <li><a href="https://www.zhihu.com/" target="_blank">知乎</a></li>
+        <li><a href="https://www.right.com.cn/" target="_blank">恩山论坛</a></li>
+        <li><a href="http://www.mjtd.com/" target="_blank">明经CAD</a></li>
+        <li><a href="https://tieba.baidu.com/" target="_blank">贴吧</a></li>
+        <li><a href="https://www.mh160.cc/" target="_blank">漫画</a></li>
+        <li><a href="https://www.douban.com/" target="_blank">豆瓣</a></li>
+        <li><a href="https://pypi.tuna.tsinghua.edu.cn/simple/" target="_blank">清华镜像源</a></li>
+        <li><a href="https://www.ip138.com/" target="_blank">iP查询</a></li>
+        <li><a href="https://panel.chmlfrp.cn/" target="_blank">Chmlfrp</a></li>
       </ul>
     </div>
     <div class="jj-list">
       <div class="jj-list-tit">视频网站</div>
       <ul class="jj-list-con">
-        <li><a href="https://www.zxzjhd.com//" class="jj-list-link" target="_blank">在线之家</a></li>
-        <li><a href="https://www.fantuantvb1.com/" class="jj-list-link" target="_blank">饭团影院</a></li>
-        <li><a href="https://subaibai.com/" class="jj-list-link" target="_blank">素白白</a></li>
-        <li><a href="https://www.czzyvideo.com/" class="jj-list-link" target="_blank">厂长资源</a></li>
-        <li><a href="https://www.ffys.fun/" class="jj-list-link" target="_blank">飞飞影视</a></li>
-        <li><a href="https://libvio.me/" class="jj-list-link" target="_blank">libvio</a></li>
-        <li><a href="https://www.jjduanju.com/" class="jj-list-link" target="_blank">吉吉短剧</a></li>
-        <li><a href="https://dmxqtv.net/" class="jj-list-link" target="_blank">大米星球</a></li> 
-        <li><a href="https://dylstv.com/" class="jj-list-link" target="_blank">火车太堵</a></li> 
+        <li><a href="https://www.zxzjhd.com//" target="_blank">在线之家</a></li>
+        <li><a href="https://www.fantuantvb1.com/" target="_blank">饭团影院</a></li>
+        <li><a href="https://subaibai.com/" target="_blank">素白白</a></li>
+        <li><a href="https://www.czzyvideo.com/" target="_blank">厂长资源</a></li>
+        <li><a href="https://www.ffys.fun/" target="_blank">飞飞影视</a></li>
+        <li><a href="https://libvio.me/" target="_blank">libvio</a></li>
+        <li><a href="https://www.jjduanju.com/" target="_blank">吉吉短剧</a></li>
+        <li><a href="https://dmxqtv.net/" target="_blank">大米星球</a></li> 
+        <li><a href="https://dylstv.com/" target="_blank">火车太堵</a></li> 
       </ul>
     </div>
     <div class="jj-list">
       <div class="jj-list-tit">个人爱好</div>
       <ul class="jj-list-con">
-        <li><a href="https://github.com/" class="jj-list-link" target="_blank">Github</a></li>
-        <li><a href="https://gitee.com/" class="jj-list-link" target="_blank">Gitee</a></li>
-        <li><a href="https://maxiaobang.lanzouf.com/b06o6ta6h" class="jj-list-link" target="_blank">FastGithub</a></li>	
-        <li><a href="./love/index.html" class="jj-list-link" target="_blank">爱心</a></li>
-        <li><a href="https://www.123pan.com/s/A6cA-04AJh" class="jj-list-link" target="_blank">CAD下载</a></li>
-        <li><a href="./books/index.html" class="jj-list-link" target="_blank">答案之书</a></li>
-        <li><a href="./fcnes/index.html" class="jj-list-link" target="_blank">FC游戏</a></li>
-        <li><a href="./wzwgame/index.html" class="jj-list-link" target="_blank">掌机</a></li>
-        <li><a href="./pushbox/index.html" class="jj-list-link" target="_blank">推箱子</a></li>
+        <li><a href="https://github.com/" target="_blank">Github</a></li>
+        <li><a href="https://gitee.com/" target="_blank">Gitee</a></li>
+        <li><a href="https://maxiaobang.lanzouf.com/b06o6ta6h" target="_blank">FastGithub</a></li>	
+        <li><a href="./love/index.html" target="_blank">爱心</a></li>
+        <li><a href="https://www.123pan.com/s/A6cA-04AJh" target="_blank">CAD下载</a></li>
+        <li><a href="./books/index.html" target="_blank">答案之书</a></li>
+        <li><a href="./fcnes/index.html" target="_blank">FC游戏</a></li>
+        <li><a href="./wzwgame/index.html" target="_blank">掌机</a></li>
+        <li><a href="./pushbox/index.html" target="_blank">推箱子</a></li>
       </ul>
     </div>
     <div class="jj-list">
       <div class="jj-list-tit">工具大全</div>
       <ul class="jj-list-con">
-        <li><a href="https://easychuan.cn/" class="jj-list-link" target="_blank">轻松传</a></li>
-        <li><a href="./shuiyin/index.html" class="jj-list-link" target="_blank">照片加水印</a></li>
-        <li><a href="https://greasyfork.org/zh-CN/scripts" class="jj-list-link" target="_blank">油猴脚本</a></li>
-        <!-- <li><a href="http://ld.frp.one:32500" class="jj-list-link" target="_blank">自建服务器</a></li> -->
-        <li><a href="./tool/index.html" class="jj-list-link" target="_blank">查询工具</a></li>
-        <li><a href="https://tool.lu/" class="jj-list-link" target="_blank">程序员工具</a></li>
-        <li><a href="./img/index.html" class="jj-list-link" target="_blank">个人用图</a></li>
-        <li><a href="./calc/index.html" class="jj-list-link" target="_blank">排管计算</a></li>
-        <li><a href="./metal/index.html" class="jj-list-link" target="_blank">金属计算器</a></li>
-        <li><a href="https://tiku.baidu.com/buguakewap/browse" class="jj-list-link" target="_blank">题库查询</a></li>
+        <li><a href="https://easychuan.cn/" target="_blank">轻松传</a></li>
+        <li><a href="./shuiyin/index.html" target="_blank">照片加水印</a></li>
+        <li><a href="https://greasyfork.org/zh-CN/scripts" target="_blank">油猴脚本</a></li>
+        <!-- <li><a href="http://ld.frp.one:32500" target="_blank">自建服务器</a></li> -->
+        <li><a href="./tool/index.html" target="_blank">查询工具</a></li>
+        <li><a href="https://tool.lu/" target="_blank">程序员工具</a></li>
+        <li><a href="./img/index.html" target="_blank">个人用图</a></li>
+        <li><a href="./calc/index.html" target="_blank">排管计算</a></li>
+        <li><a href="./metal/index.html" target="_blank">金属计算器</a></li>
+        <li><a href="https://tiku.baidu.com/buguakewap/browse" target="_blank">题库查询</a></li>
       </ul>
     </div>
     <div class="jj-list">
       <div class="jj-list-tit">其他链接</div>
       <ul class="jj-list-con">
-        <li><a href="https://www.zxx.edu.cn/" class="jj-list-link" target="_blank">教育平台</a></li>
-        <li><a href="https://siwsfw.hrss.henan.gov.cn/" class="jj-list-link" target="_blank">河南社保</a></li>
-        <li><a href="https://m12333.cn/" class="jj-list-link" target="_blank">人社通</a></li>
-        <li><a href="https://www.ok99ok99.com/" class="jj-list-link" target="_blank">学达云</a></li>
-        <li><a href="https://www.hnzwfw.gov.cn/" class="jj-list-link" target="_blank">豫事办</a></li>
-        <li><a href="https://www.chsi.com.cn/" class="jj-list-link" target="_blank">学信网</a></li>
-        <li><a href="./henanruimu/index.html" class="jj-list-link" target="_blank">河南瑞牧</a></li>
-        <li><a href="https://www.1ppt.com/" class="jj-list-link" target="_blank">PPT模板</a></li>
-        <li><a href="" class="jj-list-link" target="_blank">&emsp;</a></li>
+        <li><a href="https://www.zxx.edu.cn/" target="_blank">教育平台</a></li>
+        <li><a href="https://siwsfw.hrss.henan.gov.cn/" target="_blank">河南社保</a></li>
+        <li><a href="https://m12333.cn/" target="_blank">人社通</a></li>
+        <li><a href="https://www.ok99ok99.com/" target="_blank">学达云</a></li>
+        <li><a href="https://www.hnzwfw.gov.cn/" target="_blank">豫事办</a></li>
+        <li><a href="https://www.chsi.com.cn/" target="_blank">学信网</a></li>
+        <li><a href="./henanruimu/index.html" target="_blank">河南瑞牧</a></li>
+        <li><a href="https://www.1ppt.com/" target="_blank">PPT模板</a></li>
+        <li><a href="" target="_blank">&emsp;</li>
       </ul>
     </div>
   </div>
 </div>
 <script>
-  function search_input(keyword){
-    if(keyword.value!=""){
-      document.getElementById('clear_keyword').style.display="";
+  var search_botton = document.getElementById('search_botton');
+  var search_input = document.getElementById('search_input');
+  var search_logo = document.getElementById('search_logo');
+  var clear_keyword = document.getElementById('clear_keyword');
+  var baidu_href="https://www.baidu.com/s?wd=";
+  var bing_href="https://cn.bing.com/search?q=";
+  var search_href=baidu_href;
+  function change_input(event){
+    search_botton.href=search_href+encodeURIComponent(search_input.value);
+    if(search_input.value!=""){
+      clear_keyword.style.display="";
     }else{
-      document.getElementById('clear_keyword').style.display="none";
-    }
+      clear_keyword.style.display="none";
+    };
+    if (event.keyCode==13){
+      search_botton.click();
+    };
   }
-  function clear_keyword(){
-    document.getElementById('search_input').value="";
+  function clear_input(){
+    search_botton.href=search_href;
+    search_input.value="";
+    clear_keyword.style.display="none";
   }
-  function search_submit(){
-    let search_input = document.getElementById('search_input');
-    let search_submit = document.getElementById('search_submit');
-    search_submit.href=search_submit.href+search_input.value;
-  }
-  function change_search(){
-    let search_logo = document.getElementById('search_logo');
-    let search_submit = document.getElementById('search_submit');
-    if (search_submit.href=="https://cn.bing.com/search?q="){
+  function change_href(){
+    if (search_href==bing_href){
       search_logo.style.background='url("./static/img/scbaidu.png") 15px center no-repeat';
-      search_submit.href="https://www.baidu.com/s?wd="
+      search_input.placeholder="百度网页搜索";
+      search_href=baidu_href;
+      search_botton.href=search_href+encodeURIComponent(search_input.value);
     }else{
       search_logo.style.background='url("./static/img/scbing.png") 15px center no-repeat';
-      search_submit.href="https://cn.bing.com/search?q="
-    }
+      search_href=bing_href;search_input.placeholder="Bing网页搜索";
+      search_botton.href=search_href+encodeURIComponent(search_input.value);
+    };
   }
 </script>
 </body>
