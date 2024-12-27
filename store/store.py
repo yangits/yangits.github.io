@@ -1,7 +1,6 @@
 import socket
 import sqlite3
 import time
-
 from Cloud import Cloud_blue
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, join_room, leave_room, send
@@ -169,7 +168,6 @@ def change_goods():
 
 @app.route("/select_goods" , methods=['post'])# 连接
 def select_goods():
-    # storename=request.args["storename"]
     storename=request.form["storename"] 
     select_row1=request.form["select_row1"] 
     select_row2=request.form["select_row2"]
@@ -269,5 +267,4 @@ def dtime():
     dtime="{}/{:02d}/{:02d}-{:02d}:{:02d}".format(t.tm_year,t.tm_mon,t.tm_mday,t.tm_hour,t.tm_min)
     return dtime
 if __name__ == '__main__':
-    # app.run(host='0.0.0.0', port=666)
     socketio.run(app , host='0.0.0.0', port=666)

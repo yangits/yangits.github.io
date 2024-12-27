@@ -5,7 +5,6 @@ If GetObject("winmgmts:").ExecQuery("Select * From Win32_Process Where Name='sto
 Wsh.Popup("服务器正在运行，如果无法正常使用，请先点击关闭服务器再启动!")
 Else
 Wsh.Popup("服务器启动成功!")
-Wsh.Run "store.exe",0,false
 Wsh.Run "frpc.exe",0,false
 End If
 
