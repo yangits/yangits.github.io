@@ -21,10 +21,11 @@
 		.game{
 			text-align: center;
         	margin: auto;
-			max-width: 500px;
+			max-width: 600px;
 		}
 		.game input{
 			height: 30px;
+			width: 12%;
 		}
 		.game canvas{
 			margin-top: 10px;
@@ -53,27 +54,28 @@
 	<body onkeydown="doKeyDown(event)"><!--身体-->
 		<div class="game">	
 			<div id="msg"></div>
-			<input type="button" value="上一关" onclick="NextLevel(-1)">
-			<input type="button" value="下一关" onclick="NextLevel(1)">
-			<input type="number" id="vel" min="1" max="100" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');">
-			<input type="button" value="GO" onclick="GO();">
-			<input type="button" value="重置"  onclick="NextLevel(0)">
-			<input type="button" value="说明" onclick="showHelp()">
+			<input type="button" value="上一关" onclick="GO(-1)">
+			<input type="button" value="下一关" onclick="GO(1)">
+			<input type="number" id="vel"  onkeyup="this.value=this.value.replace(/[^0-9]/g,'');">
+			<input type="button" value="GO" onclick="GO(0);">
+			<input type="button" value="重置"  onclick="initLevel();">
 			<input type="button" value="回退" onclick="back()">
+			<input type="button" value="解答" onclick="initLevel();solve();">
 			<canvas id="canvas" width="560" height="560"></canvas>
 		</div>
 		<div class="cen">
 			<div class="bt">
-				<input type="button" value="左" onclick="go('left')">
-				<input type="button" value="上" onclick="go('up')">	
-				<input type="button" value="右" onclick="go('right')">
+				<input type="button" value="左" onclick="move('left')">
+				<input type="button" value="上" onclick="move('up')">	
+				<input type="button" value="右" onclick="move('right')">
 			</div>
 			<div class="bt">
-				<input type="button" value="下" onclick="go('down')">
+				<input type="button" value="下" onclick="move('down')">
 			</div>
 		</div>
 	</body>
-	<script src="./mapdata100.js"></script>
+	<script src="./mapdata.js"></script>
+	<script src="./answer.js"></script>
 	<script>
 		var can = document.getElementById("canvas");
 		var msg = document.getElementById("msg");
@@ -84,9 +86,10 @@
 		var moveTimes = 0;//移动了多少次
 		var point = [0,0];//小人的初始值
 		var step=[]//移动记录
+		var timer_solve//定时器
 		cxt.translate(1,1);//画布基准位置
 		cxt.lineWidth=3;//线宽
-        var n=35,a=33;
+        var n=35,a=n-2;
         initLevel();//初始化对应等级的游戏
         showMoveInfo();//初始化对应等级的游戏数据
         function drawhui1(i,j){//墙绘制
@@ -136,6 +139,7 @@
         }
 		//绘制每个游戏关卡地图
 		function DrawMap(level){
+			clearTimeout(timer_solve);
             cxt.clearRect(0, 0, canvas.width, canvas.height);
 			for (var i=0;i<level.length ;i++ )
 			{
@@ -151,43 +155,33 @@
                 }
             }
         }
-		function GO(){//跳转关卡
-			var vel=document.getElementById('vel').value;
-			if(vel=="0"||vel==""){vel=1};
-			document.getElementById('vel').value=""
-			iCurlevel = parseInt(vel)-1;//iCurlevel当前的地图关数
-			if(iCurlevel>levels.length-1){iCurlevel=levels.length-1};
-			initLevel();//初始当前等级关卡
-		}
+
 		//初始化游戏等级
 		function initLevel(){
+			
 			curMap = copyArray(levels[iCurlevel]);//当前移动过的游戏地图
 			curLevel = levels[iCurlevel];//当前等级的初始地图
-			// document.getElementById("canvas").width = curLevel[0].length*n;
-			// document.getElementById("canvas").height =curLevel.length*n;
+			n =560/curLevel.length;a=n-2;
 			DrawMap(curMap);//绘制出当前等级的地图
 			step=[];moveTimes = 0;//游戏关卡移动步数清零
 			showMoveInfo();//初始化当前关卡数据
 		}
-		//下一关
-		function NextLevel(i){
-			//iCurlevel当前的地图关数
-			iCurlevel = iCurlevel + i;
-			if (iCurlevel<0)
-			{
-				iCurlevel = 0;
-				initLevel();//初始当前等级关卡
-				return;
+
+		function GO(i){//跳转关卡
+			if (i==0){
+				var vel=document.getElementById('vel').value;
+				if(vel=="0"||vel==""){vel=1};
+				document.getElementById('vel').value=""
+				iCurlevel = parseInt(vel)-1;//iCurlevel当前的地图关数
+			}else{
+				iCurlevel = iCurlevel + i;//下一关
 			}
-			var len = levels.length;
-			if (iCurlevel > len-1)
-			{
-				iCurlevel = len-1;
-			}
+			if(iCurlevel<0){iCurlevel=0};
+			if(iCurlevel>levels.length-1){iCurlevel=levels.length-1};
 			initLevel();//初始当前等级关卡	
 		}
 		//小人移动
-		function go(dir){
+		function move(dir){
 			var p1,p2;
 			switch (dir)
 			{
@@ -214,7 +208,7 @@
 				moveTimes ++;showMoveInfo();DrawMap(curMap);//重绘当前更新了数据的地图
 				//若果移动完成了进入下一关
 				if (checkFinish()){//定时器解决渲染地图后再弹窗
-					setTimeout(()=>{alert("恭喜过关！！");NextLevel(1);},0)
+					setTimeout(()=>{alert("恭喜过关！！");GO(1);},0)
 				}
 			}
 		}
@@ -224,6 +218,17 @@
 			curMap=copyArray(step[step.length-1])
 			DrawMap(curMap);
 			moveTimes --;showMoveInfo();
+		}
+		function solve(){
+			if (moveTimes<answer[iCurlevel].length){	
+				switch (answer[iCurlevel].charAt(moveTimes)){
+					case "L":   move('left');break;//墙
+					case "R":   move('right');break;//小球
+					case "U":   move('up');break;//箱子
+					case "D":   move('down');break;//小人
+                }
+				timer_solve= setTimeout(solve, 200);
+            }
 		}
 		//判断是否推成功
 		function checkFinish(){
@@ -272,50 +277,22 @@
 			//若果小动了 返回true 指代能够移动小人
 			return true;
 		}
-		//判断是否推成功
 		//与键盘上的上下左右键关联
 		function doKeyDown(event){
 			switch (event.keyCode)
 			{
-			case 37://左键头
-      		case 65:
-				go("left");
-				break;
-			case 38://上键头
-      		case 87:
-				go("up");
-				break;
-			case 39://右箭头
-      		case 68:
-				go("right");
-				break;
-			case 40://下箭头
-      		case 83:
-				go("down");
-				break;
-			case 90:
-			case 8:
-				back();
-				break;
+			case 37: case 65: move("left");break;//左键头
+			case 38: case 87: move("up");break;//上键头
+			case 39: case 68: move("right");break;//右箭头
+			case 40: case 83: move("down");break;//下箭头
+			case 82: initLevel();;break;//r重置
+			case 90: case 8: back();break;//回退
 			}
-
 		}
 		//完善关卡数据及游戏说明
 		function showMoveInfo(){
-			msg.innerHTML = "第" + (iCurlevel+1) +"/100关 移动次数: "+ moveTimes;showhelp =false;
+			msg.innerHTML = "第" + (iCurlevel+1) +"/"+levels.length+"关 移动次数: "+ moveTimes;
 		}
-		//游戏说明
-		var showhelp = false;
-		function showHelp(){
-			showhelp = !showhelp;
-			if (showhelp)
-			{
-				msg.innerHTML = "用键盘上的上(w)、下(s)、左(a)、右(d)键移动小人,Backspace(z)可以回退，把箱子全部推到小球的位置即可过关。箱子只可向前推，不能往后拉，并且小人一次只能推动一个箱子。";
-			}else{
-				showMoveInfo();
-			}
-		}
-
 		//克隆二维数组
 		function copyArray(arr){
 			var b=[];//每次移动更新地图数据都先清空再添加新的地图
@@ -325,6 +302,5 @@
 			}
 			return b;
 		}
-
 	</script>
 </html>
