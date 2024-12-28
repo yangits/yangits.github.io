@@ -3,10 +3,142 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>不懂就搜，一搜就懂</title>
-    <link rel="shortcut icon" href="./static/img/favicon.ico">
-    <link href="./static/style.css" rel="stylesheet" type="text/css">
+    <link rel="shortcut icon" href="./favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: "微软雅黑";
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        user-select: none;
+      }
+      body, ul, li, h1, h2, h3, h4, h5, h6, p, form, dl, dt, dd {
+          margin: 0px;
+          padding: 0px;
+          font-size: 14px;
+          font-weight: normal;
+      }
+      img {
+          border-style: none;
+      }
+      li {
+          list-style: none;
+      }
+      a {
+          text-decoration: none
+      }
+      html, body {
+          background: #fff;
+          height: 100%;
+
+      }
+      .inner-center {
+          width: 900px;
+          margin: 0 auto;
+      
+      }
+      /* 搜索框 start */
+      .search-section {
+          position: relative;
+          display: flex;
+          margin-top: 20px;
+          margin-bottom: 20px;
+      }
+      .search-left {
+          border-top-left-radius: 12px;
+          border-bottom-left-radius: 12px;
+          display: flex;
+          width: 837px;
+          height: 54px;
+          line-height: 20px;
+          border: 1px solid rgba(217, 217, 217, 0.96);
+      }
+      .search-logo {
+          width: 40px;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          line-height: 52px;
+          background: url("./scbaidu.png") 15px center no-repeat;
+          cursor: pointer;
+      }
+      .input-wrap {
+          position: relative;
+          flex: 1;
+      }
+      .search-input {
+          height: 52px;
+          width: 100%;
+          outline: 0;
+          border: 0;
+          font-size: 16px;
+          padding-left: 15px;
+      }
+      .clear-keyword {
+          border-radius: 27px;
+          position: absolute;
+          top: 50%;
+          right: 10px;
+          transform: translateY(-50%);
+          cursor: pointer;
+          color: #d2d2d2;
+          font-size: 30px;
+      }
+      .search-botton {
+          min-width: 80px;
+          height: 54px;
+          line-height: 54px;
+          color: #fff;
+          font-size: 18px;
+          font-weight: 500;
+          text-align: center;
+          border-top-right-radius: 12px;
+          border-bottom-right-radius: 12px;
+          background: linear-gradient(90deg,#1890FF,#455bfb);
+      }
+      .jj-list {
+          width: 33.3%;
+          float: left;
+          margin-bottom: 10px;
+          padding-right: 16px;
+      }
+      .jj-list-tit {
+          font-size: 16px;
+          line-height: 25px;
+          color: rgba(49, 70, 89, 1);
+          font-weight: bold;
+      }
+      .jj-list-con {
+          overflow: hidden;
+          margin: 0 auto;
+      }
+      .jj-list-con li {
+          box-sizing: border-box; /*以IE盒子模型的width为标准*/
+          padding: 1px 1px; /*设置div的内边距*/
+          width: 33.3%; /*div等分成4部分*/
+          float: left;
+          transform-origin: center top;
+      }
+      .jj-list-con a {
+          display: block;
+          background: rgba(230, 247, 255, 0.96);
+          color:rgba(49, 70, 89, 1);
+          font-size: 13px;
+          text-align: center;
+          line-height: 44px;
+          transition: all 0.2s;
+          border-radius: 5px;
+      }
+      .jj-list-con a:hover {
+          background: #1890FF 100%;
+          font-size: 18px;
+          font-weight: bold;
+          color: #fff;
+      }
+
       @media only screen and (min-width: 0px) {
         .jj-list {width: 100%;}
         .inner-center {max-width: 350px;}
@@ -147,11 +279,11 @@
   }
   function change_href(){
     if (search_href==bing_href){
-      search_logo.style.background='url("./static/img/scbaidu.png") 15px center no-repeat';
+      search_logo.style.background='url("./scbaidu.png") 15px center no-repeat';
       search_href=baidu_href;search_input.placeholder="百度网页搜索";
       search_botton.href=search_href+encodeURIComponent(search_input.value);
     }else{
-      search_logo.style.background='url("./static/img/scbing.png") 15px center no-repeat';
+      search_logo.style.background='url("./scbing.png") 15px center no-repeat';
       search_href=bing_href;search_input.placeholder="Bing网页搜索";
       search_botton.href=search_href+encodeURIComponent(search_input.value);
     };
