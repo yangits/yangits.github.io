@@ -147,7 +147,7 @@
 						case 2:   drawhui2(i,j);break;//小球
 						case 3:   drawhui3(i,j);break;//箱子
 						case 4:   drawhui4(i,j);point= [i,j];break;//小人
-						case 5:   drawhui5(i,j);break;  // 小球加箱子
+						case 5:   drawhui5(i,j);break;  //小球加箱子
 					}
                 }
             }
@@ -204,7 +204,7 @@
 				moveTimes ++;showMoveInfo();DrawMap(curMap);//重绘当前更新了数据的地图
 				//若果移动完成了进入下一关
 				if (checkFinish()){//定时器解决渲染地图后再弹窗
-					setTimeout(()=>{alert("恭喜过关！！");GO(1);},0)
+					setTimeout(()=>{alert("恭喜过关！！");GO(1);},100)
 				}
 			}else{steps.pop()}
 		}
@@ -276,8 +276,7 @@
 			if(p2[0]!=-1){//若果小人推了箱子那就还需要判断箱子
 				curLevel[p2[0]][p2[1]]==2 || curLevel[p2[0]][p2[1]]==5?
 				curMap[p2[0]][p2[1]] = 2:curMap[p2[0]][p2[1]] = 0;
-				curLevel[point[0]][point[1]]==2||curLevel[point[0]][point[1]]==5?
-				curMap[point[0]][point[1]] = 5:curMap[point[0]][point[1]] = 3;
+				curMap[point[0]][point[1]] += 3;
 			}
 			point=p1;//小人更新坐标值
 		}
