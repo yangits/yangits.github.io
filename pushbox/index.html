@@ -58,9 +58,9 @@
 			<input type="button" value=">>" onclick="GO(1)">
 			<input type="number" id="vel"  onkeyup="this.value=this.value.replace(/[^0-9]/g,'');">
 			<input type="button" value="GO" onclick="GO(0);">
+			<input type="button" value="解答" onclick="initLevel();solve();">
 			<input type="button" value="重置"  onclick="initLevel();">
 			<input type="button" value="回退" onclick="back()">
-			<input type="button" value="解答" onclick="initLevel();solve();">
 			<canvas id="canvas" width="560" height="560"></canvas>
 		</div>
 		<div class="cen">
@@ -164,7 +164,7 @@
 		function GO(i){//跳转关卡
 			if (i==0){
 				var vel=document.getElementById('vel').value;
-				if(vel=="0"||vel==""){vel=1};
+				if(vel==""){vel=1};
 				document.getElementById('vel').value=""
 				iCurlevel = parseInt(vel)-1;//iCurlevel当前的地图关数
 			}else{
@@ -179,22 +179,22 @@
 			var p1,p2,m;//获取小人前面的两个坐标位置
 			switch (dir){
 				case "up":
-					steps.push("U")
+					steps.push("U");
 					p1 = [point[0]-1,point[1]];
 					p2 = [point[0]-2,point[1]];
 					break;
 				case "down":
-					steps.push("D")
+					steps.push("D");
 					p1 = [point[0]+1,point[1]];
 					p2 = [point[0]+2,point[1]];
 					break;
 				case "left":
-					steps.push("L")
+					steps.push("L");
 					p1 = [point[0],point[1]-1];
 					p2 = [point[0],point[1]-2];
 					break;
 				case "right":
-					steps.push("R")
+					steps.push("R");
 					p1 = [point[0],point[1]+1];
 					p2 = [point[0],point[1]+2];
 					break;
@@ -247,33 +247,25 @@
 			return true;
 		}
 		function backmove(step){
-			var p1,p2=[0,0];
+			var p1,p2=[-1];
 			switch (step){
 				case "u":
-					p1 = [point[0]+1,point[1]];
 					p2 = [point[0]-1,point[1]];
-					break;
 				case "U":	
 					p1 = [point[0]+1,point[1]];
 					break;
 				case "d":
-					p1 = [point[0]-1,point[1]];
 					p2 = [point[0]+1,point[1]];
-					break;
 				case "D":	
 					p1 = [point[0]-1,point[1]];
 					break;
 				case "l":
-					p1 = [point[0],point[1]+1];
 					p2 = [point[0],point[1]-1];
-					break;
 				case "L":	
 					p1 = [point[0],point[1]+1];
 					break;
 				case "r":
-					p1 = [point[0],point[1]-1];
 					p2 = [point[0],point[1]+1];
-					break;
 				case "R":	
 					p1 = [point[0],point[1]-1];
 					break;
@@ -281,7 +273,7 @@
 			curMap[p1[0]][p1[1]] = 4;//小人退一步更改地图对应坐标点的值
 			curLevel[point[0]][point[1]]==2||curLevel[point[0]][point[1]]==5?
 			curMap[point[0]][point[1]] =2:curMap[point[0]][point[1]] = 0;
-			if(p2[0]!=0 && p2[1]!=0){//若果小人推了箱子那就还需要判断箱子
+			if(p2[0]!=-1){//若果小人推了箱子那就还需要判断箱子
 				curLevel[p2[0]][p2[1]]==2 || curLevel[p2[0]][p2[1]]==5?
 				curMap[p2[0]][p2[1]] = 2:curMap[p2[0]][p2[1]] = 0;
 				curLevel[point[0]][point[1]]==2||curLevel[point[0]][point[1]]==5?
