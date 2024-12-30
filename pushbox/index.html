@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
 		<title>推箱子</title>
 		<style>
 		*{
@@ -54,8 +54,8 @@
 	<body onkeydown="doKeyDown(event)"><!--身体-->
 		<div class="game">	
 			<div id="msg"></div>
-			<input type="button" value="上一关" onclick="GO(-1)">
-			<input type="button" value="下一关" onclick="GO(1)">
+			<input type="button" value="<<" onclick="GO(-1)">
+			<input type="button" value=">>" onclick="GO(1)">
 			<input type="number" id="vel"  onkeyup="this.value=this.value.replace(/[^0-9]/g,'');">
 			<input type="button" value="GO" onclick="GO(0);">
 			<input type="button" value="重置"  onclick="initLevel();">

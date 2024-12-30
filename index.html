@@ -57,12 +57,13 @@
           border: 1px solid rgba(217, 217, 217, 0.96);
       }
       .search-logo {
-          width: 40px;
+          width: 50px;
           align-items: center;
           justify-content: center;
           text-align: center;
           line-height: 52px;
-          background: url("./scbaidu.png") 15px center no-repeat;
+          color: #1890FF;
+          font-weight: 900;
           cursor: pointer;
       }
       .input-wrap {
@@ -162,9 +163,9 @@
 <div class="inner-center">
   <div class="search-section">
     <div class="search-left">
-      <div class="search-logo" id="search_logo" onclick="change_href()"></div>
+      <div class="search-logo" id="search_logo" onclick="change_href()">Baidu</div>
       <div class="input-wrap">
-        <input class="search-input" id="search_input" type="text" placeholder="百度网页搜索" onkeyup="change_input(event);">
+        <input class="search-input" id="search_input" type="text" placeholder="网页搜索" onkeyup="change_input(event);">
         <div class="clear-keyword" id="clear_keyword" style="display: none;" onclick="clear_input()">×</div>
       </div>
     </div>
@@ -262,9 +263,7 @@
   var search_input = document.getElementById('search_input');
   var search_logo = document.getElementById('search_logo');
   var clear_keyword = document.getElementById('clear_keyword');
-  var baidu_href="https://www.baidu.com/s?wd=";
-  var bing_href="https://cn.bing.com/search?q=";
-  var search_href=baidu_href;
+  var search_href="https://www.baidu.com/s?wd=";
   function change_input(event){
     search_botton.href=search_href+encodeURIComponent(search_input.value);
     if(search_input.value!=""){
@@ -278,13 +277,11 @@
     clear_keyword.style.display="none";
   }
   function change_href(){
-    if (search_href==bing_href){
-      search_logo.style.background='url("./scbaidu.png") 15px center no-repeat';
-      search_href=baidu_href;search_input.placeholder="百度网页搜索";
+    if (search_logo.innerHTML=='Bing'){
+      search_logo.innerHTML='Baidu';search_href="https://www.baidu.com/s?wd=";
       search_botton.href=search_href+encodeURIComponent(search_input.value);
     }else{
-      search_logo.style.background='url("./scbing.png") 15px center no-repeat';
-      search_href=bing_href;search_input.placeholder="Bing网页搜索";
+      search_logo.innerHTML='Bing';search_href="https://cn.bing.com/search?q=";
       search_botton.href=search_href+encodeURIComponent(search_input.value);
     };
   }
