@@ -21,7 +21,7 @@
 		.game{
 			text-align: center;
         	margin: auto;
-			max-width: 600px;
+			max-width: 500px;
 		}
 		.game input{
 			height: 30px;
@@ -75,7 +75,6 @@
 		</div>
 	</body>
 	<script src="./mapdata.js"></script>
-	<script src="./answer.js"></script>
 	<script>
 		var can = document.getElementById("canvas");
 		var msg = document.getElementById("msg");
@@ -141,16 +140,14 @@
 		function DrawMap(level){
 			clearTimeout(timer_solve);
             cxt.clearRect(0, 0, canvas.width, canvas.height);
-			for (var i=0;i<level.length ;i++ )
-			{
-				for (var j=0;j<level[i].length ;j++ )
-				{	
+			for (var i=0;i<level.length ;i++ ){
+				for (var j=0;j<level[i].length ;j++ ){	
 					switch (level[i][j]){
-					case 1:   drawhui1(i,j);break;//墙
-					case 2:   drawhui2(i,j);break;//小球
-					case 3:   drawhui3(i,j);break;//箱子
-					case 4:   drawhui4(i,j);point= [i,j];break;//小人
-					case 5:   drawhui5(i,j);break;  // 小球加箱子
+						case 1:   drawhui1(i,j);break;//墙
+						case 2:   drawhui2(i,j);break;//小球
+						case 3:   drawhui3(i,j);break;//箱子
+						case 4:   drawhui4(i,j);point= [i,j];break;//小人
+						case 5:   drawhui5(i,j);break;  // 小球加箱子
 					}
                 }
             }
@@ -158,7 +155,6 @@
 
 		//初始化游戏等级
 		function initLevel(){
-			
 			curMap = copyArray(levels[iCurlevel]);//当前移动过的游戏地图
 			curLevel = levels[iCurlevel];//当前等级的初始地图
 			n =560/curLevel.length;a=n-2;
@@ -183,8 +179,7 @@
 		//小人移动
 		function move(dir){
 			var p1,p2;
-			switch (dir)
-			{
+			switch (dir){
 			case "up":
 				//获取小人前面的两个坐标位置来进行判断小人是否能够移动
 				p1 = [point[0]-1,point[1]];
@@ -232,13 +227,10 @@
 		}
 		//判断是否推成功
 		function checkFinish(){
-			for (var i=0;i<curMap.length ;i++ )
-			{
-				for (var j=0;j<curMap[i].length ;j++ )
-				{
+			for (var i=0;i<curMap.length ;i++ ){
+				for (var j=0;j<curMap[i].length ;j++ ){
 					//当前移动过的地图和初始地图进行比较，若果初始地图上的陷进参数在移动之后不是箱子的话就指代没推成功
-					if (curLevel[i][j] == 2 && curMap[i][j] != 5 || curLevel[i][j] == 5 && curMap[i][j] != 5)
-					{
+					if (curLevel[i][j] == 2 && curMap[i][j] != 5 || curLevel[i][j] == 5 && curMap[i][j] != 5){
 						return false;
 					}
 				}
@@ -279,14 +271,13 @@
 		}
 		//与键盘上的上下左右键关联
 		function doKeyDown(event){
-			switch (event.keyCode)
-			{
-			case 37: case 65: move("left");break;//左键头
-			case 38: case 87: move("up");break;//上键头
-			case 39: case 68: move("right");break;//右箭头
-			case 40: case 83: move("down");break;//下箭头
-			case 82: initLevel();;break;//r重置
-			case 90: case 8: back();break;//回退
+			switch (event.keyCode){
+				case 37: case 65: move("left");break;//左键头
+				case 38: case 87: move("up");break;//上键头
+				case 39: case 68: move("right");break;//右箭头
+				case 40: case 83: move("down");break;//下箭头
+				case 82: initLevel();;break;//r重置
+				case 90: case 8: back();break;//回退
 			}
 		}
 		//完善关卡数据及游戏说明
@@ -303,4 +294,5 @@
 			return b;
 		}
 	</script>
+	<script src="./answer.js"></script>
 </html>
