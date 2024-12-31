@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>口算练习机</title>
+</head>
+ <style>
+    *{
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        margin:0px;
+        padding:0px;
+    }
+    body {
+        max-width: 400px;
+        background: #019CD6;
+        user-select: none;
+        overflow: hidden;
+        text-align: center;
+        margin: auto;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .top{
+        position: fixed; /* 设置为fixed使其保持在页面上 */
+        z-index: 1;
+        width: 100%; /* 宽度 */
+        height: 100%; /* 高度 */
+        margin: auto;
+        top: 0;left: 0;
+        padding: 0px;
+    }
+    textarea{
+        text-align: center;
+        width: 100%;
+        background: #019CD6;
+        font-size: 50px;
+        overflow:scroll;
+    }
+    .game{
+        width:80%;
+        margin: 10px auto;
+        border-radius: 20px;
+        border: 15px inset;
+        border-color: #23a4d3 #4dbde3 #59c6e8 #019CD6;
+        overflow: hidden;
+        background-color: #9facaa;
+    }
+    .game canvas{
+        border-radius: 5px;
+        background-color: #9facaa;
+        width:100%;
+    }
+    .bt1 button{
+        margin: 10px 10px;
+        outline: none;
+        cursor: pointer;
+        width: 16%;
+        height: 50px;
+        border-radius: 5px;
+        font-size: 20px;
+        background: linear-gradient(145deg, #eb6c17, #c16802);
+    }
+    .bt2 button{
+        margin: 20px 10px;
+        outline: none;
+        cursor: pointer;
+        width: 16%;
+        height: 60px;
+        border-radius: 50%;
+    }   
+     .bt3{
+        margin: 10px 10px;
+        outline: none;
+        cursor: pointer;
+        width: 20%;
+        height: 50px;
+        border-radius: 5px;
+        background: linear-gradient(145deg, #eb6c17, #c16802);
+    }
+    .ok{
+        margin: 0 20px;
+        outline: none;
+        cursor: pointer;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(145deg, #eb6c17, #c16802);
+    }
+    button{
+        user-select: none;
+        text-align: center;
+        font-size: 30px;
+        border: 0px;
+        background: linear-gradient(145deg, #decb02, #c1b002);
+        box-shadow:  4px 4px 8px #555555,-4px -4px 8px #7ed2d2;
+    }
+    button:active {
+        background: linear-gradient(145deg, #a69700, #c5b400);
+        box-shadow:  2px 2px 4px #555555,-2px -2px 4px #7ed2d2;
+    }
+ </style>
+<body>
+    <div class="top" id="topmain" style="display: none;">
+        <button style="width: 100%;background: #019CD6;" onclick="back()">返回</button>
+        <textarea name="" id="historys" cols="10" rows="10" disabled></textarea>
+        
+    </div>
+    <div class="game"><canvas id="canvas" width="300" height="80"></canvas></div>
+    <div class="bt1">
+        <button type="button" onclick="start()">练习</button>
+        <button type="button" onclick="">设置</button>
+        <button type="button" onclick="topbt()">记录</button>
+        <button type="button">备用</button>
+    </div>
+    <div class="bt2"> 
+        <button type="button" onclick="if (answer.length<2){answer=answer+'1'};draw_answer();">1</button>
+        <button type="button" onclick="if (answer.length<2){answer=answer+'2'};draw_answer();">2</button>
+        <button type="button" onclick="if (answer.length<2){answer=answer+'3'};draw_answer();">3</button>
+        <button type="button" onclick="">></button>
+    </div>
+    <div class="bt2"> 
+        <button type="button" onclick="if (answer.length<2){answer=answer+'4'};draw_answer();">4</button>
+        <button type="button" onclick="if (answer.length<2){answer=answer+'5'};draw_answer();">5</button>
+        <button type="button" onclick="if (answer.length<2){answer=answer+'6'};draw_answer();">6</button>
+        <button type="button" onclick=""><</button>
+    </div>
+    <div class="bt2"> 
+        <button type="button" onclick="if (answer.length<2){answer=answer+'7'};draw_answer();">7</button>
+        <button type="button" onclick="if (answer.length<2){answer=answer+'8'};draw_answer();">8</button>
+        <button type="button" onclick="if (answer.length<2){answer=answer+'9'};draw_answer();">9</button>
+        <button type="button" onclick="if (answer.length<2){answer=answer+'0'};draw_answer();">0</button>
+    </div>
+    <div >
+        <button type="button" class="bt3">=</button>
+        <button type="button" class="ok" onclick="ok()">OK</button>
+        <button type="button" class="bt3" onclick="answer=answer.slice(0, -1);draw_answer();">×</button>
+    </div>
+ <script>
+    var topmain = document.getElementById("topmain");
+    var recordbt = document.getElementById("record");
+    var can = document.getElementById("canvas");
+    var historys = document.getElementById("historys");
+    var ctx=can.getContext("2d");
+    ctx.font = "15px Arial";
+    ctx.fillText("标题备用  标题备用  标题备用  标题备用 ", 10, 15);
+    ctx.font = "50px Arial";
+    var text,a ,b ,c,fh;
+    var answer="";
+    start();
+    function draw_text(){
+        ctx.clearRect(0, 20, can.width, can.height);
+        ctx.fillText(text, 10, 70);
+    }
+    function draw_answer(){
+        ctx.clearRect(150, 20, can.width, can.height);
+        ctx.fillText(answer, 150, 70);
+    }
+    function draw_torf(torf){
+        ctx.clearRect(250, 20, can.width, can.height);
+        ctx.fillText(torf, 250, 70);
+    }
+    function start(){
+        answer="";
+        if (Math.random()<0.5){
+            fh="+";
+            a=Math.floor(Math.random()*9+1);
+            b=Math.floor(Math.random()*(9-a)+1);
+        }else{
+            fh="-";
+            a=Math.floor(Math.random()*7+3);
+            b=Math.floor(Math.random()*(a-1)+1);
+        }
+        text=a+fh+b+"=";
+        draw_text();
+        draw_answer();
+    }
+    function ok(){
+        if (fh=="+"){ans=a+b};
+        if (fh=="-"){ans=a-b};
+        if (answer=="") {return};
+        if (answer==ans){
+            draw_torf("✓");
+            historys.innerHTML=text+answer+" ✓\n"+historys.innerHTML
+            setTimeout(()=>{start();},600);
+        }else{
+            draw_torf("×");
+            historys.innerHTML=text+answer+" ×\n"+historys.innerHTML
+            answer="";
+            setTimeout(()=>{draw_answer()},600);
+        }
+    }
+    function topbt(){
+        topmain.style.display="";
+    }
+
+    function back(){
+        topmain.style.display="none";
+    }
+ </script>
+</body>
+</html>
