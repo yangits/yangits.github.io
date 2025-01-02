@@ -148,7 +148,6 @@
         <button type="button" class="bt3" onclick="answer=answer.slice(0, -1);draw_answer();">×</button>
     </div>
  <script>
-    document.addEventListener('touchmove', function(e) {e.preventDefault();},{ passive: false });
     var board  = document.getElementById('board');
     var canva_board = board.getContext('2d');
     var topmain = document.getElementById("topmain");
