@@ -29,6 +29,7 @@
         align-items: center;
     }
     .top{
+
         position: fixed; /* 设置为fixed使其保持在页面上 */
         z-index: 1;
         width: 100%; /* 宽度 */
@@ -38,17 +39,19 @@
         padding: 0px;
     }
     textarea{
-        text-align: center;
+        height: 90%;
+        line-height: 50px;
+        text-align: left;
         width: 100%;
         background: #019CD6;
         font-size: 50px;
-        overflow:scroll;
+        overflow-y:scroll;
     }
     .game{
-        width:80%;
+        width:85%;
         margin: 10px auto;
-        border-radius: 20px;
-        border: 15px inset;
+        border-radius: 15px;
+        border: 10px inset;
         border-color: #23a4d3 #4dbde3 #59c6e8 #019CD6;
         overflow: hidden;
         background-color: #9facaa;
@@ -59,7 +62,7 @@
         width:100%;
     }
     .bt1 button{
-        margin: 10px 10px;
+        margin: 15px 10px;
         outline: none;
         cursor: pointer;
         width: 16%;
@@ -69,7 +72,7 @@
         background: linear-gradient(145deg, #eb6c17, #c16802);
     }
     .bt2 button{
-        margin: 20px 10px;
+        margin: 15px 10px;
         outline: none;
         cursor: pointer;
         width: 16%;
@@ -77,7 +80,7 @@
         border-radius: 50%;
     }   
      .bt3{
-        margin: 10px 10px;
+        margin: 15px 10px;
         outline: none;
         cursor: pointer;
         width: 20%;
@@ -86,7 +89,7 @@
         background: linear-gradient(145deg, #eb6c17, #c16802);
     }
     .ok{
-        margin: 0 20px;
+        margin: 10px 20px;
         outline: none;
         cursor: pointer;
         width: 80px;
@@ -109,10 +112,10 @@
  </style>
 <body>
     <div class="top" id="topmain" style="display: none;">
-        <button style="width: 100%;background: #019CD6;" onclick="back()">返回</button>
-        <textarea name="" id="historys" cols="10" rows="10" disabled></textarea>
+        <textarea id="historys" disabled ></textarea>
+        <button style="width: 100%;background: #019CD6;height: 10%;" onclick="back()">返回</button>
     </div>
-    <div class="game"><canvas id="canvas" width="300" height="80"></canvas></div>
+    <div class="game"><canvas id="canvas" width="320" height="80"></canvas></div>
     <div class="bt1">
         <button type="button" onclick="num_title()">范围</button>
         <button type="button" onclick="set_title()">功能</button>
@@ -159,7 +162,7 @@
     var answer="";
     start();
     function num_title(){
-        if(settitle==0){numtitle++;}else{numtitle=0;return}
+        if(settitle==0){numtitle++;}else{return}
         if(numtitle>=numtitles.length){numtitle=0}
         ctx.font = "15px Arial";
         ctx.clearRect(0, 0, 110, 20);
@@ -169,12 +172,9 @@
     function set_title(){
         settitle++;
         if(settitle>=settitles.length){settitle=0}
-        if(settitle!=0){
-            numtitle=0;
-            ctx.font = "15px Arial";
-            ctx.clearRect(0, 0, 110, 20);
-            ctx.fillText(numtitles[numtitle], 10, 15);
-        }
+        if(settitle>0){
+            ctx.clearRect(0, 0, 300, 20);
+        }else{num_title();}
         ctx.font = "15px Arial";
         ctx.clearRect(120, 0, 300, 20);
         ctx.fillText(settitles[settitle], 120, 15);
@@ -186,12 +186,12 @@
         ctx.fillText(text, 10, 70);
     }
     function draw_answer(){
-        ctx.clearRect(180, 20, 300, 80);
-        ctx.fillText(answer, 180, 70);
+        ctx.clearRect(200, 20, 300, 80);
+        ctx.fillText(answer, 200, 70);
     }
     function draw_torf(torf){
-        ctx.clearRect(250, 20, 300, 80);
-        ctx.fillText(torf, 250, 70);
+        ctx.clearRect(280, 20, 300, 80);
+        ctx.fillText(torf, 280, 70);
     }
     function start(){
         let minnum,maxnum;
@@ -236,7 +236,7 @@
         draw_text();answer="";draw_answer();
     }
     function numbt(num){
-        if (answer.length<2){answer=answer+num}else{answer=num};
+        if (answer.length<2){answer=answer+num};
         draw_answer();
     }
     function ok(){
@@ -246,11 +246,11 @@
         if (fh=="×"){ans=a*b};
         if (answer==ans){
             draw_torf("✓");
-            historys.innerHTML=text+answer+" ✓\n"+historys.innerHTML
+            historys.innerHTML+=text+answer+" ✓\n"
             setTimeout(()=>{start();},600);
         }else{
             draw_torf("×");
-            historys.innerHTML=text+answer+" ×\n"+historys.innerHTML
+            historys.innerHTML+=text+answer+" ×\n"
             answer="";
             setTimeout(()=>{draw_answer()},600);
         }
