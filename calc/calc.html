@@ -39,7 +39,7 @@
         padding: 0px;
     }
     textarea{
-        height: 90%;
+        height: 80%;
         line-height: 50px;
         text-align: left;
         width: 100%;
@@ -112,14 +112,16 @@
  </style>
 <body>
     <div class="top" id="topmain" style="display: none;">
-        <textarea id="historys" disabled ></textarea>
-        <button style="width: 100%;background: #019CD6;height: 10%;" onclick="back()">返回</button>
+        <button style="width: 100%;background: rgba(255, 255, 255, 0);height:20%;" onclick="back()"></button>
+        <canvas id="board" style="width: 100%;background: #019CD6; height: 80%;display: none;"></canvas>
+        <textarea id="historys" disabled style="display: none;"></textarea>
+
     </div>
-    <div class="game"><canvas id="canvas" width="320" height="80"></canvas></div>
+    <div class="game"><canvas id="game" width="320" height="80"></canvas></div>
     <div class="bt1">
         <button type="button" onclick="num_title()">范围</button>
         <button type="button" onclick="set_title()">功能</button>
-        <button type="button" onclick="">备用</button>
+        <button type="button" onclick="topboard()">画板</button>
         <button type="button" onclick="topbt()">记录</button>
     </div>
     <div class="bt2"> 
@@ -146,11 +148,14 @@
         <button type="button" class="bt3" onclick="answer=answer.slice(0, -1);draw_answer();">×</button>
     </div>
  <script>
+    document.addEventListener('touchmove', function(e) {e.preventDefault();},{ passive: false });
+    var board  = document.getElementById('board');
+    var canva_board = board.getContext('2d');
     var topmain = document.getElementById("topmain");
     var recordbt = document.getElementById("record");
-    var can = document.getElementById("canvas");
+    var game = document.getElementById("game");
     var historys = document.getElementById("historys");
-    var ctx=can.getContext("2d");
+    var ctx=game.getContext("2d");
     ctx.font = "15px Arial";
     var numtitles=["0—10数字","0—20数字","20—50数字","20—100数字"];
     var numtitle=0;
@@ -257,10 +262,39 @@
     }
     function topbt(){
         topmain.style.display="";
+        historys.style.display="";
+        board.style.display="none";
     }
-
+    function topboard(){
+        topmain.style.display="";
+        historys.style.display="none";
+        board.style.display="";
+        board.width=window.innerWidth;
+        board.height=window.innerHeight*0.8;
+        var startX;
+        var startY;
+        board.addEventListener('touchstart', function(e) {
+            event.preventDefault(); // 防止默认行为，如滚动
+            var touch = event.touches[0]; // 获取第一个触点
+            startX = touch.pageX - board.offsetLeft;
+            startY = touch.pageY - board.offsetTop;
+            canva_board.beginPath(); // 开始绘制新路径
+            canva_board.moveTo(startX, startY); // 移动到起点
+        });
+        board.addEventListener('touchmove', function(e) {
+            event.preventDefault();
+            var touch = event.touches[0];
+            var moveX = touch.pageX - board.offsetLeft;
+            var moveY = touch.pageY - board.offsetTop;
+            canva_board.lineTo(moveX, moveY); // 绘制直线到移动点
+            canva_board.stroke(); // 绘制路径
+        });
+    }
     function back(){
         topmain.style.display="none";
+        historys.style.display="none";
+        board.style.display="none";
+        canva_board.clearRect(0, 0, board.width, board.height);
     }
  </script>
 </body>

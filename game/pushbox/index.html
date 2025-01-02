@@ -76,6 +76,7 @@
 	</body>
 	<script src="./mapdata.js"></script>
 	<script>
+		document.addEventListener('touchmove', function(e) {event.preventDefault();},{ passive: false });
 		var can = document.getElementById("canvas");
 		var msg = document.getElementById("msg");
 		var cxt = can.getContext("2d");
