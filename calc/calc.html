@@ -39,13 +39,13 @@
         padding: 0px;
     }
     textarea{
-        height: 80%;
-        line-height: 50px;
+        color: #000;
+        height: 75%;
+        line-height: 38px;
         text-align: left;
         width: 100%;
         background: #019CD6;
-        font-size: 50px;
-        overflow-y:scroll;
+        font-size: 38px;
     }
     .game{
         width:85%;
@@ -89,7 +89,7 @@
         background: linear-gradient(145deg, #eb6c17, #c16802);
     }
     .ok{
-        margin: 10px 20px;
+        margin: 10px 20px 100px 20px;
         outline: none;
         cursor: pointer;
         width: 80px;
@@ -112,42 +112,45 @@
  </style>
 <body>
     <div class="top" id="topmain" style="display: none;">
-        <button style="width: 100%;background: rgba(255, 255, 255, 0);height:20%;" onclick="back()"></button>
-        <canvas id="board" style="width: 100%;background: #019CD6; height: 80%;display: none;"></canvas>
+        <button style="width: 100%;background: rgba(255, 255, 255, 0);height:25%;" onclick="back()"></button>
+        <canvas id="board" style="width: 100%;background: #019CD6; height: 75%;display: none;"></canvas>
         <textarea id="historys" disabled style="display: none;"></textarea>
-
     </div>
-    <div class="game"><canvas id="game" width="320" height="80"></canvas></div>
-    <div class="bt1">
-        <button type="button" onclick="num_title()">范围</button>
-        <button type="button" onclick="set_title()">功能</button>
-        <button type="button" onclick="topboard()">画板</button>
-        <button type="button" onclick="topbt()">记录</button>
-    </div>
-    <div class="bt2"> 
-        <button type="button" onclick="numbt('1')">1</button>
-        <button type="button" onclick="numbt('2')">2</button>
-        <button type="button" onclick="numbt('3')">3</button>
-        <button type="button" onclick="">></button>
-    </div>
-    <div class="bt2"> 
-        <button type="button" onclick="numbt('4')">4</button>
-        <button type="button" onclick="numbt('5')">5</button>
-        <button type="button" onclick="numbt('6')">6</button>
-        <button type="button" onclick=""><</button>
-    </div>
-    <div class="bt2"> 
-        <button type="button" onclick="numbt('7')">7</button>
-        <button type="button" onclick="numbt('8')">8</button>
-        <button type="button" onclick="numbt('9')">9</button>
-        <button type="button" onclick="numbt('0')">0</button>
-    </div>
-    <div >
-        <button type="button" class="bt3" onclick="start()">=</button>
-        <button type="button" class="ok" onclick="ok()">OK</button>
-        <button type="button" class="bt3" onclick="answer=answer.slice(0, -1);draw_answer();">×</button>
+    <div id="main">
+        <div class="game"><canvas id="game" width="320" height="120"></canvas></div>
+        <div class="bt1">
+            <button type="button" onclick="numtitle++;num_title()">范围</button>
+            <button type="button" onclick="settitle++;numtitle=0;set_title()">功能</button>
+            <button type="button" onclick="topboard()">画板</button>
+            <button type="button" onclick="topbt()">记录</button>
+        </div>
+        <div class="bt2"> 
+            <button type="button" onclick="numbt('1')">1</button>
+            <button type="button" onclick="numbt('2')">2</button>
+            <button type="button" onclick="numbt('3')">3</button>
+            <button type="button" onclick="">></button>
+        </div>
+        <div class="bt2"> 
+            <button type="button" onclick="numbt('4')">4</button>
+            <button type="button" onclick="numbt('5')">5</button>
+            <button type="button" onclick="numbt('6')">6</button>
+            <button type="button" onclick=""><</button>
+        </div>
+        <div class="bt2"> 
+            <button type="button" onclick="numbt('7')">7</button>
+            <button type="button" onclick="numbt('8')">8</button>
+            <button type="button" onclick="numbt('9')">9</button>
+            <button type="button" onclick="numbt('0')">0</button>
+        </div>
+        <div >
+            <button type="button" class="bt3" onclick="start()">=</button>
+            <button type="button" class="ok" onclick="ok()">OK</button>
+            <button type="button" class="bt3" onclick="answer=answer.slice(0, -1);draw_answer();">×</button>
+        </div>
     </div>
  <script>
+    var main = document.getElementById("main");
+    main.addEventListener('touchmove', function(e) {event.preventDefault();},{ passive: false });
     var board  = document.getElementById('board');
     var canva_board = board.getContext('2d');
     var topmain = document.getElementById("topmain");
@@ -155,58 +158,54 @@
     var game = document.getElementById("game");
     var historys = document.getElementById("historys");
     var ctx=game.getContext("2d");
-    ctx.font = "15px Arial";
-    var numtitles=["0—10数字","0—20数字","20—50数字","20—100数字"];
-    var numtitle=0;
-    var settitles=["加减运算练习","加法进位练习","减法借位练习","九九乘法表"];
-    var settitle=0; 
-    ctx.fillText(numtitles[numtitle], 10, 15);
-    ctx.fillText(settitles[settitle], 120, 15);
+    var numtitle=0,settitle=0; 
+    var numtitles=[["0—10数字","0—20数字","20—50数字","20—100数字"],
+                ["九九乘法表","口口×口","口口口×口","口口×口口"],
+                ["加法进位练习","减法借位练习","九九乘法表"]];
+    var settitles=["加减运算练习","乘法运算练习","专项练习"];
+    num_title();set_title();
     var text,a ,b ,c,fh;
     var answer="";
     start();
     function num_title(){
-        if(settitle==0){numtitle++;}else{return}
-        if(numtitle>=numtitles.length){numtitle=0}
+        if(numtitle>=numtitles[settitle].length){numtitle=0}
         ctx.font = "15px Arial";
         ctx.clearRect(0, 0, 110, 20);
-        ctx.fillText(numtitles[numtitle], 10, 15);
+        ctx.fillText(numtitles[settitle][numtitle], 10, 15);
         start();
     }
     function set_title(){
-        settitle++;
         if(settitle>=settitles.length){settitle=0}
-        if(settitle>0){
-            ctx.clearRect(0, 0, 300, 20);
-        }else{num_title();}
+        num_title();
         ctx.font = "15px Arial";
-        ctx.clearRect(120, 0, 300, 20);
-        ctx.fillText(settitles[settitle], 120, 15);
+        ctx.clearRect(150, 0, 300, 20);
+        ctx.fillText(settitles[settitle], 150, 15);
         start();
     }
     function draw_text(){
         ctx.font = "50px Arial";
-        ctx.clearRect(0, 20, 300, 80);
-        ctx.fillText(text, 10, 70);
+        ctx.clearRect(0, 20, 300, 120);
+        ctx.fillText(text, 20, 65);
+        ctx.fillText("=", 80, 115);
     }
     function draw_answer(){
-        ctx.clearRect(200, 20, 300, 80);
-        ctx.fillText(answer, 200, 70);
+        ctx.clearRect(120, 70, 300, 120);
+        ctx.fillText(answer, 120, 115);
     }
     function draw_torf(torf){
-        ctx.clearRect(280, 20, 300, 80);
-        ctx.fillText(torf, 280, 70);
+        ctx.clearRect(260, 70, 300, 120);
+        ctx.fillText(torf, 260, 115);
     }
     function start(){
-        let minnum,maxnum;
-        switch (numtitle){
-			case 0:minnum=1;maxnum=10;break;
-			case 1:minnum=1;maxnum=20;break;
-			case 2:minnum=20;maxnum=50;break;
-			case 3:minnum=20;maxnum=100;break;
-                };
         switch (settitle){
-            case 0:   
+            case 0:
+                let minnum,maxnum;
+                switch (numtitle){
+                    case 0:minnum=1;maxnum=10;break;
+                    case 1:minnum=1;maxnum=20;break;
+                    case 2:minnum=20;maxnum=50;break;
+                    case 3:minnum=20;maxnum=100;break;
+                };   
                 if (Math.random()<0.5){
                     fh="+";
                     a=Math.floor(Math.random()*(maxnum-minnum)+minnum);
@@ -216,31 +215,54 @@
                     a=Math.floor(Math.random()*(maxnum-minnum)+minnum);
                     b=Math.floor(Math.random()*(a-minnum)+minnum);
                 }
-                text=a+fh+b+"=";
+                text=a+fh+b;draw_text();answer="";draw_answer();
                 break;
             case 1:  
-                fh="+";
-                a=Math.floor(Math.random()*8+2);
-                b=Math.floor(Math.random()*(9-11+a)+11-a);
-                text=a+fh+b+"=";
-                break;
-            case 2:  
-                fh="-";
-                a=Math.floor(Math.random()*7+11);
-                b=Math.floor(Math.random()*(9-a+9)+a-9);
-                text=a+fh+b+"=";
-                break;
-            case 3:
                 fh="×";
-                a=Math.floor(Math.random()*9+1);
-                b=Math.floor(Math.random()*9+1);
-                text=a+fh+b+"=";
+                switch (numtitle){
+                    case 0:
+                        a=Math.floor(Math.random()*9+1);
+                        b=Math.floor(Math.random()*9+1);
+                        break;
+                    case 1:
+                        a=Math.floor(Math.random()*90+10);
+                        b=Math.floor(Math.random()*9+1);
+                        break;
+                    case 2:
+                        a=Math.floor(Math.random()*900+100);
+                        b=Math.floor(Math.random()*9+1);
+                    break;
+                    case 3:
+                        a=Math.floor(Math.random()*90+10);
+                        b=Math.floor(Math.random()*90+10);
+                        break;
+                };  
+                text=a+fh+b;draw_text();answer="";draw_answer();
+                break; 
+            case 2:  
+                switch (numtitle){
+                case 0:     
+                    fh="+";
+                    a=Math.floor(Math.random()*8+2);
+                    b=Math.floor(Math.random()*(9-11+a)+11-a);
+                    break;
+                case 1:
+                    fh="-";
+                    a=Math.floor(Math.random()*7+11);
+                    b=Math.floor(Math.random()*(9-a+9)+a-9);
+                    break;
+                case 2:
+                    fh="×";
+                    a=Math.floor(Math.random()*9+1);
+                    b=Math.floor(Math.random()*9+1);
+                    break;
+                };
+                text=a+fh+b;draw_text();answer="";draw_answer();
                 break;
-            } 
-        draw_text();answer="";draw_answer();
+            }
     }
     function numbt(num){
-        if (answer.length<2){answer=answer+num};
+        if (answer.length<4){answer=answer+num};
         draw_answer();
     }
     function ok(){
@@ -250,11 +272,11 @@
         if (fh=="×"){ans=a*b};
         if (answer==ans){
             draw_torf("✓");
-            historys.innerHTML+=text+answer+" ✓\n"
+            historys.innerHTML+=text+"="+answer+" ✓\n"
             setTimeout(()=>{start();},600);
         }else{
             draw_torf("×");
-            historys.innerHTML+=text+answer+" ×\n"
+            historys.innerHTML+=text+"="+answer+" ×\n"
             answer="";
             setTimeout(()=>{draw_answer()},600);
         }

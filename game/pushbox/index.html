@@ -77,21 +77,21 @@
 	<script src="./mapdata.js"></script>
 	<script>
 		document.addEventListener('touchmove', function(e) {event.preventDefault();},{ passive: false });
-		var can = document.getElementById("canvas");
 		var msg = document.getElementById("msg");
+		var can = document.getElementById("canvas");
 		var cxt = can.getContext("2d");
 		var curMap;//当前的地图
 		var curLevel;//当前等级的地图
 		var iCurlevel = 0;//关卡数
 		var moveTimes = 0;//移动了多少次
 		var point = [0,0];//小人的初始值
-		var steps=[]//移动记录
-		var timer_solve//定时器
+		var steps=[];//移动记录
+		var timer_solve;//定时器
+		var startX,startY,endX,endY;
 		cxt.translate(1,1);//画布基准位置
 		cxt.lineWidth=3;//线宽
         var n=35,a=n-2;
         initLevel();//初始化对应等级的游戏
-        showMoveInfo();//初始化对应等级的游戏数据
         function drawhui1(i,j){//墙绘制
 			cxt.beginPath();
 			cxt.fillStyle="rgb(100, 100, 100)";
@@ -309,6 +309,20 @@
 				case 90: case 8: back();break;//回退
 			}
 		}
+		can.addEventListener('touchstart', function(e) {
+            var touch = event.touches[0]; // 获取第一个触点
+            startX = touch.pageX;
+            startY = touch.pageY;
+        });//触摸移动小人
+        can.addEventListener('touchend', function(e) {
+            var touch = event.changedTouches[0];
+            var endX = touch.pageX;
+            var endY = touch.pageY;
+			if (Math.abs(endX-startX)>Math.abs(endY-startY)){
+				if (endX-startX>0){ move('right');}else{move('left')}
+			}else{
+				if (endY-startY>0){ move('down');}else{move('up')}}
+        	});
 		function showMoveInfo(){//完善关卡数据及游戏说明
 			msg.innerHTML = "第" + (iCurlevel+1) +"/"+levels.length+"关 移动次数: "+ moveTimes;
 		}
