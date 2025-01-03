@@ -89,7 +89,7 @@
         background: linear-gradient(145deg, #eb6c17, #c16802);
     }
     .ok{
-        margin: 10px 20px 100px 20px;
+        margin: 10px 20px;
         outline: none;
         cursor: pointer;
         width: 80px;
@@ -128,13 +128,13 @@
             <button type="button" onclick="numbt('1')">1</button>
             <button type="button" onclick="numbt('2')">2</button>
             <button type="button" onclick="numbt('3')">3</button>
-            <button type="button" onclick="">></button>
+            <button type="button" onclick="draw_bors('>')">></button>
         </div>
         <div class="bt2"> 
             <button type="button" onclick="numbt('4')">4</button>
             <button type="button" onclick="numbt('5')">5</button>
             <button type="button" onclick="numbt('6')">6</button>
-            <button type="button" onclick=""><</button>
+            <button type="button" onclick="draw_bors('<')"><</button>
         </div>
         <div class="bt2"> 
             <button type="button" onclick="numbt('7')">7</button>
@@ -143,7 +143,7 @@
             <button type="button" onclick="numbt('0')">0</button>
         </div>
         <div >
-            <button type="button" class="bt3" onclick="start()">=</button>
+            <button type="button" class="bt3" onclick="draw_bors('=')">=</button>
             <button type="button" class="ok" onclick="ok()">OK</button>
             <button type="button" class="bt3" onclick="answer=answer.slice(0, -1);draw_answer();">×</button>
         </div>
@@ -158,19 +158,21 @@
     var game = document.getElementById("game");
     var historys = document.getElementById("historys");
     var ctx=game.getContext("2d");
+    ctx.lineWidth=3;//线宽
     var numtitle=0,settitle=0; 
     var numtitles=[["0—10数字","0—20数字","20—50数字","20—100数字"],
-                ["九九乘法表","口口×口","口口口×口","口口×口口"],
-                ["加法进位练习","减法借位练习","九九乘法表"]];
-    var settitles=["加减运算练习","乘法运算练习","专项练习"];
+            ["九九乘法表","AB×C","ABC×D","AB×CD"],
+            ["加法进位练习","减法借位练习","九九乘法表"],
+            ["A/B○C/B","A/B○C/D","AB/CD○EF/CD","AB/CD○EF/GH"]];
+    var settitles=["加减运算练习","乘法运算练习","专项练习","分数比大小"];
     num_title();set_title();
-    var text,a ,b ,c,fh;
+    var text, a, b, c, d, fh;
     var answer="";
     start();
     function num_title(){
         if(numtitle>=numtitles[settitle].length){numtitle=0}
         ctx.font = "15px Arial";
-        ctx.clearRect(0, 0, 110, 20);
+        ctx.clearRect(0, 0, 160, 20);
         ctx.fillText(numtitles[settitle][numtitle], 10, 15);
         start();
     }
@@ -178,95 +180,165 @@
         if(settitle>=settitles.length){settitle=0}
         num_title();
         ctx.font = "15px Arial";
-        ctx.clearRect(150, 0, 300, 20);
-        ctx.fillText(settitles[settitle], 150, 15);
+        ctx.clearRect(160, 0, 320, 20);
+        ctx.fillText(settitles[settitle], 160, 15);
         start();
     }
     function draw_text(){
         ctx.font = "50px Arial";
-        ctx.clearRect(0, 20, 300, 120);
+        ctx.clearRect(0, 20, 320, 120);
         ctx.fillText(text, 20, 65);
         ctx.fillText("=", 80, 115);
     }
+    function draw_score(){
+        ctx.font = "50px Arial";
+        if (a<10){bl=15}else{bl=0}
+        ctx.clearRect(0, 20, 320, 120);
+        ctx.fillText(a, 15+bl, 65);
+        ctx.fillText(b, 15+bl, 115);
+        ctx.fillText(c, 145+bl, 65);
+        ctx.fillText(d, 145+bl, 115);
+        ctx.beginPath();ctx.moveTo(10,72); ctx.lineTo(80,72); ctx.stroke(); 
+        ctx.beginPath(); ctx.moveTo(140,72);ctx.lineTo(210,72); ctx.stroke(); 
+    }
     function draw_answer(){
-        ctx.clearRect(120, 70, 300, 120);
+        ctx.clearRect(120, 70, 320, 120);
         ctx.fillText(answer, 120, 115);
     }
     function draw_torf(torf){
-        ctx.clearRect(260, 70, 300, 120);
+        ctx.clearRect(260, 70, 320, 120);
         ctx.fillText(torf, 260, 115);
     }
     function start(){
+        answer="";
         switch (settitle){
-            case 0:
-                let minnum,maxnum;
-                switch (numtitle){
-                    case 0:minnum=1;maxnum=10;break;
-                    case 1:minnum=1;maxnum=20;break;
-                    case 2:minnum=20;maxnum=50;break;
-                    case 3:minnum=20;maxnum=100;break;
-                };   
-                if (Math.random()<0.5){
-                    fh="+";
-                    a=Math.floor(Math.random()*(maxnum-minnum)+minnum);
-                    b=Math.floor(Math.random()*(maxnum-a));
-                }else{
-                    fh="-";
-                    a=Math.floor(Math.random()*(maxnum-minnum)+minnum);
-                    b=Math.floor(Math.random()*(a-minnum)+minnum);
-                }
-                text=a+fh+b;draw_text();answer="";draw_answer();
-                break;
-            case 1:  
-                fh="×";
-                switch (numtitle){
-                    case 0:
-                        a=Math.floor(Math.random()*9+1);
-                        b=Math.floor(Math.random()*9+1);
-                        break;
-                    case 1:
-                        a=Math.floor(Math.random()*90+10);
-                        b=Math.floor(Math.random()*9+1);
-                        break;
-                    case 2:
-                        a=Math.floor(Math.random()*900+100);
-                        b=Math.floor(Math.random()*9+1);
-                    break;
-                    case 3:
-                        a=Math.floor(Math.random()*90+10);
-                        b=Math.floor(Math.random()*90+10);
-                        break;
-                };  
-                text=a+fh+b;draw_text();answer="";draw_answer();
-                break; 
-            case 2:  
-                switch (numtitle){
-                case 0:     
-                    fh="+";
-                    a=Math.floor(Math.random()*8+2);
-                    b=Math.floor(Math.random()*(9-11+a)+11-a);
-                    break;
-                case 1:
-                    fh="-";
-                    a=Math.floor(Math.random()*7+11);
-                    b=Math.floor(Math.random()*(9-a+9)+a-9);
-                    break;
-                case 2:
-                    fh="×";
-                    a=Math.floor(Math.random()*9+1);
-                    b=Math.floor(Math.random()*9+1);
-                    break;
-                };
-                text=a+fh+b;draw_text();answer="";draw_answer();
-                break;
+        case 0:
+            let minnum,maxnum;
+            switch (numtitle){
+            case 0:minnum=1;maxnum=10;break;
+            case 1:minnum=1;maxnum=20;break;
+            case 2:minnum=20;maxnum=50;break;
+            case 3:minnum=20;maxnum=100;break;
+            };   
+            if (Math.random()<0.5){
+                fh="+";
+                a=Math.floor(Math.random()*(maxnum-minnum)+minnum);
+                b=Math.floor(Math.random()*(maxnum-a));
+            }else{
+                fh="-";
+                a=Math.floor(Math.random()*(maxnum-minnum)+minnum);
+                b=Math.floor(Math.random()*(a-minnum)+minnum);
             }
+            text=a+fh+b;draw_text();draw_answer();
+            break;
+        case 1:  
+            fh="×";
+            switch (numtitle){
+            case 0:
+                a=Math.floor(Math.random()*9+1);
+                b=Math.floor(Math.random()*9+1);
+                break;
+            case 1:
+                a=Math.floor(Math.random()*90+10);
+                b=Math.floor(Math.random()*9+1);
+                break;
+            case 2:
+                a=Math.floor(Math.random()*900+100);
+                b=Math.floor(Math.random()*9+1);
+            break;
+            case 3:
+                a=Math.floor(Math.random()*90+10);
+                b=Math.floor(Math.random()*90+10);
+                break;
+            };  
+            text=a+fh+b;draw_text();draw_answer();
+            break; 
+        case 2:  
+            switch (numtitle){
+            case 0:     
+                fh="+";
+                a=Math.floor(Math.random()*8+2);
+                b=Math.floor(Math.random()*(9-11+a)+11-a);
+                break;
+            case 1:
+                fh="-";
+                a=Math.floor(Math.random()*7+11);
+                b=Math.floor(Math.random()*(9-a+9)+a-9);
+                break;
+            case 2:
+                fh="×";
+                a=Math.floor(Math.random()*9+1);
+                b=Math.floor(Math.random()*9+1);
+                break;
+            };
+            text=a+fh+b;draw_text();draw_answer();
+            break;
+        case 3:
+            fh="/";
+            switch (numtitle){
+            case 0:
+            a=Math.floor(Math.random()*9+1);
+            b=Math.floor(Math.random()*8+2);
+            c=Math.floor(Math.random()*9+1);
+            d=b;
+            draw_score();draw_bors("");
+            break;
+            case 1:
+            a=Math.floor(Math.random()*9+1);
+            b=Math.floor(Math.random()*8+2);
+            c=Math.floor(Math.random()*9+1);
+            d=Math.floor(Math.random()*8+2);
+            while(b==d){d=Math.floor(Math.random()*8+2);}
+            draw_score();draw_bors("");
+            break;
+            case 2:
+            a=Math.floor(Math.random()*90+10);
+            b=Math.floor(Math.random()*89+11);
+            c=Math.floor(Math.random()*90+10);
+            d=b;
+            draw_score();draw_bors("");
+            break;
+            case 3:
+            a=Math.floor(Math.random()*90+10);
+            b=Math.floor(Math.random()*89+11);
+            c=Math.floor(Math.random()*90+10);
+            d=Math.floor(Math.random()*89+11);
+            while(b==d){d=Math.floor(Math.random()*89+11);}
+            draw_score();draw_bors("");
+            break;
+            }
+        }
+    }
+    function draw_bors(bors){
+        if (settitle!=3){return}
+        ctx.font = "50px Arial";
+        ctx.clearRect(80, 20,60, 120);
+        ctx.clearRect(260, 20, 320, 120);
+        ctx.beginPath();
+        ctx.arc(110,70,20, 0, 2 * Math.PI, true);answer=bors;
+        ctx.stroke(); 
+        ctx.fillText(bors, 95,88);
     }
     function numbt(num){
+        if (settitle==3){return}
         if (answer.length<4){answer=answer+num};
         draw_answer();
     }
     function ok(){
         if (answer=="") {return};
+        if (fh=="/"){
+            if (a/b>c/d && answer==">" || a/b<c/d && answer=="<"|| a/b==c/d && answer=="="){
+                draw_torf("✓");
+                historys.innerHTML+=a+"/"+b+answer+b+"/"+c+" ✓\n";
+                setTimeout(()=>{start();return},600);
+            }else{
+                draw_torf("×");
+                historys.innerHTML+=a+"/"+b+answer+b+"/"+c+" ×\n";
+                answer="";
+                setTimeout(()=>{draw_bors("");return},600);
+            }return;
+        }
+        var ans;
         if (fh=="+"){ans=a+b};
         if (fh=="-"){ans=a-b};
         if (fh=="×"){ans=a*b};
@@ -292,6 +364,7 @@
         board.style.display="";
         board.width=window.innerWidth;
         board.height=window.innerHeight*0.8;
+        canva_board.lineWidth=2;//线宽
         var startX;
         var startY;
         board.addEventListener('touchstart', function(e) {
