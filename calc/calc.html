@@ -201,18 +201,14 @@
         ctx.beginPath(); ctx.moveTo(140,72);ctx.lineTo(210,72); ctx.stroke(); 
     }
     function draw_answer(){
-        ctx.clearRect(10, 70, 100, 120);
-        ctx.clearRect(120, 70, 320, 120);
+        ctx.clearRect(250, 20, 320, 120);
+        ctx.clearRect(0, 70, 320, 120);
         ctx.fillText(answer, 120, 115);
     }
     function draw_torf(torf){
         ctx.clearRect(250, 20, 320, 120);
         ctx.fillText(torf, 270, 115);
-        if (settitle==3){
-            if (torf=="✓"){smile(265,28,40);}else{sad(265,28,40);}
-            return}
-        ctx.clearRect(10, 70, 100, 120);
-        if (torf=="✓"){smile(30,78,40);}else{sad(30,78,40);}
+        if (torf=="✓"){smile(265,28,40);}else{sad(265,28,40);}
     }
     function smile(j,i,a){//笑脸绘制
         ctx.beginPath();
