@@ -360,11 +360,11 @@
         if (fh=="/"){
             if (a/b>c/d && answer==">" || a/b<c/d && answer=="<"|| a/b==c/d && answer=="="){
                 draw_torf("✓");
-                historys.innerHTML+=a+"/"+b+answer+b+"/"+c+" ✓\n";
+                historys.innerHTML+=a+"/"+b+answer+c+"/"+d+" ✓\n";
                 setTimeout(()=>{start();},600);
             }else{
                 draw_torf("×");
-                historys.innerHTML+=a+"/"+b+answer+b+"/"+c+" ×\n";
+                historys.innerHTML+=a+"/"+b+answer+c+"/"+d+" ×\n";
                 answer="";
                 setTimeout(()=>{draw_bors("");},600);
             }return;
