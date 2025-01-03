@@ -187,8 +187,7 @@
     function draw_text(){
         ctx.font = "50px Arial";
         ctx.clearRect(0, 20, 320, 120);
-        ctx.fillText(text, 20, 65);
-        ctx.fillText("=", 80, 115);
+        ctx.fillText(text+"=", 20, 65);
     }
     function draw_score(){
         ctx.font = "50px Arial";
@@ -202,12 +201,48 @@
         ctx.beginPath(); ctx.moveTo(140,72);ctx.lineTo(210,72); ctx.stroke(); 
     }
     function draw_answer(){
+        ctx.clearRect(10, 70, 100, 120);
         ctx.clearRect(120, 70, 320, 120);
         ctx.fillText(answer, 120, 115);
     }
     function draw_torf(torf){
-        ctx.clearRect(260, 70, 320, 120);
-        ctx.fillText(torf, 260, 115);
+        ctx.clearRect(250, 20, 320, 120);
+        ctx.fillText(torf, 270, 115);
+        if (settitle==3){
+            if (torf=="✓"){smile(265,28,40);}else{sad(265,28,40);}
+            return}
+        ctx.clearRect(10, 70, 100, 120);
+        if (torf=="✓"){smile(30,78,40);}else{sad(30,78,40);}
+    }
+    function smile(j,i,a){//笑脸绘制
+        ctx.beginPath();
+        ctx.strokeStyle = "rgb(0, 0, 0)";
+        ctx.fillStyle = 'rgb(0, 0, 0)';
+        ctx.arc(j+ a/2,i+ a/2, a/2, 0, 2 * Math.PI, true);
+        ctx.stroke();  
+        ctx.beginPath();
+        ctx.arc(j+ a/2,i+ a/2, a/4, 0,Math.PI, false);
+        ctx.stroke(); 
+        ctx.beginPath(); 
+        ctx.arc(j+ a/3,i+ a/3, a/8, 0, 2 * Math.PI, false);
+        ctx.fill();
+        ctx.arc(j+ 2*a/3,i+ a/3, a/8, 0, 2 * Math.PI, false);
+        ctx.fill();
+    }
+    function sad(j,i,a){//苦脸绘制
+        ctx.beginPath();
+        ctx.strokeStyle = "rgb(0, 0, 0)";
+        ctx.fillStyle = 'rgb(0, 0, 0)';
+        ctx.arc(j+ a/2,i+ a/2, a/2, 0, 2 * Math.PI, true);
+        ctx.stroke();  
+        ctx.beginPath();
+        ctx.arc(j+ a/2,i+ a*4/5, a/4, Math.PI,0, false);
+        ctx.stroke(); 
+        ctx.beginPath(); 
+        ctx.arc(j+ a/3,i+ a/3, a/8, 0, 2 * Math.PI, false);
+        ctx.fill();
+        ctx.arc(j+ 2*a/3,i+ a/3, a/8, 0, 2 * Math.PI, false);
+        ctx.fill();
     }
     function start(){
         answer="";
@@ -330,12 +365,12 @@
             if (a/b>c/d && answer==">" || a/b<c/d && answer=="<"|| a/b==c/d && answer=="="){
                 draw_torf("✓");
                 historys.innerHTML+=a+"/"+b+answer+b+"/"+c+" ✓\n";
-                setTimeout(()=>{start();return},600);
+                setTimeout(()=>{start();},600);
             }else{
                 draw_torf("×");
                 historys.innerHTML+=a+"/"+b+answer+b+"/"+c+" ×\n";
                 answer="";
-                setTimeout(()=>{draw_bors("");return},600);
+                setTimeout(()=>{draw_bors("");},600);
             }return;
         }
         var ans;
