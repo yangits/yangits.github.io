@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>不懂就搜，一搜就懂</title>
+    <link rel="shortcut icon" href="./favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        user-select: none;
+      }
+      body, ul, li, h1, h2, h3, h4, h5, h6, p, form, dl, dt, dd {
+          margin: 0px;
+          padding: 0px;
+          font-size: 14px;
+          font-weight: normal;
+      }
+      img {
+          border-style: none;
+      }
+      li {
+          list-style: none;
+      }
+      a {
+          text-decoration: none
+      }
+      html, body {
+          background: #fff;
+          height: 100%;
+
+      }
+      .inner-center {
+          width: 900px;
+          margin: 0 auto;
+      
+      }
+      /* 搜索框 start */
+      .search-section {
+          position: relative;
+          display: flex;
+          margin-top: 20px;
+          margin-bottom: 20px;
+      }
+      .search-left {
+          border-top-left-radius: 12px;
+          border-bottom-left-radius: 12px;
+          display: flex;
+          width: 837px;
+          height: 54px;
+          line-height: 20px;
+          border: 1px solid rgba(217, 217, 217, 0.96);
+      }
+      .search-logo {
+          width: 50px;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          line-height: 52px;
+          color: #1890FF;
+          font-weight: 900;
+          cursor: pointer;
+      }
+      .input-wrap {
+          position: relative;
+          flex: 1;
+      }
+      .search-input {
+          height: 52px;
+          width: 100%;
+          outline: 0;
+          border: 0;
+          font-size: 16px;
+          padding-left: 15px;
+      }
+      .clear-keyword {
+          border-radius: 27px;
+          position: absolute;
+          top: 50%;
+          right: 10px;
+          transform: translateY(-50%);
+          cursor: pointer;
+          color: #d2d2d2;
+          font-size: 30px;
+      }
+      .search-botton {
+          min-width: 80px;
+          height: 54px;
+          line-height: 54px;
+          color: #fff;
+          font-size: 18px;
+          font-weight: 500;
+          text-align: center;
+          border-top-right-radius: 12px;
+          border-bottom-right-radius: 12px;
+          background: linear-gradient(90deg,#1890FF,#455bfb);
+      }
+      .jj-list {
+          width: 33.3%;
+          float: left;
+          margin-bottom: 10px;
+          padding-right: 16px;
+      }
+      .jj-list-tit {
+          font-size: 16px;
+          line-height: 25px;
+          color: rgba(49, 70, 89, 1);
+          font-weight: bold;
+      }
+      .jj-list-con {
+          overflow: hidden;
+          margin: 0 auto;
+      }
+      .jj-list-con li {
+          box-sizing: border-box; /*以IE盒子模型的width为标准*/
+          padding: 1px 1px; /*设置div的内边距*/
+          width: 33.3%; /*div等分成4部分*/
+          float: left;
+          transform-origin: center top;
+      }
+      .jj-list-con a {
+          display: block;
+          background: rgba(230, 247, 255, 0.96);
+          color:rgba(49, 70, 89, 1);
+          font-size: 13px;
+          text-align: center;
+          line-height: 44px;
+          transition: all 0.2s;
+          border-radius: 5px;
+      }
+      .jj-list-con a:hover {
+          background: #1890FF 100%;
+          font-size: 18px;
+          font-weight: bold;
+          color: #fff;
+      }
+
+      @media only screen and (min-width: 0px) {
+        .jj-list {width: 100%;}
+        .inner-center {max-width: 350px;}
+        .jj-list:nth-of-type(n) {padding-right: 0;}
+      }
+      @media only screen and (min-width: 650px) {
+        .jj-list {width: 50%;}
+        .inner-center {max-width: 600px;}
+        .jj-list:nth-of-type(n) {padding-right: 16px;}
+        .jj-list:nth-of-type(2n) {padding-right: 0;}
+      } 
+      @media only screen and (min-width: 950px) {
+        .jj-list {width: 33.3%;}
+        .inner-center {max-width: 900px;}
+        .jj-list:nth-of-type(2n) {padding-right: 16px;}
+        .jj-list:nth-of-type(3n) {padding-right: 0;}
+      }
+    </style>
+</head>
+<body>
+<div class="inner-center">
+  <div class="search-section">
+    <div class="search-left">
+      <div class="search-logo" id="search_logo" onclick="change_href()">Baidu</div>
+      <div class="input-wrap">
+        <input class="search-input" id="search_input" type="text" placeholder="网页搜索" onkeyup="change_input(event);">
+        <div class="clear-keyword" id="clear_keyword" style="display: none;" onclick="clear_input()">×</div>
+      </div>
+    </div>
+    <a href="https://www.baidu.com/s?wd=" class="search-botton" id="search_botton"  target="_blank">搜一下</a>
+  </div>
+  <div>
+    <div class="jj-list">
+      <div class="jj-list-tit">AI引擎</div>
+      <ul class="jj-list-con">
+        <li><a href="https://www.doubao.com/chat/" target="_blank">豆包AI</a></li>
+        <li><a href="https://zhida.zhihu.com/" target="_blank">知乎直答</a></li>
+        <li><a href="https://yiyan.baidu.com/" target="_blank">文心一言</a></li>
+        <li><a href="https://xinghuo.xfyun.cn/" target="_blank">讯飞星火</a></li>
+        <li><a href="https://aishenqi.net/" target="_blank">AI神器</a></li>
+        <li><a href="https://tongyi.aliyun.com/" target="_blank">通义千问</a></li>
+        <li><a href="https://hailuoai.com/" target="_blank">海螺AI</a></li>
+        <li><a href="https://metaso.cn/" target="_blank">秘塔AI</a></li>
+        <li><a href="https://iflow.cn/" target="_blank">心流AI</a></li>
+      </ul>
+    </div>
+    <div class="jj-list">
+      <div class="jj-list-tit">社区论坛</div>
+      <ul class="jj-list-con">
+        <li><a href="https://www.zhihu.com/" target="_blank">知乎</a></li>
+        <li><a href="https://www.right.com.cn/" target="_blank">恩山论坛</a></li>
+        <li><a href="http://www.mjtd.com/" target="_blank">明经CAD</a></li>
+        <li><a href="https://tieba.baidu.com/" target="_blank">贴吧</a></li>
+        <li><a href="https://www.mh160.cc/" target="_blank">漫画</a></li>
+        <li><a href="http://tw.frp.one:32500/" target="_blank">服务器</a></li>
+        <li><a href="https://pypi.tuna.tsinghua.edu.cn/simple/" target="_blank">清华镜像源</a></li>
+        <li><a href="https://www.ip138.com/" target="_blank">iP查询</a></li>
+        <li><a href="https://panel.chmlfrp.cn/" target="_blank">Chmlfrp</a></li>
+      </ul>
+    </div>
+    <div class="jj-list">
+      <div class="jj-list-tit">视频网站</div>
+      <ul class="jj-list-con">
+        <li><a href="https://www.zxzjhd.com//" target="_blank">在线之家</a></li>
+        <li><a href="https://www.fantuantvb1.com/" target="_blank">饭团影院</a></li>
+        <li><a href="https://subaibai.com/" target="_blank">素白白</a></li>
+        <li><a href="https://www.czzyvideo.com/" target="_blank">厂长资源</a></li>
+        <li><a href="https://www.ffys.fun/" target="_blank">飞飞影视</a></li>
+        <li><a href="https://libvio.me/" target="_blank">libvio</a></li>
+        <li><a href="https://www.jjduanju.com/" target="_blank">吉吉短剧</a></li>
+        <li><a href="https://dmxqtv.net/" target="_blank">大米星球</a></li> 
+        <li><a href="https://dylstv.com/" target="_blank">火车太堵</a></li> 
+      </ul>
+    </div>
+    <div class="jj-list">
+      <div class="jj-list-tit">个人爱好</div>
+      <ul class="jj-list-con">
+        <li><a href="https://github.com/" target="_blank">Github</a></li>
+        <li><a href="https://gitee.com/" target="_blank">Gitee</a></li>
+        <li><a href="https://maxiaobang.lanzouf.com/b06o6ta6h" target="_blank">FastGithub</a></li>	
+        <li><a href="./calc/love.html" target="_blank">爱心</a></li>
+        <li><a href="./tool/books.html" target="_blank">答案之书</a></li>
+        <li><a href="./calc/calc.html" target="_blank">口算练习机</a></li>
+        <li><a href="./game/fcnes/index.html" target="_blank">FC游戏</a></li>
+        <li><a href="./game/wzw/index.html" target="_blank">掌机</a></li>
+        <li><a href="./game/pushbox/index.html" target="_blank">推箱子</a></li>
+      </ul>
+    </div>
+    <div class="jj-list">
+      <div class="jj-list-tit">工具大全</div>
+      <ul class="jj-list-con">
+        <li><a href="https://easychuan.cn/" target="_blank">轻松传</a></li>
+        <li><a href="./tool/shuiyin.html" target="_blank">照片加水印</a></li>
+        <li><a href="https://greasyfork.org/zh-CN/scripts" target="_blank">油猴脚本</a></li>
+        <li><a href="./tool/index.html" target="_blank">查询工具</a></li>
+        <li><a href="https://tool.lu/" target="_blank">程序员工具</a></li>
+        <li><a href="./img/index.html" target="_blank">个人用图</a></li>
+        <li><a href="./calc/index.html" target="_blank">排管计算</a></li>
+        <li><a href="./calc/metal.html" target="_blank">金属计算器</a></li>
+        <li><a href="https://tiku.baidu.com/buguakewap/browse" target="_blank">题库查询</a></li>
+      </ul>
+    </div>
+    <div class="jj-list">
+      <div class="jj-list-tit">其他链接</div>
+      <ul class="jj-list-con">
+        <li><a href="https://www.zxx.edu.cn/" target="_blank">教育平台</a></li>
+        <li><a href="https://siwsfw.hrss.henan.gov.cn/" target="_blank">河南社保</a></li>
+        <li><a href="https://m12333.cn/" target="_blank">人社通</a></li>
+        <li><a href="https://www.ok99ok99.com/" target="_blank">学达云</a></li>
+        <li><a href="https://www.hnzwfw.gov.cn/" target="_blank">豫事办</a></li>
+        <li><a href="https://www.chsi.com.cn/" target="_blank">学信网</a></li>
+        <li><a href="./henanruimu/index.html" target="_blank">河南瑞牧</a></li>
+        <li><a href="https://www.1ppt.com/" target="_blank">PPT模板</a></li>
+        <li><a href="https://www.123pan.com/s/A6cA-04AJh" target="_blank">CAD下载</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<script>
+  var search_botton = document.getElementById('search_botton');
+  var search_input = document.getElementById('search_input');
+  var search_logo = document.getElementById('search_logo');
+  var clear_keyword = document.getElementById('clear_keyword');
+  var search_href="https://www.baidu.com/s?wd=";
+  function change_input(event){
+    search_botton.href=search_href+encodeURIComponent(search_input.value);
+    if(search_input.value!=""){
+      clear_keyword.style.display="";
+    }else{clear_keyword.style.display="none";};
+    if (event.keyCode==13){search_botton.click();};
+  }
+  function clear_input(){
+    search_botton.href=search_href;
+    search_input.value="";
+    clear_keyword.style.display="none";
+  }
+  function change_href(){
+    if (search_logo.innerHTML=='Bing'){
+      search_logo.innerHTML='Baidu';search_href="https://www.baidu.com/s?wd=";
+      search_botton.href=search_href+encodeURIComponent(search_input.value);
+    }else{
+      search_logo.innerHTML='Bing';search_href="https://cn.bing.com/search?q=";
+      search_botton.href=search_href+encodeURIComponent(search_input.value);
+    };
+  }
+</script>
+</body>
+</html>
