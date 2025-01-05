@@ -7,12 +7,26 @@
     <title> 答案之书 </title>
 </head>
 <style>
+    body{
+        background-color: black;
+    }
+    *{
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        margin:0px;
+        padding:0px;
+    }
     .page {
         max-width: 360px;
         text-align: center;
         margin: auto;
     }
     span{
+        color: rgb(255, 255, 255);
         position: fixed; /* 设置为fixed使其保持在页面上 */
         z-index: 1;
         left: 0;
@@ -22,39 +36,43 @@
         margin: auto;
         word-wrap: break-word;
         word-break: break-all;
+        text-shadow: 10px 10px 10px #ff0000;
     }
     #txtpage{
-        top: 180px;
+        top: 210px;
         width: 150px;
-        text-shadow: 2px 2px 5px #ffaaaa;
     }
     #txthometop{
-        top: 70px;
+        top: 100px;
         max-width: 260px;
     }
     #txthome{
-        top: 120px;
+        top: 150px;
         max-width: 230px;
         font-size: 11px;
         text-align: left;
     }
-    img{
-        width: 100%;
-        height: 100%;
+    canvas {
+        max-width: 360px;
+        display: block; 
+        margin: auto;
+        left: 0%;right: 0%;
+        position: absolute;
+        top: 30px;
     }
 </style>
 <body>
-    <div class="page" id="home" onclick="answer()">
-        <img src="./books.jpg" title="点击寻找答案" >
+    <canvas id="c" onclick="if(page){answer();page=false;}else{re();page=true;}"></canvas>
+    <div class="page" id="home" onclick="answer();page=false;">
         <span id="txthometop">《答案之书》使用说明</span>
         <span id="txthome"></span>
     </div>    
-    <div class="page" id="answer" style="display: none;"  onclick="re()">
-        <img id="img" src="./books.jpg"title="点击返回">
+    <div class="page" id="answer" style="display: none;" onclick="re();page=true;">
         <span id="txtpage"></span>
     </div>
     <script>
-         document.getElementById('txthome').innerText='1、把书放在桌上，闭上眼睛。\n\n 2、用5至10秒钟的时间集中思考你的问题。例如：“他喜欢我吗？”或“我需要换个工作吗”。\n\n 3、再想象或说出你的问题（每次只能有一个问题）。\n\n 4、在你感觉时间正确的时候，点击图片，你要寻找的答案就在那里。\n\n 5、遇到任何问题，你都可以打开它，找到你的人生解答。'
+        var page=true; 
+        document.getElementById('txthome').innerText='1、把书放在桌上，闭上眼睛。\n\n 2、用5至10秒钟的时间集中思考你的问题。例如：“他喜欢我吗？”或“我需要换个工作吗”。\n\n 3、再想象或说出你的问题（每次只能有一个问题）。\n\n 4、在你感觉时间正确的时候，点击图片，你要寻找的答案就在那里。\n\n 5、遇到任何问题，你都可以打开它，找到你的人生解答。'
         function answer(){
             var num=Math.floor(Math.random()*412);
             var lines = ["别难过，你是最棒的","时间会证明一切","需要一个相当大的努力","一年也没有关系","开始改变你的日常习惯","遇上方知有","采用一个冒险的态度","允许你先休息一下","好运将会降临","避免第一个解决方案","寻求援助会让你成功","需要耐心","实际一点吧","合作将会是关键","考虑一下这个机会","早点去做","无需多问，尽力去做","别让压力打乱你的节奏","也许会有好转","是时候做新的打算了","不用怀疑了","不要陷入你的感情","不要犹豫","别浪费时间了","先完成其他事情","专注你眼下的生活","遵循别人的引导","遵循专家的建议","按照你的意愿","坚持终有回报","然后做好它!","这不可能失败","也许是一段奇妙的旅程","这是你不会忘记的","这肯定会让事情变得有趣","这是不确定的","木已成舟","这可能很难，但你会发现它的价值","这将影响别人对你的看法","这将是一种享受","这会带来好运","前路仍不可预测","这是不明智的","它会让你付出代价","现在就是绝佳的时机","不值得反抗","是你走的时候","保持开放的心态","不要让别人知道","笑一下","请摆脱当前束缚","让它过去吧","为什么不列出原因","也许","一直走下去","你不会一个人","只做一次","注重细节","为突发事件做好准备","重新考虑你的方法","得真正地努力一下",
@@ -76,5 +94,128 @@
         }
 
     </script>
+    <script>
+        var c = document.getElementById('c'),
+            ctx = c.getContext('2d'),
+            cw = c.width = 360,
+            ch = c.height = 450,
+            parts = [],
+            partCount = 200,   
+            partsFull = false,    
+            hueRange = 50,
+            globalTick = 0,
+            rand = function(min, max){
+                return Math.floor( (Math.random() * (max - min + 1) ) + min);
+            };
+        
+        var Part = function(){
+          this.reset();
+        };
+        
+        Part.prototype.reset = function(){
+          this.startRadius = rand(1, 25);
+          this.radius = this.startRadius;
+          this.x = cw/2 + (rand(0, 6) - 3);
+          this.y = 250;      
+          this.vx = 0;
+          this.vy = 0;
+          this.hue = rand(globalTick - hueRange, globalTick + hueRange);
+          this.saturation = rand(50, 100);
+          this.lightness = rand(20, 70);
+          this.startAlpha = rand(1, 10) / 100;
+          this.alpha = this.startAlpha;
+          this.decayRate = .1;  
+          this.startLife = 7;
+          this.life = this.startLife;
+          this.lineWidth = rand(1, 3);
+        }
+            
+        Part.prototype.update = function(){  
+          this.vx += (rand(0, 200) - 100) / 1500;
+          this.vy -= this.life/50;  
+          this.x += this.vx;
+          this.y += this.vy;  
+          this.alpha = this.startAlpha * (this.life / this.startLife);
+          this.radius = this.startRadius * (this.life / this.startLife);
+          this.life -= this.decayRate;  
+          if(
+            this.x > cw + this.radius || 
+            this.x < -this.radius ||
+            this.y > ch + this.radius ||
+            this.y < -this.radius ||
+            this.life <= this.decayRate
+          ){
+            this.reset();  
+          }  
+        };
+          
+        Part.prototype.render = function(){
+          ctx.beginPath();
+          ctx.arc(this.x+150, this.y-150, this.radius, 0, Math.PI * 2, false);
+          ctx.fillStyle = ctx.strokeStyle = 'hsla('+this.hue+', '+this.saturation+'%, '+this.lightness+'%, '+this.alpha+')';
+          ctx.lineWidth = this.lineWidth;
+          ctx.fill();
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.arc(this.x-150, this.y-150, this.radius, 0, Math.PI * 2, false);
+          ctx.fillStyle = ctx.strokeStyle = 'hsla('+this.hue+', '+this.saturation+'%, '+this.lightness+'%, '+this.alpha+')';
+          ctx.lineWidth = this.lineWidth;
+          ctx.fill();
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.arc(this.x+150, this.y+150, this.radius, 0, Math.PI * 2, false);
+          ctx.fillStyle = ctx.strokeStyle = 'hsla('+this.hue+', '+this.saturation+'%, '+this.lightness+'%, '+this.alpha+')';
+          ctx.lineWidth = this.lineWidth;
+          ctx.fill();
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.arc(this.x-150, this.y+150, this.radius, 0, Math.PI * 2, false);
+          ctx.fillStyle = ctx.strokeStyle = 'hsla('+this.hue+', '+this.saturation+'%, '+this.lightness+'%, '+this.alpha+')';
+          ctx.lineWidth = this.lineWidth;
+          ctx.fill();
+          ctx.stroke();
+        };
+        
+        var createParts = function(){
+          if(!partsFull){
+            if(parts.length > partCount){
+              partsFull = true;
+            } else {
+              parts.push(new Part()); 
+            }
+          }
+        };
+          
+        var updateParts = function(){
+          var i = parts.length;
+          while(i--){
+            parts[i].update();
+          }
+        };
+        
+        var renderParts = function(){
+          var i = parts.length;
+          while(i--){
+            parts[i].render();
+          }   
+        };
+            
+        var clear = function(){
+          ctx.globalCompositeOperation = 'destination-out';
+          ctx.fillStyle = 'hsla(0, 0%, 0%, .3)';
+          ctx.fillRect(0, 0, cw, ch);
+          ctx.globalCompositeOperation = 'lighter';
+        };   
+        var loop = function(){
+          window.requestAnimFrame(loop, c);
+          clear();
+          createParts();
+          updateParts();
+          renderParts();
+          globalTick++;
+        };
+        window.requestAnimFrame=function(){return window.requestAnimationFrame||window.webkitRequestAnimationFrame||window.mozRequestAnimationFrame||window.oRequestAnimationFrame||window.msRequestAnimationFrame||function(a){window.setTimeout(a,1E3/60)}}();
+        loop();
+        </script>
 </body>
 </html>
