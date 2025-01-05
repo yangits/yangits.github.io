@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>查询工具</title>
+</head>
+<style>
+  div{
+      font-size: 16px;
+      background-color: rgb(206, 203, 203);
+      max-width: 400px;
+      text-align: center;
+      margin: 10px auto;
+  }
+  button{
+      width: 200px;
+      height: 25px;
+  }
+  textarea{
+      width: 90%;
+      resize: none;
+      margin: 5px;
+      background-color: rgb(255, 255, 255);
+  }
+  p{
+        text-align: center;
+        font-size: 10px;
+        line-height: 10px;
+    }
+</style>
+<body>
+  <div>
+    选择接口：
+    <select id="selects" onchange="selects_change();">
+        <option selected>星火模型Lite</option>
+        <option>百度题库</option>
+    </select>
+    <textarea id="text_input" cols="50" rows="5" placeholder="输入关键词"></textarea>
+    <button type="button" id="get_result">获取结果</button>
+    <textarea id="text_result" cols="50" rows="25" disabled> </textarea>
+  </div>
+  <script>
+    document.getElementById('get_result').onclick= function(){
+      var area_input=document.getElementById('text_input');
+      var area_result=document.getElementById('text_result');
+      var selects = document.getElementById('selects').value;
+      var str=area_input.value;
+      if(str==""){alert("关键词不能为空")}
+      else{
+        if (selects=="星火模型Lite"){
+          var url='https://api.pearktrue.cn/api/xfai/?message='+str;
+          const Http = new XMLHttpRequest();
+          Http.open("GET", url);
+          Http.send();
+          area_result.innerHTML="请稍后......"
+          Http.onreadystatechange = (e) => {
+            var http_json=JSON.parse(Http.responseText)
+            if (http_json.msg=="获取成功"){
+              area_result.innerHTML=http_json.answer
+            }
+            else{area_result.innerHTML="获取失败"
+            }
+          }
+        }else{
+          var url='https://api.pearktrue.cn/api/baidutiku/?question='+str;
+          const Http = new XMLHttpRequest();
+          Http.open("GET", url);
+          Http.send();
+          area_result.innerHTML=str
+          area_result.innerHTML="请稍后......"
+          Http.onreadystatechange = (e) => {
+            var http_json=JSON.parse(Http.responseText)
+            if (http_json.msg=="查询成功"){
+              var text="题目: "+http_json.data.question+"\n\n"
+              text=text+"选择: "+http_json.data.options+"\n\n"
+              text=text+"答案: "+http_json.data.answer
+              area_result.innerHTML=text
+            }
+            else{area_result.innerHTML="查询失败"
+            }
+          }
+        }
+      }}
+  </script>
+</body>
+</html>

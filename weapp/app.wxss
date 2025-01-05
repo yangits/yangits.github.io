@@ -1,0 +1,14 @@
+page {
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.f_center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+

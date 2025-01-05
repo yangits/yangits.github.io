@@ -1,0 +1,190 @@
+
+.level {
+  height: 80rpx;
+  line-height: 80rpx;
+  width: 100%;
+  margin-bottom: 35rpx;
+}
+.level .buttons {
+  display: flex;
+  margin: 20rpx 0;
+}
+.level .buttons button {
+  border: 4rpx solid #0066ff;
+  background: #0066ff;
+  color: #fff;
+  line-height: 60rpx;
+  font-size: 36rpx;
+}
+.level .buttons button.active {
+  background: #fff;
+  border: 4rpx solid #0066ff;
+  color: #0066ff;
+  
+}
+
+.import {
+  width: 80%;
+  display: flex;
+  margin: 0 38rpx 20rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  justify-content: space-between;
+}
+.import view {
+  display: inline-block;
+  vertical-align: text-bottom
+}
+.import view > view {
+  background: #0066ff;
+  border-radius: 10rpx;
+  margin-right: 20rpx;
+  height: 80rpx;
+}
+.import view > view:first-child {
+  color: #fff;
+  font-size: 34rpx;
+  text-align: center;
+  padding: 0rpx 16rpx;
+}
+.import view > view text {
+  color: #000;
+  font-size: 36rpx;
+}
+.import view > image {
+  height: 32rpx;
+  width: 32rpx;
+  padding: 0rpx 16rpx;
+  /* margin-top: 20rpx; */
+}
+.import view > button {
+  background: #5f41b3;
+  color: #fff;
+  text-align: center;
+  padding: 0rpx  20rpx;
+  height: 80rpx;
+  margin-left: 60rpx;
+  font-size: 34rpx;
+}
+.import > view:last-child {
+  flex: 1;
+  justify-content: flex-end;
+  display: flex;
+}
+.import view:last-child view {
+  background: transparent;
+  margin-right: 0;
+}
+.import view:last-child view {
+  display: flex;
+  margin-right: 20rpx;
+}
+.import view:last-child view image{
+  height: 50rpx;
+  width: 50rpx;
+  margin-top: 16rpx;
+}
+
+.contain .row > text{
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+  width: 72rpx;
+  height: 72rpx;
+  line-height: 72rpx;
+  border: 2rpx solid #0066ff;
+  border-right-width: 0;
+  border-bottom-width: 0;
+  color: forestgreen;
+  font-weight: bolder;
+  font-size: 42rpx;
+}
+.contain .row > text:first-child {
+  border-left-width: 6rpx;
+}
+.contain .row > text:last-child {
+  border-right-width: 6rpx;
+}
+.contain .row > text.col_g_right {
+  border-right-width: 6rpx;
+}
+.contain .row > text:last-child.col_g_right {
+  border-right-width: 6rpx;
+}
+.contain .row > text.tips {
+  color: rgb(212, 84, 84);
+  font-weight: bolder;
+}
+.contain .row.selectRow {
+  background: linear-gradient(to bottom, #73FF96 0%, #fff 20%, #fff 80%, #73FF96 100%);
+}
+.contain .row > text.selectCell {
+  background: linear-gradient(to right, #73FF96 0%, #fff 20%, #fff 80%, #73FF96 100%);
+}
+.contain .row > text.markText {
+  background: #ffce9c;
+}
+.contain .row > text.mark2 {
+  background: lightblue;
+}
+.contain .row > text.mark1 {
+  background: lightpink;
+}
+.contain .row > text.fill {
+  color: forestgreen;
+}
+.contain .row > text.error {
+  background: yellow;
+}
+.contain .row > text.empty {
+  color: transparent;
+}
+
+.contain .row.row_g_bottom > text{
+  border-bottom-width: 6rpx;
+}
+.contain .row:first-child > text {
+  border-top-width: 6rpx;
+}
+.contain .row:last-child > text {
+  border-bottom-width: 6rpx;
+}
+.dashboard {
+  width: 86%;
+  border-radius: 20rpx;
+  border: 2rpx solid #ffa042;
+  padding: 10rpx 10rpx;
+  margin: 20rpx 36rpx;
+}
+.dashboard .buttons {
+   display: flex;
+   justify-content: space-between;
+}
+.dashboard .buttons > button {
+  border: none;
+  display: inline-block;
+  background: #0066ff;
+  color: #fff;
+  text-align: center;
+  padding: 0 8rpx;
+  margin: 10rpx 8rpx;
+  height: 68rpx;
+  width: 68rpx;
+  line-height: 68rpx;
+  font-weight: bold;
+  font-size: 38rpx;
+}
+.dashboard .buttons > button image{
+  margin-top: 8rpx;
+  height: 50rpx;
+  width: 50rpx;
+}
+.dashboard .buttons > button#back image{
+  transform: rotateY(180deg);
+}
+.buttons > button::after {
+  border: none;
+}
+.dashboard .buttons .null {
+  background: transparent;
+}

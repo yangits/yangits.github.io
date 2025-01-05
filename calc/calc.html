@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <title>口算练习机</title>
+</head>
+ <style>
+    *{
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        margin:0px;
+        padding:0px;
+    }
+    body {
+        max-width: 400px;
+        background: #019CD6;
+        user-select: none;
+        overflow: hidden;
+        text-align: center;
+        margin: auto;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .top{
+
+        position: fixed; /* 设置为fixed使其保持在页面上 */
+        z-index: 1;
+        width: 100%; /* 宽度 */
+        height: 100%; /* 高度 */
+        margin: auto;
+        top: 0;left: 0;
+        padding: 0px;
+    }
+    textarea{
+        color: #000;
+        height: 75%;
+        line-height: 38px;
+        text-align: left;
+        width: 100%;
+        background: #019CD6;
+        font-size: 38px;
+    }
+    .game{
+        width:85%;
+        margin: 10px auto;
+        border-radius: 15px;
+        border: 10px inset;
+        border-color: #23a4d3 #4dbde3 #59c6e8 #019CD6;
+        overflow: hidden;
+        background-color: #9facaa;
+    }
+    .game canvas{
+        border-radius: 5px;
+        background-color: #9facaa;
+        width:100%;
+    }
+    .bt1 button{
+        margin: 15px 10px;
+        outline: none;
+        cursor: pointer;
+        width: 16%;
+        height: 50px;
+        border-radius: 5px;
+        font-size: 20px;
+        background: linear-gradient(145deg, #eb6c17, #c16802);
+    }
+    .bt2 button{
+        margin: 15px 10px;
+        outline: none;
+        cursor: pointer;
+        width: 16%;
+        height: 60px;
+        border-radius: 50%;
+    }   
+     .bt3{
+        margin: 15px 10px;
+        outline: none;
+        cursor: pointer;
+        width: 20%;
+        height: 50px;
+        border-radius: 5px;
+        background: linear-gradient(145deg, #eb6c17, #c16802);
+    }
+    .ok{
+        margin: 10px 20px;
+        outline: none;
+        cursor: pointer;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(145deg, #eb6c17, #c16802);
+    }
+    button{
+        user-select: none;
+        text-align: center;
+        font-size: 30px;
+        border: 0px;
+        background: linear-gradient(145deg, #decb02, #c1b002);
+        box-shadow:  4px 4px 8px #555555,-4px -4px 8px #7ed2d2;
+    }
+    button:active {
+        background: linear-gradient(145deg, #a69700, #c5b400);
+        box-shadow:  2px 2px 4px #555555,-2px -2px 4px #7ed2d2;
+    }
+ </style>
+<body>
+    <div class="top" id="topmain" style="display: none;">
+        <button style="width: 100%;background: rgba(255, 255, 255, 0);height:25%;" onclick="back()"></button>
+        <canvas id="board" style="width: 100%;background: #019CD6; height: 75%;display: none;"></canvas>
+        <textarea id="historys" disabled style="display: none;"></textarea>
+    </div>
+    <div id="main">
+        <div class="game"><canvas id="game" width="320" height="120"></canvas></div>
+        <div class="bt1">
+            <button type="button" onclick="numtitle++;num_title()">范围</button>
+            <button type="button" onclick="settitle++;numtitle=0;set_title()">功能</button>
+            <button type="button" onclick="topboard()">画板</button>
+            <button type="button" onclick="topbt()">记录</button>
+        </div>
+        <div class="bt2"> 
+            <button type="button" onclick="numbt('1')">1</button>
+            <button type="button" onclick="numbt('2')">2</button>
+            <button type="button" onclick="numbt('3')">3</button>
+            <button type="button" onclick="draw_bors('>')">></button>
+        </div>
+        <div class="bt2"> 
+            <button type="button" onclick="numbt('4')">4</button>
+            <button type="button" onclick="numbt('5')">5</button>
+            <button type="button" onclick="numbt('6')">6</button>
+            <button type="button" onclick="draw_bors('<')"><</button>
+        </div>
+        <div class="bt2"> 
+            <button type="button" onclick="numbt('7')">7</button>
+            <button type="button" onclick="numbt('8')">8</button>
+            <button type="button" onclick="numbt('9')">9</button>
+            <button type="button" onclick="numbt('0')">0</button>
+        </div>
+        <div >
+            <button type="button" class="bt3" onclick="draw_bors('=')">=</button>
+            <button type="button" class="ok" onclick="ok()">OK</button>
+            <button type="button" class="bt3" onclick="answer=answer.slice(0, -1);draw_answer();">×</button>
+        </div>
+    </div>
+ <script>
+    var main = document.getElementById("main");
+    main.addEventListener('touchmove', function(e) {event.preventDefault();},{ passive: false });
+    var board  = document.getElementById('board');
+    var canva_board = board.getContext('2d');
+    var topmain = document.getElementById("topmain");
+    var recordbt = document.getElementById("record");
+    var game = document.getElementById("game");
+    var historys = document.getElementById("historys");
+    var ctx=game.getContext("2d");
+    ctx.lineWidth=3;//线宽
+    var numtitle=0,settitle=0; 
+    var numtitles=[["0—10数字","0—20数字","20—50数字","20—100数字"],
+            ["九九乘法表","AB×C","ABC×D","AB×CD"],
+            ["加法进位练习","减法借位练习","九九乘法表"],
+            ["A/B○C/B","A/B○C/D","AB/CD○EF/CD","AB/CD○EF/GH"]];
+    var settitles=["加减运算练习","乘法运算练习","专项练习","分数比大小"];
+    num_title();set_title();
+    var text, a, b, c, d, fh;
+    var answer="";
+    start();
+    function num_title(){
+        if(numtitle>=numtitles[settitle].length){numtitle=0}
+        ctx.font = "15px Arial";
+        ctx.clearRect(0, 0, 160, 20);
+        ctx.fillText(numtitles[settitle][numtitle], 10, 15);
+        start();
+    }
+    function set_title(){
+        if(settitle>=settitles.length){settitle=0}
+        num_title();
+        ctx.font = "15px Arial";
+        ctx.clearRect(160, 0, 320, 20);
+        ctx.fillText(settitles[settitle], 160, 15);
+        start();
+    }
+    function draw_text(){
+        ctx.font = "50px Arial";
+        ctx.clearRect(0, 20, 320, 120);
+        ctx.fillText(text+"=", 20, 65);
+    }
+    function draw_score(){
+        ctx.font = "50px Arial";
+        if (a<10){bl=15}else{bl=0}
+        ctx.clearRect(0, 20, 320, 120);
+        ctx.fillText(a, 15+bl, 65);
+        ctx.fillText(b, 15+bl, 115);
+        ctx.fillText(c, 145+bl, 65);
+        ctx.fillText(d, 145+bl, 115);
+        ctx.beginPath();ctx.moveTo(10,72); ctx.lineTo(80,72); ctx.stroke(); 
+        ctx.beginPath(); ctx.moveTo(140,72);ctx.lineTo(210,72); ctx.stroke(); 
+    }
+    function draw_answer(){
+        ctx.clearRect(250, 20, 320, 120);
+        ctx.clearRect(0, 70, 320, 120);
+        ctx.fillText(answer, 120, 115);
+    }
+    function draw_torf(torf){
+        ctx.clearRect(250, 20, 320, 120);
+        ctx.fillText(torf, 270, 115);
+        if (torf=="✓"){smile(265,28,40);}else{sad(265,28,40);}
+    }
+    function smile(j,i,a){//笑脸绘制
+        ctx.beginPath();
+        ctx.strokeStyle = "rgb(0, 0, 0)";
+        ctx.fillStyle = 'rgb(0, 0, 0)';
+        ctx.arc(j+ a/2,i+ a/2, a/2, 0, 2 * Math.PI, true);
+        ctx.stroke();  
+        ctx.beginPath();
+        ctx.arc(j+ a/2,i+ a/2, a/4, 0,Math.PI, false);
+        ctx.stroke(); 
+        ctx.beginPath(); 
+        ctx.arc(j+ a/3,i+ a/3, a/8, 0, 2 * Math.PI, false);
+        ctx.fill();
+        ctx.arc(j+ 2*a/3,i+ a/3, a/8, 0, 2 * Math.PI, false);
+        ctx.fill();
+    }
+    function sad(j,i,a){//苦脸绘制
+        ctx.beginPath();
+        ctx.strokeStyle = "rgb(0, 0, 0)";
+        ctx.fillStyle = 'rgb(0, 0, 0)';
+        ctx.arc(j+ a/2,i+ a/2, a/2, 0, 2 * Math.PI, true);
+        ctx.stroke();  
+        ctx.beginPath();
+        ctx.arc(j+ a/2,i+ a*4/5, a/4, Math.PI,0, false);
+        ctx.stroke(); 
+        ctx.beginPath(); 
+        ctx.arc(j+ a/3,i+ a/3, a/8, 0, 2 * Math.PI, false);
+        ctx.fill();
+        ctx.arc(j+ 2*a/3,i+ a/3, a/8, 0, 2 * Math.PI, false);
+        ctx.fill();
+    }
+    function start(){
+        answer="";
+        switch (settitle){
+        case 0:
+            let minnum,maxnum;
+            switch (numtitle){
+            case 0:minnum=1;maxnum=10;break;
+            case 1:minnum=1;maxnum=20;break;
+            case 2:minnum=20;maxnum=50;break;
+            case 3:minnum=20;maxnum=100;break;
+            };   
+            if (Math.random()<0.5){
+                fh="+";
+                a=Math.floor(Math.random()*(maxnum-minnum)+minnum);
+                b=Math.floor(Math.random()*(maxnum-a));
+            }else{
+                fh="-";
+                a=Math.floor(Math.random()*(maxnum-minnum)+minnum);
+                b=Math.floor(Math.random()*(a-minnum)+minnum);
+            }
+            text=a+fh+b;draw_text();draw_answer();
+            break;
+        case 1:  
+            fh="×";
+            switch (numtitle){
+            case 0:
+                a=Math.floor(Math.random()*9+1);
+                b=Math.floor(Math.random()*9+1);
+                break;
+            case 1:
+                a=Math.floor(Math.random()*90+10);
+                b=Math.floor(Math.random()*9+1);
+                break;
+            case 2:
+                a=Math.floor(Math.random()*900+100);
+                b=Math.floor(Math.random()*9+1);
+            break;
+            case 3:
+                a=Math.floor(Math.random()*90+10);
+                b=Math.floor(Math.random()*90+10);
+                break;
+            };  
+            text=a+fh+b;draw_text();draw_answer();
+            break; 
+        case 2:  
+            switch (numtitle){
+            case 0:     
+                fh="+";
+                a=Math.floor(Math.random()*8+2);
+                b=Math.floor(Math.random()*(9-11+a)+11-a);
+                break;
+            case 1:
+                fh="-";
+                a=Math.floor(Math.random()*7+11);
+                b=Math.floor(Math.random()*(9-a+9)+a-9);
+                break;
+            case 2:
+                fh="×";
+                a=Math.floor(Math.random()*9+1);
+                b=Math.floor(Math.random()*9+1);
+                break;
+            };
+            text=a+fh+b;draw_text();draw_answer();
+            break;
+        case 3:
+            fh="/";
+            switch (numtitle){
+            case 0:
+            a=Math.floor(Math.random()*9+1);
+            b=Math.floor(Math.random()*8+2);
+            c=Math.floor(Math.random()*9+1);
+            d=b;
+            draw_score();draw_bors("");
+            break;
+            case 1:
+            a=Math.floor(Math.random()*9+1);
+            b=Math.floor(Math.random()*8+2);
+            c=Math.floor(Math.random()*9+1);
+            d=Math.floor(Math.random()*8+2);
+            while(b==d){d=Math.floor(Math.random()*8+2);}
+            draw_score();draw_bors("");
+            break;
+            case 2:
+            a=Math.floor(Math.random()*90+10);
+            b=Math.floor(Math.random()*89+11);
+            c=Math.floor(Math.random()*90+10);
+            d=b;
+            draw_score();draw_bors("");
+            break;
+            case 3:
+            a=Math.floor(Math.random()*90+10);
+            b=Math.floor(Math.random()*89+11);
+            c=Math.floor(Math.random()*90+10);
+            d=Math.floor(Math.random()*89+11);
+            while(b==d){d=Math.floor(Math.random()*89+11);}
+            draw_score();draw_bors("");
+            break;
+            }
+        }
+    }
+    function draw_bors(bors){
+        if (settitle!=3){return}
+        ctx.font = "50px Arial";
+        ctx.clearRect(80, 20,60, 120);
+        ctx.clearRect(260, 20, 320, 120);
+        ctx.beginPath();
+        ctx.arc(110,70,20, 0, 2 * Math.PI, true);answer=bors;
+        ctx.stroke(); 
+        ctx.fillText(bors, 95,88);
+    }
+    function numbt(num){
+        if (settitle==3){return}
+        if (answer.length<4){answer=answer+num};
+        draw_answer();
+    }
+    function ok(){
+        if (answer=="") {return};
+        if (fh=="/"){
+            if (a/b>c/d && answer==">" || a/b<c/d && answer=="<"|| a/b==c/d && answer=="="){
+                draw_torf("✓");
+                historys.innerHTML+=a+"/"+b+answer+c+"/"+d+" ✓\n";
+                setTimeout(()=>{start();},600);
+            }else{
+                draw_torf("×");
+                historys.innerHTML+=a+"/"+b+answer+c+"/"+d+" ×\n";
+                answer="";
+                setTimeout(()=>{draw_bors("");},600);
+            }return;
+        }
+        var ans;
+        if (fh=="+"){ans=a+b};
+        if (fh=="-"){ans=a-b};
+        if (fh=="×"){ans=a*b};
+        if (answer==ans){
+            draw_torf("✓");
+            historys.innerHTML+=text+"="+answer+" ✓\n"
+            setTimeout(()=>{start();},600);
+        }else{
+            draw_torf("×");
+            historys.innerHTML+=text+"="+answer+" ×\n"
+            answer="";
+            setTimeout(()=>{draw_answer()},600);
+        }
+    }
+    function topbt(){
+        topmain.style.display="";
+        historys.style.display="";
+        board.style.display="none";
+    }
+    function topboard(){
+        topmain.style.display="";
+        historys.style.display="none";
+        board.style.display="";
+        board.width=window.innerWidth;
+        board.height=window.innerHeight*0.8;
+        canva_board.lineWidth=2;//线宽
+        var startX;
+        var startY;
+        board.addEventListener('touchstart', function(e) {
+            event.preventDefault(); // 防止默认行为，如滚动
+            var touch = event.touches[0]; // 获取第一个触点
+            startX = touch.pageX - board.offsetLeft;
+            startY = touch.pageY - board.offsetTop;
+            canva_board.beginPath(); // 开始绘制新路径
+            canva_board.moveTo(startX, startY); // 移动到起点
+        });
+        board.addEventListener('touchmove', function(e) {
+            event.preventDefault();
+            var touch = event.touches[0];
+            var moveX = touch.pageX - board.offsetLeft;
+            var moveY = touch.pageY - board.offsetTop;
+            canva_board.lineTo(moveX, moveY); // 绘制直线到移动点
+            canva_board.stroke(); // 绘制路径
+        });
+    }
+    function back(){
+        topmain.style.display="none";
+        historys.style.display="none";
+        board.style.display="none";
+        canva_board.clearRect(0, 0, board.width, board.height);
+    }
+ </script>
+</body>
+</html>
