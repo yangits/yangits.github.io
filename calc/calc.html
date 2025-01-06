@@ -45,7 +45,7 @@
         text-align: left;
         width: 100%;
         background: #019CD6;
-        font-size: 32px;
+        font-size: 38px;
     }
     .game{
         width:85%;
@@ -162,12 +162,12 @@
     var numtitle=0,settitle=0; 
     var numtitles=[["0—10数字","0—20数字","20—50数字","20—100数字"],
             ["凑十法练习","破十法练习","加法进位练习","减法借位练习","九九乘法表"],
-            ["九九乘法表","AB×C","ABC×D","AB×CD"],
+            ["九九乘法表","AB×C","A×BCD","AB×CD"],
             ["AA〇BB","A+/-B〇C","1A+/-1B〇1C","AA+/-BB〇CC"],
             ["A/B〇C/B","A/B〇C/D","AA/BB〇CC/BB","AA/BB〇CC/DD"]];
     var settitles=["加减运算练习","专项练习","乘法运算练习","算式比大小","分数比大小"];
     num_title();set_title();
-    var text, a, b, c, d, fh;
+    var text, a="", b="", c="", d="", fh="", fha="";
     var answer="";
     start();
     function num_title(){//标题范围绘制
@@ -185,26 +185,28 @@
         ctx.fillText(settitles[settitle], 160, 15);
         start();
     }
-    function draw_text(){//算式绘制
-        ctx.font = "45px Arial";ctx.clearRect(0, 20, 320, 120);
-        ctx.fillText(text, 10, 60);
-        ctx.fillText("〇:", 20, 110);
-    }
+    function draw_calc(a,fh,b,fha,c){//算式绘制
+        ctx.font = "40px Arial";
+        ctx.clearRect(0, 20, 320, 120);
+        ctx.fillText(a, 10, 60);ctx.fillText(fh, 60, 60);ctx.fillText(b, 100, 60);
+        ctx.fillText(fha, 150, 60);ctx.fillText(c, 190, 60);
+        ctx.fillText("=", 10, 110);
+    } 
     function draw_score(){//分数绘制
-        ctx.font = "45px Arial";
+        ctx.font = "40px Arial";
         if (a<10){bl=15}else{bl=0}
         ctx.clearRect(0, 20, 320, 120);
         ctx.fillText(a, 15+bl, 60);
         ctx.fillText(b, 15+bl, 110);
-        ctx.fillText(c, 145+bl, 60);
-        ctx.fillText(d, 145+bl, 110);
-        ctx.beginPath();ctx.moveTo(10,70); ctx.lineTo(210,70); ctx.stroke(); 
+        ctx.fillText(c, 135+bl, 60);
+        ctx.fillText(d, 135+bl, 110);
+        ctx.beginPath();ctx.moveTo(10,70); ctx.lineTo(190,70); ctx.stroke(); 
     }
     function draw_answer(){//答案绘制
-        if (settitle==4){return}
+        if (settitles[settitle]=="分数比大小"){return}
         ctx.clearRect(250, 20, 320, 120);
-        ctx.clearRect(120, 70, 320, 120);
-        ctx.fillText(answer, 120, 110);
+        ctx.clearRect(60, 70, 320, 120);
+        ctx.fillText(answer, 60, 110);
     }
     function draw_torf(torf){//对错绘制
         ctx.clearRect(250, 20, 320, 120);
@@ -212,19 +214,19 @@
         if (torf=="✓"){smile(265,28,40);}else{sad(265,28,40);}
     }
     function numbt(num){//输入、删除数字
-        if (settitle>=3){return}
+        if (settitle>=3){return}//输入数字的禁止输入符号
         if (answer.length<4){answer=answer+num};
         draw_answer();
     }
     function draw_bors(bors){//输入大、小于号
-        if (settitle<3){return};
-        if (settitle==3){answer=bors;draw_answer();return};
-        ctx.font = "60px Arial";
-        ctx.clearRect(80, 20,60, 120);
+        if (settitle<3){return};//比较大小禁止输入数字
+        if (settitle==3){answer=bors;draw_answer();return};//数字比较大小
+        ctx.font = "50px Arial";
+        ctx.clearRect(70, 20,60, 120);
         ctx.clearRect(260, 20, 320, 120);
-        ctx.fillText("〇", 80,90);
-        ctx.font = "45px Arial";answer=bors;
-        ctx.fillText(bors, 95,85);
+        ctx.fillText("〇", 75,88);
+        ctx.font = "40px Arial";answer=bors;
+        ctx.fillText(bors, 88,85);
     }
     function smile(j,i,a){//笑脸绘制
         ctx.beginPath();
@@ -274,29 +276,29 @@
             }else{
                 fh="-";a=rand(min,max);b=rand(0,a);
             }
-            text=a+fh+b+"=〇";draw_text();draw_answer();
+            draw_calc(a,fh,b,"","");draw_answer();text=a+fh+b;
             break; 
         case 1:  //专项
             switch (numtitle){
             case 0:
                 fh="-";a=10;b=rand(1,10);
-                text=b+"+〇="+a;draw_text();draw_answer();
+                draw_calc(b,"+","〇","=",a);draw_answer();text=b+"+〇="+a;
                 break;  
             case 1:
                 fh="-";a=10;b=rand(1,10);
-                text=a+fh+b+"=〇";draw_text();draw_answer();
+                draw_calc(a,fh,b,"","");draw_answer();text=a+fh+b;
                 break;
             case 2:     
                 fh="+";a=rand(2,10);b=rand(11-a,9);
-                text=a+fh+b+"=〇";draw_text();draw_answer();
+                draw_calc(a,fh,b,"","");draw_answer();text=a+fh+b;
                 break;
             case 3:
                 fh="-";a=rand(11,19);b=rand(a-9,9);
-                text=a+fh+b+"=〇";draw_text();draw_answer();
+                draw_calc(a,fh,b,"","");draw_answer();text=a+fh+b;
                 break;
             case 4:
                 fh="×";a=rand(1,10);b=rand(1,10);
-                text=a+fh+b+"=〇";draw_text();draw_answer();
+                draw_calc(a,fh,b,"","");draw_answer();text=a+fh+b;
                 break;
             };
             break;
@@ -310,53 +312,51 @@
                 a=rand(10,100);b=rand(1,10);
                 break;
             case 2:
-                a=rand(100,1000);b=rand(1,10);
+                a=rand(1,10);b=rand(100,1000);
             break;
             case 3:
                 a=rand(10,100);b=rand(10,100);
                 break;
             };  
-            text=a+fh+b+"=〇";draw_text();draw_answer();
+            draw_calc(a,fh,b,"","");draw_answer();text=a+fh+b;
             break;
         case 3: //算式比大小
-            fh="〇";
+            fha="〇";
             switch (numtitle){
             case 0:
                 a=rand(1,100); b=rand(1,100);
-                text=a+fh+b;draw_text();draw_answer();
+                draw_calc(a,fha,b,"","");draw_answer();text=a+fha+b;
                 break;
             case 1:
                 if (Math.random()<0.5){
-                    c=rand(1,10);d=rand(1,10-c);
-                    a=c+d;text=c+"+"+d;
+                    fh="+";
+                    a=rand(1,10);b=rand(1,10-a);
                 }else{
-                    c=rand(1,10);d=rand(1,c);
-                    a=c-d;text=c+"-"+d;
+                    fh="-";
+                    a=rand(1,10);b=rand(1,a);
                 }
-                b=rand(1,10);text +=fh+b;
-                draw_text();draw_answer();
+                c=rand(1,10);
+                draw_calc(a,fh,b,fha,c);text=a+fh+b+fha+c;
+                draw_answer();
                 break;
             case 2:
-            if (Math.random()<0.5){
-                    c=rand(1,20);d=rand(1,20-c);
-                    a=c+d;text=c+"+"+d;
+                if (Math.random()<0.5){
+                    fh="+";a=rand(1,20);b=rand(1,20-a);
+                    
                 }else{
-                    c=rand(1,20);d=rand(1,c);
-                    a=c-d;text=c+"-"+d;
+                    fh="-";a=rand(1,20);b=rand(1,a);
                 }
-                b=rand(1,20);text +=fh+b;
-                draw_text();draw_answer();
+                c=rand(1,20);
+                draw_calc(a,fh,b,fha,c);draw_answer();text=a+fh+b+fha+c;
                 break;
             case 3:
-            if (Math.random()<0.5){
-                    c=rand(20,100); d=rand(20,100-c);
-                    a=c+d;text=c+"+"+d;
+                if (Math.random()<0.5){
+                    a=rand(20,100); b=rand(20,100-a);
                 }else{
-                    c=rand(20,100);d=rand(20,c);
-                    a=c-d;text=c+"-"+d;
+                    a=rand(20,100);b=rand(20,a);
                 }
-                b=rand(20,100);text +=fh+b;
-                draw_text();draw_answer();
+                c=rand(20,100);
+                draw_calc(a,fh,b,fha,c);draw_answer();text=a+fh+b+fha+c;
                 break;
             };
             break;
@@ -390,18 +390,21 @@
         if (fh=="/"){
             if (a/b>c/d && answer==">" || a/b<c/d && answer=="<"|| a/b==c/d && answer=="="){
                 draw_torf("✓");
-                historys.innerHTML+=a+"/"+b+answer+c+"/"+d+" ✓\n";
+                historys.innerHTML+=a+"/"+b+"〇"+c+"/"+d+";"+answer+" ✓\n"
                 setTimeout(()=>{start();},600);
             }else{
                 draw_torf("×");
-                historys.innerHTML+=a+"/"+b+answer+c+"/"+d+" ×\n";
+                historys.innerHTML+=a+"/"+b+"〇"+c+"/"+d+";"+answer+" ×\n"
                 answer="";
                 setTimeout(()=>{draw_bors("");},600);
             }return;
         }
         var ans;
-        if (fh=="〇"){
-            if (a>b && answer==">" || a<b && answer=="<"|| a==b && answer=="="){
+        if (fh=="+"){ans=a+b};
+        if (fh=="-"){ans=a-b};
+        if (fh=="×"){ans=a*b};
+        if (fha=="〇"){
+            if (ans>c && answer==">" || ans<c && answer=="<"|| ans==c && answer=="="){
                 draw_torf("✓");
                 historys.innerHTML+=text+";"+answer+" ✓\n"
                 setTimeout(()=>{start();},600);
@@ -410,18 +413,16 @@
                 historys.innerHTML+=text+";"+answer+" ×\n"
                 answer="";
                 setTimeout(()=>{draw_bors("");},600);
-            }return;
+            }fha=="";return;
         };
-        if (fh=="+"){ans=a+b};
-        if (fh=="-"){ans=a-b};
-        if (fh=="×"){ans=a*b};
+        if(numtitle==0 && settitle==1){fhtext=";"}else{fhtext="="}
         if (answer==ans){
             draw_torf("✓");
-            historys.innerHTML+=text+";"+answer+" ✓\n"
+            historys.innerHTML+=text+fhtext+answer+" ✓\n"
             setTimeout(()=>{start();},600);
         }else{
             draw_torf("×");
-            historys.innerHTML+=text+";"+answer+" ×\n"
+            historys.innerHTML+=text+fhtext+answer+" ×\n"
             answer="";
             setTimeout(()=>{draw_answer()},600);
         }
