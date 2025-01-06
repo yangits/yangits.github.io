@@ -201,6 +201,7 @@
         ctx.beginPath();ctx.moveTo(10,70); ctx.lineTo(210,70); ctx.stroke(); 
     }
     function draw_answer(){//答案绘制
+        if (settitle==4){return}
         ctx.clearRect(250, 20, 320, 120);
         ctx.clearRect(120, 70, 320, 120);
         ctx.fillText(answer, 120, 110);
