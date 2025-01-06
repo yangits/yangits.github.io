@@ -321,47 +321,46 @@
             draw_calc(a,fh,b,"","");draw_answer();text=a+fh+b;
             break;
         case 3: //算式比大小
-            fha="〇";
+            fh="〇";
             switch (numtitle){
             case 0:
-                a=rand(1,100); b=rand(1,100);
-                draw_calc(a,fha,b,"","");draw_answer();text=a+fha+b;
+                a=rand(1,100); c=rand(1,100);b=0
+                draw_calc(a,fh,c,"","");draw_answer();text=a+fh+c;
                 break;
             case 1:
                 if (Math.random()<0.5){
-                    fh="+";
+                    fha="+";
                     a=rand(1,10);b=rand(1,10-a);
                 }else{
-                    fh="-";
+                    fha="-";
                     a=rand(1,10);b=rand(1,a);
                 }
                 c=rand(1,10);
-                draw_calc(a,fh,b,fha,c);text=a+fh+b+fha+c;
+                draw_calc(a,fha,b,fh,c);text=a+fha+b+fh+c;
                 draw_answer();
                 break;
             case 2:
                 if (Math.random()<0.5){
-                    fh="+";a=rand(1,20);b=rand(1,20-a);
+                    fha="+";a=rand(1,20);b=rand(1,20-a);
                     
                 }else{
-                    fh="-";a=rand(1,20);b=rand(1,a);
+                    fha="-";a=rand(1,20);b=rand(1,a);
                 }
                 c=rand(1,20);
-                draw_calc(a,fh,b,fha,c);draw_answer();text=a+fh+b+fha+c;
+                draw_calc(a,fha,b,fh,c);draw_answer();text=a+fha+b+fh+c;
                 break;
             case 3:
                 if (Math.random()<0.5){
-                    a=rand(20,100); b=rand(20,100-a);
+                    fha="+";a=rand(20,100); b=rand(20,100-a);
                 }else{
-                    a=rand(20,100);b=rand(20,a);
+                    fha="+";a=rand(20,100);b=rand(20,a);
                 }
                 c=rand(20,100);
-                draw_calc(a,fh,b,fha,c);draw_answer();text=a+fh+b+fha+c;
+                draw_calc(a,fha,b,fh,c);draw_answer();text=a+fha+b+fh+c;
                 break;
             };
             break;
         case 4://分数比大小
-            fh="/";
             switch (numtitle){
             case 0:
             a=rand(1,10); b=rand(2,10); c=rand(1,10); d=b;
@@ -387,7 +386,7 @@
 
     function ok(){//判断对错
         if (answer=="") {return};
-        if (fh=="/"){
+        if (settitles[settitle]=="分数比大小"){
             if (a/b>c/d && answer==">" || a/b<c/d && answer=="<"|| a/b==c/d && answer=="="){
                 draw_torf("✓");
                 historys.innerHTML+=a+"/"+b+"〇"+c+"/"+d+";"+answer+" ✓\n"
@@ -400,11 +399,11 @@
             }return;
         }
         var ans;
-        if (fh=="+"){ans=a+b};
-        if (fh=="-"){ans=a-b};
-        if (fh=="×"){ans=a*b};
-        if (fha=="〇"){
-            if (ans>c && answer==">" || ans<c && answer=="<"|| ans==c && answer=="="){
+        if (settitles[settitle]=="算式比大小"){
+            console.log(settitles[settitle]);
+            if (fha=="+"){a=a+b};
+            if (fha=="-"){a=a-b};
+            if (a>c && answer==">" || a<c && answer=="<"|| a==c && answer=="="){
                 draw_torf("✓");
                 historys.innerHTML+=text+";"+answer+" ✓\n"
                 setTimeout(()=>{start();},600);
@@ -413,12 +412,12 @@
                 historys.innerHTML+=text+";"+answer+" ×\n"
                 answer="";
                 setTimeout(()=>{draw_bors("");},600);
-            }fha="";return;
+            }return;
         };
         if (fh=="+"){ans=a+b};
         if (fh=="-"){ans=a-b};
         if (fh=="×"){ans=a*b};
-        if(numtitle==0 && settitle==1){fhtext=";"}else{fhtext="="}
+        if(numtitles[settitle][numtitle]=="凑十法练习"){fhtext=";"}else{fhtext="="}
         if (answer==ans){
             draw_torf("✓");
             historys.innerHTML+=text+fhtext+answer+" ✓\n"
