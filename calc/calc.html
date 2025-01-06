@@ -413,8 +413,11 @@
                 historys.innerHTML+=text+";"+answer+" ×\n"
                 answer="";
                 setTimeout(()=>{draw_bors("");},600);
-            }fha=="";return;
+            }fha="";return;
         };
+        if (fh=="+"){ans=a+b};
+        if (fh=="-"){ans=a-b};
+        if (fh=="×"){ans=a*b};
         if(numtitle==0 && settitle==1){fhtext=";"}else{fhtext="="}
         if (answer==ans){
             draw_torf("✓");
