@@ -45,7 +45,7 @@
         text-align: left;
         width: 100%;
         background: #019CD6;
-        font-size: 38px;
+        font-size: 32px;
     }
     .game{
         width:85%;
@@ -149,27 +149,25 @@
         </div>
     </div>
  <script>
-    var main = document.getElementById("main");
-    main.addEventListener('touchmove', function(e) {event.preventDefault();},{ passive: false });
+    document.getElementById("main").addEventListener('touchmove', function(e) {
+        event.preventDefault();},{ passive: false });
     var board  = document.getElementById('board');
     var canva_board = board.getContext('2d');
     var topmain = document.getElementById("topmain");
     var recordbt = document.getElementById("record");
     var game = document.getElementById("game");
     var historys = document.getElementById("historys");
-    var ctx=game.getContext("2d");
-    ctx.lineWidth=3;//线宽
+    var ctx=game.getContext("2d");ctx.lineWidth=3;//线宽
     var numtitle=0,settitle=0; 
-    var numtitles=[["0—10数字","0—20数字","20—50数字","20—100数字"],
-            ["凑十法练习","破十法练习","加法进位练习","减法借位练习","九九乘法表"],
-            ["九九乘法表","AB×C","A×BCD","AB×CD"],
+    var numtitles=[["0—10数字","0—20数字","20—100数字"],
+            ["破十法练习","加法进位练习","减法借位练习","九九乘法表"],
+            ["1A＋1B－1C","AA＋BB－CC","A×B+/-CC"],
+            ["九九乘法表","AB×C","ABC×D","AB×CD"],
             ["AA〇BB","A+/-B〇C","1A+/-1B〇1C","AA+/-BB〇CC"],
-            ["A/B〇C/B","A/B〇C/D","AA/BB〇CC/BB","AA/BB〇CC/DD"]];
-    var settitles=["加减运算练习","专项练习","乘法运算练习","算式比大小","分数比大小"];
-    num_title();set_title();
-    var text, a="", b="", c="", d="", fh="", fha="";
-    var answer="";
-    start();
+            ["AA/BB〇CC/BB","AA/BB〇AA/CC","A/B〇C/D"]];
+    var settitles=["加减运算练习","专项练习","混合运算","乘法运算练习","算式比大小","分数比大小"];
+    var text, a="", b="", c="", d="", fh="";
+    var answer="",ans="";set_title();
     function num_title(){//标题范围绘制
         if(numtitle>=numtitles[settitle].length){numtitle=0}
         ctx.font = "15px Arial";
@@ -185,11 +183,10 @@
         ctx.fillText(settitles[settitle], 160, 15);
         start();
     }
-    function draw_calc(a,fh,b,fha,c){//算式绘制
+    function draw_calc(text){//算式绘制
         ctx.font = "40px Arial";
         ctx.clearRect(0, 20, 320, 120);
-        ctx.fillText(a, 10, 60);ctx.fillText(fh, 60, 60);ctx.fillText(b, 100, 60);
-        ctx.fillText(fha, 150, 60);ctx.fillText(c, 190, 60);
+        ctx.fillText(text, 20, 60);
         ctx.fillText("=", 10, 110);
     } 
     function draw_score(){//分数绘制
@@ -214,13 +211,14 @@
         if (torf=="✓"){smile(265,28,40);}else{sad(265,28,40);}
     }
     function numbt(num){//输入、删除数字
-        if (settitle>=3){return}//输入数字的禁止输入符号
+        if (settitle>=4){return}//输入数字的禁止输入符号
         if (answer.length<4){answer=answer+num};
         draw_answer();
     }
     function draw_bors(bors){//输入大、小于号
-        if (settitle<3){return};//比较大小禁止输入数字
-        if (settitle==3){answer=bors;draw_answer();return};//数字比较大小
+        if (settitle<4){return};//比较大小禁止输入数字
+        if (settitles[settitle]=="算式比大小"){
+            answer=bors;draw_answer();return};//数字比较大小
         ctx.font = "50px Arial";
         ctx.clearRect(70, 20,60, 120);
         ctx.clearRect(260, 20, 320, 120);
@@ -268,42 +266,78 @@
             switch (numtitle){
             case 0:min=1;max=10;break;
             case 1:min=1;max=20;break;
-            case 2:min=20;max=50;break;
-            case 3:min=20;max=100;break;
+            case 2:min=20;max=100;break;
             };   
             if (Math.random()<0.5){
-                fh="+";a=rand(min,max);b=rand(0,max-a);
+                a=rand(min,max-min);b=rand(min,max-a);text=a+"＋"+b;ans=a+b;
             }else{
-                fh="-";a=rand(min,max);b=rand(0,a);
-            }
-            draw_calc(a,fh,b,"","");draw_answer();text=a+fh+b;
+                a=rand(min,max);b=rand(min,a);text=a+"－"+b;ans=a-b;
+            };
+            draw_calc(text);draw_answer();
             break; 
         case 1:  //专项
-            switch (numtitle){
+            switch (numtitle){  
             case 0:
-                fh="-";a=10;b=rand(1,10);
-                draw_calc(b,"+","〇","=",a);draw_answer();text=b+"+〇="+a;
-                break;  
-            case 1:
-                fh="-";a=10;b=rand(1,10);
-                draw_calc(a,fh,b,"","");draw_answer();text=a+fh+b;
+                a=10;b=rand(1,10);text=a+"－"+b;ans=a-b;
                 break;
-            case 2:     
-                fh="+";a=rand(2,10);b=rand(11-a,9);
-                draw_calc(a,fh,b,"","");draw_answer();text=a+fh+b;
+            case 1:     
+                a=rand(2,10);b=rand(11-a,9);text=a+"＋"+b;ans=a+b;
+                break;
+            case 2:
+                a=rand(11,19);b=rand(a-9,9);text=a+"－"+b;ans=a-b;
                 break;
             case 3:
-                fh="-";a=rand(11,19);b=rand(a-9,9);
-                draw_calc(a,fh,b,"","");draw_answer();text=a+fh+b;
-                break;
-            case 4:
-                fh="×";a=rand(1,10);b=rand(1,10);
-                draw_calc(a,fh,b,"","");draw_answer();text=a+fh+b;
+                a=rand(1,10);b=rand(1,10);text=a+" × "+b;ans=a*b;
                 break;
             };
+            draw_calc(text);draw_answer();
             break;
-        case 2:  //乘法
-            fh="×";
+        case 2:  //混合运算
+            switch (numtitle){  
+                case 0:
+                    if (Math.random()<0.5){
+                        a=rand(1,15);b=rand(1,15-a);c=a+b;
+                        text=a+"＋"+b
+                    }else{
+                        a=rand(10,20);b=rand(1,a-5);c=a-b;
+                        text=a+"－"+b
+                    };
+                    if (Math.random()<0.5){
+                        d=rand(1,20-c);ans=c+d;
+                        text +="＋"+d;
+                    }else{
+                        d=rand(1,c);ans=c-d;
+                        text +="－"+d;
+                    };break;
+                case 1:
+                    if (Math.random()<0.5){
+                        a=rand(20,50);b=rand(20,50-a);c=a+b;
+                        text=a+"＋"+b
+                    }else{
+                        a=rand(50,100);b=rand(20,a-30);c=a-b;
+                        text=a+"－"+b
+                    };
+                    if (Math.random()<0.5){
+                        d=rand(20,100-c);ans=c+d;
+                        text +="＋"+d;
+                    }else{
+                        d=rand(20,c);ans=c-d;
+                        text +="－"+d;
+                    };break;
+                case 2:
+                    a=rand(1,10);b=rand(1,10);c=a*b;
+                    text=a+" × "+b;
+                    if (Math.random()<0.5){
+                        d=rand(1,100-c);ans=c+d;
+                        text +="＋"+d;
+                    }else{
+                        d=rand(1,c);ans=c-d;
+                        text +="－"+d;
+                    };break;
+            };
+            draw_calc(text);draw_answer();
+            break;
+        case 3:  //乘法
             switch (numtitle){
             case 0:
                 a=rand(1,10);b=rand(1,10);
@@ -312,121 +346,97 @@
                 a=rand(10,100);b=rand(1,10);
                 break;
             case 2:
-                a=rand(1,10);b=rand(100,1000);
+                a=rand(100,1000);b=rand(1,10);
             break;
             case 3:
                 a=rand(10,100);b=rand(10,100);
                 break;
-            };  
-            draw_calc(a,fh,b,"","");draw_answer();text=a+fh+b;
+            };text=a+" × "+b;ans=a*b;
+            draw_calc(text);draw_answer();
             break;
-        case 3: //算式比大小
-            fh="〇";
+        case 4: //算式比大小
             switch (numtitle){
             case 0:
-                a=rand(1,100); c=rand(1,100);b=0
-                draw_calc(a,fh,c,"","");draw_answer();text=a+fh+c;
+                a=rand(1,100); c=rand(1,100);ans=a;fh="";b="";
                 break;
             case 1:
                 if (Math.random()<0.5){
-                    fha="+";
-                    a=rand(1,10);b=rand(1,10-a);
+                    fh="＋";
+                    a=rand(1,10);b=rand(1,10-a);ans=a+b;
+
                 }else{
-                    fha="-";
-                    a=rand(1,10);b=rand(1,a);
+                    fh="－";
+                    a=rand(1,10);b=rand(1,a);ans=a-b;
                 }
                 c=rand(1,10);
-                draw_calc(a,fha,b,fh,c);text=a+fha+b+fh+c;
-                draw_answer();
                 break;
             case 2:
                 if (Math.random()<0.5){
-                    fha="+";a=rand(1,20);b=rand(1,20-a);
+                    fh="＋";
+                    a=rand(1,20);b=rand(1,20-a);ans=a+b;
                     
                 }else{
-                    fha="-";a=rand(1,20);b=rand(1,a);
+                    fh="－";
+                    a=rand(1,20);b=rand(1,a);ans=a-b;
                 }
                 c=rand(1,20);
-                draw_calc(a,fha,b,fh,c);draw_answer();text=a+fha+b+fh+c;
                 break;
             case 3:
                 if (Math.random()<0.5){
-                    fha="+";a=rand(20,100); b=rand(20,100-a);
+                    fh="＋";
+                    a=rand(20,100); b=rand(20,100-a);ans=a+b;
                 }else{
-                    fha="+";a=rand(20,100);b=rand(20,a);
+                    fh="－";
+                    a=rand(20,100);b=rand(20,a);ans=a-b;
                 }
                 c=rand(20,100);
-                draw_calc(a,fha,b,fh,c);draw_answer();text=a+fha+b+fh+c;
                 break;
-            };
+            }; text=a+fh+b+"〇"+c;
+            draw_calc(text);draw_answer();
             break;
-        case 4://分数比大小
+        case 5://分数比大小
             switch (numtitle){
             case 0:
-            a=rand(1,10); b=rand(2,10); c=rand(1,10); d=b;
-            draw_score();draw_bors("");
-            break;
+                a=rand(10,100);b=rand(11,100);c=rand(10,100);d=b;
+                break;
             case 1:
-            a=rand(1,10); b=rand(2,10);c=rand(1,10);d=rand(2,10);
-            while(b==d){d=rand(2,10);}
-            draw_score();draw_bors("");
-            break;
+                a=rand(10,100);b=rand(11,100);c=a;d=rand(11,100);
+                break;
             case 2:
-            a=rand(10,100);b=rand(11,100);c=rand(10,100);d=b;
-            draw_score();draw_bors("");
-            break;
-            case 3:
-            a=rand(10,100);b=rand(11,100);c=rand(10,100);d=rand(11,100);
-            while(b==d){d=rand(11,100);}
-            draw_score();draw_bors("");
-            break;
+                a=rand(1,10); b=rand(2,10);c=rand(1,10);d=rand(2,10);
+                while(b==d){d=rand(2,10);}break;
             }
+            text=a+"/"+b+"〇"+c+"/"+d;
+            draw_score();draw_bors("");ans=a/b;c=c/d
         }
     }
 
     function ok(){//判断对错
         if (answer=="") {return};
-        if (settitles[settitle]=="分数比大小"){
-            if (a/b>c/d && answer==">" || a/b<c/d && answer=="<"|| a/b==c/d && answer=="="){
+        switch (settitles[settitle]){
+        case "分数比大小":case "算式比大小":
+            if (ans>c && answer==">" || ans<c && answer=="<"|| ans==c && answer=="="){
                 draw_torf("✓");
-                historys.innerHTML+=a+"/"+b+"〇"+c+"/"+d+";"+answer+" ✓\n"
+                historys.innerHTML+=text.replace("〇",answer)+";✓\n"
                 setTimeout(()=>{start();},600);
             }else{
-                draw_torf("×");
-                historys.innerHTML+=a+"/"+b+"〇"+c+"/"+d+";"+answer+" ×\n"
+                draw_torf("x");
+                historys.innerHTML+=text.replace("〇",answer)+";x\n"
                 answer="";
                 setTimeout(()=>{draw_bors("");},600);
-            }return;
-        }
-        var ans;
-        if (settitles[settitle]=="算式比大小"){
-            console.log(settitles[settitle]);
-            if (fha=="+"){a=a+b};
-            if (fha=="-"){a=a-b};
-            if (a>c && answer==">" || a<c && answer=="<"|| a==c && answer=="="){
+            };break;
+        case "混合运算":case "加减运算练习":
+        case "专项练习":case "乘法运算练习":
+            if (answer==ans){
                 draw_torf("✓");
-                historys.innerHTML+=text+";"+answer+" ✓\n"
+                historys.innerHTML+=text.replace(" × ","×")+"="+answer+";✓\n"
                 setTimeout(()=>{start();},600);
             }else{
-                draw_torf("×");
-                historys.innerHTML+=text+";"+answer+" ×\n"
+                draw_torf("x");
+                historys.innerHTML+=text.replace(" × ","×")+"="+answer+";x\n"
                 answer="";
-                setTimeout(()=>{draw_bors("");},600);
-            }return;
-        };
-        if (fh=="+"){ans=a+b};
-        if (fh=="-"){ans=a-b};
-        if (fh=="×"){ans=a*b};
-        if(numtitles[settitle][numtitle]=="凑十法练习"){fhtext=";"}else{fhtext="="}
-        if (answer==ans){
-            draw_torf("✓");
-            historys.innerHTML+=text+fhtext+answer+" ✓\n"
-            setTimeout(()=>{start();},600);
-        }else{
-            draw_torf("×");
-            historys.innerHTML+=text+fhtext+answer+" ×\n"
-            answer="";
-            setTimeout(()=>{draw_answer()},600);
+                setTimeout(()=>{draw_answer()},600);
+            };break;
         }
     }
     function topbt(){//记录
