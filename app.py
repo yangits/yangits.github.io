@@ -1,10 +1,5 @@
-import os
-import sys
-import time
-import webbrowser
-import zipfile
+import os ,sys,time,zipfile
 from io import BytesIO
-
 from flask import Flask, redirect, request, send_file
 
 #   pyinstaller -F app.py
@@ -17,7 +12,6 @@ html0="""<html>
             <script>
                 function upload() {
                     const f = document.querySelector('#file');
-                    
                     const fdata = new FormData();
                     fdata.append('file', f.files[0]);
                     const xhr = new XMLHttpRequest();
@@ -149,5 +143,4 @@ def file_size_fomat(size):
     else:
         return '%.1f' % float(size/1073741824) + 'GB'
 if __name__ == '__main__':
-    webbrowser.open("http://127.0.0.1:666/")
     app.run(host='0.0.0.0', port=666)

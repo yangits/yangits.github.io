@@ -158,7 +158,7 @@
     var game = document.getElementById("game");
     var historys = document.getElementById("historys");
     var ctx=game.getContext("2d");ctx.lineWidth=3;//线宽
-    var numtitle=0,settitle=0; 
+    var numtitle=0,settitle=0,historysnum=0;
     var numtitles=[["0—10数字","0—20数字","20—100数字"],
             ["破十法练习","加法进位练习","减法借位练习","九九乘法表"],
             ["1A＋1B－1C","AA＋BB－CC","A×B+/-CC"],
@@ -410,30 +410,32 @@
             draw_score();draw_bors("");ans=a/b;c=c/d
         }
     }
-
+    function historys_add(text){
+        historysnum++;
+        historys.innerHTML+=historysnum+";"+text+"\n";
+    }
     function ok(){//判断对错
         if (answer=="") {return};
         switch (settitles[settitle]){
         case "分数比大小":case "算式比大小":
             if (ans>c && answer==">" || ans<c && answer=="<"|| ans==c && answer=="="){
                 draw_torf("✓");
-                historys.innerHTML+=text.replace("〇",answer)+";✓\n"
+                historys_add(text.replace("〇",answer)+";✓");
                 setTimeout(()=>{start();},600);
             }else{
                 draw_torf("x");
-                historys.innerHTML+=text.replace("〇",answer)+";x\n"
-                answer="";
+                historys_add(text.replace("〇",answer)+";x");
                 setTimeout(()=>{draw_bors("");},600);
             };break;
         case "混合运算":case "加减运算练习":
         case "专项练习":case "乘法运算练习":
             if (answer==ans){
                 draw_torf("✓");
-                historys.innerHTML+=text.replace(" × ","×")+"="+answer+";✓\n"
+                historys_add(text.replace(" × ","×")+"="+answer+";✓");
                 setTimeout(()=>{start();},600);
             }else{
                 draw_torf("x");
-                historys.innerHTML+=text.replace(" × ","×")+"="+answer+";x\n"
+                historys_add(text.replace(" × ","×")+"="+answer+";x");
                 answer="";
                 setTimeout(()=>{draw_answer()},600);
             };break;
