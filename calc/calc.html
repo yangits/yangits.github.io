@@ -18,7 +18,7 @@
         padding:0px;
     }
     body {
-        max-width: 400px;
+        max-width: 380px;
         background: #019CD6;
         user-select: none;
         overflow: hidden;
@@ -41,11 +41,11 @@
     textarea{
         color: #000;
         height: 75%;
-        line-height: 38px;
+        line-height: 28px;
         text-align: left;
         width: 100%;
         background: #019CD6;
-        font-size: 32px;
+        font-size: 28px;
     }
     .game{
         width:85%;
@@ -69,14 +69,14 @@
         height: 50px;
         border-radius: 5px;
         font-size: 20px;
-        background: linear-gradient(145deg, #eb6c17, #c16802);
+        background: #e25c03;
     }
     .bt2 button{
         margin: 15px 10px;
         outline: none;
         cursor: pointer;
         width: 16%;
-        height: 60px;
+        height: 56px;
         border-radius: 50%;
     }   
      .bt3{
@@ -86,7 +86,7 @@
         width: 20%;
         height: 50px;
         border-radius: 5px;
-        background: linear-gradient(145deg, #eb6c17, #c16802);
+        background: #d85904;
     }
     .ok{
         margin: 10px 20px;
@@ -95,7 +95,7 @@
         width: 80px;
         height: 80px;
         border-radius: 50%;
-        background: linear-gradient(145deg, #eb6c17, #c16802);
+        background: #dd7703;
     }
     button{
         user-select: none;
@@ -216,15 +216,17 @@
         draw_answer();
     }
     function draw_bors(bors){//输入大、小于号
-        if (settitle<4){return};//比较大小禁止输入数字
         if (settitles[settitle]=="算式比大小"){
-            answer=bors;draw_answer();return};//数字比较大小
-        ctx.font = "50px Arial";
-        ctx.clearRect(70, 20,60, 120);
-        ctx.clearRect(260, 20, 320, 120);
-        ctx.fillText("〇", 75,88);
-        ctx.font = "40px Arial";answer=bors;
-        ctx.fillText(bors, 88,85);
+            answer=bors;draw_answer();
+        }
+        if (settitles[settitle]=="分数比大小"){
+            ctx.font = "50px Arial";
+            ctx.clearRect(70, 20,60, 120);
+            ctx.clearRect(260, 20, 320, 120);
+            ctx.fillText("〇", 75,88);
+            ctx.font = "40px Arial";answer=bors;
+            ctx.fillText(bors, 88,85); 
+        }
     }
     function smile(j,i,a){//笑脸绘制
         ctx.beginPath();
