@@ -119,8 +119,8 @@
     <div id="main">
         <div class="game"><canvas id="game" width="320" height="120"></canvas></div>
         <div class="bt1">
-            <button type="button" onclick="numtitle++;num_title()">范围</button>
             <button type="button" onclick="settitle++;numtitle=0;set_title()">功能</button>
+            <button type="button" onclick="numtitle++;num_title()">范围</button>
             <button type="button" onclick="topboard()">画板</button>
             <button type="button" onclick="topbt()">记录</button>
         </div>
@@ -159,30 +159,30 @@
     var historys = document.getElementById("historys");
     var ctx=game.getContext("2d");ctx.lineWidth=3;//线宽
     var numtitle=0,settitle=0,historysnum=0;
+    var settitles=["加减运算","专项练习","混合运算","乘法运算","算式比大小","分数比大小"];
     var numtitles=[["0—10数字","0—20数字","20—100数字"],
             ["破十法练习","加法进位练习","减法借位练习","九九乘法表"],
             ["1A＋1B－1C","AA＋BB－CC","A×B+/-CC"],
             ["九九乘法表","AB×C","ABC×D","AB×CD"],
             ["AA〇BB","A+/-B〇C","1A+/-1B〇1C","AA+/-BB〇CC"],
             ["AA/BB〇CC/BB","AA/BB〇AA/CC","A/B〇C/D"]];
-    var settitles=["加减运算练习","专项练习","混合运算","乘法运算练习","算式比大小","分数比大小"];
     var text, a="", b="", c="", d="", fh="";
     var answer="",ans="";set_title();
+    function set_title(){//标题功能绘制
+        if(settitle>=settitles.length){settitle=0}
+        ctx.font = "15px Arial";
+        ctx.clearRect(0, 0, 320, 20);
+        ctx.fillText((settitle+1)+"、"+settitles[settitle], 10, 15);
+        num_title();
+    }
     function num_title(){//标题范围绘制
         if(numtitle>=numtitles[settitle].length){numtitle=0}
         ctx.font = "15px Arial";
-        ctx.clearRect(0, 0, 160, 20);
-        ctx.fillText(numtitles[settitle][numtitle], 10, 15);
+        ctx.clearRect(130, 0, 320, 20);
+        ctx.fillText((settitle+1)+"-"+(numtitle+1)+"、"+numtitles[settitle][numtitle], 130, 15);
         start();
     }
-    function set_title(){//标题功能绘制
-        if(settitle>=settitles.length){settitle=0}
-        num_title();
-        ctx.font = "15px Arial";
-        ctx.clearRect(160, 0, 320, 20);
-        ctx.fillText(settitles[settitle], 160, 15);
-        start();
-    }
+
     function draw_calc(text){//算式绘制
         ctx.font = "40px Arial";
         ctx.clearRect(0, 20, 320, 120);
@@ -418,8 +418,7 @@
     }
     function ok(){//判断对错
         if (answer=="") {return};
-        switch (settitles[settitle]){
-        case "分数比大小":case "算式比大小":
+        if(settitles[settitle]=="分数比大小" || settitles[settitle]=="算式比大小"){
             if (ans>c && answer==">" || ans<c && answer=="<"|| ans==c && answer=="="){
                 draw_torf("✓");
                 historys_add(text.replace("〇",answer)+";✓");
@@ -428,9 +427,8 @@
                 draw_torf("x");
                 historys_add(text.replace("〇",answer)+";x");
                 setTimeout(()=>{draw_bors("");},600);
-            };break;
-        case "混合运算":case "加减运算练习":
-        case "专项练习":case "乘法运算练习":
+            };
+        }else{
             if (answer==ans){
                 draw_torf("✓");
                 historys_add(text.replace(" × ","×")+"="+answer+";✓");
@@ -440,7 +438,7 @@
                 historys_add(text.replace(" × ","×")+"="+answer+";x");
                 answer="";
                 setTimeout(()=>{draw_answer()},600);
-            };break;
+            };
         }
     }
     function topbt(){//记录
