@@ -29,7 +29,6 @@
         align-items: center;
     }
     .top{
-
         position: fixed; /* 设置为fixed使其保持在页面上 */
         z-index: 1;
         width: 100%; /* 宽度 */
@@ -112,7 +111,7 @@
  </style>
 <body>
     <div class="top" id="topmain" style="display: none;">
-        <button style="width: 100%;background: rgba(255, 255, 255, 0);height:25%;" onclick="back()"></button>
+        <button style="width: 100%;background: rgba(0, 0, 0, 0);height:25%;" onclick="back()"></button>
         <canvas id="board" style="width: 100%;background: #019CD6; height: 75%;display: none;"></canvas>
         <textarea id="historys" disabled style="display: none;"></textarea>
     </div>
@@ -128,13 +127,13 @@
             <button type="button" onclick="numbt('1')">1</button>
             <button type="button" onclick="numbt('2')">2</button>
             <button type="button" onclick="numbt('3')">3</button>
-            <button type="button" onclick="draw_bors('>')">></button>
+            <button type="button" onclick="borsbt('>')">></button>
         </div>
         <div class="bt2"> 
             <button type="button" onclick="numbt('4')">4</button>
             <button type="button" onclick="numbt('5')">5</button>
             <button type="button" onclick="numbt('6')">6</button>
-            <button type="button" onclick="draw_bors('<')"><</button>
+            <button type="button" onclick="borsbt('<')"><</button>
         </div>
         <div class="bt2"> 
             <button type="button" onclick="numbt('7')">7</button>
@@ -143,7 +142,7 @@
             <button type="button" onclick="numbt('0')">0</button>
         </div>
         <div >
-            <button type="button" class="bt3" onclick="draw_bors('=')">=</button>
+            <button type="button" class="bt3" onclick="borsbt('=')">=</button>
             <button type="button" class="ok" onclick="ok()">OK</button>
             <button type="button" class="bt3" onclick="answer=answer.slice(0, -1);draw_answer();">×</button>
         </div>
@@ -190,73 +189,56 @@
         ctx.fillText("=", 10, 110);
     } 
     function draw_score(){//分数绘制
-        ctx.font = "40px Arial";
-        if (a<10){bl=15}else{bl=0}
+        ctx.font = "30px Arial";
+        if (a<10){bl=10}else{bl=0}
         ctx.clearRect(0, 20, 320, 120);
         ctx.fillText(a, 15+bl, 60);
         ctx.fillText(b, 15+bl, 110);
-        ctx.fillText(c, 135+bl, 60);
-        ctx.fillText(d, 135+bl, 110);
-        ctx.beginPath();ctx.moveTo(10,70); ctx.lineTo(190,70); ctx.stroke(); 
+        ctx.fillText(c, 110+bl, 60);
+        ctx.fillText(d, 110+bl, 110);
+        ctx.beginPath();ctx.moveTo(10,73); ctx.lineTo(150,73); ctx.stroke(); 
     }
     function draw_answer(){//答案绘制
-        if (settitles[settitle]=="分数比大小"){return}
-        ctx.clearRect(250, 20, 320, 120);
+        ctx.font = "40px Arial";
+        ctx.clearRect(260, 20, 320, 120);
+        if (settitles[settitle]=="分数比大小"){           
+            ctx.clearRect(55, 20,50, 120);
+            ctx.fillText("〇", 60,85);
+            ctx.fillText(answer, 68,85);return}
         ctx.clearRect(60, 70, 320, 120);
         ctx.fillText(answer, 60, 110);
     }
     function draw_torf(torf){//对错绘制
-        ctx.clearRect(250, 20, 320, 120);
-        ctx.fillText(torf, 270, 110);
-        if (torf=="✓"){smile(265,28,40);}else{sad(265,28,40);}
+        ctx.fillText(torf, 275, 110);
+        smile(265,28,40,torf)
     }
     function numbt(num){//输入、删除数字
         if (settitle>=4){return}//输入数字的禁止输入符号
         if (answer.length<4){answer=answer+num};
         draw_answer();
     }
-    function draw_bors(bors){//输入大、小于号
-        if (settitles[settitle]=="算式比大小"){
-            answer=bors;draw_answer();
-        }
-        if (settitles[settitle]=="分数比大小"){
-            ctx.font = "50px Arial";
-            ctx.clearRect(70, 20,60, 120);
-            ctx.clearRect(260, 20, 320, 120);
-            ctx.fillText("〇", 75,88);
-            ctx.font = "40px Arial";answer=bors;
-            ctx.fillText(bors, 88,85); 
-        }
+    function borsbt(bors){//输入大、小于号
+        if (settitle<4){return}//输入符号的禁止数字
+        answer=bors;draw_answer();
     }
-    function smile(j,i,a){//笑脸绘制
+    function smile(j,i,a,torf){//表情绘制
         ctx.beginPath();
-        ctx.strokeStyle = "rgb(0, 0, 0)";
-        ctx.fillStyle = 'rgb(0, 0, 0)';
         ctx.arc(j+ a/2,i+ a/2, a/2, 0, 2 * Math.PI, true);
         ctx.stroke();  
-        ctx.beginPath();
-        ctx.arc(j+ a/2,i+ a/2, a/4, 0,Math.PI, false);
-        ctx.stroke(); 
         ctx.beginPath(); 
         ctx.arc(j+ a/3,i+ a/3, a/8, 0, 2 * Math.PI, false);
         ctx.fill();
         ctx.arc(j+ 2*a/3,i+ a/3, a/8, 0, 2 * Math.PI, false);
         ctx.fill();
-    }
-    function sad(j,i,a){//苦脸绘制
-        ctx.beginPath();
-        ctx.strokeStyle = "rgb(0, 0, 0)";
-        ctx.fillStyle = 'rgb(0, 0, 0)';
-        ctx.arc(j+ a/2,i+ a/2, a/2, 0, 2 * Math.PI, true);
-        ctx.stroke();  
-        ctx.beginPath();
-        ctx.arc(j+ a/2,i+ a*4/5, a/4, Math.PI,0, false);
-        ctx.stroke(); 
-        ctx.beginPath(); 
-        ctx.arc(j+ a/3,i+ a/3, a/8, 0, 2 * Math.PI, false);
-        ctx.fill();
-        ctx.arc(j+ 2*a/3,i+ a/3, a/8, 0, 2 * Math.PI, false);
-        ctx.fill();
+        if(torf=="✓"){//笑脸绘制
+            ctx.beginPath();
+            ctx.arc(j+ a/2,i+ a/2, a/4, 0,Math.PI, false);
+            ctx.stroke(); 
+        }else{//苦脸绘制
+            ctx.beginPath();
+            ctx.arc(j+ a/2,i+ a*4/5, a/4, Math.PI,0, false);
+            ctx.stroke(); 
+        }
     }
     function rand(min,max){
         return Math.floor(Math.random()*(max-min)+min);
@@ -271,25 +253,31 @@
             case 2:min=20;max=100;break;
             };   
             if (Math.random()<0.5){
-                a=rand(min,max-min);b=rand(min,max-a);text=a+"＋"+b;ans=a+b;
+                a=rand(min,max-min);b=rand(min,max-a);
+                text=a+"＋"+b;ans=a+b;
             }else{
-                a=rand(min,max);b=rand(min,a);text=a+"－"+b;ans=a-b;
+                a=rand(min,max);b=rand(min,a);
+                text=a+"－"+b;ans=a-b;
             };
             draw_calc(text);draw_answer();
             break; 
         case 1:  //专项
             switch (numtitle){  
             case 0:
-                a=10;b=rand(1,10);text=a+"－"+b;ans=a-b;
+                a=10;b=rand(1,10);
+                text=a+"－"+b;ans=a-b;
                 break;
             case 1:     
-                a=rand(2,10);b=rand(11-a,9);text=a+"＋"+b;ans=a+b;
+                a=rand(2,10);b=rand(11-a,9);
+                text=a+"＋"+b;ans=a+b;
                 break;
             case 2:
-                a=rand(11,19);b=rand(a-9,9);text=a+"－"+b;ans=a-b;
+                a=rand(11,19);b=rand(a-9,9);
+                text=a+"－"+b;ans=a-b;
                 break;
             case 3:
-                a=rand(1,10);b=rand(1,10);text=a+" × "+b;ans=a*b;
+                a=rand(1,10);b=rand(1,10);
+                text=a+" × "+b;ans=a*b;
                 break;
             };
             draw_calc(text);draw_answer();
@@ -298,11 +286,11 @@
             switch (numtitle){  
                 case 0:
                     if (Math.random()<0.5){
-                        a=rand(1,15);b=rand(1,15-a);c=a+b;
-                        text=a+"＋"+b
+                        a=rand(1,15);b=rand(1,15-a);
+                        text=a+"＋"+b;c=a+b;
                     }else{
-                        a=rand(10,20);b=rand(1,a-5);c=a-b;
-                        text=a+"－"+b
+                        a=rand(10,20);b=rand(1,a-5);
+                        text=a+"－"+b;c=a-b;
                     };
                     if (Math.random()<0.5){
                         d=rand(1,20-c);ans=c+d;
@@ -313,11 +301,11 @@
                     };break;
                 case 1:
                     if (Math.random()<0.5){
-                        a=rand(20,50);b=rand(20,50-a);c=a+b;
-                        text=a+"＋"+b
+                        a=rand(20,50);b=rand(20,50-a);
+                        text=a+"＋"+b;c=a+b;
                     }else{
-                        a=rand(50,100);b=rand(20,a-30);c=a-b;
-                        text=a+"－"+b
+                        a=rand(50,100);b=rand(20,a-30);
+                        text=a+"－"+b;c=a-b;
                     };
                     if (Math.random()<0.5){
                         d=rand(20,100-c);ans=c+d;
@@ -409,7 +397,7 @@
                 while(b==d){d=rand(2,10);}break;
             }
             text=a+"/"+b+"〇"+c+"/"+d;
-            draw_score();draw_bors("");ans=a/b;c=c/d
+            draw_score();draw_answer();ans=a/b;c=c/d
         }
     }
     function historys_add(text){
@@ -418,26 +406,23 @@
     }
     function ok(){//判断对错
         if (answer=="") {return};
-        if(settitles[settitle]=="分数比大小" || settitles[settitle]=="算式比大小"){
+        if(isNaN(answer)){//判断是否是数字
             if (ans>c && answer==">" || ans<c && answer=="<"|| ans==c && answer=="="){
                 draw_torf("✓");
                 historys_add(text.replace("〇",answer)+";✓");
-                setTimeout(()=>{start();},600);
+                setTimeout(()=>{start()},600);
             }else{
-                draw_torf("x");
-                historys_add(text.replace("〇",answer)+";x");
-                setTimeout(()=>{draw_bors("");},600);
+                draw_torf("x");historys_add(text.replace("〇",answer)+";x");
+                answer="";setTimeout(()=>{draw_answer()},600);
             };
         }else{
             if (answer==ans){
                 draw_torf("✓");
                 historys_add(text.replace(" × ","×")+"="+answer+";✓");
-                setTimeout(()=>{start();},600);
+                setTimeout(()=>{start()},600);
             }else{
-                draw_torf("x");
-                historys_add(text.replace(" × ","×")+"="+answer+";x");
-                answer="";
-                setTimeout(()=>{draw_answer()},600);
+                draw_torf("x");historys_add(text.replace(" × ","×")+"="+answer+";x");
+                answer="";setTimeout(()=>{draw_answer()},600);
             };
         }
     }
