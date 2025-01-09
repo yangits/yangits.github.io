@@ -23,15 +23,9 @@ def bag_program(weights, nums, max_weight):
     num_arrs= dellarrys(num_arrays_list)#去重
     return num_arrs
 def integer_program(A_gq,B_gq): 
-    ma=max(B_gq) 
     m = lp.LpProblem(sense=lp.LpMinimize)      # 确定最大最小化问题，当前确定的是最小化问题
     x = [lp.LpVariable(f'x{i}',lowBound=0) for i in range(len(A_gq[0]))]    # 定义变量放到列表中 生成x1 x2 x3  ,cat='Integer'
-    y = [lp.LpVariable(f'y{i}',lowBound=0, upBound=1 ) for i in range(len(A_gq[0]))]    #,cat='Integer'
     m += lp.lpSum(x) # 定义目标函数，并将目标函数加入求解的问题中 
-    # if n > 0:
-    for i in range(len(A_gq[0])):# 设置比较条件
-        m += (x[i] <= y[i]*ma)
-        # m += (lp.lpSum(y) <= n) 
     for i in range(len(A_gq)):# 设置比较条件
         m += (lp.lpDot(A_gq[i],x) >= B_gq[i])# 等于 
     m.solve()     # 求解

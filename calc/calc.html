@@ -115,7 +115,7 @@
         <canvas id="board" style="width: 100%;background: #019CD6; height: 75%;display: none;"></canvas>
         <textarea id="historys" disabled style="display: none;"></textarea>
     </div>
-    <div id="main">
+    <div id="main" ondblclick="">
         <div class="game"><canvas id="game" width="320" height="120"></canvas></div>
         <div class="bt1">
             <button type="button" onclick="settitle++;numtitle=0;set_title()">功能</button>
@@ -159,15 +159,15 @@
     var ctx=game.getContext("2d");ctx.lineWidth=3;//线宽
     var numtitle=0,settitle=0,historysnum=0;
     var settitles=["加减运算","专项练习","混合运算","乘法运算","除法运算","算式比大小","分数比大小"];
-    var numtitles=[["0—10数字","0—20数字","20—100数字"],
+    var numtitles=[["0—10数字","0—20数字","20—100数字","100—1000数字"],
             ["破十法练习","加法进位练习","减法借位练习","九九乘法表"],
-            ["1A+1B-1C","AA+BB-CC","A×B+/-CC"],
-            ["A×B","AB×C","ABC×D","AB×CD"],
+            ["1A+1B-1C","AA+BB-CC","A×B+/-CC","A÷B+/-CC"],
+            ["A×B","AA×B","AAA×B","AA×BB"],
             ["AA÷B","AAA÷B","AAAA÷B","AAAA÷BB"],
             ["AA〇BB","A+/-B〇C","1A+/-1B〇1C","AA+/-BB〇CC"],
             ["AA/BB〇CC/BB","AA/BB〇AA/CC","A/B〇C/D"]];
-    var text, a="", b="", c="", d="", fh="";
-    var answer="",ans="";set_title();
+    var text, a, b, c, d, fh;
+    var answer,ans;set_title();
     function set_title(){//标题功能绘制
         if(settitle>=settitles.length){settitle=0}
         ctx.font = "15px Arial";
@@ -182,7 +182,6 @@
         ctx.fillText((settitle+1)+"-"+(numtitle+1)+"、"+numtitles[settitle][numtitle], 130, 15);
         start();
     }
-
     function draw_calc(text){//算式绘制
         ctx.font = "40px Arial";
         ctx.clearRect(0, 20, 320, 120);
@@ -252,6 +251,7 @@
             case 0:min=1;max=10;break;
             case 1:min=1;max=20;break;
             case 2:min=20;max=100;break;
+            case 3:min=100;max=1000;break;
             };   
             if (Math.random()<0.5){
                 a=rand(min,max-min);b=rand(min,max-a);
@@ -323,6 +323,16 @@
                         text +=" + "+d;
                     }else{
                         d=rand(1,c);ans=c-d;
+                        text +=" - "+d;
+                    };break;
+                case 3:
+                    a=rand(1,10);b=rand(1,10);
+                    text=a*b+" ÷ "+b;
+                    if (Math.random()<0.5){
+                        d=rand(1,100-a);ans=a+d;
+                        text +=" + "+d;
+                    }else{
+                        d=rand(1,a);ans=a-d;
                         text +=" - "+d;
                     };break;
             };
@@ -419,16 +429,14 @@
         }
     }
     function historys_add(text){
-        historysnum++;
+        historysnum++;text=text.replace(/ /g,"");
         historys.innerHTML+=historysnum+";"+text+"\n";
     }
     function ok(){//判断对错
-        if (answer=="") {return};
-        text=text.replace(/ /g,"");
+        if (answer==""){return};
         if(isNaN(answer)){//判断是否是数字
             if (ans>c && answer==">" || ans<c && answer=="<"|| ans==c && answer=="="){
-                draw_torf("✓");
-                historys_add(text.replace("〇",answer)+";✓");
+                draw_torf("✓");historys_add(text.replace("〇",answer)+";✓");
                 setTimeout(()=>{start()},600);
             }else{
                 draw_torf("x");historys_add(text.replace("〇",answer)+";x");
@@ -436,8 +444,7 @@
             };
         }else{
             if (answer==ans){
-                draw_torf("✓");
-                historys_add(text+"="+answer+";✓");
+                draw_torf("✓");historys_add(text+"="+answer+";✓");
                 setTimeout(()=>{start()},600);
             }else{
                 draw_torf("x");historys_add(text+"="+answer+";x");

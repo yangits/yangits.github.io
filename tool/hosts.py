@@ -1,5 +1,4 @@
 import os ,re
-
 import requests
 urls=["github.com"]
 url_hosts = "https://raw.hellogithub.com/hosts"
@@ -32,4 +31,4 @@ os.system("ipconfig /flushdns")
 # 如果你想要删除的提交是最近的一个，你可以使用HEAD~1
 # git reset --hard HEAD~1
 # 最后，强制推送到GitHub以覆盖远程仓库
-# git push -f origin master
+# git push -f origin main

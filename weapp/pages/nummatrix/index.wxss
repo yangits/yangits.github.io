@@ -1,14 +1,14 @@
 .container {
     width: 454rpx;
     height: 454rpx;
-    border: 20rpx solid #4b49b3;
+    border: 15rpx solid #4b49b3;
     overflow: hidden;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     align-content: space-between;
     border-radius: 20rpx;
-    margin-top: 20rpx;
+    margin-top: 10rpx;
 }
 
 .home {
@@ -18,7 +18,7 @@
     color: #fff;
     border-radius: 10rpx;
     font-size: 36rpx;
-    margin: 10rpx 50rpx;
+    margin: 30rpx 50rpx;
 }
 .home_active {
     width: 200rpx;
@@ -28,7 +28,7 @@
     border: 4rpx solid #0066ff;
     border-radius: 10rpx;
     font-size: 36rpx;
-    margin: 10rpx 50rpx;
+    margin: 30rpx 50rpx;
 }
 
 .v1 {
