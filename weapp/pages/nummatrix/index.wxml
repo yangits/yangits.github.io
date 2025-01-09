@@ -11,8 +11,8 @@
         <view wx:if='{{item.isEmpty}}' style="width:calc((750rpx - 100rpx) / {{nowDifficulty}});height:calc((750rpx - 100rpx) / {{nowDifficulty}});" class="v2"></view>
     </block>
 </view>
-<view class="v3" style="display: {{home==='华容道'? '' :'none'}};"> 步数：{{step}}</view>
-<view class="v4" style="display: {{home==='华容道'? '' :'none'}};">耗时：{{m}}:{{s}}</view>
+<view class="v3" style="display: {{home==='华容道'? '' :'none'}};"> 步数：{{step}} 
+<text decode="true">&emsp;</text> 耗时：{{m}}:{{s}}</view>
 <view bindtap="botton_click" class="f_center game" style="display: {{home==='华容道'? '' :'none'}};">{{bottun}}</view>
 <view bindtap="choose_hrd" class='f_center game' style="display: {{home==='华容道'? '' :'none'}};">选择难度 {{nowDifficulty}}×{{nowDifficulty}}</view>
 <!-- 幻方 -->

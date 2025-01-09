@@ -8,6 +8,7 @@
     justify-content: space-between;
     align-content: space-between;
     border-radius: 20rpx;
+    margin-top: 20rpx;
 }
 
 .home {
@@ -54,10 +55,6 @@
     margin: 20rpx 0;
 }
 
-.v4 {
-    font-size: 32rpx;
-    margin-bottom: 40rpx;
-}
 
 .game {
     width: 400rpx;

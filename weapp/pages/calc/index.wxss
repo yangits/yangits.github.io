@@ -38,7 +38,7 @@ textarea {
   resize: none;
   background-color: rgb(255, 255, 255);
   text-align: left;
-  margin-top: 6rpx;
+  margin-top: 12rpx;
   font-size:30rpx ;
 
 }
