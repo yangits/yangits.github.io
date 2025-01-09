@@ -1,8 +1,6 @@
-import os
-import re
+import os ,re
 
 import requests
-
 urls=["github.com"]
 url_hosts = "https://raw.hellogithub.com/hosts"
 hosts_ip=""
@@ -27,3 +25,11 @@ with open("C:/Windows/System32/drivers/etc/hosts", "w") as hosts:
     # hosts.write(hosts_hello)
 hosts.close()
 os.system("ipconfig /flushdns")
+# 查看提交历史，找到你想要删除的提交之前的commit的哈希值
+# git log
+# 假设你想要删除的提交的哈希值是123abc，使用以下命令回退到那个提交
+# git reset --hard 123abc
+# 如果你想要删除的提交是最近的一个，你可以使用HEAD~1
+# git reset --hard HEAD~1
+# 最后，强制推送到GitHub以覆盖远程仓库
+# git push -f origin master

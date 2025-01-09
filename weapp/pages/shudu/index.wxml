@@ -1,7 +1,7 @@
 
 <view id="level" class="level">
   <view class="buttons">
-    <block wx:for="{{sudokuTypes}}" wx:key="{{item.value}}">
+    <block wx:for="{{sudokuTypes}}" wx:key="value">
       <button size="mini"
         data-type="{{item.value}}"
         data-level="{{item.level}}"
@@ -69,7 +69,7 @@
     <button size="mini" class="null"></button>
     <button size="mini"
       wx:for="{{fixedNumbers_top}}"
-      wx:key="{{item}}"
+      wx:key="item"
       data-number="{{item}}"
       bindtap="{{selectRowIndex===null?'':'gameCellNumber'}}">{{item}}</button>
   </view>
@@ -77,7 +77,7 @@
   <view class="buttons">
     <button size="mini"
       wx:for="{{fixedNumbers_bottom}}"
-      wx:key="{{item}}"
+      wx:key="item"
       data-number="{{item}}"
       bindtap="{{selectRowIndex===null?'':'gameCellNumber'}}">{{item}}</button>
   </view>

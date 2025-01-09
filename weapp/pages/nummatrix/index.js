@@ -1,9 +1,7 @@
 const app = getApp();
 Page({
   data: {
-    windowWidth: app.windowWidth, // 屏幕宽度
     numData: [],
-    numData_hf: [],
     m: '00',   // 分
     s: '00',   // 秒
     step: 0,   // 步数
