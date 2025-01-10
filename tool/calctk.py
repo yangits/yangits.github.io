@@ -1,36 +1,47 @@
 import tkinter
 import pulp as lp
+import numpy as np
+from scipy.optimize import linprog
 #pyinstaller -F -w calctk.py --collect-data pulp
-def bag_program(weights, nums, max_weight):
-    weight_num =[[] for i in range(max_weight)]
-    for il, l in enumerate(weights):
-        val = [0]*len(weights)
-        for i in range(l, max_weight + 1, l):
-            val[il] += 1
-            if val[il] <= nums[il]:
-                weight_num[i - 1].append(deepcopy(val))
-        for i in range(max_weight):
-            if weight_num[i]:
-                if i + l < max_weight:
-                    for vals in weight_num[i]:
-                        val=deepcopy(vals)
-                        val[il] += 1
-                        if val[il] <= nums[il]:
-                             weight_num[i + l].append(deepcopy(val))
-    num_arrays_list = []
-    for vals in weight_num:
-          num_arrays_list.extend(vals)
-    num_arrs= dellarrys(num_arrays_list)#去重
-    return num_arrs
+def bag_program(weights, max_weight):
+    result=[]
+    ren=[0]*len(weights)
+    def backtrack(start,ren, current_weight):
+        # 如果当前重量超过背包容量，直接返回
+        if current_weight > max_weight:
+            ren=[0]*len(weights)
+            return
+        result.append(list(ren))
+        for i in range(start, len(weights)):
+            # 添加当前物品到组合中
+            ren[i]+=1
+            # 递归调用，尝试添加下一个物品
+            backtrack(i, ren, current_weight + weights[i])
+            # 移除当前物品，回溯
+            ren[i]-=1
+    # 从第一个物品开始，当前组合为空，当前重量为0
+    backtrack(0, ren, 0)
+    return result
 def integer_program(A_gq,B_gq): 
-    m = lp.LpProblem(sense=lp.LpMinimize)      # 确定最大最小化问题，当前确定的是最小化问题
-    x = [lp.LpVariable(f'x{i}',lowBound=0) for i in range(len(A_gq[0]))]    # 定义变量放到列表中 生成x1 x2 x3  ,cat='Integer'
-    m += lp.lpSum(x) # 定义目标函数，并将目标函数加入求解的问题中 
-    for i in range(len(A_gq)):# 设置比较条件
-        m += (lp.lpDot(A_gq[i],x) >= B_gq[i])# 等于 
-    m.solve()     # 求解
-    re=[lp.value(var) for var in x]
-    return re
+    c = np.ones(len(A_gq[0]))
+    # 线性约束：-A_gq * x >= -B_gq
+    a = np.array(A_gq)*(-c)
+    b = -np.array(B_gq)
+    bounds=()
+    for i in range(len(A_gq[0])):
+        bounds += ((0, None),)# 下界是0，上界没有
+    # 求解最值
+    re = linprog(c, A_ub=a, b_ub=b, bounds=bounds)
+    return re.x
+    # ---------以上是scipy求解-------------以下是pulp求解--------
+    # m = lp.LpProblem(sense=lp.LpMinimize)      # 确定最大最小化问题，当前确定的是最小化问题
+    # x = [lp.LpVariable(f'x{i}',lowBound=0) for i in range(len(A_gq[0]))]    # 定义变量放到列表中 生成x1 x2 x3  ,cat='Integer'
+    # m += lp.lpSum(x) # 定义目标函数，并将目标函数加入求解的问题中 
+    # for i in range(len(A_gq)):# 设置比较条件
+    #     m += (lp.lpDot(A_gq[i],x) >= B_gq[i])# 等于 
+    # m.solve()     # 求解
+    # re=[lp.value(var) for var in x]
+    # return re
 def deepcopy (a):  #模拟深拷贝
     demo=[0]*len(a)
     for i in range(len(a)):
@@ -69,7 +80,7 @@ def sumar(weights, num):
 class tkapp(tkinter.Tk):
     def __init__(self):
         super().__init__()
-        self.title("管材排料计算 - 星愿 QQ:934550145")
+        self.title("管材排料计算")
         self.geometry("600x600")
         self.label1 = tkinter.Label(self, text="原材料长度: ")
         self.label2 = tkinter.Label(self, text="需下料长度: ")
@@ -110,7 +121,7 @@ class tkapp(tkinter.Tk):
             return 
         self.append_text("开始计算...\n开始动态规划, 计算所有下料分布可能...")    
         try:
-            num_arrs= bag_program(weights, nums, max_weight)     #计算可能下料方案
+            num_arrs= bag_program(weights, max_weight)     #计算可能下料方案
         except:
             self.append_text('动态规划失败，请检查数据!!!') 
             return         
