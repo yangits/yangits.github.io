@@ -164,11 +164,12 @@
     <div class="search-left">
       <div class="search-logo" id="search_logo" onclick="change_href()">Baidu</div>
       <div class="input-wrap">
-        <input class="search-input" id="search_input" type="text" placeholder="网页搜索" oninput="change_input(event);">
+        <input class="search-input" id="search_input" type="text" placeholder="网页搜索" 
+          oninput="change_input()" onkeydown="keydown_input(event)">
         <div class="clear-keyword" id="clear_keyword" style="display: none;" onclick="clear_input()">×</div>
       </div>
     </div>
-    <a href="https://www.baidu.com/s?wd=" class="search-botton" id="search_botton"  target="_blank">搜一下</a>
+    <div class="search-botton" onclick="search_bt()">搜一下</div>
   </div>
   <div>
     <div class="jj-list">
@@ -258,31 +259,31 @@
   </div>
 </div>
 <script>
-  var search_botton = document.getElementById('search_botton');
   var search_input = document.getElementById('search_input');
   var search_logo = document.getElementById('search_logo');
   var clear_keyword = document.getElementById('clear_keyword');
   var search_href="https://www.baidu.com/s?wd=";
-  function change_input(event){
-    search_botton.href=search_href+encodeURIComponent(search_input.value);
-    if(search_input.value!=""){
-      clear_keyword.style.display="";
-    }else{clear_keyword.style.display="none";};
-    if (event.keyCode==13){search_botton.click();};
+  function change_input(){
+    search_input.value!=""?clear_keyword.style.display="":clear_keyword.style.display="none";
+  }
+  function keydown_input(event){
+    if(event.keyCode==13){search_bt()}
   }
   function clear_input(){
-    search_botton.href=search_href;
     search_input.value="";
     clear_keyword.style.display="none";
   }
+  function search_bt(){
+    window.open(search_href+encodeURIComponent(search_input.value), '_blank');
+  }
   function change_href(){
     if (search_logo.innerHTML=='Bing'){
-      search_logo.innerHTML='Baidu';search_href="https://www.baidu.com/s?wd=";
-      search_botton.href=search_href+encodeURIComponent(search_input.value);
+      search_logo.innerHTML='Baidu';
+      search_href="https://www.baidu.com/s?wd=";
     }else{
-      search_logo.innerHTML='Bing';search_href="https://cn.bing.com/search?q=";
-      search_botton.href=search_href+encodeURIComponent(search_input.value);
-    };
+      search_logo.innerHTML='Bing';
+      search_href="https://cn.bing.com/search?q=";
+    }
   }
 </script>
 </body>
