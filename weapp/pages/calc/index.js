@@ -3,13 +3,19 @@ const app = getApp();
 Page({
     data: {
         max_weight_data:"6000", // 屏幕宽度
-        weights_data: "2300.1988.1050.601.503.459.359",
-        nums_data: "912.320.1248.320.912.320.1248",
+        weights_data: "2300,1988,1050,601,503,459,359",
+        nums_data: "912,320,1248,320,912,320,1248",
         text_result: "计算结果:"
     },
-    max_weight_set: function(e) {this.setData({max_weight_data: e.detail.value});},
-    weights_data_set: function(e) {this.setData({weights_data: e.detail.value});},
-    nums_data_set: function(e) {this.setData({nums_data: e.detail.value});},
+    max_weight_set: function(e) {
+      e.detail.value=e.detail.value.replace(/[^0-9\.]/g,'');
+      this.setData({max_weight_data: e.detail.value});},
+    weights_data_set: function(e) {
+      e.detail.value=e.detail.value.replace(/[^0-9\,\.]/g,'');
+      this.setData({weights_data: e.detail.value});},
+    nums_data_set: function(e) {
+      e.detail.value=e.detail.value.replace(/[^0-9\,\.]/g,'');
+      this.setData({nums_data: e.detail.value});},
 
     getResult (goal, limit) {
         //调用getLoosen函数 将原先的限制条件矩阵进行扩充
@@ -118,39 +124,29 @@ Page({
         }
         return loosen;
     },
-    bag_program: function(weights, nums, max_weight) {
-        let weight_num = [];
-        for (let i = 0; i < max_weight; i++) {
-            weight_num.push([]);
-        } 
-        for (let ii = 0; ii < weights.length; ii++) {
-            let L = weights[ii];
-            let val = [];
-            for (let i = 0; i < weights.length; i++) {
-                val.push(0);  
-            }
-            for (let i = L; i < max_weight + 1; i = i + L) {
-                val[ii]++;
-                if (val[ii] <= nums[ii]) {
-                    weight_num[i - 1].push(this.deepcopy(val));    
-                }
-            }
-            for (let i = 0; i < max_weight; i++) {
-                if (weight_num[i]) {
-                    if (i + L < max_weight) {
-                        for (let j in weight_num[i]) {
-                            val = this.deepcopy(weight_num[i][j]);
-                            val[ii]++;
-                            if (val[ii] <= nums[ii]) {
-                                weight_num[i + L].push(this.deepcopy(val));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        let num_arrs = this.dellarrys(weight_num.flat());//去重(降维)
-        return num_arrs;
+
+    bag_program(weights, max_weight) {
+      const result = [];
+      const re = new Array(weights.length).fill(0);
+      function backtrack(start, re, currentWeight) {
+          // 如果当前重量超过背包容量，直接返回
+          if (currentWeight > max_weight) {
+              re = new Array(weights.length).fill(0);
+              return;
+          }
+          result.push([...re]);
+          for (let i = start; i < weights.length; i++) {
+              // 添加当前物品到组合中
+              re[i]++;
+              // 递归调用，尝试添加下一个物品
+              backtrack(i, re, currentWeight + weights[i]);
+              // 移除当前物品，回溯
+              re[i]--;
+          }
+      }
+      // 从第一个物品开始，当前组合为空，当前重量为0
+      backtrack(0, re, 0);
+      return result;
     },
     deepcopy(a) {  //模拟深拷贝
         let demo = [];
@@ -198,8 +194,8 @@ Page({
         return re;
     },
     get_result() {
-        var weights=this.data.weights_data.split(".").map(Number);
-        var nums=this.data.nums_data.split(".").map(Number);
+        var weights=this.data.weights_data.split(",").map(Number);
+        var nums=this.data.nums_data.split(",").map(Number);
         var max_weight=Number(this.data.max_weight_data);
         var texts= "开始计算……\n开始动态规划，计算所有下料分布可能……";
         this.setData({text_result:texts});
@@ -208,8 +204,7 @@ Page({
                 this.setData({text_result:texts});
                 return;}
         }
-        
-        let num_arrs = this.bag_program(weights, nums, max_weight);
+        let num_arrs = this.bag_program(weights, max_weight);
         texts += "\n动态规划结束，开始线性规划选择最优分布……";
         this.setData({text_result:texts});
         let num_arrs_T = [];     //转置矩阵
@@ -240,7 +235,7 @@ Page({
         var z = 0; var l = 0; var re = 0;
         for (let i = 0; i < result.length; i++) {
           re = Math.round(result[i][1]+0.2);
-          texts += "\n" + (i+1) + "#：余" + (max_weight - this.sumarrys(weights, num_arrs[result[i][0]]));
+          texts += "\n" + (i+1) + "#：余" +  Math.round((max_weight - this.sumarrys(weights, num_arrs[result[i][0]]))*100)/100;
           texts += "，需" + re + "根" + JSON.stringify(this.sumf(weights, num_arrs[result[i][0]]));
           z += re;   //计算目标函数的值
           l += this.sumarrys(weights, num_arrs[result[i][0]]) * re;
