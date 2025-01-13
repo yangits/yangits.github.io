@@ -54,7 +54,7 @@
 	<body onkeydown="doKeyDown(event)"><!--身体-->
 		<div class="game">	
 			<div>
-				<select id="mapdata" onchange="initLevel();">
+				<select id="mapdata" onchange="iCurlevel=0;initLevel();">
 					<option selected>关卡集1</option>
 					<option>关卡集2</option>
 					<option>关卡集3</option>
@@ -233,7 +233,7 @@
 				moveTimes ++;showMoveInfo();DrawMap(curMap);//重绘当前更新了数据的地图
 				//若果移动完成了进入下一关
 				if (checkFinish()){//定时器解决渲染地图后再弹窗
-					setTimeout(()=>{alert("恭喜过关！！");GO(1);},100)
+					setTimeout(()=>{alert("恭喜过关！！");GO(1);},220)
 				}
 			}else{steps.pop()}
 		}
@@ -365,8 +365,5 @@
 	<script defer src="./Boxworld.js" onload="initLevel();"></script>
 	<script async src="./setlevel.js"></script>
 	<script async src="./Microban.js"></script>
-	<script async src="./Microban2.js"></script>
-	<script async src="./Microban3.js"></script>
-	<script async src="./Microban4.js"></script>
 	<script async src="./answer.js"></script>
 </html>
