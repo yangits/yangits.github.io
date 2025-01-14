@@ -138,9 +138,9 @@
             var result = [];
             //将该数组进行初始化
             for (let i = 0; i < loosen.length; i++) {
+                if(loosen[i][2]>goal.length) {return false}
                 result.push([]);
             //将b列的值读取入该数组
-                if(loosen[i][2]>goal.length) {return false}
                 result[i] =[loosen[i][2],loosen[i][1]];
             }
             //返回该数组

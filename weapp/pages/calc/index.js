@@ -65,13 +65,13 @@ Page({
             //结束循环判断
             else break;
         }
-
         var result = [];
         //将该数组进行初始化
         for (let i = 0; i < loosen.length; i++) {
-            result.push([]);
+          if(loosen[i][2]>goal.length) {return false}
+          result.push([]);
         //将b列的值读取入该数组
-            result[i] =[loosen[i][2],loosen[i][1]];
+          result[i] =[loosen[i][2],loosen[i][1]];
         }
         //返回该数组
         return result;
@@ -148,13 +148,6 @@ Page({
       backtrack(0, re, 0);
       return result;
     },
-    deepcopy(a) {  //模拟深拷贝
-        let demo = [];
-        for (let i = 0; i < a.length; i++) {
-            demo[i] = a[i];
-        }
-        return demo;
-    },
     sumf(a, b) {   //方案具化
         let re = [];
         for (let i = 0; i < a.length; i++) {
@@ -185,12 +178,6 @@ Page({
         for (let i = 0; i < num1.length; i++) {
             re.push(num1[i] + num2[i]);
         }
-        return re;
-    },
-    dellarrys (a) {     //二维数组去重
-        let obj = {};
-        a.forEach(item => obj[item] = item);
-        let re = Object.values(obj);
         return re;
     },
     get_result() {
@@ -258,5 +245,4 @@ Page({
         path: 'calc/index'
         }
     }
-
 })

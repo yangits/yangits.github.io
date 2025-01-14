@@ -262,7 +262,11 @@
   var search_input = document.getElementById('search_input');
   var search_logo = document.getElementById('search_logo');
   var clear_keyword = document.getElementById('clear_keyword');
-  var search_href="https://www.baidu.com/s?wd=";
+  var search_text=["Baidu","Bing","AI"];
+  var search_href=["https://www.baidu.com/s?wd=",
+    "https://cn.bing.com/search?q=",
+    "https://chat.baidu.com/search?word="];
+  var search_num=0;
   function change_input(){
     search_input.value!=""?clear_keyword.style.display="":clear_keyword.style.display="none";
   }
@@ -274,16 +278,12 @@
     clear_keyword.style.display="none";
   }
   function search_bt(){
-    window.open(search_href+encodeURIComponent(search_input.value), '_blank');
+    window.open(search_href[search_num]+encodeURIComponent(search_input.value), '_blank');
   }
   function change_href(){
-    if (search_logo.innerHTML=='Bing'){
-      search_logo.innerHTML='Baidu';
-      search_href="https://www.baidu.com/s?wd=";
-    }else{
-      search_logo.innerHTML='Bing';
-      search_href="https://cn.bing.com/search?q=";
-    }
+    search_num++;
+    if(search_num>=search_href.length){search_num=0};
+    search_logo.innerHTML=search_text[search_num];
   }
 </script>
 </body>
