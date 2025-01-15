@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>汉字练习机</title>
+	</head>
+	<!-- https://www.jsdelivr.com/package/npm/cnchar-all -->
+	<!-- <script src="https://fastly.jsdelivr.net/npm/cnchar-all/cnchar.all.min.js"></script> -->
+	<script src="https://fastly.jsdelivr.net/npm/cnchar/cnchar.min.js"></script>
+	<script src="https://fastly.jsdelivr.net/npm/cnchar-poly/cnchar.poly.min.js"></script>
+	<script src="https://fastly.jsdelivr.net/npm/cnchar-order/cnchar.order.min.js"></script>
+	<script src="https://fastly.jsdelivr.net/npm/cnchar-trad/cnchar.trad.min.js"></script>
+	<script src="https://fastly.jsdelivr.net/npm/cnchar-draw/cnchar.draw.min.js"></script>
+	<script src="https://fastly.jsdelivr.net/npm/cnchar-idiom/cnchar.idiom.min.js"></script>
+	<script src="https://fastly.jsdelivr.net/npm/cnchar-xhy/cnchar.xhy.min.js"></script>
+	<script src="https://fastly.jsdelivr.net/npm/cnchar-radical/cnchar.radical.min.js"></script>
+	<script src="https://fastly.jsdelivr.net/npm/cnchar-words/cnchar.words.min.js"></script>
+	<script src="https://fastly.jsdelivr.net/npm/cnchar-explain/cnchar.explain.min.js"></script>
+	<script src="https://fastly.jsdelivr.net/npm/cnchar-voice/cnchar.voice.min.js"></script>
+	<script src="https://fastly.jsdelivr.net/npm/cnchar-random/cnchar.random.min.js"></script>
+	<body>
+		<button id="btn">发音</button>
+		<audio id="myAudio">
+			<source src="" type="audio/mpeg">
+		</audio>
+		<div id='cnchar-area'></div>
+		<div id='draw-area'></div>
+
+		<script>
+			const btn = document.getElementById('btn');
+			const char_cn = "好";
+			const audio = document.getElementById('myAudio');
+			btn.onclick = function(){
+               
+                if ('speechSynthesis' in window){
+                    const ssa = new SpeechSynthesisUtterance(char_cn);
+                    ssa.lang = 'zh-CN';
+                    ssa.rate = 1;
+                    ssa.volume = 1;
+                    window.speechSynthesis.speak(ssa);
+                }else{
+					//api https://czyt.tech/post/a-free-tts-api/
+					audio.src='https://dds.dui.ai/runtime/v1/synthesize?voiceId=feyinf&text='+char_cn+'&speed=1&volume=50&audioType=wav'
+                    audio.play();
+                }
+			}
+			var screenwith=window.innerWidth
+			if (screenwith>500){screenwith=500}
+			
+			var drawArea = document.getElementById('draw-area');
+			drawArea.innerHTML = '';
+			var option = {
+				clear: false,
+				el: drawArea,
+				style: {
+					radicalColor: '#44f',
+					backgroundColor: '#eee',
+					length: screenwith
+				}
+			};
+			option.type = cnchar.draw.TYPE.NORMAL;
+			cnchar.draw(char_cn, option);
+			drawArea.innerHTML = '';
+			option.type = cnchar.draw.TYPE.ANIMATION;
+			cnchar.draw(char_cn, option);
+			option.type = cnchar.draw.TYPE.STROKE;
+			option.style.length=100
+			cnchar.draw(char_cn, option);
+			var res = [
+				char_cn.spell('tone'),
+				char_cn.stroke()+"画",
+			]
+			document.getElementById('cnchar-area').innerText = "拼音："+char_cn.spell('tone')+"。共"+char_cn.stroke()+"画";
+		</script>
+
+	</body>
+</html>
