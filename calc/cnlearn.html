@@ -15,8 +15,6 @@
 			height: 100%;
 			width: 100%;
 			background: #ffffff;
-			user-select: none;
-			overflow: hidden;
 			text-align: center;
 			margin: auto;
 			flex-direction: column;
@@ -87,7 +85,7 @@
 				};
 				cnchar.draw(char_cn, options);
 				var res = [
-					"第"+(num+1)+"个字,",
+					"第"+(num+1)+"/"+(char_cn_st.length+1)+"个字,",
 					"拼音:"+char_cn.spell('tone'),
 					",共"+char_cn.stroke()+"画。",
 				]
@@ -99,8 +97,19 @@
 				cnchar.draw(char_cn, option);
 			}
 			function go(n){
-				if (n==0){char_cn=vel.value;start();return}
-				num += n;if(num<0 || num>=char_cn_st.length){num=0};
+				if(n==0){
+					if(vel.value==""){
+						num=0;char_cn = char_cn_st.charAt(num)
+						start();return
+					}else if(isNaN(vel.value)){
+						char_cn=vel.value;start();
+						vel.value="";return}
+				}
+				if(n==1 ||n==-1){
+					num += n;if(num<0 || num>=char_cn_st.length){num=0}
+				}else{
+					num=vel.value-1;vel.value="";
+				}
 				char_cn = char_cn_st.charAt(num)
 				start();
 			}
