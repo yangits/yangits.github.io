@@ -4,11 +4,10 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>汉字练习机</title>
+		<title>学前汉字</title>
 	</head>
-	<!-- https://www.jsdelivr.com/package/npm/cnchar-all -->
-	<script src="https://fastly.jsdelivr.net/npm/cnchar/cnchar.min.js"></script>
-	<script src="https://fastly.jsdelivr.net/npm/cnchar-draw/cnchar.draw.min.js"></script>
+	<script src="./cnchar.min.js"></script>
+	<script src="./cnchar.draw.min.js"></script>
 	<style>
 		body {
 			height: 100%;
@@ -82,8 +81,7 @@
 				if (char_cn.length>1){
 					myAudio.src="https://dds.dui.ai/runtime/v1/synthesize?voiceId=feyinf&text="+char_cn+"&speed=1&volume=100&audioType=wav";
 				}else{
-					// myAudio.src="./vioce/"+char_cn.spell('tone',"flat")+".mp3"
-					myAudio.src="https://unpkg.com/cnchar-data@1.1.0/voice/"+char_cn.spell('tone',"flat")+".mp3";
+					myAudio.src="https://yangits.github.io/cnchar-data/voice/"+char_cn.spell('tone',"flat")+".mp3";
 				}
 				myAudio.load();myAudio.play();
 			}
