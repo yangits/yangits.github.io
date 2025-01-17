@@ -11,7 +11,7 @@ def download_file(url, folder):
     # 将内容写入文件
         with open(filename, 'wb') as file:
             file.write(responsen.content)
-        print(f'mp3load: {filename}')
+        print(f'下载成功: {filename}')
 
 def download_mp3_from_website(website_url, folder='mp3load'):
     # 创建下载目录
@@ -37,3 +37,4 @@ def download_mp3_from_website(website_url, folder='mp3load'):
 
 website_url = 'https://unpkg.com/cnchar-data@1.1.0/voice/'
 download_mp3_from_website(website_url)
+print("程序正在运行请稍后......")  

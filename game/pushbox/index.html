@@ -26,6 +26,7 @@
 		.game input{
 			height: 30px;
 			width: 12%;
+			margin-top: 10px;
 		}
 		.game canvas{
 			margin-top: 10px;
@@ -65,8 +66,8 @@
 				<span id="msg"></span>
 			</div>
 
-			<input type="button" value="<<" onclick="GO(-1)">
-			<input type="button" value=">>" onclick="GO(1)">
+			<input type="button" value="⋘" onclick="GO(-1)">
+			<input type="button" value="⋙" onclick="GO(1)">
 			<input type="number" id="vel"  onkeyup="this.value=this.value.replace(/[^0-9]/g,'');">
 			<input type="button" value="GO" onclick="GO(0);">
 			<input type="button" value="解答" id="answerbt" style="display: '';" onclick="initLevel();solve();">
@@ -347,8 +348,10 @@
             var endX = touch.pageX;
             var endY = touch.pageY;
 			if (Math.abs(endX-startX)>Math.abs(endY-startY)){
+				if(Math.abs(endX-startX)<20){return}
 				if (endX-startX>0){ move('right');}else{move('left')}
 			}else{
+				if(Math.abs(endY-startY)<20){return}
 				if (endY-startY>0){ move('down');}else{move('up')}}
         	});
 		function showMoveInfo(){//完善关卡数据及游戏说明

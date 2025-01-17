@@ -18,6 +18,7 @@
 			flex-direction: column;
 			justify-content: center;
 			align-items: center;
+			margin-top: 6px;
 		}
 		.bt{
 			text-align: center;
@@ -25,12 +26,15 @@
 			flex-direction: column;
 			justify-content: center;
 			align-items: center;
-			max-width: 500px;
+			max-width: 600px;
+			margin-top: 6px;
+			margin-bottom: 6px;
 		}
 		input{
 			height: 30px;
 			width: 16%;
 		}
+
 	</style>
 	<body>
 		<audio id="myAudio"></audio>
@@ -38,8 +42,8 @@
 		<div class="bt">
 			<input type="button" value="⋘" onclick="go(-1)">
 			<input type="button" value="⋙" onclick="go(1)">
-			<input type="text" id="vel">
-			<input type="button" value="GO/刷" onclick="go(0)">
+			<input type="text" id="vel" placeholder="GO刷新">
+			<input type="button" value="GO" onclick="go(0)">
 			<input type="button" value="绘制" onclick="len=0;drow_char()">
 		</div>
 		<div id='draw-area' onclick="char_audio()"></div>
@@ -50,7 +54,7 @@
 			const myAudio = document.getElementById('myAudio');
 			const vel = document.getElementById('vel');
 			var screenwith=window.innerWidth
-			if (screenwith>500){screenwith=500}
+			if (screenwith>600){screenwith=600}
 			var drawArea = document.getElementById('draw-area');
 			var drawAreas = document.getElementById('draw-areas');
 			var option = {
