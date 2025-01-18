@@ -44,7 +44,6 @@
 			<input type="text" id="vel" placeholder="GO刷新">
 			<input type="button" value="GO" onclick="go(0)">
 			<input type="button" value="绘制" onclick="len=0;drow_char()">
-			
 		</div>
 		<div id='draw_area' onclick="char_audio()"></div>
 		<div id='draw_areas'></div>
@@ -86,7 +85,7 @@
 					var char_pinyin =char_cn.spell("array",'tone',"flat");
 					function plays(){
 						if (i<char_pinyin.length){
-							myAudio.src="https://yangits.github.io/cnchar-data/voice/"+char_pinyin[i]+".mp3";
+							myAudio.src="https://yangits.github.io/cnchar-data/voice/"+char_pinyin[i].replace("0","5")+".mp3";
 							myAudio.load(); myAudio.play();
 						}
 						if (i==char_pinyin.length){
@@ -97,7 +96,7 @@
 					}
 					myAudio.addEventListener('ended',  plays);plays();
 				}else{
-					myAudio.src="https://yangits.github.io/cnchar-data/voice/"+char_cn.spell('tone',"flat")+".mp3";
+					myAudio.src="https://yangits.github.io/cnchar-data/voice/"+char_cn.spell('tone',"flat").replace("0","5")+".mp3";
 					myAudio.load(); myAudio.play();
 				}
 			}
@@ -117,11 +116,11 @@
 				};
 				cnchar.draw(char_cn, options);
 				var res = [
-					"第"+(num+1)+"/"+(char_cn_st.length+1)+"个字,",
-					"拼音:"+char_cn.spell("array",'low','tone','poly'),
-					",共"+char_cn.stroke()+"画。",
+					"第"+(num +1)+"/"+char_cn_st.length+"个字",
+					"["+char_cn+"]:"+char_cn.spell("array",'low','tone','poly'),
+					"共"+char_cn.stroke()+"画。",
 				]
-				document.getElementById('cnchar-area').innerText = res.join('');
+				document.getElementById('cnchar-area').innerText = res.join(',');
 			}
 			function drow_char(){
 				option.type = cnchar.draw.TYPE.TEST;
