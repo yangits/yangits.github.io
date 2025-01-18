@@ -4,9 +4,9 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>学前汉字</title>
+		<title>学习汉字</title>
 	</head>
-	<script src="./cnchar.min.js"></script>
+	<script src="https://fastly.jsdelivr.net/npm/cnchar/cnchar.min.js"></script>
 	<script src="./cnchar.draw.min.js"></script>
 	<style>
 		body {
@@ -80,7 +80,7 @@
 					}
 				}
 			};
-			start();
+			window.onload = function(){start()};
 			function char_audio(){
 				if (char_cn.length>1){
 					myAudio.src="https://dds.dui.ai/runtime/v1/synthesize?voiceId=feyinf&text="+char_cn+"&speed=1&volume=100&audioType=wav";
@@ -134,6 +134,5 @@
 				start();char_audio();
 			}
 		</script>
-
 	</body>
 </html>
