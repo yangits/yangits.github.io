@@ -15,9 +15,6 @@
 			margin:0px;
 			padding:0px;
 		}
-		body{
-			overflow:hidden;
-		}
 		.game{
 			text-align: center;
         	margin: auto;
@@ -38,13 +35,12 @@
 			width: 70px;
 			height: 70px;
 			border-radius: 50%;
-			margin-left: 2px;
-			margin-right: 2px;
+			margin-left: 10px;
+			margin-right: 10px;
 			margin-top: 10px;
 			font-size: 20px;
 		}
 		.cen{
-			position: fixed;
 			left: 0;
 			right: 0;
 			text-align: center;
@@ -55,22 +51,18 @@
 	<body onkeydown="doKeyDown(event)"><!--身体-->
 		<div class="game">	
 			<div>
-				<select id="mapdata" onchange="iCurlevel=0;initLevel();">
+				<select id="mapdata" onchange="change_map()">
 					<option selected>关卡集1</option>
 					<option>关卡集2</option>
 					<option>关卡集3</option>
-					<option>关卡集4</option>
-					<option>关卡集5</option>
-					<option>关卡集6</option>
 				</select>
 				<span id="msg"></span>
 			</div>
-
 			<input type="button" value="⋘" onclick="GO(-1)">
 			<input type="button" value="⋙" onclick="GO(1)">
 			<input type="number" id="vel"  onkeyup="this.value=this.value.replace(/[^0-9]/g,'');">
 			<input type="button" value="GO" onclick="GO(0);">
-			<input type="button" value="解答" id="answerbt" style="display: '';" onclick="initLevel();solve();">
+			<input type="button" value="解答" onclick="initLevel();solve();">
 			<input type="button" value="重置"  onclick="initLevel();">
 			<input type="button" value="回退" onclick="back()">
 			<canvas id="canvas" width="560" height="560"></canvas>
@@ -89,7 +81,7 @@
 	<script>
 		document.addEventListener('touchmove', function(e) {event.preventDefault();},{ passive: false });
 		var msg = document.getElementById("msg");
-		var answerbt = document.getElementById("answerbt");
+		var textsteps = document.getElementById("textsteps");
 		var mapdata = document.getElementById("mapdata");
 		var can = document.getElementById("canvas");
 		var cxt = can.getContext("2d");
@@ -104,8 +96,7 @@
 		cxt.translate(1,1);//画布基准位置
 		cxt.lineWidth=3;//线宽
         var n=35,a=n-2;
-		var levels=[];
-
+		var levels=[],answer=[];
         function drawhui1(i,j){//墙绘制
 			cxt.beginPath();
 			cxt.fillStyle="rgb(100, 100, 100)";
@@ -167,22 +158,16 @@
                 }
             }
         }
-		//初始化游戏等级
-		function initLevel(){
+		function change_map(){
+			iCurlevel=0;
 			switch(mapdata.value){
-			case "关卡集1":levels=Boxworld;  
-				answerbt.style.display="";break
-			case "关卡集2":levels=setlevel;
-				answerbt.style.display="none";break
-			case "关卡集3":levels=Microban;
-				answerbt.style.display="none";break
-			case "关卡集4":levels=Microban2;
-				answerbt.style.display="none";break
-			case "关卡集5":levels=Microban3;
-				answerbt.style.display="none";break
-			case "关卡集6":levels=Microban4;
-				answerbt.style.display="none";break
+			case "关卡集1":levels=Boxworld;answer=Boxworld_answer;break
+			case "关卡集2":levels=setlevel;answer=setlevel_answer;break
+			case "关卡集3":levels=Microban;answer=Microban_answer;break
 			}
+			initLevel()
+		}
+		function initLevel(){//初始化游戏等级
 			curMap = copyArray(levels[iCurlevel]);//当前移动过的游戏地图
 			curLevel = levels[iCurlevel];//当前等级的初始地图
 			curLevel.length>curLevel[0].length?n =560/curLevel.length:n =560/curLevel[0].length
@@ -209,22 +194,22 @@
 			var p1,p2,m;//获取小人前面的两个坐标位置
 			switch (dir){
 				case "up":
-					steps.push("U");
+					steps.push("u");
 					p1 = [point[0]-1,point[1]];
 					p2 = [point[0]-2,point[1]];
 					break;
 				case "down":
-					steps.push("D");
+					steps.push("d");
 					p1 = [point[0]+1,point[1]];
 					p2 = [point[0]+2,point[1]];
 					break;
 				case "left":
-					steps.push("L");
+					steps.push("l");
 					p1 = [point[0],point[1]-1];
 					p2 = [point[0],point[1]-2];
 					break;
 				case "right":
-					steps.push("R");
+					steps.push("r");
 					p1 = [point[0],point[1]+1];
 					p2 = [point[0],point[1]+2];
 					break;
@@ -232,9 +217,16 @@
 			//若果小人能够移动的话，更新游戏数据，并重绘地图
 			if (Trygo(p1,p2)){
 				moveTimes ++;showMoveInfo();DrawMap(curMap);//重绘当前更新了数据的地图
-				//若果移动完成了进入下一关
-				if (checkFinish()){//定时器解决渲染地图后再弹窗
-					setTimeout(()=>{alert("恭喜过关！！");GO(1);},220)
+				if (checkFinish()){//若果移动完成了进入下一关，定时器解决渲染地图后再弹窗
+					let item=localStorage.getItem(mapdata.value+"["+iCurlevel+"]")
+					if(!answer[iCurlevel]){
+						if (!item){item=""}
+						if(steps.length<item.length ||item.length==0){
+							localStorage.setItem(mapdata.value+"["+iCurlevel+"]", steps.join(""));
+							setTimeout(()=>{alert("恭喜过关,答案已保存！！");GO(1);},20);return
+						}
+					}
+					setTimeout(()=>{alert("恭喜过关");GO(1);},20)
 				}
 			}else{steps.pop()}
 		}
@@ -259,44 +251,40 @@
 			if(curMap[p1[0]][p1[1]]==1) return false;//若果前面是墙，不通过
 			if(curMap[p1[0]][p1[1]]==3 || curMap[p1[0]][p1[1]]==5){//若果小人前面是箱子那就还需要判断箱子前面有没有障碍物(箱子/墙)
 				if (curMap[p2[0]][p2[1]]==0 || curMap[p2[0]][p2[1]]==2){
-					steps[steps.length-1]=steps[steps.length-1].toLowerCase();
+					steps[steps.length-1]=steps[steps.length-1].toUpperCase();
 					curMap[p2[0]][p2[1]] += 3;//更改地图对应坐标点的值
 				}else{
 					return false;
 				}
 			}
 			curMap[p1[0]][p1[1]] = 4;//小人前进一步更改地图对应坐标点的值
-			//若果小人前进了一步，小人原来的位置如何显示
 			var v = curLevel[point[0]][point[1]];
 			if(v==2||v==5){v=2;}else{v=0;}//可能是5 既有箱子又陷进
-			//重置小人位置的地图参数
 			curMap[point[0]][point[1]] = v;
-			//若果判断小人前进了一步，更新坐标值
-			point = p1;
-			//若果小动了 返回true 指代能够移动小人
+			point = p1;//更新小人坐标值
 			return true;
 		}
 		function backmove(step){
 			var p1,p2=[-1];
 			switch (step){
-				case "u":
+				case "U":
 					p2 = [point[0]-1,point[1]];
-				case "U":	
+				case "u":	
 					p1 = [point[0]+1,point[1]];
 					break;
-				case "d":
+				case "D":
 					p2 = [point[0]+1,point[1]];
-				case "D":	
+				case "d":	
 					p1 = [point[0]-1,point[1]];
 					break;
-				case "l":
+				case "L":
 					p2 = [point[0],point[1]-1];
-				case "L":	
+				case "l":	
 					p1 = [point[0],point[1]+1];
 					break;
-				case "r":
+				case "R":
 					p2 = [point[0],point[1]+1];
-				case "R":	
+				case "r":	
 					p1 = [point[0],point[1]-1];
 					break;
 			}
@@ -317,12 +305,16 @@
 			moveTimes --;showMoveInfo();
 		}
 		function solve(){
-			if (moveTimes<answer[iCurlevel].length){	
+			if(!answer[iCurlevel]){
+				let item=localStorage.getItem(mapdata.value+"["+iCurlevel+"]")
+				if(!item){alert("此关卡集没有答案,保存自己的答案吧！！");return}else{answer[iCurlevel]=item};
+			}
+			if (moveTimes<answer[iCurlevel].length){
 				switch (answer[iCurlevel].charAt(moveTimes)){
-					case "L":   move('left');break;//墙
-					case "R":   move('right');break;//小球
-					case "U":   move('up');break;//箱子
-					case "D":   move('down');break;//小人
+					case "L": case "l": move('left');break;//墙
+					case "R": case "r": move('right');break;//小球
+					case "U": case "u": move('up');break;//箱子
+					case "D": case "d": move('down');break;//小人
                 }
 				timer_solve= setTimeout(solve, 200);
             }
@@ -364,9 +356,20 @@
 			}
 			return b;
 		}
+		function get_items(){
+			let items = [];
+			for (let i = 0; i < localStorage.length; i++) {
+				let key = localStorage.key(i);
+				if(key.charAt(0)=="关"){
+					// localStorage.removeItem("关卡集1[0]")
+					items.push(key+"="+localStorage.getItem(key))
+				}
+			}
+			return items;
+		}
 	</script>
-	<script src="./Boxworld.js" onload="initLevel();"></script>
+	<script src="./Boxworld.js" onload="levels=Boxworld;initLevel();"></script>
 	<script src="./setlevel.js"></script>
 	<script src="./Microban.js"></script>
-	<script src="./answer.js"></script>
+	<script src="./answer.js" onload="answer=Boxworld_answer;"></script>
 </html>
