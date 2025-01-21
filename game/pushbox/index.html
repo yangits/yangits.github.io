@@ -51,7 +51,7 @@
 	<body onkeydown="doKeyDown(event)"><!--身体-->
 		<div class="game">	
 			<div>
-				<select id="mapdata" onchange="change_map()">
+				<select id="mapdata" onchange="iCurlevel=0;change_map();initLevel()">
 					<option selected>关卡集1</option>
 					<option>关卡集2</option>
 					<option>关卡集3</option>
@@ -159,13 +159,11 @@
             }
         }
 		function change_map(){
-			iCurlevel=0;
 			switch(mapdata.value){
 			case "关卡集1":levels=Boxworld;answer=Boxworld_answer;break
 			case "关卡集2":levels=setlevel;answer=setlevel_answer;break
 			case "关卡集3":levels=Microban;answer=Microban_answer;break
 			}
-			initLevel()
 		}
 		function initLevel(){//初始化游戏等级
 			curMap = copyArray(levels[iCurlevel]);//当前移动过的游戏地图
