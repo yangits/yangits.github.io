@@ -62,7 +62,7 @@
 			<input type="button" value="⋙" onclick="GO(1)">
 			<input type="number" id="vel" placeholder="GO重置" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');">
 			<input type="button" value="GO" onclick="GO(0);">
-			<input type="button" value="解答" onclick="initLevel();solve();">
+			<input type="button" value="解答" onclick="solve();">
 			<input type="button" value="回退" onclick="back()">
 			<canvas id="canvas" width="560" height="560"></canvas>
 		</div>
@@ -208,13 +208,15 @@
 			if (Trygo(p1,p2)){
 				moveTimes++;DrawMap(curMap);//重绘当前更新了数据的地图
 				if (checkFinish()){//若果移动完成了进入下一关，定时器解决渲染地图后再弹窗
+					answer=answers[mapdata.selectedIndex][iCurlevel];
 					let item=localStorage.getItem(mapdata.value+"["+iCurlevel+"]")
 					if(!answer){
 						if (!item){item=""}
 						if(steps.length<item.length ||item.length==0){
 							localStorage.setItem(mapdata.value+"["+iCurlevel+"]", steps.join(""));
-							setTimeout(()=>{alert("恭喜过关,答案已保存！！");GO(1);},20);return
-						}
+							setTimeout(()=>{alert("恭喜过关,答案已保存！！");GO(1);},20);
+						}else{setTimeout(()=>{alert("恭喜过关");GO(1);},20)}
+						return;
 					}
 					setTimeout(()=>{alert("恭喜过关");GO(1);},20)
 				}
@@ -299,15 +301,18 @@
 				let item=localStorage.getItem(mapdata.value+"["+iCurlevel+"]")
 				if(!item){alert("此关卡集没有答案,保存自己的答案吧！！");return}else{answer=item};
 			}
-			if (moveTimes<answer.length){
+			initLevel();solve_step();
+			function solve_step(){
+				if (moveTimes<answer.length){
 				switch (answer.charAt(moveTimes)){
 					case "L": case "l": move('left');break;//墙
 					case "R": case "r": move('right');break;//小球
 					case "U": case "u": move('up');break;//箱子
 					case "D": case "d": move('down');break;//小人
                 }
-				timer_solve= setTimeout(solve, 200);
-            }
+				timer_solve= setTimeout(solve_step, 200);
+           	 	}
+			}
 		}
 		function doKeyDown(event){//与键盘上的上下左右键关联
 			switch (event.keyCode){
