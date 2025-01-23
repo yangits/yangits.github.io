@@ -151,12 +151,12 @@
     document.getElementById("main").addEventListener('touchmove', function(e) {
         event.preventDefault();},{ passive: false });
     var board  = document.getElementById('board');
-    var canva_board = board.getContext('2d');
+    var board_Context = board.getContext('2d');
     var topmain = document.getElementById("topmain");
     var recordbt = document.getElementById("record");
     var game = document.getElementById("game");
     var historys = document.getElementById("historys");
-    var ctx=game.getContext("2d");ctx.lineWidth=3;//线宽
+    var Context=game.getContext("2d");Context.lineWidth=3;//线宽
     var numtitle=0,settitle=0,historysnum=0;
     var settitles=["加减运算","专项练习","混合运算","乘法运算","除法运算","算式比大小","分数比大小"];
     var numtitles=[["0—10数字","0—20数字","20—100数字","100—1000数字"],
@@ -170,46 +170,46 @@
     var answer,ans;set_title();
     function set_title(){//标题功能绘制
         if(settitle>=settitles.length){settitle=0}
-        ctx.font = "15px Arial";
-        ctx.clearRect(0, 0, 320, 20);
-        ctx.fillText((settitle+1)+"、"+settitles[settitle], 10, 15);
+        Context.font = "15px Arial";
+        Context.clearRect(0, 0, 320, 20);
+        Context.fillText((settitle+1)+"、"+settitles[settitle], 10, 15);
         num_title();
     }
     function num_title(){//标题范围绘制
         if(numtitle>=numtitles[settitle].length){numtitle=0}
-        ctx.font = "15px Arial";
-        ctx.clearRect(130, 0, 320, 20);
-        ctx.fillText((settitle+1)+"-"+(numtitle+1)+"、"+numtitles[settitle][numtitle], 130, 15);
+        Context.font = "15px Arial";
+        Context.clearRect(130, 0, 320, 20);
+        Context.fillText((settitle+1)+"-"+(numtitle+1)+"、"+numtitles[settitle][numtitle], 130, 15);
         start();
     }
     function draw_calc(text){//算式绘制
-        ctx.font = "40px Arial";
-        ctx.clearRect(0, 20, 320, 120);
-        ctx.fillText(text, 20, 60);
-        ctx.fillText("=", 10, 110);
+        Context.font = "40px Arial";
+        Context.clearRect(0, 20, 320, 120);
+        Context.fillText(text, 20, 60);
+        Context.fillText("=", 10, 110);
     } 
     function draw_score(){//分数绘制
-        ctx.font = "30px Arial";
+        Context.font = "30px Arial";
         if (a<10){bl=10}else{bl=0}
-        ctx.clearRect(0, 20, 320, 120);
-        ctx.fillText(a, 15+bl, 60);
-        ctx.fillText(b, 15+bl, 110);
-        ctx.fillText(c, 110+bl, 60);
-        ctx.fillText(d, 110+bl, 110);
-        ctx.beginPath();ctx.moveTo(10,73); ctx.lineTo(150,73); ctx.stroke(); 
+        Context.clearRect(0, 20, 320, 120);
+        Context.fillText(a, 15+bl, 60);
+        Context.fillText(b, 15+bl, 110);
+        Context.fillText(c, 110+bl, 60);
+        Context.fillText(d, 110+bl, 110);
+        Context.beginPath();Context.moveTo(10,73); Context.lineTo(150,73); Context.stroke(); 
     }
     function draw_answer(){//答案绘制
-        ctx.font = "40px Arial";
-        ctx.clearRect(260, 20, 320, 120);
+        Context.font = "40px Arial";
+        Context.clearRect(260, 20, 320, 120);
         if (settitles[settitle]=="分数比大小"){           
-            ctx.clearRect(55, 20,50, 120);
-            ctx.fillText("〇", 60,85);
-            ctx.fillText(answer, 68,85);return}
-        ctx.clearRect(60, 70, 320, 120);
-        ctx.fillText(answer, 60, 110);
+            Context.clearRect(55, 20,50, 120);
+            Context.fillText("〇", 60,85);
+            Context.fillText(answer, 68,85);return}
+        Context.clearRect(60, 70, 320, 120);
+        Context.fillText(answer, 60, 110);
     }
     function draw_torf(torf){//对错绘制
-        ctx.fillText(torf, 275, 110);
+        Context.fillText(torf, 275, 110);
         smile(265,28,40,torf)
     }
     function numbt(num){//输入、删除数字
@@ -222,22 +222,22 @@
         answer=bors;draw_answer();
     }
     function smile(j,i,a,torf){//表情绘制
-        ctx.beginPath();
-        ctx.arc(j+ a/2,i+ a/2, a/2, 0, 2 * Math.PI, true);
-        ctx.stroke();  
-        ctx.beginPath(); 
-        ctx.arc(j+ a/3,i+ a/3, a/8, 0, 2 * Math.PI, false);
-        ctx.fill();
-        ctx.arc(j+ 2*a/3,i+ a/3, a/8, 0, 2 * Math.PI, false);
-        ctx.fill();
+        Context.beginPath();
+        Context.arc(j+ a/2,i+ a/2, a/2, 0, 2 * Math.PI, true);
+        Context.stroke();  
+        Context.beginPath(); 
+        Context.arc(j+ a/3,i+ a/3, a/8, 0, 2 * Math.PI, false);
+        Context.fill();
+        Context.arc(j+ 2*a/3,i+ a/3, a/8, 0, 2 * Math.PI, false);
+        Context.fill();
         if(torf=="✓"){//笑脸绘制
-            ctx.beginPath();
-            ctx.arc(j+ a/2,i+ a/2, a/4, 0,Math.PI, false);
-            ctx.stroke(); 
+            Context.beginPath();
+            Context.arc(j+ a/2,i+ a/2, a/4, 0,Math.PI, false);
+            Context.stroke(); 
         }else{//苦脸绘制
-            ctx.beginPath();
-            ctx.arc(j+ a/2,i+ a*4/5, a/4, Math.PI,0, false);
-            ctx.stroke(); 
+            Context.beginPath();
+            Context.arc(j+ a/2,i+ a*4/5, a/4, Math.PI,0, false);
+            Context.stroke(); 
         }
     }
     function rand(min,max){
@@ -463,7 +463,7 @@
         board.style.display="";
         board.width=window.innerWidth;
         board.height=window.innerHeight*0.8;
-        canva_board.lineWidth=2;//线宽
+        board_Context.lineWidth=2;//线宽
         var startX;
         var startY;
         board.addEventListener('touchstart', function(e) {
@@ -471,23 +471,23 @@
             var touch = event.touches[0]; // 获取第一个触点
             startX = touch.pageX - board.offsetLeft;
             startY = touch.pageY - board.offsetTop;
-            canva_board.beginPath(); // 开始绘制新路径
-            canva_board.moveTo(startX, startY); // 移动到起点
+            board_Context.beginPath(); // 开始绘制新路径
+            board_Context.moveTo(startX, startY); // 移动到起点
         });
         board.addEventListener('touchmove', function(e) {
             event.preventDefault();
             var touch = event.touches[0];
             var moveX = touch.pageX - board.offsetLeft;
             var moveY = touch.pageY - board.offsetTop;
-            canva_board.lineTo(moveX, moveY); // 绘制直线到移动点
-            canva_board.stroke(); // 绘制路径
+            board_Context.lineTo(moveX, moveY); // 绘制直线到移动点
+            board_Context.stroke(); // 绘制路径
         });
     }
     function back(){
         topmain.style.display="none";
         historys.style.display="none";
         board.style.display="none";
-        canva_board.clearRect(0, 0, board.width, board.height);
+        board_Context.clearRect(0, 0, board.width, board.height);
     }
  </script>
 </body>

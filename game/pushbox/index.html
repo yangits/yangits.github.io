@@ -35,8 +35,8 @@
 			width: 70px;
 			height: 70px;
 			border-radius: 50%;
-			margin-left: 10px;
-			margin-right: 10px;
+			margin-left: 6px;
+			margin-right: 6px;
 			margin-top: 10px;
 			font-size: 20px;
 		}
@@ -53,8 +53,8 @@
 			<div>
 				<select id="mapdata" onchange="iCurlevel=0;initLevel()">
 					<option selected>经典</option>
-					<option>困难</option>
 					<option>简单</option>
+					<option>困难</option>
 				</select>
 				<span id="msg"></span>
 			</div>
@@ -66,7 +66,6 @@
 			<input type="button" value="回退" onclick="back()">
 			<canvas id="canvas" width="560" height="560"></canvas>
 		</div>
-		<button onclick=" down_txt()">下载</button>
 		<div class="cen">
 			<div class="bt">
 				<input type="button" value="左" onclick="move('left')">
@@ -83,8 +82,8 @@
 		var msg = document.getElementById("msg");
 		var textsteps = document.getElementById("textsteps");
 		var mapdata = document.getElementById("mapdata");
-		var can = document.getElementById("canvas");
-		var cxt = can.getContext("2d");
+		var canvas = document.getElementById("canvas");
+		var Context = canvas.getContext("2d");
 		var curMap;//当前显示的地图
 		var curLevel;//当前等级原始的地图
 		var iCurlevel = 0;//当前关卡数
@@ -93,60 +92,60 @@
 		var steps=[];//移动记录
 		var timer_solve;//定时器
 		var startX,startY,endX,endY;
-		cxt.translate(1,1);//画布基准位置
-		cxt.lineWidth=3;//线宽
+		Context.translate(1,1);//画布基准位置
+		Context.lineWidth=3;//线宽
         var n=35,a=n-2;
 		var maps=[];answers=[];
 		var levels=[],answer=[],levels_len=100;
         function drawhui1(i,j){//墙绘制
-			cxt.beginPath();
-			cxt.fillStyle="rgb(100, 100, 100)";
-            cxt.fillRect(j*n,i*n,a,a);
+			Context.beginPath();
+			Context.fillStyle="rgb(100, 100, 100)";
+            Context.fillRect(j*n,i*n,a,a);
         }
         function drawhui2(i,j){//小球绘制
-			cxt.beginPath();
-			cxt.fillStyle = 'rgb(0, 0, 0)';
-			cxt.arc(j*n+ a/2,i*n+ a/2, a/3, 0, 2 * Math.PI, false);
-			cxt.fill();
+			Context.beginPath();
+			Context.fillStyle = 'rgb(0, 0, 0)';
+			Context.arc(j*n+ a/2,i*n+ a/2, a/3, 0, 2 * Math.PI, false);
+			Context.fill();
         }
         function drawhui3(i,j){//箱子绘制
-			cxt.beginPath();
-            cxt.strokeStyle = "rgb(0, 0, 0)";
-			cxt.fillStyle="rgb(204, 170, 102)";
-            cxt.fillRect(j*n,i*n,a,a);
-			cxt.moveTo(j*n+a/4, i*n+a/4); // 起点
-			cxt.lineTo(j*n+3*a/4, i*n+3*a/4); // 线
-			cxt.moveTo(j*n+3*a/4, i*n+a/4); // 起点
-			cxt.lineTo(j*n+a/4, i*n+3*a/4); // 线
-			cxt.stroke();     
+			Context.beginPath();
+            Context.strokeStyle = "rgb(0, 0, 0)";
+			Context.fillStyle="rgb(204, 170, 102)";
+            Context.fillRect(j*n,i*n,a,a);
+			Context.moveTo(j*n+a/4, i*n+a/4); // 起点
+			Context.lineTo(j*n+3*a/4, i*n+3*a/4); // 线
+			Context.moveTo(j*n+3*a/4, i*n+a/4); // 起点
+			Context.lineTo(j*n+a/4, i*n+3*a/4); // 线
+			Context.stroke();     
         }
         function drawhui4(i,j){//人物绘制
-			cxt.beginPath();
-			cxt.strokeStyle = "rgb(0, 0, 0)";
-			cxt.fillStyle = 'rgb(0, 0, 0)';
-			cxt.arc(j*n+ a/2,i*n+ a/2, a/2, 0, 2 * Math.PI, true);
-			cxt.stroke();  
-			cxt.beginPath();
-			cxt.arc(j*n+ a/2,i*n+ a/2, a/4, 0,Math.PI, false);
-			cxt.stroke(); 
-			cxt.beginPath(); 
-			cxt.arc(j*n+ a/3,i*n+ a/3, a/8, 0, 2 * Math.PI, false);
-			cxt.fill();
-			cxt.arc(j*n+ 2*a/3,i*n+ a/3, a/8, 0, 2 * Math.PI, false);
-			cxt.fill();
+			Context.beginPath();
+			Context.strokeStyle = "rgb(0, 0, 0)";
+			Context.fillStyle = 'rgb(0, 0, 0)';
+			Context.arc(j*n+ a/2,i*n+ a/2, a/2, 0, 2 * Math.PI, true);
+			Context.stroke();  
+			Context.beginPath();
+			Context.arc(j*n+ a/2,i*n+ a/2, a/4, 0,Math.PI, false);
+			Context.stroke(); 
+			Context.beginPath(); 
+			Context.arc(j*n+ a/3,i*n+ a/3, a/8, 0, 2 * Math.PI, false);
+			Context.fill();
+			Context.arc(j*n+ 2*a/3,i*n+ a/3, a/8, 0, 2 * Math.PI, false);
+			Context.fill();
         }
 		function drawhui5(i,j){//小球和箱子重合绘制
-			cxt.beginPath();
-            cxt.strokeStyle = "rgb(0, 0, 0)";
-			cxt.fillStyle = 'rgb(204, 170, 102)';
-            cxt.fillRect(j*n,i*n,a,a);
-			cxt.arc(j*n+ a/2,i*n+ a/2, a/4, 0, 2 * Math.PI, false);
-			cxt.stroke();        
+			Context.beginPath();
+            Context.strokeStyle = "rgb(0, 0, 0)";
+			Context.fillStyle = 'rgb(204, 170, 102)';
+            Context.fillRect(j*n,i*n,a,a);
+			Context.arc(j*n+ a/2,i*n+ a/2, a/4, 0, 2 * Math.PI, false);
+			Context.stroke();        
         }
 		//绘制每个游戏关卡地图
 		function DrawMap(level){
 			clearTimeout(timer_solve);
-            cxt.clearRect(0, 0, canvas.width, canvas.height);
+            Context.clearRect(0, 0, canvas.width, canvas.height);
 			for (var i=0;i<level.length ;i++ ){
 				for (var j=0;j<level[i].length ;j++ ){	
 					switch (level[i][j]){
@@ -173,9 +172,9 @@
 				var vel=document.getElementById('vel').value;
 				if(vel==""){initLevel();return};
 				document.getElementById('vel').value=""
-				iCurlevel = parseInt(vel)-1;//iCurlevel当前的地图关数
+				iCurlevel = parseInt(vel)-1;
 			}else{
-				iCurlevel = iCurlevel + i;//下一关
+				iCurlevel = iCurlevel + i;
 			}
 			if(iCurlevel<0){iCurlevel=0};
 			if(iCurlevel>levels_len-1){iCurlevel=levels_len-1};
@@ -210,16 +209,15 @@
 				moveTimes++;DrawMap(curMap);//重绘当前更新了数据的地图
 				if (checkFinish()){//若果移动完成了进入下一关，定时器解决渲染地图后再弹窗
 					answer=answers[mapdata.selectedIndex][iCurlevel];
-					let item=localStorage.getItem("关卡集"+(mapdata.selectedIndex+1)+"["+iCurlevel+"]")
 					if(!answer){
-						if (!item){item=""}
+						let item=localStorage.getItem(mapdata.value+"["+iCurlevel+"]");
+						if (!item){item=""};
 						if(steps.length<item.length ||item.length==0){
-							localStorage.setItem("关卡集"+(mapdata.selectedIndex+1)+"["+iCurlevel+"]", steps.join(""));
-							setTimeout(()=>{alert("恭喜过关,答案已保存！！");GO(1);},20);
-						}else{setTimeout(()=>{alert("恭喜过关");GO(1);},20)}
-						return;
+							localStorage.setItem(mapdata.value+"["+iCurlevel+"]", steps.join(""));
+							setTimeout(()=>{alert("恭喜过关,答案已保存！！");GO(1);},50);return;
+						}
 					}
-					setTimeout(()=>{alert("恭喜过关");GO(1);},20)
+					setTimeout(()=>{alert("恭喜过关");GO(1);},50)
 				}
 			}else{steps.pop()}
 		}
@@ -299,8 +297,8 @@
 		function solve(){
 			answer=answers[mapdata.selectedIndex][iCurlevel];
 			if(!answer){
-				let item=localStorage.getItem("关卡集"+(mapdata.selectedIndex+1)+"["+iCurlevel+"]")
-				if(!item){alert("此关卡集没有答案,保存自己的答案吧！！");return}else{answer=item};
+				let item=localStorage.getItem(mapdata.value+"["+iCurlevel+"]")
+				if(!item){alert("此关卡没有答案,保存自己的答案吧！！");return}else{answer=item};
 			}
 			initLevel();solve_step();
 			function solve_step(){
@@ -325,12 +323,12 @@
 				case 90: case 8: back();break;//回退
 			}
 		}
-		can.addEventListener('touchstart', function(e) {
+		canvas.addEventListener('touchstart', function(e) {
             var touch = event.touches[0]; // 获取第一个触点
             startX = touch.pageX;
             startY = touch.pageY;
         });//触摸移动小人
-        can.addEventListener('touchend', function(e) {
+        canvas.addEventListener('touchend', function(e) {
             var touch = event.changedTouches[0];
             var endX = touch.pageX;
             var endY = touch.pageY;
@@ -342,7 +340,7 @@
 				if (endY-startY>0){ move('down');}else{move('up')}}
         	});
 		function copyArray(arr){//克隆二维数组
-			var b=[];//每次移动更新地图数据都先清空再添加新的地图
+			var b=[];
 			for (var i=0;i<arr.length ;i++ ){
 				b[i] = arr[i].concat();//链接两个数组
 			}
@@ -352,11 +350,10 @@
 			let items = [];
 			for (let i = 0; i < localStorage.length; i++) {
 				let key = localStorage.key(i);
-				if(key.charAt(0)=="关"){
-					// localStorage.removeItem("关卡集1[0]")
-					items.push(key+"="+localStorage.getItem(key))
-				}
+				// localStorage.removeItem(key)
+				items.push(key+"="+localStorage.getItem(key))
 			}
+			console.log(items);
 			return items;
 		}
 		function down_txt() {
@@ -370,8 +367,8 @@
             document.body.removeChild(a);
         };
 	</script>
-	<script src="./Boxworld.js" onload="maps[0]=Boxworld;initLevel();"></script>
-	<script src="./answer.js" onload="answers=[Boxworld_answer,[],[]]"></script>
-	<script src="./setlevel.js" onload="maps[1]=setlevel;"></script>
-	<script src="./Microban.js" onload="maps[2]=Microban;"></script>
+	<script async src="./Boxworld.js" onload="maps[0]=Boxworld;initLevel();"></script>
+	<script async src="./answer.js" onload="answers=[Box_answer,Mic_answer,set_answer]"></script>
+	<script async src="./Microban.js" onload="maps[1]=Microban;"></script>
+	<script async src="./setlevel.js" onload="maps[2]=setlevel;"></script>
 </html>
