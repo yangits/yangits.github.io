@@ -350,10 +350,11 @@
 			let items = [];
 			for (let i = 0; i < localStorage.length; i++) {
 				let key = localStorage.key(i);
-				// localStorage.removeItem(key)
-				items.push(key+"="+localStorage.getItem(key))
+				if(key.charAt(0)=="困"){
+					// localStorage.removeItem(key)
+					items.push(key+"="+localStorage.getItem(key))
+				}
 			}
-			console.log(items);
 			return items;
 		}
 		function down_txt() {
