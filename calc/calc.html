@@ -116,6 +116,7 @@
         <textarea id="historys" disabled style="display: none;"></textarea>
     </div>
     <div id="main" ondblclick="">
+        <audio id="myAudio"></audio>
         <div class="game"><canvas id="game" width="320" height="120"></canvas></div>
         <div class="bt1">
             <button type="button" onclick="settitle++;numtitle=0;set_title()">功能</button>
@@ -156,6 +157,7 @@
     var recordbt = document.getElementById("record");
     var game = document.getElementById("game");
     var historys = document.getElementById("historys");
+    var myAudio = document.getElementById('myAudio');
     var Context=game.getContext("2d");Context.lineWidth=3;//线宽
     var numtitle=0,settitle=0,historysnum=0;
     var settitles=["加减运算","专项练习","混合运算","乘法运算","除法运算","算式比大小","分数比大小"];
@@ -234,10 +236,14 @@
             Context.beginPath();
             Context.arc(j+ a/2,i+ a/2, a/4, 0,Math.PI, false);
             Context.stroke(); 
+            myAudio.src="https://dds.dui.ai/runtime/v1/synthesize?voiceId=lzliaf&text=太棒了&speed=1&volume=100&audioType=mp3";
+            myAudio.load(); myAudio.play();
         }else{//苦脸绘制
             Context.beginPath();
             Context.arc(j+ a/2,i+ a*4/5, a/4, Math.PI,0, false);
             Context.stroke(); 
+            myAudio.src="https://dds.dui.ai/runtime/v1/synthesize?voiceId=lzliaf&text=答错了&speed=1&volume=100&audioType=mp3";
+            myAudio.load(); myAudio.play();
         }
     }
     function rand(min,max){

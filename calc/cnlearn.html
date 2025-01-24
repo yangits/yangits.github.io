@@ -80,25 +80,16 @@
 			};
 			window.onload = function(){start()};
 			function char_audio(){
-				if (char_cn.length>1){
-					var i=0;
-					var char_pinyin =char_cn.spell("array",'tone',"flat");
-					function plays(){
-						if (i<char_pinyin.length){
-							myAudio.src="https://yangits.github.io/cnchar-data/voice/"+char_pinyin[i].replace("0","5")+".mp3";
-							myAudio.load(); myAudio.play();
-						}
-						if (i==char_pinyin.length){
-							myAudio.src="https://dds.dui.ai/runtime/v1/synthesize?voiceId=feyinf&text="+char_cn+"&speed=1&volume=100&audioType=wav";
-							myAudio.load(); myAudio.play();
-						}
-						i++;
+				var i=0;
+				var char_pinyin =char_cn.spell("array",'tone',"flat");
+				function plays(){
+					if (i<char_pinyin.length){
+						myAudio.src="https://yangits.github.io/cnchar-data/voice/"+char_pinyin[i].replace("0","5")+".mp3";
+						myAudio.load(); myAudio.play();
 					}
-					myAudio.addEventListener('ended',  plays);plays();
-				}else{
-					myAudio.src="https://yangits.github.io/cnchar-data/voice/"+char_cn.spell('tone',"flat").replace("0","5")+".mp3";
-					myAudio.load(); myAudio.play();
+					i++;
 				}
+				myAudio.addEventListener('ended',  plays);plays();
 			}
 			function start(){				
 				option.type = cnchar.draw.TYPE.ANIMATION;

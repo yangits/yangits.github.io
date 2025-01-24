@@ -355,11 +355,12 @@
 					items.push(key+"="+localStorage.getItem(key))
 				}
 			}
+			console.log(items);
 			return items;
-		}
+		};get_items()
 		function down_txt() {
             var textToDownload = get_items();
-            var blob = new Blob([textToDownload], { type: 'text/plain' });
+            var blob = new Blob([textToDownload],{type:'text/plain'});
             var a = document.createElement("a");
             a.href = URL.createObjectURL(blob);
             a.download = "example.txt";
@@ -368,8 +369,8 @@
             document.body.removeChild(a);
         };
 	</script>
-	<script async src="./Boxworld.js" onload="maps[0]=Boxworld;initLevel();"></script>
-	<script async src="./answer.js" onload="answers=[Box_answer,Mic_answer,set_answer]"></script>
-	<script async src="./Microban.js" onload="maps[1]=Microban;"></script>
-	<script async src="./setlevel.js" onload="maps[2]=setlevel;"></script>
+	<script src="./Boxworld.js" onload="maps[0]=Boxworld;initLevel();"></script>
+	<script src="./answer.js" onload="answers=[Box_answer,Mic_answer,set_answer]"></script>
+	<script src="./Microban.js" onload="maps[1]=Microban;"></script>
+	<script src="./setlevel.js" onload="maps[2]=setlevel;"></script>
 </html>
