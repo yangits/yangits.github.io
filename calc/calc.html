@@ -236,13 +236,13 @@
             Context.beginPath();
             Context.arc(j+ a/2,i+ a/2, a/4, 0,Math.PI, false);
             Context.stroke(); 
-            myAudio.src="https://dds.dui.ai/runtime/v1/synthesize?voiceId=lzliaf&text=太棒了&speed=1&volume=100&audioType=mp3";
+            myAudio.src="./true.mp3";
             myAudio.load(); myAudio.play();
         }else{//苦脸绘制
             Context.beginPath();
             Context.arc(j+ a/2,i+ a*4/5, a/4, Math.PI,0, false);
             Context.stroke(); 
-            myAudio.src="https://dds.dui.ai/runtime/v1/synthesize?voiceId=lzliaf&text=答错了&speed=1&volume=100&audioType=mp3";
+            myAudio.src="./false.mp3";
             myAudio.load(); myAudio.play();
         }
     }
