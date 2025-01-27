@@ -25,10 +25,27 @@ var sudoku = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
-
-var answer = [[], [], [], [], [], [], [], [], []];
+var sudoku0 = [];
+var answer = [];
 var table = [[], [], [], [], [], [], [], [], []];
-
+var selectindex=[]
+var timeStart;
+var countTime = false;
+var timeArea;
+var count = 0;
+var timerId = -1;
+bindTable();
+timeArea = document.getElementById("timer");
+gameStart();
+Array.from(document.getElementsByTagName('li')).forEach(function(li) {
+  if (window.innerWidth>=500) {
+   li.style.height = '50px'; // 设置高度为100px
+   li.style.lineHeight = '50px'; // 设置高度为100px
+  }else{
+   li.style.height = window.innerWidth/10+ 'px';
+   li.style.lineHeight = window.innerWidth/10+ 'px';
+  }
+});
 function checkColumn(col, x) {
   for (var i = 0; i < 9; i++) {
     if (sudoku[i][col] === x) {
@@ -171,9 +188,8 @@ function setBlockRandomly(n) {
   }
 }
 
-/**
- * 将游戏面板的 DOM Element 保存到一个数组里
- */
+
+// 获取文档中所有的<li>元素并转换为数组
 function bindTable() {
   var e = document.getElementById("sudoku").firstElementChild;
   for (var i = 0; i < 9; i++) {
@@ -187,23 +203,64 @@ function bindTable() {
 /**
  * 把二维数组 a 中的数据设置到游戏面板上
  */
+
+function select(x,y){
+  selectindex=[x,y]
+  for (var i = 0; i < 9; i++) {
+    for (var j = 0; j < 9; j++) {
+      if(sudoku[i][j]==sudoku[x][y] && sudoku[x][y]!=""){
+        table[i][j].style.background="aqua"
+      }else if (i== x) {
+        table[i][j].style.background="linear-gradient(to bottom, #73FF96 0%, #fff 20%, #fff 80%, #73FF96 100%)"
+      }else if(j==y){
+        table[i][j].style.background="linear-gradient(to right, #73FF96 0%, #fff 20%, #fff 80%, #73FF96 100%)"
+      }else{
+        table[i][j].style.background=""
+      }
+    }
+  }
+  table[x][y].style.background="yellow"
+}
+function clear_select(){
+  for (var i = 0; i < 9; i++) {
+    for (var j = 0; j < 9; j++) {
+        table[i][j].style.backgroundColor=""
+    }
+  }
+}
+function inputnum(value){
+    // 检验数据是否合法
+  let i=selectindex[0]
+  let j=selectindex[1]
+  if (sudoku0[i][j]!=0){return}
+  table[i][j].innerHTML = value;
+  sudoku[i][j] = value;
+  // if (check(i, j, value)) {
+  //   table[i][j].style.backgroundColor=""
+  // }else{
+  //   table[i][j].style.backgroundColor="red"
+  // }
+  select(i,j)
+  if (sudokuOK()) {
+    setTimeout(gameOver,10)
+    // gameOver();
+  }
+}
 function setTable(a) {
   for (var i = 0; i < 9; i++) {
     for (var j = 0; j < 9; j++) {
       if (a[i][j] !== 0) {
+        table[i][j].style.color = "red"
         table[i][j].innerHTML = a[i][j];
       } else {
-        table[i][j].innerHTML = '<input type="text" maxlength="1" onchange="onInput(' + i + ',' + j + ');"/>';
+        table[i][j].innerHTML = '';
       }
     }
   }
 }
 
 function createSudoku() {
-  clear(sudoku); // 把 sudoku 的值都赋值为 0
-  // 随机填充编号为 3, 5, 7 的 block
-  // 因为这三个 block 值不相关, 因此可以随机填充
-  // 以减少搜索次数
+  clear(sudoku);
   setBlockRandomly(3);
   setBlockRandomly(5);
   setBlockRandomly(7);
@@ -220,9 +277,6 @@ function clear(arr) {
   }
 }
 
-/**
- * 复制一个 Numeric 型的二维数组
- */
 function copy(arr) {
   var a = [[], [], [], [], [], [], [], [], []];
   for (var i = 0; i < 9; i++) {
@@ -243,6 +297,7 @@ function createGame() {
       sudoku[i][Math.floor(Math.random() * 9)] = 0;
     }
   }
+  sudoku0=copy(sudoku)
 }
 // 设置难度为简答
 function easy() {
@@ -264,34 +319,21 @@ function change() {
 // 查看答案
 function showAnswer() {
   setTable(answer);
-  endTimer();
+  sudoku= copy(answer);
+  // endTimer();
 }
-// 处理输入
-function onInput(i, j) {
-  var inputElement = table[i][j].firstElementChild;
-  var value = parseInt(inputElement.value);
-
-  // 检验数据是否合法
-  if (check(i, j, value)) {
-    sudoku[i][j] = value;
-    // table[i][j].innerHTML = value;
-  } else {
-    alert('Wrong Answer, Please change to another number');
-    inputElement.value = "";
-  }
-
-  // 检查数独是否完成
-  if (sudokuOK()) {
-    gameOver();
-  }
+function claer_num() {
+  setTable(sudoku0);
+  sudoku=copy(sudoku0)
 }
-
-
-var timeStart;
-var countTime = false;
-var timeArea;
-var count = 0;
-var timerId = -1;
+function del_num() {
+  let i=selectindex[0]
+  let j=selectindex[1]
+  if (sudoku0[i][j]!=0){return}
+  sudoku[i][j] = "";
+  table[i][j].innerHTML = '';
+  select(i,j)
+}
 
 function startTimer() {
   timeStart = new Date();
@@ -299,7 +341,7 @@ function startTimer() {
   count = 0;
   timeArea.innerHTML =  "00 : 00 : 00";
   timerId = setTimeout(timer, 1000);
-  console.log(timerId);
+  // console.log(timerId);
 }
 
 function timer() {
@@ -323,7 +365,7 @@ function pad(i) {
 function endTimer() {
   countTime = false;
   clearTimeout(timerId);
-  console.log(timerId);
+  // console.log(timerId);
 }
 
 function gameStart() {
@@ -334,14 +376,8 @@ function gameStart() {
 
 function gameOver() {
   endTimer();
-  var restart = confirm('Congratulations! You have finished this sudoku, click OK to start a new Game');
+  var restart = confirm('恭喜过关,点击开始新的游戏');
   if(restart) {
     gameStart();
   }
 }
-
-(function loading() {
-  bindTable();
-  timeArea = document.getElementById("timer");
-  gameStart();
-})();

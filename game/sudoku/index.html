@@ -2,185 +2,104 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sudoku</title>
   <style>
-    #container {
-      display: block;
+    *{
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      margin:0px;
+      padding:0px;
+      text-align: center;
+      margin: auto;
     }
     .sudoku_wrap {
-      width: inherit;
-      height: 600px;
+      max-width: 500px;
     }
-    .button_wrap {
-      width: 170px;
-      height: 100px;
+    #timer {
+      max-width: 500px;
+      padding: 10px;
     }
     .check_wrap {
-      width:170px;
-      height: 50px;
+      max-width: 500px;
     }
-    .center {
-      position: absolute;
-      margin:auto;
-      top:0;
-      left: 0;
-      right: 0;
-      bottom:0;
-    }
-    .center-horizontal {
-      margin-left:auto;
-      margin-right: auto;
-      left: 0;
-      right:0;
-    }
+
     #sudoku {
-      width: 590px;
-      height: 540px;
+      max-width: 500px;
       list-style: none;
-      position: static;
+      padding-left: 20px;
     }
 
     #sudoku li {
-      width: 60px;
-      height: 60px;
+      width: 10%;
+      height: 35px;
       border: 1px solid #000;
       float: left;
       text-align: center;
-      line-height: 60px;
-      font-size: 30px;
+      line-height: 35px;
+      font-size: 20px;
+      /* background: linear-gradient(to bottom, #73FF96 0%, #fff 20%, #fff 80%, #73FF96 100%);
+      background: linear-gradient(to right, #73FF96 0%, #fff 20%, #fff 80%, #73FF96 100%); */
     }
 
-    #sudoku input {
-      width: 60px;
-      height: 60px;
-      border: 0px;
-      float: left;
-      text-align: center;
-      line-height: 60px;
-      font-size: 30px;
-      padding: 0px;
-    }
-
-    button {
-      width:80px;
-      height: 50px;
+    input {
+      width:30%;
+      height: 30px;
       font-size: 20px;
       border-radius: 5px;
     }
-
-
+    span{
+      padding-left: 10px;
+    }
+    button{
+      width: 12%;
+      height: 30px;
+      margin-top: 10px;
+    }
+    .footbt{
+      max-width: 500px;
+    }
   </style>
 </head>
 <body>
-<h1 style="text-align: center">数独游戏</h1>
-<div id="container">
+  <div id="difficulty" class="check_wrap">
+    <input type="button" value="简单" onclick="easy();gameStart()" checked>
+    <input type="button" value="困难" onclick="hard();gameStart()">
+    <input type="button" value="大师" onclick="disgust();gameStart()">
+  </div>
+  <div id="timer"></div>
   <div class="sudoku_wrap">
-    <ul id="sudoku" class="center">
-      <li x="0" y="0"></li>
-      <li x="0" y="1"></li>
-      <li x="0" y="2"></li>
-      <li x="0" y="3"></li>
-      <li x="0" y="4"></li>
-      <li x="0" y="5"></li>
-      <li x="0" y="6"></li>
-      <li x="0" y="7"></li>
-      <li x="0" y="8"></li>
-
-      <li x="1" y="0"></li>
-      <li x="1" y="1"></li>
-      <li x="1" y="2"></li>
-      <li x="1" y="3"></li>
-      <li x="1" y="4"></li>
-      <li x="1" y="5"></li>
-      <li x="1" y="6"></li>
-      <li x="1" y="7"></li>
-      <li x="1" y="8"></li>
-
-      <li x="2" y="0"></li>
-      <li x="2" y="1"></li>
-      <li x="2" y="2"></li>
-      <li x="2" y="3"></li>
-      <li x="2" y="4"></li>
-      <li x="2" y="5"></li>
-      <li x="2" y="6"></li>
-      <li x="2" y="7"></li>
-      <li x="2" y="8"></li>
-
-      <li x="3" y="0"></li>
-      <li x="3" y="1"></li>
-      <li x="3" y="2"></li>
-      <li x="3" y="3"></li>
-      <li x="3" y="4"></li>
-      <li x="3" y="5"></li>
-      <li x="3" y="6"></li>
-      <li x="3" y="7"></li>
-      <li x="3" y="8"></li>
-
-      <li x="4" y="0"></li>
-      <li x="4" y="1"></li>
-      <li x="4" y="2"></li>
-      <li x="4" y="3"></li>
-      <li x="4" y="4"></li>
-      <li x="4" y="5"></li>
-      <li x="4" y="6"></li>
-      <li x="4" y="7"></li>
-      <li x="4" y="8"></li>
-
-      <li x="5" y="0"></li>
-      <li x="5" y="1"></li>
-      <li x="5" y="2"></li>
-      <li x="5" y="3"></li>
-      <li x="5" y="4"></li>
-      <li x="5" y="5"></li>
-      <li x="5" y="6"></li>
-      <li x="5" y="7"></li>
-      <li x="5" y="8"></li>
-
-      <li x="6" y="0"></li>
-      <li x="6" y="1"></li>
-      <li x="6" y="2"></li>
-      <li x="6" y="3"></li>
-      <li x="6" y="4"></li>
-      <li x="6" y="5"></li>
-      <li x="6" y="6"></li>
-      <li x="6" y="7"></li>
-      <li x="6" y="8"></li>
-
-      <li x="7" y="0"></li>
-      <li x="7" y="1"></li>
-      <li x="7" y="2"></li>
-      <li x="7" y="3"></li>
-      <li x="7" y="4"></li>
-      <li x="7" y="5"></li>
-      <li x="7" y="6"></li>
-      <li x="7" y="7"></li>
-      <li x="7" y="8"></li>
-
-      <li x="8" y="0"></li>
-      <li x="8" y="1"></li>
-      <li x="8" y="2"></li>
-      <li x="8" y="3"></li>
-      <li x="8" y="4"></li>
-      <li x="8" y="5"></li>
-      <li x="8" y="6"></li>
-      <li x="8" y="7"></li>
-      <li x="8" y="8"></li>
-
-    </ul>
+    <ul id="sudoku"></ul>
+    <script>
+      var sudoku = document.getElementById('sudoku');
+      for (var i = 0; i < 9; i++) {
+        for (var j = 0; j < 9; j++) {
+          sudoku.innerHTML+='<li onclick="select('+i+','+j+')"></li>'
+      }}
+  </script>
   </div>
-  <div id="difficulty" class="check_wrap center-horizontal">
-    <input type="radio" name="difficulty" value="easy" onclick="easy()" checked>简单
-    <input type="radio" name="difficulty" value="hard" onclick="hard()">困难
-    <input type="radio" name="difficulty" value="disgust" onclick="disgust()">变态
+  <div class="footbt">
+    <button onclick="claer_num()">清除</button>
+    <button >检查</button>
+    <button >标记</button>
+    <button onclick="del_num()">删除</button>
+    <button onclick="showAnswer()">答案</button>
+    <button onclick="inputnum(1)">1</button>
+    <button onclick="inputnum(2)">2</button>
   </div>
-  <p id="timer" style="text-align: center"></p>
-  <div class="button_wrap center-horizontal">
-    <button type="button" onclick="gameStart()">换一个</button>
-    <button type="button" onclick="showAnswer()">看答案</button>
+  <div class="footbt">
+    <button onclick="inputnum(3)">3</button>
+    <button onclick="inputnum(4)">4</button>
+    <button onclick="inputnum(5)">5</button>
+    <button onclick="inputnum(6)">6</button>
+    <button onclick="inputnum(7)">7</button>
+    <button onclick="inputnum(8)">8</button>
+    <button onclick="inputnum(9)">9</button>
   </div>
-
   <script src="sudoku.js"></script>
-</div>
 </body>
 </html>
