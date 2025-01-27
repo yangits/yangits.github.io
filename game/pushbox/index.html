@@ -214,10 +214,10 @@
 						if (!item){item=""};
 						if(steps.length<item.length ||item.length==0){
 							localStorage.setItem(mapdata.value+"["+iCurlevel+"]", steps.join(""));
-							setTimeout(()=>{alert("恭喜过关,答案已保存！！");GO(1);},50);return;
+							setTimeout(()=>{confirm("恭喜过关,答案已保存！\n是否开始下一关?")?GO(1):GO(0);},50);return;
 						}
 					}
-					setTimeout(()=>{alert("恭喜过关");GO(1);},50)
+					setTimeout(()=>{confirm("恭喜过关！\n是否开始下一关?")?GO(1):GO(0);},50)
 				}
 			}else{steps.pop()}
 		}
@@ -298,7 +298,7 @@
 			answer=answers[mapdata.selectedIndex][iCurlevel];
 			if(!answer){
 				let item=localStorage.getItem(mapdata.value+"["+iCurlevel+"]")
-				if(!item){alert("此关卡没有答案,保存自己的答案吧！！");return}else{answer=item};
+				if(!item){alert("此关卡没有答案,保存自己的答案吧！");return}else{answer=item};
 			}
 			initLevel();solve_step();
 			function solve_step(){
