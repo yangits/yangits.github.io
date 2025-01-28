@@ -10,7 +10,7 @@
  */
 
 var a = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-var difficulty = 0;
+var difficulty = 3;
 var randomComparator = function (a, b) {
   return 0.5 - Math.random();
 };
@@ -42,11 +42,13 @@ var table = [[], [], [], [], [], [], [], [], []];
 var selectindex=[9,9]
 var timeStart;
 var countTime = false;
-var timeArea;
 var count = 0;
 var timerId = -1;
 bindTable();
-timeArea = document.getElementById("timer");
+var timeArea = document.getElementById("timer");
+var easybt = document.getElementById("easybt");
+var hardbt = document.getElementById("hardbt");
+var disgustbt = document.getElementById("disgustbt");
 gameStart();
 Array.from(document.getElementsByTagName('li')).forEach(function(li) {
   if (window.innerWidth>=500) {
@@ -152,7 +154,6 @@ function sudokuOK() {
 }
 
 function tryit(i, j) {
-  // console.log("i: " + i + " j: " + j);
   if (i >= 9) {
     return true;
   }
@@ -168,7 +169,6 @@ function tryit(i, j) {
       return true;
     }
   }
-  // console.log("s: " + s + " t: " + t);
   for (var k = 0; k < 9; k++) {
     if (check(i, j, a[k])) {
       sudoku[i][j] = a[k];
@@ -196,7 +196,6 @@ function setBlockRandomly(n) {
   }
 }
 
-
 // 获取文档中所有的<li>元素并转换为数组
 function bindTable() {
   var e = document.getElementById("sudoku").firstElementChild;
@@ -207,11 +206,6 @@ function bindTable() {
     }
   }
 }
-
-/**
- * 把二维数组 a 中的数据设置到游戏面板上
- */
-
 function select(x,y){
   selectindex=[x,y]
   for (var i = 0; i < 9; i++) {
@@ -231,7 +225,7 @@ function select(x,y){
     }
   }
   if(sudoku[x][y]==""){
-    table[x][y].style.background="yellow"
+    table[x][y].style.background="cadetblue"
   }
 }
 function clear_select(){
@@ -244,10 +238,14 @@ function clear_select(){
   }
 }
 function checkall(){
+  clear_select()
   for (var i = 0; i < 9; i++) {
     for (var j = 0; j < 9; j++) {
       if(sudoku0[i][j]==""){
-        table[i][j].style.background= check(i, j, sudoku[i][j]) ? "" : "yellow"
+        let su=sudoku[i][j]
+        sudoku[i][j]=0
+        table[i][j].style.background= check(i, j, su) ? "" : "yellow"
+        sudoku[i][j]=su
       }
     }
   }
@@ -256,12 +254,9 @@ function flag(){
   if (selectindex[0]==9){return}
   let i=selectindex[0]
   let j=selectindex[1]
-  console.log(flagnum[i][j]);
   if(sudoku0[i][j]==""){
     flagnum[i][j]= flagnum[i][j]==0 ? 1 : 0
   }
-  // select(i,j)
-  // console.log(flagnum);
   setTable(sudoku)
 }
 function inputnum(value){
@@ -270,6 +265,7 @@ function inputnum(value){
   let j=selectindex[1]
   if (sudoku0[i][j]!=0){return}
   table[i][j].innerHTML = value;
+  // flagnum[i][j]=check(i, j, value)?0:1
   sudoku[i][j] = value;
   select(i,j)
   if (sudokuOK()) {
@@ -280,7 +276,7 @@ function setTable(a) {
   for (var i = 0; i < 9; i++) {
     for (var j = 0; j < 9; j++) {
       table[i][j].innerHTML=a[i][j] !== 0 ? a[i][j] : ''
-      table[i][j].style.color=sudoku0[i][j] == 0 ? "blue" : "red"
+      table[i][j].style.color=sudoku0[i][j] == 0 ? "green" : "red"
       if(flagnum[i][j]==1){
         table[i][j].style.background="yellow"
       }
@@ -331,14 +327,23 @@ function createGame() {
 // 设置难度为简答
 function easy() {
   difficulty = 3;
+  easybt.className="input0"
+  hardbt.className="input1"
+  disgustbt.className="input1"
 }
 //设置难度为困难
 function hard() {
   difficulty = 5;
+  easybt.className="input1"
+  hardbt.className="input0"
+  disgustbt.className="input1"
 }
 // 设置难度为变态
 function disgust() {
   difficulty = 7;
+  easybt.className="input1"
+  hardbt.className="input1"
+  disgustbt.className="input0"
 }
 // 换一个数独
 function change() {
@@ -361,6 +366,7 @@ function del_num() {
   if (sudoku0[i][j]!=0){return}
   sudoku[i][j] = "";
   table[i][j].innerHTML = '';
+  flagnum[i][j]= 0
   select(i,j)
 }
 
