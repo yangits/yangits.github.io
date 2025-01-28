@@ -10,7 +10,7 @@
  */
 
 var a = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-var difficulty = 3;
+var difficulty = 0;
 var randomComparator = function (a, b) {
   return 0.5 - Math.random();
 };
@@ -25,10 +25,21 @@ var sudoku = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
+var flagnum = [
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0]
+];
 var sudoku0 = [];
 var answer = [];
 var table = [[], [], [], [], [], [], [], [], []];
-var selectindex=[]
+var selectindex=[9,9]
 var timeStart;
 var countTime = false;
 var timeArea;
@@ -39,8 +50,8 @@ timeArea = document.getElementById("timer");
 gameStart();
 Array.from(document.getElementsByTagName('li')).forEach(function(li) {
   if (window.innerWidth>=500) {
-   li.style.height = '50px'; // 设置高度为100px
-   li.style.lineHeight = '50px'; // 设置高度为100px
+   li.style.height = '50px'; // 设置高度
+   li.style.lineHeight = '50px'; 
   }else{
    li.style.height = window.innerWidth/10+ 'px';
    li.style.lineHeight = window.innerWidth/10+ 'px';
@@ -52,7 +63,6 @@ function checkColumn(col, x) {
       return false;
     }
   }
-  // console.log("check column true");
   return true;
 }
 
@@ -62,7 +72,6 @@ function checkRow(row, x) {
       return false;
     }
   }
-  // console.log("check row true");
   return true;
 }
 
@@ -76,7 +85,6 @@ function checkBlock(row, col, x) {
       }
     }
   }
-  // console.log("check block true");
   return true;
 }
 
@@ -217,43 +225,64 @@ function select(x,y){
       }else{
         table[i][j].style.background=""
       }
+      if(flagnum[i][j]==1){
+        table[i][j].style.background="yellow"
+      }
     }
   }
-  table[x][y].style.background="yellow"
+  if(sudoku[x][y]==""){
+    table[x][y].style.background="yellow"
+  }
 }
 function clear_select(){
+  selectindex=[9,9]
   for (var i = 0; i < 9; i++) {
     for (var j = 0; j < 9; j++) {
-        table[i][j].style.backgroundColor=""
+        table[i][j].style.background=""
+        flagnum[i][j]=0
     }
   }
 }
+function checkall(){
+  for (var i = 0; i < 9; i++) {
+    for (var j = 0; j < 9; j++) {
+      if(sudoku0[i][j]==""){
+        table[i][j].style.background= check(i, j, sudoku[i][j]) ? "" : "yellow"
+      }
+    }
+  }
+}
+function flag(){
+  if (selectindex[0]==9){return}
+  let i=selectindex[0]
+  let j=selectindex[1]
+  console.log(flagnum[i][j]);
+  if(sudoku0[i][j]==""){
+    flagnum[i][j]= flagnum[i][j]==0 ? 1 : 0
+  }
+  // select(i,j)
+  // console.log(flagnum);
+  setTable(sudoku)
+}
 function inputnum(value){
-    // 检验数据是否合法
+  if (selectindex[0]==9){return}
   let i=selectindex[0]
   let j=selectindex[1]
   if (sudoku0[i][j]!=0){return}
   table[i][j].innerHTML = value;
   sudoku[i][j] = value;
-  // if (check(i, j, value)) {
-  //   table[i][j].style.backgroundColor=""
-  // }else{
-  //   table[i][j].style.backgroundColor="red"
-  // }
   select(i,j)
   if (sudokuOK()) {
     setTimeout(gameOver,10)
-    // gameOver();
   }
 }
 function setTable(a) {
   for (var i = 0; i < 9; i++) {
     for (var j = 0; j < 9; j++) {
-      if (a[i][j] !== 0) {
-        table[i][j].style.color = "red"
-        table[i][j].innerHTML = a[i][j];
-      } else {
-        table[i][j].innerHTML = '';
+      table[i][j].innerHTML=a[i][j] !== 0 ? a[i][j] : ''
+      table[i][j].style.color=sudoku0[i][j] == 0 ? "blue" : "red"
+      if(flagnum[i][j]==1){
+        table[i][j].style.background="yellow"
       }
     }
   }
@@ -320,11 +349,11 @@ function change() {
 function showAnswer() {
   setTable(answer);
   sudoku= copy(answer);
-  // endTimer();
 }
 function claer_num() {
   setTable(sudoku0);
   sudoku=copy(sudoku0)
+  clear_select()
 }
 function del_num() {
   let i=selectindex[0]
@@ -372,6 +401,7 @@ function gameStart() {
   endTimer();
   change();
   startTimer();
+  clear_select()
 }
 
 function gameOver() {

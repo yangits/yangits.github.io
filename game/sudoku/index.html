@@ -42,10 +42,15 @@
       text-align: center;
       line-height: 35px;
       font-size: 20px;
-      /* background: linear-gradient(to bottom, #73FF96 0%, #fff 20%, #fff 80%, #73FF96 100%);
-      background: linear-gradient(to right, #73FF96 0%, #fff 20%, #fff 80%, #73FF96 100%); */
+      font-weight: 900;
+      color: green;
     }
-
+    #sudoku :nth-of-type(3n) {
+      border-right: 3px solid blue;
+    }
+    #sudoku :nth-of-type(9n+1) {
+      border-left: 3px solid blue;
+    }
     input {
       width:30%;
       height: 30px;
@@ -59,6 +64,7 @@
       width: 12%;
       height: 30px;
       margin-top: 10px;
+      font-size: 16px;
     }
     .footbt{
       max-width: 500px;
@@ -78,14 +84,21 @@
       var sudoku = document.getElementById('sudoku');
       for (var i = 0; i < 9; i++) {
         for (var j = 0; j < 9; j++) {
-          sudoku.innerHTML+='<li onclick="select('+i+','+j+')"></li>'
+          if(i==0 || i==3 || i==6){
+            sudoku.innerHTML+='<li style="border-top: 3px solid blue;" onclick="select('+i+','+j+')"></li>'
+          }else if(i==8){
+            sudoku.innerHTML+='<li style="border-bottom: 3px solid blue;" onclick="select('+i+','+j+')"></li>'
+          }else{
+            sudoku.innerHTML+='<li onclick="select('+i+','+j+')"></li>'
+          }
+          
       }}
   </script>
   </div>
   <div class="footbt">
     <button onclick="claer_num()">清除</button>
-    <button >检查</button>
-    <button >标记</button>
+    <button onclick="checkall()">检查</button>
+    <button onclick="flag()">标记</button>
     <button onclick="del_num()">删除</button>
     <button onclick="showAnswer()">答案</button>
     <button onclick="inputnum(1)">1</button>
