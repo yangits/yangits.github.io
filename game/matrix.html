@@ -52,7 +52,6 @@
       background: blue;
       color: white;
     }
-
     select,button{
       width: 60%;
       height: 38px;
@@ -74,7 +73,7 @@
   <div  id="main"></div>
   <div class="choose">
     <button id="startbt" onclick="start_bt()">开始</button>
-    <select id="choose_hrdbt" onchange="timedata.innerHTML='耗时: 00 : 00';step=0;choose_hrd();">
+    <select id="choose_hrdbt" onchange="home_hrd()">
       <option selected>3 × 3</option>
       <option>4 × 4</option>
       <option>5 × 5</option>
@@ -143,7 +142,6 @@
         numData.push(i);
         main.innerHTML+='<span>'+i+'</span>';
       }
-      numData.push("");
       span_style(size)
     }
     function start_bt(){
@@ -158,19 +156,14 @@
         startbt.innerHTML="重置"
       }else{
         timedata.innerHTML =  "耗时: 00 : 00";
-        step=0;choose_hrd();endTimer();
+        step=0;choose_hrd();
       }
-      
     }
     function disorganize() {
       numData.sort(() => { return (0.5 - Math.random()); }); // 随机打乱顺序
-      while (numData[numData.length - 1]!="") {
-        numData.sort(() => { return (0.5 - Math.random()); }); // 当前空格在最后一位就退出循环
-      }
       let num = 0;
       for (let i = 0; i < numData.length; i++) {
         for (let x = i + 1; x < numData.length; x++) {
-          // 计算逆序数总的数量
           if (numData[i] > numData[x]) {
             num += 1;
           }
@@ -178,35 +171,27 @@
       }
       // 逆序数的数量 必须为偶数才有解
       if (num % 2 == 0) {
-        return numData;
+        numData.push("");return;
       } else {
-        // 递归调用，直到逆序数的数量为偶数才终止
         disorganize(numData);
       }
-    }
-    // 游戏结束
-    function gameOver() {
+    } 
+    function gameOver() {// 游戏结束
       // 如果最后一格为空的话 并且 倒数第二格值正确的话，再计算游戏是否结束
       if (numData[numData.length - 1]=="" && numData[numData.length - 2] == size*size - 1) {
-        let flg = true; // 是否结束
         for (let i = 1; i < numData.length-1; i++) {
-          if (numData[i-1] != i) {
-            flg = false;
-            break;
-          }
+          if (numData[i-1] != i) {return}
         }
-        if (flg) {
-          alert("恭喜过关了！");choose_hrd();
-        }
+        alert("恭喜过关了！");choose_hrd();
       }
     }
     // 移动算法
     function goMove(n) {
       let x = '';
       // 当前点击的 上下左右 方向如果有空位的话，就互换位置
-      if (numData[n - size]=="") {  // 下
+      if (numData[n - size]=="") {  // 上
         x = n - size;
-      } else if (numData[n + size]=="") {  // 上
+      } else if (numData[n + size]=="") {  // 下
         x = n + size;
       } else if (numData[n - 1] =="") {  // 左
         // 如果是在最左边的话，禁止向左移动
@@ -243,7 +228,6 @@
       count = 0;
       timedata.innerHTML =  "耗时: 00 : 00";
       timerId = setTimeout(timer, 1000);
-      // console.log(timerId);
     }
     function timer() {
       count++;
@@ -254,14 +238,12 @@
         timerId = setTimeout(timer, 1000);
       }
     }
-
     function pad(i) {
       if (i < 10) {
         return "0" + i;
       }
       return i;
     }
-
     function endTimer() {
       countTime = false;
       clearTimeout(timerId);
@@ -270,15 +252,15 @@
       size=choose_hfbt.selectedIndex*2+3;
       msg.innerHTML="幻方和："+(size**2+1)*size/2;
       main.innerHTML="";
+      let matrix = magicMatrix(size);
       for (var i = 0; i < size; i++) {
           for (var j = 0; j < size; j++) {
-            main.innerHTML+='<span>'+magicMatrix(size)[i][j]+'</span>'
+            main.innerHTML+='<span>'+matrix[i][j]+'</span>'
       }}
       span_style(size)
     }
-    // 初始化题目
     function magicMatrix(n) {
-      var matrix = [];
+      let matrix = [];
       var x = 0;
       var y = (n-1)/2; // 奇数的中心位置
       for (let i = 0; i < n; i++) {
