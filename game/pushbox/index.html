@@ -303,12 +303,11 @@
 			if(!answer){
 				let item=localStorage.getItem(mapdata.value+"["+iCurlevel+"]")
 				if(!item){
-					if(confirm("此关卡没有答案,是否暴力求解(建议箱子数量4个及以下)！")){
-						solver_box(maps[mapdata.selectedIndex][iCurlevel])
+					if(confirm("此关卡没有答案,是否暴力求解(小型地图及5个以下箱子)")){
+						solver_box()
 					}else{return}
 				}else{answer=item};
 			}
-
 			initLevel();solve_step();
 			function solve_step(){
 				if (moveTimes<answer.length){
@@ -375,20 +374,19 @@
 					{ dx: 0, dy: -1, action: 'l' },
 					{ dx: -1, dy: 0, action: 'u' }
 				];
-				
 				// 解析迷宫
 				const parseResult = this.parseMaze(maze);
 				this.start = parseResult.start;
 				this.initialBoxes = parseResult.boxes;
 				this.targets = parseResult.targets;
 				this.maze = maze;
+				this.TIME_LIMIT = 5000; // 超时时间（5 秒）
+				this.startTime = Date.now(); // 记录搜索开始时间
 			}
-
 			parseMaze(maze) {
 				let start = null;
 				const boxes = new Set();
 				const targets = new Set();
-				
 				for (let i = 0; i < maze.length; i++) {
 					const row = maze[i];
 					for (let j = 0; j < row.length; j++) {
@@ -399,33 +397,51 @@
 							boxes.add(JSON.stringify([i, j]));
 						} else if (c === '.') {
 							targets.add(JSON.stringify([i, j]));
-						}else if (c === '*') {
+						} else if (c === '*') {
 							boxes.add(JSON.stringify([i, j]));
 							targets.add(JSON.stringify([i, j]));
 						}
 					}
 				}
-				// 转换 Set 为坐标数组
 				return {
 					start,
 					boxes: Array.from(boxes).map(pos => JSON.parse(pos)),
 					targets: Array.from(targets).map(pos => JSON.parse(pos))
 				};
 			}
-
 			isWin(boxes) {
-				return boxes.every(box => 
+				return boxes.every(box =>
 					this.targets.some(t => t[0] === box[0] && t[1] === box[1])
 				);
 			}
-
 			getStateKey(player, boxes) {
-				const sortedBoxes = [...boxes].sort((a, b) => 
+				const sortedBoxes = [...boxes].sort((a, b) =>
 					a[0] - b[0] || a[1] - b[1]
 				);
 				return JSON.stringify([player, sortedBoxes]);
 			}
-
+			isBoxDeadlocked(box, boxes) {
+				const [x, y] = box;
+				// 检查箱子是否在角落
+				const isCorner =
+					(this.maze[x - 1]?.[y] === '#' && this.maze[x][y - 1] === '#') || // 左上角
+					(this.maze[x - 1]?.[y] === '#' && this.maze[x][y + 1] === '#') || // 右上角
+					(this.maze[x + 1]?.[y] === '#' && this.maze[x][y - 1] === '#') || // 左下角
+					(this.maze[x + 1]?.[y] === '#' && this.maze[x][y + 1] === '#');   // 右下角
+				if (isCorner) {
+					// 如果箱子在角落且不在目标位置，则锁死
+					return !this.targets.some(t => t[0] === x && t[1] === y);
+				}
+				// 检查箱子是否在墙边且无法移动
+				const isWallSide =
+					(this.maze[x - 1]?.[y] === '#' || this.maze[x + 1]?.[y] === '#') &&
+					(this.maze[x][y - 1] === '#' || this.maze[x][y + 1] === '#');
+				if (isWallSide) {
+					// 如果箱子在墙边且不在目标位置，则锁死
+					return !this.targets.some(t => t[0] === x && t[1] === y);
+				}
+				return false;
+			}
 			solve() {
 				const visited = new Set();
 				const queue = [];
@@ -434,44 +450,43 @@
 					boxes: this.initialBoxes,
 					path: []
 				});
-
 				while (queue.length > 0) {
+					if (Date.now() - this.startTime > this.TIME_LIMIT) {
+						return null; // 超时返回 null
+					}
 					const { player, boxes, path } = queue.shift();
-
 					// 检查胜利条件
 					if (this.isWin(boxes)) {
 						return path;
 					}
-
 					// 生成状态唯一标识
 					const stateKey = this.getStateKey(player, boxes);
 					if (visited.has(stateKey)) {
 						continue;
 					}
 					visited.add(stateKey);
-
+					// 检查是否有箱子锁死
+					if (boxes.some(box => this.isBoxDeadlocked(box, boxes))) {
+						continue; // 跳过锁死状态
+					}
 					// 尝试所有移动方向
 					for (const { dx, dy, action } of this.DIRECTIONS) {
 						const px = player[0], py = player[1];
 						const nx = px + dx, ny = py + dy;
-
 						// 检查新位置是否合法
 						if (!this.isValid(nx, ny)) continue;
-
 						// 检查是否推动箱子
 						const boxIndex = boxes.findIndex(b => b[0] === nx && b[1] === ny);
 						if (boxIndex !== -1) {
 							const bx = nx + dx, by = ny + dy;
-							if (!this.isValid(bx, by) || 
+							if (!this.isValid(bx, by) ||
 								boxes.some(b => b[0] === bx && b[1] === by)) {
 								continue; // 无法推动
 							}
-							
 							// 创建新箱子状态
-							const newBoxes = boxes.map((b, i) => 
+							const newBoxes = boxes.map((b, i) =>
 								i === boxIndex ? [bx, by] : b
 							);
-							
 							queue.push({
 								player: [nx, ny],
 								boxes: newBoxes,
@@ -487,23 +502,21 @@
 						}
 					}
 				}
-
 				return null; // 无解
 			}
-
 			isValid(x, y) {
-				return x >= 0 && x < this.maze.length && 
-					y >= 0 && y < this.maze[0].length && 
+				return x >= 0 && x < this.maze.length &&
+					y >= 0 && y < this.maze[0].length &&
 					this.maze[x][y] !== '#';
 			}
 		}
-		function solver_box(map){
-			const solver = new SokobanSolver(map.split("\n"));
+		function solver_box(){
+			const solver = new SokobanSolver(curLevel);
 			const solution = solver.solve();
 			if (solution) {
 				answer=solution.join('')
 			} else {
-				alert("没有找到解")
+				alert("超时，没有找到解")
 			}
 		}
 	</script>
