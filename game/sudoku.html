@@ -21,16 +21,16 @@
       max-width: 500px;
     }
     #sudoku span {
-      border: 1px solid blue;
+      border: 1px solid mediumblue;
       float: left;
       text-align: center;
       font-weight: 900;
     }
     #sudoku :nth-of-type(3n) {
-      border-right: 3px solid blue; 
+      border-right: 4px solid mediumblue; 
     }
     #sudoku :nth-of-type(9n+1) {
-      border-left: 3px solid blue;
+      border-left: 4px solid mediumblue;
     }
     input {
       width:25%;
@@ -38,22 +38,22 @@
       font-size: 20px;
       border-radius: 5px;
       margin: 10px;
-      border: 3px solid blue;
+      border: 3px solid mediumblue;
     }
     .input0{
       background: white;
-      color: blue;
+      color: mediumblue;
     }
     .input1{
-      background: blue;
+      background: mediumblue;
       color: white;
     }
     button{
       width: 12%;
       height: 38px;
       margin-top: 10px;
-      font-size: 16px;
-      background: blue;
+      font-size: 22px;
+      background: mediumblue;
       color: rgb(255, 255, 255);
       border: 0;
       border-radius: 5px;
@@ -75,20 +75,20 @@
     for (var i = 0; i < 9; i++) {
       for (var j = 0; j < 9; j++) {
         if(i==0 || i==3 || i==6){
-          sudoku.innerHTML+='<span style="border-top: 3px solid blue;" onclick="select('+i+','+j+')"></span>'
+          sudoku.innerHTML+='<span style="border-top: 4px solid mediumblue;" onclick="select('+i+','+j+')"></span>'
         }else if(i==8){
-          sudoku.innerHTML+='<span style="border-bottom: 3px solid blue;" onclick="select('+i+','+j+')"></span>'
+          sudoku.innerHTML+='<span style="border-bottom: 4px solid mediumblue;" onclick="select('+i+','+j+')"></span>'
         }else{
           sudoku.innerHTML+='<span onclick="select('+i+','+j+')"></span>'
         }
     }}
   </script>
   <div class="footbt">
-    <button onclick="claer_num()">清除</button>
-    <button onclick="checkall()">检查</button>
-    <button onclick="flag()">标记</button>
-    <button onclick="del_num()">删除</button>
-    <button onclick="showAnswer()">答案</button>
+    <button onclick="claer_num()">清</button>
+    <button onclick="checkall()">检</button>
+    <button onclick="flag()">标</button>
+    <button onclick="del_num()">删</button>
+    <button onclick="showAnswer()">答</button>
     <button onclick="inputnum(1)">1</button>
     <button onclick="inputnum(2)">2</button>
   </div>
@@ -143,9 +143,9 @@
   var disgustbt = document.getElementById("disgustbt");
   bindTable();gameStart();
   Array.from(document.getElementsByTagName('span')).forEach(function(span) {
-    span.style.width = screenwidth/9-3+ 'px';
-    span.style.height =screenwidth/9-3+ 'px';
-    span.style.lineHeight = screenwidth/9-3+ 'px';
+    span.style.width = screenwidth/9-3.5+ 'px';
+    span.style.height =screenwidth/9-3.5+ 'px';
+    span.style.lineHeight = screenwidth/9-3.5+ 'px';
     span.style.fontSize = screenwidth/9/1.8+ 'px';
   });
   function checkColumn(col, x) {
@@ -285,7 +285,7 @@
     for (var i = 0; i < 9; i++) {
       for (var j = 0; j < 9; j++) {
         if(sudoku[i][j]==sudoku[x][y] && sudoku[x][y]!=""){
-          table[i][j].style.background="aqua"
+          table[i][j].style.background="lightblue"
         }else if (i== x) {
           table[i][j].style.background="linear-gradient(to bottom, #73FF96 0%, #fff 20%, #fff 80%, #73FF96 100%)"
         }else if(j==y){
@@ -294,12 +294,12 @@
           table[i][j].style.background=""
         }
         if(flagnum[i][j]==1){
-          table[i][j].style.background="yellow"
+          table[i][j].style.background="red"
         }
       }
     }
-    if(sudoku[x][y]==""){
-      table[x][y].style.background="cadetblue"
+    if(sudoku[x][y]=="" && flagnum[x][y]!=1){
+      table[x][y].style.background="lightblue"
     }
   }
   function clear_select(){
@@ -314,7 +314,7 @@
   function checkall(){
     for (var i = 0; i < 9; i++) {
       for (var j = 0; j < 9; j++) {
-        if(sudoku0[i][j]==""){
+        if(sudoku0[i][j]==0){
           let su=sudoku[i][j]
           sudoku[i][j]=0
           table[i][j].style.background= check(i, j, su) ? "" : "yellow"
@@ -324,19 +324,18 @@
     }
   }
   function flag(){
-    if (selectindex[0]==9){return}
     let i=selectindex[0]
     let j=selectindex[1]
-    if(sudoku0[i][j]==""){
+    if (i==9 || sudoku0[i][j]!=0){return}
+    if(sudoku0[i][j]==0){
       flagnum[i][j]= flagnum[i][j]==0 ? 1 : 0
     }
-    setTable(sudoku)
+    select(i,j);
   }
   function inputnum(value){
-    if (selectindex[0]==9){return}
     let i=selectindex[0]
     let j=selectindex[1]
-    if (sudoku0[i][j]!=0){return}
+    if (i==9 || sudoku0[i][j]!=0){return}
     table[i][j].innerHTML = value;
     sudoku[i][j] = value;
     select(i,j)
@@ -349,9 +348,6 @@
       for (var j = 0; j < 9; j++) {
         table[i][j].innerHTML=a[i][j] !== 0 ? a[i][j] : ''
         table[i][j].style.color=sudoku0[i][j] == 0 ? "green" : "red"
-        if(flagnum[i][j]==1){
-          table[i][j].style.background="yellow"
-        }
       }
     }
   }
@@ -434,8 +430,8 @@
   function del_num() {
     let i=selectindex[0]
     let j=selectindex[1]
-    if (sudoku0[i][j]!=0){return}
-    sudoku[i][j] = "";
+    if (i==9 || sudoku0[i][j]!=0){return}
+    sudoku[i][j] = 0;
     table[i][j].innerHTML = '';
     flagnum[i][j]= 0
     select(i,j)
