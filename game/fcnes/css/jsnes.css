@@ -1,4 +1,3 @@
-html,
 body {
     margin: 0;
     height: 100%;
@@ -25,18 +24,15 @@ body {
     max-height: 621px;
     padding: 10px;
 }
-
 .panel {
     position: relative;
     height: 100%;
-    padding: 10px;
     box-sizing: border-box;
     background: #f8f1d7;
     border-radius: 15px;
     display: flex;
     flex-direction: row;
 }
-
 .function-area {
     flex: 1;
     display: flex;
@@ -44,7 +40,6 @@ body {
     justify-content: center;
     flex-direction: column;
 }
-
 .controller-area {
     padding-bottom:30px ;
     position: relative;
@@ -52,14 +47,12 @@ body {
     display: flex;
     flex-direction: row;
 }
-
 .action-area {
     padding-bottom:50px ;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
 }
-
 .controller {
     position: relative;
     width: 140px;
@@ -67,7 +60,6 @@ body {
     align-self: flex-end;
     filter: drop-shadow(5px 5px 0px rgba(255, 255, 255, .8));
 }
-
 .controller button {
     position: absolute;
     z-index: 1;
@@ -84,7 +76,6 @@ body {
     user-select: none;
     transform: translate(-50%, -50%);
 }
-
 .controller::before {
     content: '';
     position: absolute;
@@ -98,7 +89,6 @@ body {
     background: #857b7a;
     transform: translate(-50%, -50%);
 }
-
 .controller::after {
     content: '';
     z-index: 2;
@@ -113,7 +103,6 @@ body {
     top: 50%;
     transform: translate(-50%, -50%);
 }
-
 button.up.joydirection {
     top: 0;
     transform: translate(-50%, 0);
@@ -122,7 +111,6 @@ button.up.joydirection {
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
 }
-
 button.right.joydirection {
     left: auto;
     right: 0;
@@ -132,7 +120,6 @@ button.right.joydirection {
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
 }
-
 button.down.joydirection {
     top: auto;
     transform: translate(-50%, 0);
@@ -142,7 +129,6 @@ button.down.joydirection {
     border-top-right-radius: 0;
     border-top-left-radius: 0;
 }
-
 button.left.joydirection {
     left: 0;
     transform: translate(0, -50%);
@@ -151,7 +137,6 @@ button.left.joydirection {
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
 }
-
 .function {
     display: flex;
     border-radius: 50px;
@@ -163,7 +148,6 @@ button.left.joydirection {
     padding: 6px 6px;
     margin-right: 5px;
 }
-
 .function button {
     user-select: none;
     margin: 3px;
@@ -175,12 +159,10 @@ button.left.joydirection {
     border-radius: 15px;
     color: #000;
 }
-
 .action {
     display: flex;
     align-self: flex-end;
 }
-
 .action button {
     user-select: none;
     width: 70px;
@@ -191,12 +173,9 @@ button.left.joydirection {
     color: #000;
     border: 8px solid #474f51;
 }
-
 .action button:first-child {
     margin-right: 5px;
 }
-
-
 .screen canvas {
     max-width: 100%;
     max-height: 100%;
@@ -214,11 +193,9 @@ button.left.joydirection {
     justify-content: center;
     overflow: hidden;
 }
-
 .nes-roms>select {
     width: 200px;
 }
-
 .nes-controls {
     margin-top: 2px;
 }
@@ -235,17 +212,14 @@ button.left.joydirection {
         bottom: 100px;
         padding-bottom: 10px;
     }
-
     .screen {
         margin-bottom: 100px;
         max-height: 380px;
     }
     .action-area {
         flex: 1;
-
     }
 }
-
 @media screen and (orientation: landscape) {
     /*横屏 css*/
 }

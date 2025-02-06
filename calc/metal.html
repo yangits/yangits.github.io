@@ -16,14 +16,13 @@
         margin-top: 30px ;
         line-height: 40px;
         padding-top: 10px;
+        border-radius: 10px;
     }
     input {
         width:50%;
         height: 25px;
-        /* text-align: right; */
         border: 0px;
         border-radius: 3px;
-
     }
     #clas, #material {
         font-size: 18px;
@@ -33,18 +32,17 @@
     }
     #material{
         font-size: 14px;
-        
     }
     .foot,#PP{
         text-align: center;
         color: rgb(110, 110, 110);
-        font-size: 8px;
+        font-size: 10px;
         padding-bottom: 6px;
+        line-height: 10px;
     }
     a{
         text-align: center;
-        font-size: 8px;
-        line-height: 8px;
+        font-size: 10px;
     }
     .red{
         color: red;}
@@ -65,10 +63,8 @@
         border-radius: 8px;
         margin: 10px 10px;
     }
-
 </style>
 <body>
-
     <div class="home">
         <div>
             <button id="jszl" class="head_active"  onclick="jszl()">计算重量</button>
@@ -86,23 +82,23 @@
         </select>
         <div id="NNN">重量:<span id="kg_result" class="red">0.000</span>千克</div>
         <div id="KKG" style="display: none;">数量:<span id="n_result"  class="red">0.000</span>个</div>
-        <div id="TT"><span id="t">*厚度: </span><input id="T" type="text" value="" placeholder="0" onkeyup="repl(this);">毫米</div>
-        <div id="WW"><span id="w">*宽度: </span><input id="W" type="text" value="" placeholder="0" onkeyup="repl(this);">毫米</div>
-        <div id="AA" style="display: none;"><span id="a">*外长: </span><input id="A" type="text" value="" placeholder="0" onkeyup="repl(this);">毫米</div>
-        <div id="BB" style="display: none;"><span id="b">*外宽: </span><input id="B" type="text" value="" placeholder="0" onkeyup="repl(this);">毫米</div>
-        <div id="DD" style="display: none;">*外径: <input id="D" type="text" placeholder="0" onkeyup="repl(this);">毫米</div>
-        <div id="LL">*长度: <input id="L" type="text" value="" placeholder="0" onkeyup="repl(this);">米&emsp;</div>
-        <div id="NN">*数量: <input id="N" type="text" value="" placeholder="1" onkeyup="repl(this);">个&emsp;</div>
-        <div id="KG" style="display: none;">*重量: <input id="K" type="text" value="" placeholder="0" onkeyup="repl(this);" >千克</div>
+        <div id="TT"><span id="t">*厚度: </span><input id="T" placeholder="0" onkeyup="repl(this);">毫米</div>
+        <div id="WW"><span id="w">*宽度: </span><input id="W" placeholder="0" onkeyup="repl(this);">毫米</div>
+        <div id="AA" style="display: none;"><span id="a">*外长: </span><input id="A" placeholder="0" onkeyup="repl(this);">毫米</div>
+        <div id="BB" style="display: none;"><span id="b">*外宽: </span><input id="B" placeholder="0" onkeyup="repl(this);">毫米</div>
+        <div id="DD" style="display: none;">*外径: <input id="D" placeholder="0" onkeyup="repl(this);">毫米</div>
+        <div id="LL">*长度: <input id="L" placeholder="0" onkeyup="repl(this);">米&emsp;</div>
+        <div id="NN">*数量: <input id="N" placeholder="1" onkeyup="repl(this);">个&emsp;</div>
+        <div id="KG" style="display: none;">*重量: <input id="K" placeholder="0" onkeyup="repl(this);" >千克</div>
         <span id="PP">密度: <span id="P">7.85</span>g/cm³。材质为: </span>
         <select id="material" onchange="material_change();">
             <option selected>碳钢</option>
             <option>不锈钢</option>
             <option>铝合金</option>
         </select>
-        <div  class="foot" style="line-height: 18px;"><a href="../calc/index.html" target="_blank">排管程序</a></div>
+        <div  class="foot"><a href="../index.html">返回首页</a></div>
     </div>
-    <div class="foot">本工具计算结果是理论估算值, <br>与实际测量值存在偏差, 仅供参考</div>
+    <div class="foot">此程序仅供学习和参考，计算结果自行承担风险</div>
     <script>
         var head="计算重量";
         function jszl(){
@@ -124,7 +120,6 @@
             document.getElementById("KG").style.display="";
             head="计算数量";text_input();
         }
-
         function text_input(){   
             let P=document.getElementById('P').innerHTML
             let T = parseFloat(document.getElementById('T').value);

@@ -14,7 +14,7 @@
         max-width:450px;
         text-align: center;
         margin: auto;
-    
+        border-radius: 10px;
     }
     button,input {
         width: 70%;
@@ -22,7 +22,7 @@
         font-size: 12px;
         margin-bottom: 5px;
         border: 0px;
-        border-radius: 3px;
+        border-radius: 5px;
     }
     button{
         margin-top: 5px;
@@ -37,11 +37,11 @@
         font-size: 12px;
         border: 0px;
         background-color: rgb(255, 255, 255);
+        border-radius: 3px;
     }
     a{
         text-align: center;
-        font-size: 8px;
-        line-height: 8px;
+        font-size: 10px;
     }
 </style>
 <body>
@@ -51,7 +51,7 @@
         <br>下料数量: <input id="nums" type="text" value="912,320,1248,320,912,320,1248" onkeyup="this.value=this.value.replace(/[^0-9\,\.]/g,'');">
         <br><button type="button" id="get_result">开始计算</button>
         <br><textarea id="text_result" disabled>计算结果:</textarea>
-        <br><a href="./metal.html" target="_blank">金属计算器</a>
+        <br><a href="../index.html">返回首页</a>
     </div>
     <script>
         function getResult(goal, limit) {
