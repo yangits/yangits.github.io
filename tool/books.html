@@ -150,28 +150,18 @@
         Part.prototype.render = function(){
           ctx.beginPath();//右上角
           ctx.arc(this.x+150, this.y-py, this.radius, 0, Math.PI * 2, false);
-          ctx.fillStyle = ctx.strokeStyle = 'hsla('+this.hue+', '+this.saturation+'%, '+this.lightness+'%, '+this.alpha+')';
+          ctx.fillStyle =  'hsla('+this.hue+', '+this.saturation+'%, '+this.lightness+'%, '+this.alpha+')';
           ctx.lineWidth = this.lineWidth;
           ctx.fill();
-          ctx.stroke();
           ctx.beginPath();//左上角
           ctx.arc(this.x-py, this.y-150, this.radius, 0, Math.PI * 2, false);
-          ctx.fillStyle = ctx.strokeStyle = 'hsla('+this.hue+', '+this.saturation+'%, '+this.lightness+'%, '+this.alpha+')';
-          ctx.lineWidth = this.lineWidth;
           ctx.fill();
-          ctx.stroke();
           ctx.beginPath();//右下角
           ctx.arc(this.x+py, this.y+150, this.radius, 0, Math.PI * 2, false);
-          ctx.fillStyle = ctx.strokeStyle = 'hsla('+this.hue+', '+this.saturation+'%, '+this.lightness+'%, '+this.alpha+')';
-          ctx.lineWidth = this.lineWidth;
           ctx.fill();
-          ctx.stroke();
           ctx.beginPath();//左下角
           ctx.arc(this.x-150, this.y+py, this.radius, 0, Math.PI * 2, false);
-          ctx.fillStyle = ctx.strokeStyle = 'hsla('+this.hue+', '+this.saturation+'%, '+this.lightness+'%, '+this.alpha+')';
-          ctx.lineWidth = this.lineWidth;
           ctx.fill();
-          ctx.stroke();
         };
         
         var createParts = function(){

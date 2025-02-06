@@ -356,9 +356,7 @@
     setBlockRandomly(3);
     setBlockRandomly(5);
     setBlockRandomly(7);
-    a.sort(randomComparator);
-    var success = tryit(0, 0);
-    return success;
+    return tryit(0, 0);
   }
   function clear(arr) {
     for (var i = 0; i < 9; i++) {
@@ -409,11 +407,6 @@
     hardbt.className="input1"
     disgustbt.className="input0"
   }
-  // 换一个数独
-  function change() {
-    createGame();
-    setTable(sudoku);
-  }
   // 查看答案
   function showAnswer() {
     setTable(answer);
@@ -425,7 +418,6 @@
       sudoku=copy(sudoku0)
       clear_select()
     }
-    
   }
   function del_num() {
     let i=selectindex[0]
@@ -464,7 +456,8 @@
   }
   function gameStart() {
     endTimer();
-    change();
+    createGame();
+    setTable(sudoku);
     startTimer();
     clear_select()
   }
