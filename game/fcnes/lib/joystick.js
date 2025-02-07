@@ -86,13 +86,13 @@ Joystick.prototype.getDirection = function(data){
 //用于8键模式 将角度转换成方向
 Joystick.prototype.transformDirection = function(degree){
     //8个方向平方360度 每个方向45度
-    //右上 22.5 - 76.5
-    //上   76.5 - 112.5
+    //右上 22.5 - 67.5
+    //上   67.5 - 112.5
     //左上 112.5 - 157.5
     //左   157.5 - 202.5
     //左下 202.5 - 247.5
-    //右下 247.5 - 292.5
-    //右   >292.5 <=22.5
+    //下 247.5 - 292.5
+    //右下   292.5 -337.5
     //右   >337.5 <=22.5
     if(degree > 337.5){
         //右
@@ -112,7 +112,7 @@ Joystick.prototype.transformDirection = function(degree){
     }else if(degree > 112.5){
         //左上
         return 'left_up'
-    }else if(degree > 76.5){
+    }else if(degree > 67.5){
         //上
         return 'up'
     }else if(degree > 22.5){
