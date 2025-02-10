@@ -1,143 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>不懂就搜，一搜就懂</title>
-    <link rel="shortcut icon" href="./img/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-        user-select: none;
-      }
-      li {
-          list-style: none;
-      }
-      a {
-          text-decoration: none
-      }
-      .inner-center {
-          width: 900px;
-          margin: 0 auto;
-      }
-      /* 搜索框 start */
-      .search-section {
-          position: relative;
-          display: flex;
-          margin-top: 20px;
-          margin-bottom: 20px;
-      }
-      .search-left {
-          border-top-left-radius: 12px;
-          border-bottom-left-radius: 12px;
-          display: flex;
-          width:100%;
-          border: 1px solid rgba(217, 217, 217, 0.96);
-      }
-      .search-logo {
-          width: 56px;
-          align-items: center;
-          justify-content: center;
-          text-align: center;
-          line-height: 42px;
-          color: #1890FF;
-          font-weight: 900;
-          font-size: 16px;
-          cursor: pointer;
-      }
-      .input-wrap {
-          position: relative;
-          flex: 1;
-      }
-      .search-input {
-          height: 100%;
-          width: 100%;
-          outline: 0;
-          border: 0;
-          font-size: 16px;
-          padding-left: 5px;
-      }
-      .clear-keyword {
-          position: absolute;
-          top: 50%;
-          right: 10px;
-          transform: translateY(-50%);
-          cursor: pointer;
-          color: #d2d2d2;
-          font-size: 30px;
-      }
-      .search-botton {
-          width: 100px;
-          line-height: 42px;
-          color: #fff;
-          font-size: 18px;
-          font-weight: 500;
-          text-align: center;
-          border-top-right-radius: 12px;
-          border-bottom-right-radius: 12px;
-          background: linear-gradient(90deg,#1890FF,#455bfb);
-      }
-      .jj-list {
-          width: 33.3%;
-          float: left;
-          margin-bottom: 10px;
-          padding-right: 16px;
-      }
-      .jj-list-tit {
-          font-size: 16px;
-          line-height: 25px;
-          color: rgba(49, 70, 89, 1);
-          font-weight: bold;
-      }
-      .jj-list-con {
-          overflow: hidden;
-          margin: 0 auto;
-      }
-      .jj-list-con li {
-          box-sizing: border-box;
-          padding: 1px 1px;
-          width: 33.3%;
-          float: left;
-          transform-origin: center top;
-      }
-      .jj-list-con a {
-          display: block;
-          background: rgba(230, 247, 255);
-          color:rgba(49, 70, 89, 1);
-          font-size: 13px;
-          text-align: center;
-          line-height: 44px;
-          transition: all 0.2s;
-          border-radius: 5px;
-      }
-      .jj-list-con a:hover {
-          background: #1890FF;
-          font-size: 16px;
-          font-weight: bold;
-          color: #fff;
-      }
-      @media only screen and (min-width: 0px) {
-        .jj-list {width: 100%;}
-        .inner-center {max-width: 350px;}
-        .jj-list:nth-of-type(n) {padding-right: 0;}
-      }
-      @media only screen and (min-width: 650px) {
-        .jj-list {width: 50%;}
-        .inner-center {max-width: 600px;}
-        .jj-list:nth-of-type(n) {padding-right: 16px;}
-        .jj-list:nth-of-type(2n) {padding-right: 0;}
-      } 
-      @media only screen and (min-width: 950px) {
-        .jj-list {width: 33.3%;}
-        .inner-center {max-width: 900px;}
-        .jj-list:nth-of-type(2n) {padding-right: 16px;}
-        .jj-list:nth-of-type(3n) {padding-right: 0;}
-      }
-    </style>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>不懂就搜，一搜就懂</title>
+  <link rel="shortcut icon" href="./img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      margin: 0 auto;
+      padding: 0;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      user-select: none;
+    }
+    .search-section {
+      position: relative;
+      display: flex;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    .search-left {
+      border-top-left-radius: 12px;
+      border-bottom-left-radius: 12px;
+      display: flex;
+      width:100%;
+      border: 1px solid rgba(217, 217, 217);
+    }
+    .search-logo {
+      width: 56px;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      line-height: 42px;
+      color: #1890FF;
+      font-weight: 900;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .input-wrap {
+      position: relative;
+      flex: 1;
+    }
+    .search-input {
+      height: 100%;
+      width: 100%;
+      outline: 0;
+      border: 0;
+      font-size: 16px;
+      padding-left: 5px;
+    }
+    .clear-keyword {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #d2d2d2;
+      font-size: 30px;
+    }
+    .search-botton {
+      width: 100px;
+      line-height: 42px;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 500;
+      text-align: center;
+      border-top-right-radius: 12px;
+      border-bottom-right-radius: 12px;
+      background: linear-gradient(90deg,#1890FF,#455bfb);
+    }
+    .jj-list {
+      width: 100%;
+      float: left;
+      margin-bottom: 10px;
+      padding-right: 16px;
+    }
+    .jj-list-tit {
+      font-size: 16px;
+      line-height: 25px;
+      font-weight: bold;
+    }
+    .jj-list-con li {
+      box-sizing: border-box;
+      padding: 1px 1px;
+      width: 33.3%;
+      float: left;
+      transform-origin: center top;
+      list-style: none;
+    }
+    .jj-list-con a {
+      overflow: hidden;
+      display: block;
+      background: rgba(230, 247, 255);
+      color:black;
+      font-size: 13px;
+      text-align: center;
+      line-height: 46px;
+      transition: all 0.2s;
+      border-radius: 5px;
+      text-decoration: none
+    }
+    .jj-list-con a:hover {
+      background: #1890FF;
+      font-size: 16px;
+      font-weight: bold;
+      color: #fff;
+    }
+    .inner-center {max-width: 350px;}
+    .jj-list:nth-of-type(n) {padding-right: 0;}
+    @media only screen and (min-width: 700px) {
+      .jj-list {width: 50%;}
+      .inner-center {max-width: 650px;}
+      .jj-list:nth-of-type(n) {padding-right: 16px;}
+      .jj-list:nth-of-type(2n) {padding-right: 0;}
+    } 
+  </style>
 </head>
 <body>
 <div class="inner-center">

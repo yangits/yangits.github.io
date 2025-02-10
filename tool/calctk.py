@@ -22,6 +22,36 @@ def bag_program(weights, max_weight):
     # 从第一个物品开始，当前组合为空，当前重量为0
     backtrack(0, ren, 0)
     return result
+def bag_program(weights, max_weight):
+    result = []
+    ren = [0] * len(weights)
+    
+    # 先对物品进行排序（优化剪枝效率）
+    sorted_items = sorted(enumerate(weights), key=lambda x: x[1])
+    index_mapping = [i[0] for i in sorted_items]
+    sorted_weights = [i[1] for i in sorted_items]
+    
+    def backtrack(start, current_weight):
+        # 记录有效结果
+        result.append(list(ren))
+        
+        for i in range(start, len(sorted_weights)):
+            weight = sorted_weights[i]
+            # 提前剪枝：如果当前重量加物品重量超过上限就终止循环
+            if current_weight + weight > max_weight:
+                break
+                
+            # 剪枝：跳过相同重量的重复物品（需根据实际情况调整）
+            if i > start and sorted_weights[i] == sorted_weights[i-1]:
+                continue
+                
+            original_idx = index_mapping[i]
+            ren[original_idx] += 1
+            backtrack(i, current_weight + weight)
+            ren[original_idx] -= 1
+    
+    backtrack(0, 0)
+    return result
 def integer_program(A_gq,B_gq): 
     c = np.ones(len(A_gq[0]))
     # 线性约束：-A_gq * x >= -B_gq
@@ -124,7 +154,8 @@ class tkapp(tkinter.Tk):
             num_arrs= bag_program(weights, max_weight)     #计算可能下料方案
         except:
             self.append_text('动态规划失败，请检查数据!!!') 
-            return         
+            return   
+        print(len(num_arrs))      
         weight_num=[]
         for vals in num_arrs:
             weight_num.extend([vals])
