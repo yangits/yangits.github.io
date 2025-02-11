@@ -197,24 +197,25 @@
         function bag_program(weights, max_weight) {
             const result = [];
             const re = new Array(weights.length).fill(0);
-            function backtrack(start, re, currentWeight) {
+            function backtrack(start, currentWeight) {
                 // 如果当前重量超过背包容量，直接返回
                 if (currentWeight > max_weight) {
-                    re = new Array(weights.length).fill(0);
+                    re[start]--;
+                    result.push([...re]);
+                    re[start]++;
                     return;
                 }
-                result.push([...re]);
                 for (let i = start; i < weights.length; i++) {
                     // 添加当前物品到组合中
                     re[i]++;
                     // 递归调用，尝试添加下一个物品
-                    backtrack(i, re, currentWeight + weights[i]);
+                    backtrack(i, currentWeight + weights[i]);
                     // 移除当前物品，回溯
                     re[i]--;
                 }
             }
             // 从第一个物品开始，当前组合为空，当前重量为0
-            backtrack(0, re, 0);
+            backtrack(0, 0);
             return result;
         }
         function sumf(a, b) {   //方案具化
@@ -290,12 +291,7 @@
                     text.value += "，需" + re + "根" + JSON.stringify(sumf(weights, num_arrs[result[i][0]]));
                     z += re;   //计算目标函数的值
                     l += sumarrys(weights, num_arrs[result[i][0]]) * re;
-                    if (i < 1) {
-                        Numbers = sumar(num_arrs[result[i][0]], re);
-                        }
-                    else {
-                        Numbers = sum(Numbers ,sumar(num_arrs[result[i][0]], re))
-                    };
+                    Numbers =i < 1?sumar(num_arrs[result[i][0]], re): sum(Numbers ,sumar(num_arrs[result[i][0]], re))
             };
             text.value += "\n下料数量分别为：" + JSON.stringify(Numbers);
             text.value += "\n所需原料总数目为：" + z;

@@ -6,21 +6,22 @@ from scipy.optimize import linprog
 def bag_program(weights, max_weight):
     result=[]
     ren=[0]*len(weights)
-    def backtrack(start,ren, current_weight):
+    def backtrack(start, current_weight):
         # 如果当前重量超过背包容量，直接返回
         if current_weight > max_weight:
-            ren=[0]*len(weights)
+            ren[start]-=1
+            result.append(list(ren))
+            ren[start]+=1
             return
-        result.append(list(ren))
         for i in range(start, len(weights)):
             # 添加当前物品到组合中
             ren[i]+=1
             # 递归调用，尝试添加下一个物品
-            backtrack(i, ren, current_weight + weights[i])
+            backtrack(i, current_weight + weights[i])
             # 移除当前物品，回溯
             ren[i]-=1
     # 从第一个物品开始，当前组合为空，当前重量为0
-    backtrack(0, ren, 0)
+    backtrack(0, 0)
     return result
 def integer_program(A_gq,B_gq): 
     c = np.ones(len(A_gq[0]))
@@ -124,37 +125,38 @@ class tkapp(tkinter.Tk):
             num_arrs= bag_program(weights, max_weight)     #计算可能下料方案
         except:
             self.append_text('动态规划失败，请检查数据!!!') 
-            return   
-        print(len(num_arrs))      
+            return      
         weight_num=[]
+        print(len(num_arrs))
         for vals in num_arrs:
             weight_num.extend([vals])
         num_arrs=weight_num
         self.append_text("动态规划结束,开始线性规划选择最优分布...")
         try:
-            re=integer_program(list(zip(*num_arrs)),nums)        #求解最优方案
+            result=integer_program(list(zip(*num_arrs)),nums)        #求解最优方案
         except:
             self.append_text('线性规划失败，请检查数据!!!') 
             return
-        if sum(re) <= 0 :
+        if sum(result) <= 0 :
             self.append_text('没有任何方案，请修改参数!!!') 
             return 
         self.append_text("线性规划完成, 等待输出结果...")
         numbers=[]
-        j=0;l=0;z=[]
-        for i in range(len(re)):
-            if re[i] != 0:
-                z.append(round(re[i]+0.2))
-                self.append_text(f'{j+1}#: 余{max_weight-sumarrys(weights,num_arrs[i])},需{z[j]}根*{sumf(weights,num_arrs[i])}')
-                l += sumarrys(weights,num_arrs[i])*z[j]
+        j=0;l=0;z=0
+        for i in range(len(result)):
+            if result[i] != 0:
+                re=round(result[i]+0.2)
+                z+=re
+                self.append_text(f'{j+1}#: 余{max_weight-sumarrys(weights,num_arrs[i])},需{re}根*{sumf(weights,num_arrs[i])}')
+                l += sumarrys(weights,num_arrs[i])*re
                 if j==0:
-                    numbers=sumar(num_arrs[i],z[j])
+                    numbers=sumar(num_arrs[i],re)
                 else:
-                    numbers=sumnums(numbers,sumar(num_arrs[i],z[j]))
+                    numbers=sumnums(numbers,sumar(num_arrs[i],re))
                 j += 1
         self.append_text(f'下料数量分别为: {numbers}')        
-        self.append_text(f'所需原料总数目为: {sum(z)}根') 
-        self.append_text('管材平均利用率为: {:.2f}%'.format(l/sum(re)/max_weight*100)) 
+        self.append_text(f'所需原料总数目为: {z}根') 
+        self.append_text('管材平均利用率为: {:.2f}%'.format(l/z/max_weight*100)) 
         self.append_text("此程序仅供学习和参考，计算结果自行承担风险!!!")        
 if __name__ == '__main__':
     app = tkapp()
