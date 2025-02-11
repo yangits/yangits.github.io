@@ -6,62 +6,62 @@ from flask import Flask, redirect, request, send_file
 filepath =os.path.dirname(os.path.realpath(sys.argv[0]))
 app = Flask(__name__, static_url_path='', static_folder=filepath, template_folder=filepath)
 html0="""<html>
-        <head>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>共享文件列表</title>
-            <script>
-                function upload() {
-                    const f = document.querySelector('#file');
-                    const fdata = new FormData();
-                    fdata.append('file', f.files[0]);
-                    const xhr = new XMLHttpRequest();
-                    xhr.open('post', '/upload_file', true);
-                    xhr.upload.addEventListener("progress", function (e) {
-                        if (e.lengthComputable) {
-                        let percentComplete = e.loaded / e.total; // 计算上传进度（比例）
-                        document.getElementById("myElement").innerHTML = Math.round(percentComplete*10000)/100
-                        } })
-                    xhr.send(fdata);
-                    }
-            </script>
-        </head>
-        <body style="display: flex; justify-content: center; background-color: aliceblue;">
-            <div>
-                <table border='1' style="border-spacing: 0px;font-size:12px;">
-                <caption style="height:40px;line-height: 40px;font-size:16px;">文件共享列表</caption>
-                <tr>
-                    <td width=380px>文件或文件夹</td>
-                    <td width=80px>文件大小</td>
-                    <td width=100px>修改日期</td>
-                    <td width=80px>链接</td>
-                </tr>
-        """
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>共享文件列表</title>
+    <script>
+        function upload() {
+            const f = document.querySelector('#file');
+            const fdata = new FormData();
+            fdata.append('file', f.files[0]);
+            const xhr = new XMLHttpRequest();
+            xhr.open('post', '/upload_file', true);
+            xhr.upload.addEventListener("progress", function (e) {
+                if (e.lengthComputable) {
+                let percentComplete = e.loaded / e.total; // 计算上传进度（比例）
+                document.getElementById("myElement").innerHTML = Math.round(percentComplete*10000)/100
+                } })
+            xhr.send(fdata);
+            }
+    </script>
+</head>
+<body style="display: flex; justify-content: center; background-color: aliceblue;">
+    <div>
+        <table border='1' style="border-spacing: 0px;font-size:12px;">
+        <caption style="height:40px;line-height: 40px;font-size:16px;">文件共享列表</caption>
+        <tr>
+            <td width=380px>文件或文件夹</td>
+            <td width=80px>文件大小</td>
+            <td width=100px>修改日期</td>
+            <td width=80px>链接</td>
+        </tr>
+"""
 @app.route("/" , methods=['GET','post'])
 def index():
-        # return render_template("./index.html")
-        file_list = os.listdir(filepath)
-        html=html0
-        for file in file_list:
-            size,mtime=get_size_time(filepath+"/"+file)
-            if os.path.isfile(filepath+"/"+file):
-                file2=file;file1=file
-            else:
-                file2="path_file/"+file;file1=file+"/"
-            html=html+ """<tr>
-                            <td><a href="/%s">%s</a></td>
-                            <td>%s</td>
-                            <td>%s</td>
-                            <td><a href="/dload_file/%s">下载</a></td>
-                        </tr>""" %(file2,file1,size,mtime,file)
-        html=html+ """</table> <br>
-            <form action="/upload_file/path_file" enctype='multipart/form-data' method='POST'>
-                <input type="file" name="file"  id="file" multiple>
-                <input type="submit" value="上传/首页"  id="upload-btn" onclick="upload()">
-                <span>上传进度<span id="myElement">0</span>%</span>
-            </form></div>
-        </body>
-        </html>"""
-        return html
+    # return render_template("./index.html")
+    file_list = os.listdir(filepath)
+    html=html0
+    for file in file_list:
+        size,mtime=get_size_time(filepath+"/"+file)
+        if os.path.isfile(filepath+"/"+file):
+            file2=file;file1=file
+        else:
+            file2="path_file/"+file;file1=file+"/"
+        html=html+ """<tr>
+                        <td><a href="/%s">%s</a></td>
+                        <td>%s</td>
+                        <td>%s</td>
+                        <td><a href="/dload_file/%s">下载</a></td>
+                    </tr>""" %(file2,file1,size,mtime,file)
+    html=html+ """</table> <br>
+        <form action="/upload_file/path_file" enctype='multipart/form-data' method='POST'>
+            <input type="file" name="file"  id="file" multiple>
+            <input type="submit" value="上传/首页"  id="upload-btn" onclick="upload()">
+            <span>上传进度<span id="myElement">0</span>%</span>
+        </form></div>
+    </body>
+    </html>"""
+    return html
         
 @app.route("/path_file/<path:path>")
 def path_file(path):
