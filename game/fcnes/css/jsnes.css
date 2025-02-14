@@ -16,7 +16,7 @@ body {
     right: 0;
     bottom: 0;
     box-sizing: border-box;
-    max-width: 1218px;
+    max-width: 1200px;
     border-radius: 10px;
     margin: auto;
     background: #da4a4a;
@@ -58,7 +58,6 @@ body {
     width: 140px;
     height: 140px;
     align-self: flex-end;
-    filter: drop-shadow(5px 5px 0px rgba(255, 255, 255, .8));
 }
 .controller button {
     position: absolute;
