@@ -28,7 +28,6 @@
         margin-top: 5px;
         height: 30px;
         width: 180px;
-
     }
     textarea {
         width: 90%;
@@ -134,16 +133,13 @@
                 }
                 else break;
             }
-            //使用一维数组表示最优结果
             var result = [];
-            //将该数组进行初始化
             for (let i = 0; i < loosen.length; i++) {
                 if(loosen[i][2]>goal.length) {return false}
                 result.push([]);
-            //将b列的值读取入该数组
+                //将b列的值读取入该数组
                 result[i] =[loosen[i][2],loosen[i][1]];
             }
-            //返回该数组
             return result;
         };
         //进行初等行变换
@@ -195,21 +191,19 @@
             return loosen;
         };
         function bag_program(weights, max_weight) {
-            const result = [];
-            const re = new Array(weights.length).fill(0);
-            function backtrack(start, currentWeight) {
+            let result = [];
+            let re = new Array(weights.length).fill(0);
+            function backtrack(start, curWeight) {
                 // 如果当前重量超过背包容量，直接返回
-                if (currentWeight > max_weight) {
-                    re[start]--;
+                if (curWeight > max_weight) {
                     result.push([...re]);
-                    re[start]++;
+                    result[result.length-1][start]--
                     return;
                 }
                 for (let i = start; i < weights.length; i++) {
-                    // 添加当前物品到组合中
                     re[i]++;
                     // 递归调用，尝试添加下一个物品
-                    backtrack(i, currentWeight + weights[i]);
+                    backtrack(i, curWeight + weights[i]);
                     // 移除当前物品，回溯
                     re[i]--;
                 }
@@ -255,48 +249,35 @@
             let weights = document.getElementById('weights').value.split(",").map(Number);
             let nums = document.getElementById('nums').value.split(",").map(Number);
             let text = document.getElementById('text_result');
-            text.value = "开始计算……\n开始动态规划，计算所有下料分布可能……";
-            for (let j = 0; j < weights.length; j++) {
-                if(weights[j]>max_weight){text.value += "\n计算停止，出现未知错误，请调整数据。";return;}
-            }
+            text.value = "开始计算,计算所有下料分布可能……";
             let num_arrs = bag_program(weights, max_weight);
-            text.value += "\n动态规划结束，开始线性规划选择最优分布……";
-            var num_arrs_T = [];     //转置矩阵
-            for (let i = 0; i < num_arrs[0].length; i++) { num_arrs_T[i] = []; };
-            for (let i = 0; i < num_arrs.length; i++) {
-                for (let j = 0; j < num_arrs[i].length; j++) { num_arrs_T[j][i] = num_arrs[i][j] * -1; }
+            let num_arrs_T = [];     //转置矩阵
+            for (let i = 0; i < num_arrs[i].length; i++) {
+                num_arrs_T[i] = []; 
+                for (let j = 0; j < num_arrs.length; j++) { num_arrs_T[i][j] = num_arrs[j][i] * -1; }
             };
-            var goals = [];        //目标变量系数
-            var x = [];            //定义变量x[i]
-            for (let i = 0; i < num_arrs_T[0].length; i++) {
-                goals[i] = -1; x[i] = "x" + i;
-            };
-            var limits = [];       //定义基矩阵
+            let goals = new Array(num_arrs_T[0].length).fill(-1);        //目标变量系数
+            let limits = [];       //定义基矩阵
             for (let i = 0; i < num_arrs_T.length; i++) {
                 limits[i] = [num_arrs_T[i], nums[i] * -1];
             };
-            // 调用getResult函数 对该线性规划问题求解
+            text.value += "\n开始线性规划选择最优分布……";
             let result = getResult(goals, limits);
-            //若该线性规划问题无最优解 则将报错提示输出到网页 并退出函数
-            if (!result) {
-                text.value += "\n计算停止，出现未知错误，请调整数据。";
-                return;
-            }
-            //生成求解后的结果文本
-            var Numbers = [];
+            if (!result) {text.value += "\n计算停止,出现未知错误,请调整数据。";return;}
+            let Numbers = new Array(num_arrs[0].length).fill(0);
             let z = 0; l = 0;
             for (let i = 0; i < result.length; i++) {
                     re = Math.round(result[i][1]+0.2);
-                    text.value += "\n" + (i+1) + "#：余" + Math.round((max_weight - sumarrys(weights, num_arrs[result[i][0]]))*100)/100;
-                    text.value += "，需" + re + "根" + JSON.stringify(sumf(weights, num_arrs[result[i][0]]));
+                    text.value += "\n" + (i+1) + "#:余" + Math.round((max_weight - sumarrys(weights, num_arrs[result[i][0]]))*100)/100;
+                    text.value += ",需" + re + "根" + JSON.stringify(sumf(weights, num_arrs[result[i][0]]));
                     z += re;   //计算目标函数的值
                     l += sumarrys(weights, num_arrs[result[i][0]]) * re;
-                    Numbers =i < 1?sumar(num_arrs[result[i][0]], re): sum(Numbers ,sumar(num_arrs[result[i][0]], re))
+                    Numbers =sum(Numbers ,sumar(num_arrs[result[i][0]], re))
             };
-            text.value += "\n下料数量分别为：" + JSON.stringify(Numbers);
-            text.value += "\n所需原料总数目为：" + z;
-            text.value += "\n管材平均利用率为：" + Math.round(l / z / max_weight * 10000) / 100 + "%";
-            text.value += "\n此程序仅供学习和参考，计算结果自行承担风险！";
+            text.value += "\n下料数量分别为: " + JSON.stringify(Numbers);
+            text.value += "\n所需原料总数目为: " + z;
+            text.value += "\n管材平均利用率为: " + Math.round(l / z / max_weight * 10000) / 100 + "%";
+            text.value += "\n此程序仅供学习和参考,计算结果自行承担风险！";
         }
     </script>
 </body>

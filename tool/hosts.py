@@ -9,15 +9,15 @@ for url in urls:
     url_ip138 = 'https://site.ip138.com/'  + url
     ip138_html = requests.get(url_ip138, headers=header).text
     ip138_ips=re.findall('/" target="_blank">([0-9]*.[0-9]*.[0-9]*.[0-9]*)</a>',ip138_html) 
+    hosts_ip = ip138_ips[0]+"  "+url
     for ip in ip138_ips[:8]:
         try:
             github = requests.get("http://"+ip, headers={'Host':url,"User-Agent": header["User-Agent"]},timeout=2)
             print("访问 "+url+" ["+ip+"] 成功")
-            hosts_ip = ip+"  "+url+"\n" + hosts_ip
+            hosts_ip +="\n"+ ip+"  "+url
             break
         except:
             print("访问 "+url+" ["+ip+"] 失败...")
-    hosts_ip = ip138_ips[0]+"  "+url+"\n" + hosts_ip
 with open("C:/Windows/System32/drivers/etc/hosts", "w") as hosts:
     hosts.write(hosts_ip)
 hosts.close()

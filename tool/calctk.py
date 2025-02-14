@@ -9,12 +9,10 @@ def bag_program(weights, max_weight):
     def backtrack(start, current_weight):
         # 如果当前重量超过背包容量，直接返回
         if current_weight > max_weight:
-            ren[start]-=1
             result.append(list(ren))
-            ren[start]+=1
+            result[-1][start]-=1
             return
         for i in range(start, len(weights)):
-            # 添加当前物品到组合中
             ren[i]+=1
             # 递归调用，尝试添加下一个物品
             backtrack(i, current_weight + weights[i])
@@ -43,11 +41,6 @@ def integer_program(A_gq,B_gq):
     # m.solve()     # 求解
     # re=[lp.value(var) for var in x]
     # return re
-def deepcopy (a):  #模拟深拷贝
-    demo=[0]*len(a)
-    for i in range(len(a)):
-        demo[i]=a[i]
-    return demo
 def sumf (a,b):   #方案具化
     re=[]
     for i in range(len(a)):
@@ -65,18 +58,11 @@ def sumnums (num1,num2):  #两个数组对应元素的和
     for i in range(len(num1)):
         re.append(num1[i]+num2[i])
     return re
-def dellarrys (a):#去重
-    re=[]
-    for i in a :
-        if i not in re :
-            re.append(i)
-    return re
 def sumar(weights, num):
     re = []
     for i in range(len(weights)):
         re.append(weights[i] * num)
     return re
-
 
 class tkapp(tkinter.Tk):
     def __init__(self):
@@ -103,11 +89,9 @@ class tkapp(tkinter.Tk):
         self.edit2.insert(0, "2300,1988,1050,601,503,459,359")
         self.edit3.insert(0, "912,320,1248,320,912,320,1248")
         self.append_text('计算结果...')
-
     def append_text(self,text):
         self.textarea.insert('end',text+ "\n")
         self.update()
-
     def run(self):  
         self.textarea.delete(1.0, 'end')
         try:
@@ -115,49 +99,26 @@ class tkapp(tkinter.Tk):
             weights = eval(self.edit2.get())
             nums = eval(self.edit3.get())
         except:
-            self.append_text('输入框不是整数或逗号格式错误,请参考默认数值')
+            self.append_text('输入框逗号格式错误,请参考默认数值')
             return
-        if not ( isinstance(max_weight, int)):
-            self.append_text('输入框不是整数或逗号格式错误,请参考默认数值')
-            return 
-        self.append_text("开始计算...\n开始动态规划, 计算所有下料分布可能...")    
+        self.append_text("开始计算,计算所有下料分布可能...")    
+        num_arrs= bag_program(weights, max_weight)  
+        self.append_text("开始线性规划选择最优分布...")
         try:
-            num_arrs= bag_program(weights, max_weight)     #计算可能下料方案
+            result=integer_program(list(zip(*num_arrs)),nums)
         except:
-            self.append_text('动态规划失败，请检查数据!!!') 
-            return      
-        weight_num=[]
-        print(len(num_arrs))
-        for vals in num_arrs:
-            weight_num.extend([vals])
-        num_arrs=weight_num
-        self.append_text("动态规划结束,开始线性规划选择最优分布...")
-        try:
-            result=integer_program(list(zip(*num_arrs)),nums)        #求解最优方案
-        except:
-            self.append_text('线性规划失败，请检查数据!!!') 
+            self.append_text('线性规划失败,请检查数据!!!') 
             return
-        if sum(result) <= 0 :
-            self.append_text('没有任何方案，请修改参数!!!') 
-            return 
-        self.append_text("线性规划完成, 等待输出结果...")
-        numbers=[]
-        j=0;l=0;z=0
+        numbers=[0]*len(num_arrs[0]);j=0;l=0;z=0
         for i in range(len(result)):
             if result[i] != 0:
-                re=round(result[i]+0.2)
-                z+=re
-                self.append_text(f'{j+1}#: 余{max_weight-sumarrys(weights,num_arrs[i])},需{re}根*{sumf(weights,num_arrs[i])}')
+                re=round(result[i]+0.2);z += re;j += 1
+                self.append_text(f'{j}#:余{round(max_weight-sumarrys(weights,num_arrs[i]),2)},需{re}根*{sumf(weights,num_arrs[i])}')
                 l += sumarrys(weights,num_arrs[i])*re
-                if j==0:
-                    numbers=sumar(num_arrs[i],re)
-                else:
-                    numbers=sumnums(numbers,sumar(num_arrs[i],re))
-                j += 1
+                numbers=sumnums(numbers,sumar(num_arrs[i],re))
         self.append_text(f'下料数量分别为: {numbers}')        
         self.append_text(f'所需原料总数目为: {z}根') 
         self.append_text('管材平均利用率为: {:.2f}%'.format(l/z/max_weight*100)) 
-        self.append_text("此程序仅供学习和参考，计算结果自行承担风险!!!")        
+        self.append_text("此程序仅供学习和参考,计算结果自行承担风险!!!")        
 if __name__ == '__main__':
-    app = tkapp()
-    app.mainloop()    # 进入消息循环
+    tkapp().mainloop()    # 进入消息循环
