@@ -77,6 +77,10 @@
 			</div>
 		</div>
 	</body>
+	<script src="./Boxworld.js"></script>
+	<script src="./answer.js"></script>
+	<script src="./Microban.js"></script>
+	<script src="./setlevel.js"></script>
 	<script>
 		document.addEventListener('touchmove',function(e){event.preventDefault();},{passive:false});
 		var msg = document.getElementById("msg");
@@ -95,8 +99,10 @@
 		Context.translate(1,1);//画布基准位置
 		Context.lineWidth=3;//线宽
         var n=35,a=n-2;
-		var maps=[];answers=[];
 		var levels=[],answer=[],levels_len=100;
+		var maps=[Boxworld,Microban,setlevel];
+		var answers=[Box_answer,Mic_answer,[]];
+		initLevel();
         function drawhui1(i,j){//墙绘制
 			Context.beginPath();
 			Context.fillStyle="rgb(100, 100, 100)";
@@ -520,8 +526,4 @@
 			}
 		}
 	</script>
-	<script src="./Boxworld.js" onload="maps[0]=Boxworld;initLevel();"></script>
-	<script src="./answer.js" onload="answers=[Box_answer,Mic_answer,[]]"></script>
-	<script src="./Microban.js" onload="maps[1]=Microban;"></script>
-	<script src="./setlevel.js" onload="maps[2]=setlevel;"></script>
 </html>
