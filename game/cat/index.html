@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.6">
+    <title>圈小猫</title>
+    <style>
+        #catch-the-cat {
+            margin-top: 32px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <script src="phaser.min.js"></script>
+    <script src="catch-the-cat.js"></script>
+    <div id="catch-the-cat"></div>
+    <script>
+      window.game = new CatchTheCatGame({
+        w: 11,
+        h: 11,
+        r: 20,
+        initialWallCount: 8,
+        backgroundColor: 0xffffff,
+        parent: 'catch-the-cat',
+        statusBarAlign: 'center',
+        credit: '圈小猫'
+      });
+    </script>
+</body>
+</html>
