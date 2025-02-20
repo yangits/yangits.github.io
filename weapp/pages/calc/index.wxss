@@ -1,0 +1,44 @@
+page {
+    background-color: rgb(199, 199, 199);
+}
+.body{
+  display:flex;
+  flex-direction:column;
+  text-align: center;
+  align-items: center;
+  margin-top: 20rpx;
+}
+
+.center view {
+  color: black;
+  height: 60rpx;
+  display:flex;
+  align-items:center;
+  font-size:30rpx ;
+  margin-top: 10rpx;
+}
+button {
+  width: 300rpx;
+  background-color: rgb(255, 255, 255);
+  font-size:35rpx ;
+  line-height: 70rpx;
+  border-radius: 20rpx;
+  margin-top: 10rpx;
+}
+input {
+  text-align: left;
+  width: 550rpx;
+  background-color: rgb(255, 255, 255);
+  height: 60rpx;
+  border-radius: 10rpx;
+}
+textarea {
+  height: 980rpx;
+  width: 680rpx;
+  resize: none;
+  background-color: rgb(255, 255, 255);
+  text-align: left;
+  margin-top: 12rpx;
+  font-size:30rpx ;
+
+}

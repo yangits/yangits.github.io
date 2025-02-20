@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>仓库管理系统</title>
+    <link rel="stylesheet" href="../static/main.css">
+</head>
+<body>
+    <!-- 登录窗口 -->
+    <div id="login" class="login">
+        <div class="background" id="background" >
+            <h3>用户登录</h3>
+            <div class="timsg"></div>
+            <label>账  户: </label><select id="username"></select><br>
+            <div id="password_msg" class="timsg"></div>
+            <label>密  码: </label><input type="password" id="password" onkeyup="Id('password_msg').innerHTML=''"><br>
+            <div  class="timsg"></div>
+            <label>仓  库: </label><select id="storename"></select><br>
+            <div class="timsg"></div>
+            <button onclick="Login()">登录</button><br>
+            <a class="timsg" href="" id="login_id">点击切换局域网络</a>
+        </div>
+    </div>
+    <div id="good_top" class="good_top">
+        <div class="background" id="background" >
+            <div class="close" onclick="hide_goods_top()">&times;</div>
+            <div class="timsg" id="good_row_num" style="display: none;">9</div>
+            <label>ID值: </label><input type="text" id="good_id"  disabled="disabled"><br>
+            <div class="timsg" id="good_top_msg1"></div>
+            <label>品类: </label><input type="text" id="good_row1"><br>
+            <div class="timsg" id="good_top_msg2"></div>
+            <label>名称: </label><input type="text" id="good_row2"><br>
+            <div class="timsg" id="good_top_msg3"></div>
+            <label>材质: </label><input type="text" id="good_row3"><br>
+            <div class="timsg" id="good_top_msg4"></div>
+            <label>规格: </label><input type="text" id="good_row4"><br>
+            <div class="timsg"></div>
+            <label>备注: </label><input type="text" id="good_row5"><br>
+            <div class="timsg"></div>
+            <label>单价: </label><input type="text" id="good_row6"><br>
+            <div class="timsg"></div>
+            <label>单重: </label><input type="text" id="good_row7"><br>
+            <div class="timsg"></div>
+            <label>单位: </label><input type="text" id="good_row8"><br>
+            <div class="timsg" id="good_top_msg_num"></div>
+            <label>数量: </label><input type="text" id="good_num"  disabled="disabled" value="0" onkeyup="this.value=this.value.replace(/[^0-9\.]/g,'');"><br>
+            <div class="timsg"  id="good_old_num" style="display: none;"></div>
+            <button id="goods_top_bt" onclick="clickok_goods('')">新增确认</button>
+        </div>
+    </div>
+    <div id="name_top" class="name_top">
+        <div class="background" id="background" >
+            <div class="close" onclick="hide_name_top()">&times;</div>
+            <div class="timsg"></div>
+            <label>ID值: </label><input type="text" id="name_row0"  disabled="disabled"><br>
+            <div class="timsg" id="name_top_msg1"></div>
+            <label>名字: </label><input type="text" id="name_row1"><br>
+            <div class="timsg"></div>
+            <label>密码: </label><input type="text" id="name_row2"><br>
+            <div class="timsg"></div>
+            <label>权限: </label>
+            <select id="name_row3">
+                <option>管理员</option>
+                <option>仓管</option>
+                <option>员工</option>
+            </select><br>
+            <div class="timsg"></div>
+            <button id="name_top_bt" onclick="clickok_name()">新建确认</button>
+        </div>
+    </div>
+    <div class="top_row" id="store_goods_li">
+        <label >仓库管理系统</label>
+        <span  class="top_row_bt" onclick="get_store_goods()" >仓库管理
+        <!-- <ul>
+            <li><a href="#">出库单</a></li>
+            <li><a href="#">入库单</a></li>
+            <li><a href="#">新建仓库</a></li>
+            <li><a href="#">删除仓库</a></li>
+        </ul> -->
+        </span>
+        <span class="top_row_bt" onclick="get_good_outin()">出入库记录</span>
+        <span class="top_row_bt" onclick="get_path_file()">公共云盘</span>
+        <span class="top_row_bt" onclick="get_account_set()">账户设置</span>
+        <a href="chat" target="_blank"><span class="top_row_bt">聊天室</span></a>
+        <span class="top_row_bt" onclick="showLogin()">退出</span>
+        
+    </div>
+    <div class="mainbody">
+        <div class="main_top">
+            <div style="display: none;" id="select_all">
+                <label>品类:</label><input type="text" id="select_row1" onkeydown="keyup_submit(event);">
+                <label>名称:</label><input type="text" id="select_row2" onkeydown="keyup_submit(event);">
+                <label>材质:</label><input type="text" id="select_row3" onkeydown="keyup_submit(event);">
+                <label>规格:</label><input type="text" id="select_row4" onkeydown="keyup_submit(event);">
+                <label>操作:</label><input type="text" id="select_row5" onkeydown="keyup_submit(event);">
+                <label>操作员:</label><input type="text" id="select_row6" onkeydown="keyup_submit(event);">
+                <div class="timsg"></div>
+            </div>
+            
+            <button class="right" onclick="tabledown()">表格导出</button>
+            <input type='file' name='file' accept="text/csv" id='file_excel' style="display: none;"  onchange="upfile_or_uploud()">
+            <button class="right" id="up_excel" onclick="up_excel()">表格导入</button>
+            <span id="in_add_good">
+                <button class="right"  onclick="show_goods_top('')">新增物料</button>
+                <button class="right" onclick="add_store()">新增仓库</button>
+            </span>
+            <button class="right" onclick="show_name_top('')" id="add_name_bt">新增账户</button>
+            <button class="right" onclick="add_dirs()" id="add_dirs_bt">新建文件夹</button>
+            <button class="right" onclick="show_select()" id="select_bt">打开搜索</button>
+            <span style="float: right;" id="myElement"></span>
+            <span style="float: left;cursor: pointer;" id="path_show">
+                <button onclick="Id('path').innerHTML='/';get_path_file()">返回根目录</button> 
+                <span id="path" onclick="up_path()">/</span>
+            </span>
+            
+        </div>
+        <div class="goods_table" id="goods_table_id">
+            <table border='1' id="goods_table"></table>
+            <div class="right" onclick="hide_show_rows()" id="hide_show_rows">点击加载全部</div>
+            <span style="display: none;" id="show_rows">200</span>
+        </div>
+    </div>
+    <footer><span id="foot_username">**</span>------<span id="foot_storename">**</span>------<span>河南瑞牧农牧设备有限公司</span></footer>
+    <script type="text/javascript" src="../static/main.js"></script>
+</body>
+</html>

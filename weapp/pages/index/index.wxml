@@ -1,0 +1,28 @@
+
+<view class="body">
+  <view class="f_center">
+    <view bindtap="home_zl" class="f_center {{home==='计算重量'? 'home_active' :'home'}}">计算重量</view>
+      <view bindtap="home_sl" class="f_center {{home==='计算数量'? 'home_active' :'home'}}">计算数量</view>
+  </view>
+  <view class="show" >品类： 
+  <picker mode="selector" range="{{clas_array}}" value="{{clas_index}}" bindchange="clas_Change">
+      <text>{{clas_array[clas_index]}}></text>
+  </picker></view>
+
+  <view class="{{jskg}}">重量:<text class="red">{{kg_result}}</text>千克</view>
+  <view class="{{jssl}}">数量:<text class="red">{{N_result}}</text>个</view>
+  <view class="{{TT}}" >*厚度: <input type="digit" value="{{T}}" bindinput="T_set" placeholder="0"/>毫米</view>
+  <view class="{{WW}}" >*宽度: <input type="digit" value="{{W}}" bindinput="W_set" placeholder="0"/>毫米</view>
+  <view  class="{{AA}}" >*外长: <input type="digit" value="{{A}}" bindinput="A_set" placeholder="0"/>毫米</view>
+  <view  class="{{BB}}" >*外宽: <input id="B" type="digit" value="{{B}}" bindinput="B_set" placeholder="0"/>毫米</view>
+  <view class="{{DD}}" >*外径: <input type="digit" value="{{D}}" bindinput="D_set" placeholder="0"/>毫米</view>
+  <view  class="show" >*长度: <input  type="digit" value="{{L}}" bindinput="L_set" placeholder="0"/>米<text decode="true">&emsp;</text></view>
+  <view class="{{jskg}}"><text decode="true">&ensp;</text>数量: <input  type="digit" value="{{N}}" bindinput="N_set" placeholder="1"/><text decode="true">个&emsp;</text></view>
+  <view class="{{jssl}}">*重量: <input  type="digit" value="{{KG}}" bindinput="KG_set" placeholder="0"/><text decode="true">千克</text></view>
+  <view class="show"><text class="PP">密度: <text>{{P}}</text>g/cm³。材质为: </text>
+  <picker mode="selector" range="{{material_array}}" value="{{material_index}}" bindchange="material_Change" class="material">
+      <text class="red">{{material_array[material_index]}}></text>
+  </picker></view>
+
+</view>
+<view class="foot">本工具计算结果是理论估算值, 与实际测量值存在偏差, 仅供参考</view>

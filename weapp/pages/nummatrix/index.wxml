@@ -1,0 +1,30 @@
+<view class="f_center">
+  <view bindtap="home_hf" class="f_center {{home==='幻方'? 'home_active' :'home'}}">幻方</view>
+    <view bindtap="home_hrd" class="f_center {{home==='华容道'? 'home_active' :'home'}}">华容道</view>
+</view>
+<!-- 华容道 -->
+<view class="container" style="width:calc(750rpx - 90rpx + {{(nowDifficulty-1)*2}}rpx);height:calc(750rpx - 90rpx + {{(nowDifficulty-1)*2}}rpx); display: {{home==='华容道'? '' :'none'}};">
+    <block wx:for='{{numData}}' wx:key='num'>
+        <view wx:if="{{!item.isEmpty}}" style="width:calc((750rpx - 100rpx) / {{nowDifficulty}});height:calc((750rpx - 100rpx) / {{nowDifficulty}});font-size: calc(350rpx / {{nowDifficulty}}); " catchtouchstart="goMove" data-index='{{index}}' class="v1" >
+            <view class="f_center">{{item.num}}</view>
+        </view>
+        <view wx:if='{{item.isEmpty}}' style="width:calc((750rpx - 100rpx) / {{nowDifficulty}});height:calc((750rpx - 100rpx) / {{nowDifficulty}});" class="v2"></view>
+    </block>
+</view>
+<view class="v3" style="display: {{home==='华容道'? '' :'none'}};"> 步数：{{step}} 
+<text decode="true">&emsp;</text> 耗时：{{m}}:{{s}}</view>
+<view bindtap="botton_click" class="f_center game" style="display: {{home==='华容道'? '' :'none'}};">{{bottun}}</view>
+<view bindtap="choose_hrd" class='f_center game' style="display: {{home==='华容道'? '' :'none'}};">选择难度 {{nowDifficulty}}×{{nowDifficulty}}</view>
+<!-- 幻方 -->
+<view class="container" style="width:calc(750rpx - 90rpx + {{(nownum-1)*2}}rpx);height:calc(750rpx - 90rpx + {{(nownum-1)*2}}rpx); display: {{home==='幻方'? '' :'none'}};">
+    <block wx:for='{{numData}}' wx:key='num'>
+        <view  style="width:calc((750rpx - 100rpx) / {{nownum}});height:calc((750rpx - 100rpx) / {{nownum}});font-size: calc(350rpx / {{nownum}}); "   class="v1" >
+            <view class="f_center">{{item.num}}</view>
+        </view>
+    </block>
+</view>
+<view class="v3" style="display: {{home==='幻方'? '' :'none'}};">幻方和：{{sumnum}}</view>
+<view bindtap="choose_hf" class='f_center game' style="display: {{home==='幻方'? '' :'none'}};">幻方{{nownum}}×{{nownum}}</view>
+
+
+

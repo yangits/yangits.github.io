@@ -1,0 +1,9 @@
+<view class="body">
+  <view class="center">
+    <view >原材料长:<input  type="digit" value="{{max_weight_data}}" bindinput="max_weight_set"/></view>
+    <view >下料尺寸:<input  type="text" value="{{weights_data}}" bindinput="weights_data_set" /></view>
+    <view >下料数量:<input  type="text" value="{{nums_data}}" bindinput="nums_data_set" /></view>
+    <button bind:tap="get_result">开始计算</button>
+  </view>
+  <textarea  maxlength="-1" value="{{text_result}}" disabled></textarea>
+</view>

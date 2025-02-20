@@ -1,0 +1,521 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<title>推箱子</title>
+		<style>
+		*{
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-khtml-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+			margin:0px;
+			padding:0px;
+		}
+		.game{
+			text-align: center;
+        	margin: auto;
+			max-width: 500px;
+		}
+		.game input{
+			height: 30px;
+			width: 15%;
+			margin-top: 10px;
+		}
+		.game canvas{
+			margin-top: 10px;
+			background-color: rgb(200, 200, 200);
+            border: 5px  solid #280000;
+			width:96%;
+		}
+		.bt input{
+			width: 25%;
+			height: 60px;
+			border-radius: 30%;
+			margin-left: 6px;
+			margin-right: 6px;
+			margin-top: 10px;
+			font-size: 20px;
+		}
+		</style>
+	</head>
+	<body onkeydown="doKeyDown(event)">
+		<div class="game">
+			<div>
+				<select id="mapdata" onchange="iCurlevel=0;initLevel()">
+					<option selected>经典</option>
+					<option>简单</option>
+					<option>困难</option>
+				</select>
+				<span id="msg"></span>
+			</div>
+			<input type="button" value="⋘" onclick="GO(-1)">
+			<input type="button" value="⋙" onclick="GO(1)">
+			<input type="number" id="vel" placeholder="GO重置" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');">
+			<input type="button" value="GO" onclick="GO(0);">
+			<input type="button" value="解答" onclick="solve();">
+			<input type="button" value="回退" onclick="back()">
+			<canvas id="canvas" width="560" height="560"></canvas>
+			<div class="bt">
+				<input type="button" value="左" onclick="move('left')">
+				<input type="button" value="上" onclick="move('up')">	
+				<input type="button" value="右" onclick="move('right')">
+			</div>
+			<div class="bt">
+				<input type="button" value="下" onclick="move('down')">
+			</div>
+		</div>
+	</body>
+	<script src="./Boxworld.js"></script>
+	<script src="./answer.js"></script>
+	<script src="./Microban.js"></script>
+	<script src="./setlevel.js"></script>
+	<script>
+		document.addEventListener('touchmove',function(e){event.preventDefault();},{passive:false});
+		var msg = document.getElementById("msg");
+		var textsteps = document.getElementById("textsteps");
+		var mapdata = document.getElementById("mapdata");
+		var canvas = document.getElementById("canvas");
+		var Context = canvas.getContext("2d");
+		var curMap;//当前显示的地图
+		var curLevel;//当前等级原始的地图
+		var iCurlevel = 0;//当前关卡数
+		var moveTimes = 0;//移动次数
+		var point = [0,0];//小人的初始值
+		var steps=[];//移动记录
+		var timer_solve;//定时器
+		var startX,startY,endX,endY;
+		Context.translate(1,1);//画布基准位置
+		Context.lineWidth=3;//线宽
+        var n=35,a=n-2;
+		var levels=[],answer=[],levels_len=100;
+		var maps=[Boxworld,Microban,setlevel];
+		var answers=[Box_answer,Mic_answer,[]];
+		initLevel();
+        function drawhui1(i,j){//墙绘制
+			Context.beginPath();
+			Context.fillStyle="rgb(100, 100, 100)";
+            Context.fillRect(j*n,i*n,a,a);
+        }
+        function drawhui2(i,j){//小球绘制
+			Context.beginPath();
+			Context.fillStyle = 'rgb(0, 0, 0)';
+			Context.arc(j*n+ a/2,i*n+ a/2, a/3, 0, 2 * Math.PI, false);
+			Context.fill();
+        }
+        function drawhui3(i,j){//箱子绘制
+			Context.beginPath();
+            Context.strokeStyle = "rgb(0, 0, 0)";
+			Context.fillStyle="rgb(204, 170, 102)";
+            Context.fillRect(j*n,i*n,a,a);
+			Context.moveTo(j*n+a/4, i*n+a/4); // 起点
+			Context.lineTo(j*n+3*a/4, i*n+3*a/4); // 线
+			Context.moveTo(j*n+3*a/4, i*n+a/4); // 起点
+			Context.lineTo(j*n+a/4, i*n+3*a/4); // 线
+			Context.stroke();     
+        }
+        function drawhui4(i,j){//人物绘制
+			Context.beginPath();
+			Context.strokeStyle = "rgb(0, 0, 0)";
+			Context.fillStyle = 'rgb(0, 0, 0)';
+			Context.arc(j*n+ a/2,i*n+ a/2, a/2, 0, 2 * Math.PI, true);
+			Context.stroke();  
+			Context.beginPath();
+			Context.arc(j*n+ a/2,i*n+ a/2, a/4, 0,Math.PI, false);
+			Context.stroke(); 
+			Context.beginPath(); 
+			Context.arc(j*n+ a/3,i*n+ a/3, a/8, 0, 2 * Math.PI, false);
+			Context.fill();
+			Context.arc(j*n+ 2*a/3,i*n+ a/3, a/8, 0, 2 * Math.PI, false);
+			Context.fill();
+        }
+		function drawhui5(i,j){//小球和箱子重合绘制
+			Context.beginPath();
+            Context.strokeStyle = "rgb(0, 0, 0)";
+			Context.fillStyle = 'rgb(204, 170, 102)';
+            Context.fillRect(j*n,i*n,a,a);
+			Context.arc(j*n+ a/2,i*n+ a/2, a/4, 0, 2 * Math.PI, false);
+			Context.stroke();        
+        }
+		//绘制每个游戏关卡地图
+		function DrawMap(level){
+			clearTimeout(timer_solve);
+            Context.clearRect(0, 0, canvas.width, canvas.height);
+			for (var i=0;i<level.length ;i++ ){
+				for (var j=0;j<level[i].length ;j++ ){	
+					switch (level[i][j]){
+						case '#': drawhui1(i,j);break;//墙
+						case '.': drawhui2(i,j);break;//小球
+						case '$': drawhui3(i,j);break;//箱子
+						case '@': drawhui4(i,j);point= [i,j];break;//小人
+						case '*': drawhui5(i,j);break;  //小球加箱子
+					}
+                }
+            }
+			msg.innerHTML = "第" + (iCurlevel+1) +"/"+levels_len+"关 移动次数: "+ moveTimes;
+        }
+		function initLevel(){//初始化游戏等级
+			levels_len=maps[mapdata.selectedIndex].length;
+			curLevel=maps[mapdata.selectedIndex][iCurlevel];
+			curLevel=curLevel.split("\n")
+			for (var i=0;i<curLevel.length ;i++ ){
+				curLevel[i]=curLevel[i].split("")
+			}
+			curMap = copyArray(curLevel);//当前的游戏地图
+			curLevel.length>curLevel[0].length?n =560/curLevel.length:n =560/curLevel[0].length;
+			a=n-2;steps=[];moveTimes = 0;//游戏关卡移动步数清零
+			DrawMap(curMap);//绘制当前地图
+		}
+		function GO(i){//跳转关卡
+			if (i==0){
+				var vel=document.getElementById('vel').value;
+				if(vel==""){initLevel();return};
+				document.getElementById('vel').value=""
+				iCurlevel = parseInt(vel)-1;
+			}else{
+				iCurlevel = iCurlevel + i;
+			}
+			if(iCurlevel<0){iCurlevel=0};
+			if(iCurlevel>levels_len-1){iCurlevel=levels_len-1};
+			initLevel();//初始当前等级关卡	
+		}
+		function move(dir){		//小人移动
+			var p1,p2;//获取小人前面的两个坐标位置
+			switch (dir){
+				case "up":
+					steps.push("u");
+					p1 = [point[0]-1,point[1]];
+					p2 = [point[0]-2,point[1]];
+					break;
+				case "down":
+					steps.push("d");
+					p1 = [point[0]+1,point[1]];
+					p2 = [point[0]+2,point[1]];
+					break;
+				case "left":
+					steps.push("l");
+					p1 = [point[0],point[1]-1];
+					p2 = [point[0],point[1]-2];
+					break;
+				case "right":
+					steps.push("r");
+					p1 = [point[0],point[1]+1];
+					p2 = [point[0],point[1]+2];
+					break;
+			}
+			//若果小人能够移动的话，更新游戏数据，并重绘地图
+			if (Trygo(p1,p2)){
+				moveTimes++;DrawMap(curMap);//重绘当前更新了数据的地图
+				if (checkFinish()){//若果移动完成了进入下一关，定时器解决渲染地图后再弹窗
+					answer=answers[mapdata.selectedIndex][iCurlevel];
+					if(!answer){
+						let item=localStorage.getItem(mapdata.value+"["+iCurlevel+"]");
+						if (!item){item=""};
+						if(steps.length<item.length ||item.length==0){
+							localStorage.setItem(mapdata.value+"["+iCurlevel+"]", steps.join(""));
+							setTimeout(()=>{confirm("恭喜过关,答案已保存！\n是否开始下一关?")?GO(1):GO(0);},50);return;
+						}
+					}
+					setTimeout(()=>{confirm("恭喜过关！\n是否开始下一关?")?GO(1):GO(0);},50)
+				}
+			}else{steps.pop()}
+		}
+		//判断是否推成功
+		function checkFinish(){
+			for (var i=0;i<curMap.length ;i++ ){
+				for (var j=0;j<curMap[i].length ;j++ ){
+					//当前移动过的地图和初始地图进行比较，若果初始地图上的陷进参数在移动之后不是箱子的话就指代没推成功
+					if (curLevel[i][j] == '.' && curMap[i][j] != '*' || curLevel[i][j] == '*' && curMap[i][j] != '*'){
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		//判断小人是否能够移动
+		function Trygo(p1,p2){
+			if(p1[0]<0) return false;//若果超出地图的上边，不通过
+			if(p1[1]<0) return false;//若果超出地图的左边，不通过
+			if(p1[0]>curMap.length) return false;//若果超出地图的下边，不通过
+			if(p1[1]>curMap[0].length) return false;//若果超出地图的右边，不通过
+			if(curMap[p1[0]][p1[1]]=='#') return false;//若果前面是墙，不通过
+			if(curMap[p1[0]][p1[1]]=='$' || curMap[p1[0]][p1[1]]=='*'){//若果小人前面是箱子那就还需要判断箱子前面有没有障碍物(箱子/墙)
+				if (curMap[p2[0]][p2[1]]==' ' || curMap[p2[0]][p2[1]]=='.'){
+					steps[steps.length-1]=steps[steps.length-1].toUpperCase();
+					curMap[p2[0]][p2[1]] =curMap[p2[0]][p2[1]]==' '? "$":"*";//更改地图对应坐标点的值
+				}else{
+					return false;
+				}
+			}
+			curMap[p1[0]][p1[1]] = '@';//小人前进一步更改地图对应坐标点的值
+			var v = curLevel[point[0]][point[1]];
+			if(v=='.'||v=='*'){v='.';}else{v=' ';}//可能是5 既有箱子又陷进
+			curMap[point[0]][point[1]] = v;
+			point = p1;//更新小人坐标值
+			return true;
+		}
+		function backmove(step){
+			var p1,p2=[-1];
+			switch (step){
+				case "U":
+					p2 = [point[0]-1,point[1]];
+				case "u":	
+					p1 = [point[0]+1,point[1]];
+					break;
+				case "D":
+					p2 = [point[0]+1,point[1]];
+				case "d":	
+					p1 = [point[0]-1,point[1]];
+					break;
+				case "L":
+					p2 = [point[0],point[1]-1];
+				case "l":	
+					p1 = [point[0],point[1]+1];
+					break;
+				case "R":
+					p2 = [point[0],point[1]+1];
+				case "r":	
+					p1 = [point[0],point[1]-1];
+					break;
+			}
+			curMap[p1[0]][p1[1]] = '@';//小人退一步更改地图对应坐标点的值
+			curLevel[point[0]][point[1]]=='.'||curLevel[point[0]][point[1]]=='*'?
+			curMap[point[0]][point[1]] ='.':curMap[point[0]][point[1]] = ' ';
+			if(p2[0]!=-1){//若果小人推了箱子那就还需要判断箱子
+				curLevel[p2[0]][p2[1]]=='.' || curLevel[p2[0]][p2[1]]=='*'?
+				curMap[p2[0]][p2[1]] = '.':curMap[p2[0]][p2[1]] = ' ';
+				curMap[point[0]][point[1]] =curMap[point[0]][point[1]]==' '? '$':'*';
+			}
+			point=p1;//小人更新坐标值
+		}
+		function back(){
+			if(steps.length<=0){initLevel();return};
+			backmove(steps[steps.length-1]);
+			DrawMap(curMap);steps.pop();moveTimes--;
+		}
+		function solve(){
+			answer=answers[mapdata.selectedIndex][iCurlevel];
+			if(!answer){
+				let item=localStorage.getItem(mapdata.value+"["+iCurlevel+"]")
+				if(!item){
+					if(confirm("此关卡没有答案,是否暴力求解(小型地图及5个以下箱子)")){
+						solver_box()
+					}else{return}
+				}else{answer=item};
+			}
+			initLevel();solve_step();
+			function solve_step(){
+				if (moveTimes<answer.length){
+				switch (answer.charAt(moveTimes)){
+					case "L": case "l": move('left');break;//墙
+					case "R": case "r": move('right');break;//小球
+					case "U": case "u": move('up');break;//箱子
+					case "D": case "d": move('down');break;//小人
+                }
+				timer_solve= setTimeout(solve_step, 200);
+           	 	}
+			}
+		}
+		function doKeyDown(event){//与键盘上的上下左右键关联
+			switch (event.keyCode){
+				case 37: case 65: move("left");break;//左键头
+				case 38: case 87: move("up");break;//上键头
+				case 39: case 68: move("right");break;//右箭头
+				case 40: case 83: move("down");break;//下箭头
+				case 82: initLevel();;break;//r重置
+				case 90: case 8: back();break;//回退
+			}
+		}
+		canvas.addEventListener('touchstart', function(e) {
+            var touch = event.touches[0]; // 获取第一个触点
+            startX = touch.pageX;
+            startY = touch.pageY;
+        });//触摸移动小人
+        canvas.addEventListener('touchend', function(e) {
+            var touch = event.changedTouches[0];
+            var endX = touch.pageX;
+            var endY = touch.pageY;
+			if (Math.abs(endX-startX)>Math.abs(endY-startY)){
+				if(Math.abs(endX-startX)<20){return}
+				if (endX-startX>0){ move('right');}else{move('left')}
+			}else{
+				if(Math.abs(endY-startY)<20){return}
+				if (endY-startY>0){ move('down');}else{move('up')}}
+        	});
+		function copyArray(arr){//克隆二维数组
+			var b=[];
+			for (var i=0;i<arr.length ;i++ ){
+				b[i] = arr[i].concat();//链接两个数组
+			}
+			return b;
+		}
+		function get_items(){
+			let items = [];
+			for (let i = 0; i < localStorage.length; i++) {
+				let key = localStorage.key(i);
+				if(key.charAt(0)=="困"){
+					// localStorage.removeItem(key)
+					items.push(key+"="+localStorage.getItem(key))
+				}
+			}
+			return items;
+		}
+		//暴力求解
+		class SokobanSolver {
+			constructor(maze) {
+				this.DIRECTIONS = [
+					{ dx: 0, dy: 1, action: 'r' },
+					{ dx: 1, dy: 0, action: 'd' },
+					{ dx: 0, dy: -1, action: 'l' },
+					{ dx: -1, dy: 0, action: 'u' }
+				];
+				// 解析迷宫
+				const parseResult = this.parseMaze(maze);
+				this.start = parseResult.start;
+				this.initialBoxes = parseResult.boxes;
+				this.targets = parseResult.targets;
+				this.maze = maze;
+				this.TIME_LIMIT = 5000; // 超时时间（5 秒）
+				this.startTime = Date.now(); // 记录搜索开始时间
+			}
+			parseMaze(maze) {
+				let start = null;
+				const boxes = new Set();
+				const targets = new Set();
+				for (let i = 0; i < maze.length; i++) {
+					const row = maze[i];
+					for (let j = 0; j < row.length; j++) {
+						const c = row[j];
+						if (c === '@') {
+							start = [i, j];
+						} else if (c === '$') {
+							boxes.add(JSON.stringify([i, j]));
+						} else if (c === '.') {
+							targets.add(JSON.stringify([i, j]));
+						} else if (c === '*') {
+							boxes.add(JSON.stringify([i, j]));
+							targets.add(JSON.stringify([i, j]));
+						}
+					}
+				}
+				return {
+					start,
+					boxes: Array.from(boxes).map(pos => JSON.parse(pos)),
+					targets: Array.from(targets).map(pos => JSON.parse(pos))
+				};
+			}
+			isWin(boxes) {
+				return boxes.every(box =>
+					this.targets.some(t => t[0] === box[0] && t[1] === box[1])
+				);
+			}
+			getStateKey(player, boxes) {
+				const sortedBoxes = [...boxes].sort((a, b) =>
+					a[0] - b[0] || a[1] - b[1]
+				);
+				return JSON.stringify([player, sortedBoxes]);
+			}
+			isBoxDeadlocked(box, boxes) {
+				const [x, y] = box;
+				// 检查箱子是否在角落
+				const isCorner =
+					(this.maze[x - 1]?.[y] === '#' && this.maze[x][y - 1] === '#') || // 左上角
+					(this.maze[x - 1]?.[y] === '#' && this.maze[x][y + 1] === '#') || // 右上角
+					(this.maze[x + 1]?.[y] === '#' && this.maze[x][y - 1] === '#') || // 左下角
+					(this.maze[x + 1]?.[y] === '#' && this.maze[x][y + 1] === '#');   // 右下角
+				if (isCorner) {
+					// 如果箱子在角落且不在目标位置，则锁死
+					return !this.targets.some(t => t[0] === x && t[1] === y);
+				}
+				// 检查箱子是否在墙边且无法移动
+				const isWallSide =
+					(this.maze[x - 1]?.[y] === '#' || this.maze[x + 1]?.[y] === '#') &&
+					(this.maze[x][y - 1] === '#' || this.maze[x][y + 1] === '#');
+				if (isWallSide) {
+					// 如果箱子在墙边且不在目标位置，则锁死
+					return !this.targets.some(t => t[0] === x && t[1] === y);
+				}
+				return false;
+			}
+			solve() {
+				const visited = new Set();
+				const queue = [];
+				queue.push({
+					player: this.start,
+					boxes: this.initialBoxes,
+					path: []
+				});
+				while (queue.length > 0) {
+					if (Date.now() - this.startTime > this.TIME_LIMIT) {
+						return null; // 超时返回 null
+					}
+					const { player, boxes, path } = queue.shift();
+					// 检查胜利条件
+					if (this.isWin(boxes)) {
+						return path;
+					}
+					// 生成状态唯一标识
+					const stateKey = this.getStateKey(player, boxes);
+					if (visited.has(stateKey)) {
+						continue;
+					}
+					visited.add(stateKey);
+					// 检查是否有箱子锁死
+					if (boxes.some(box => this.isBoxDeadlocked(box, boxes))) {
+						continue; // 跳过锁死状态
+					}
+					// 尝试所有移动方向
+					for (const { dx, dy, action } of this.DIRECTIONS) {
+						const px = player[0], py = player[1];
+						const nx = px + dx, ny = py + dy;
+						// 检查新位置是否合法
+						if (!this.isValid(nx, ny)) continue;
+						// 检查是否推动箱子
+						const boxIndex = boxes.findIndex(b => b[0] === nx && b[1] === ny);
+						if (boxIndex !== -1) {
+							const bx = nx + dx, by = ny + dy;
+							if (!this.isValid(bx, by) ||
+								boxes.some(b => b[0] === bx && b[1] === by)) {
+								continue; // 无法推动
+							}
+							// 创建新箱子状态
+							const newBoxes = boxes.map((b, i) =>
+								i === boxIndex ? [bx, by] : b
+							);
+							queue.push({
+								player: [nx, ny],
+								boxes: newBoxes,
+								path: [...path, action.toUpperCase()]
+							});
+						} else {
+							// 普通移动
+							queue.push({
+								player: [nx, ny],
+								boxes: boxes,
+								path: [...path, action]
+							});
+						}
+					}
+				}
+				return null; // 无解
+			}
+			isValid(x, y) {
+				return x >= 0 && x < this.maze.length &&
+					y >= 0 && y < this.maze[0].length &&
+					this.maze[x][y] !== '#';
+			}
+		}
+		function solver_box(){
+			const solver = new SokobanSolver(curLevel);
+			const solution = solver.solve();
+			if (solution) {
+				answer=solution.join('')
+			} else {
+				alert("超时，没有找到解")
+			}
+		}
+	</script>
+</html>

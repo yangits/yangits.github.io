@@ -1,0 +1,224 @@
+body {
+    margin: 0;
+    height: 100%;
+    background: #d0e7f9;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.main {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    box-sizing: border-box;
+    max-width: 1200px;
+    border-radius: 10px;
+    margin: auto;
+    background: #da4a4a;
+    height: 100%;
+    max-height: 621px;
+    padding: 10px;
+}
+.panel {
+    position: relative;
+    height: 100%;
+    box-sizing: border-box;
+    background: #f8f1d7;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: row;
+}
+.function-area {
+    flex: 1;
+    display: flex;
+    padding: 0 5px;
+    justify-content: center;
+    flex-direction: column;
+}
+.controller-area {
+    padding-bottom:30px ;
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: row;
+}
+.action-area {
+    padding-bottom:50px ;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+.controller {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    align-self: flex-end;
+}
+.controller button {
+    position: absolute;
+    z-index: 1;
+    border: 8px solid #474f51;
+    background: #857b7a;
+    color: transparent;
+    border-radius: 15px;
+    box-sizing: border-box;
+    outline: 0;
+    width: 56px;
+    height: 56px;
+    left: 50%;
+    top: 50%;
+    user-select: none;
+    transform: translate(-50%, -50%);
+}
+.controller::before {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+    box-sizing: border-box;
+    left: 50%;
+    top: 50%;
+    width: 56px;
+    height: 56px;
+    background: #857b7a;
+    transform: translate(-50%, -50%);
+}
+.controller::after {
+    content: '';
+    z-index: 2;
+    position: absolute;
+    pointer-events: none;
+    box-sizing: border-box;
+    width: 42px;
+    height: 42px;
+    border: 8px solid #474f51;
+    border-radius: 50%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+button.up.joydirection {
+    top: 0;
+    transform: translate(-50%, 0);
+    border-bottom: 0;
+    height: 50px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+button.right.joydirection {
+    left: auto;
+    right: 0;
+    transform: translate(0, -50%);
+    border-left: 0;
+    width: 50px;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+}
+button.down.joydirection {
+    top: auto;
+    transform: translate(-50%, 0);
+    bottom: 0;
+    border-top: 0;
+    height: 50px;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+}
+button.left.joydirection {
+    left: 0;
+    transform: translate(0, -50%);
+    border-right: 0;
+    width: 50px;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+}
+.function {
+    display: flex;
+    border-radius: 50px;
+    background: #da4a4a;
+    position: absolute;
+    bottom: 150px;
+    align-self: flex-end;
+    transform: translateX(10px);
+    padding: 6px 6px;
+    margin-right: 5px;
+}
+.function button {
+    user-select: none;
+    margin: 3px;
+    height: 36px;
+    width: 68px;
+    outline: 0;
+    border: 6px solid #474f51;
+    background: #857b7a;
+    border-radius: 15px;
+    color: #000;
+}
+.action {
+    display: flex;
+    align-self: flex-end;
+}
+.action button {
+    user-select: none;
+    width: 70px;
+    height: 70px;
+    background: #857b7a;
+    border-radius: 50%;
+    outline: 0;
+    color: #000;
+    border: 8px solid #474f51;
+}
+.action button:first-child {
+    margin-right: 5px;
+}
+.screen canvas {
+    max-width: 100%;
+    max-height: 100%;
+}
+.screen {
+    z-index: 11;
+    flex: 11;
+    display: flex;
+    width: 100%;
+    height: 350px;
+    transition: .3s;
+    background: #000;
+    border-radius: 10px;
+    align-items:flex-start;
+    justify-content: center;
+    overflow: hidden;
+}
+.nes-roms>select {
+    width: 200px;
+}
+.nes-controls {
+    margin-top: 2px;
+}
+@media screen and (orientation: portrait) {
+    /*竖屏 css*/
+    .main {
+        max-height: 100%;
+    }
+    .function-area {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 5px;
+        bottom: 100px;
+        padding-bottom: 10px;
+    }
+    .screen {
+        margin-bottom: 100px;
+        max-height: 380px;
+    }
+    .action-area {
+        flex: 1;
+    }
+}
+@media screen and (orientation: landscape) {
+    /*横屏 css*/
+}

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>学习汉字</title>
+	</head>
+	<script src="./cnchar.min.js"></script>
+	<script src="./cnchar.draw.min.js"></script>
+	<style>
+		body {
+			height: 100%;
+			width: 100%;
+			background: #cbcbcb;
+			text-align: center;
+			margin: auto;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			margin-top: 6px;
+		}
+		.bt{
+			text-align: center;
+			margin: auto;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			max-width: 600px;
+			margin-top: 6px;
+			margin-bottom: 6px;
+		}
+		input{
+			height: 30px;
+			width: 16%;
+		}
+	</style>
+	<body>
+		<audio id="myAudio"></audio>
+		<span  id='cnchar-area'></span>
+		<div class="bt">
+			<input type="button" value="⋘" onclick="go(-1)">
+			<input type="button" value="⋙" onclick="go(1)">
+			<input type="text" id="vel" placeholder="GO刷新">
+			<input type="button" value="GO" onclick="go(0)">
+			<input type="button" value="绘制" onclick="len=0;drow_char()">
+		</div>
+		<div id='draw_area' onclick="char_audio()"></div>
+		<div id='draw_areas'></div>
+		<script>
+			const char_cn_st = "大小多少远近高低高矮胖瘦长短粗细上下左右东南西北年月日时钟表铃铛时间地点是非曲直男女老少先来后到莫名其妙穿衣戴帽歌唱舞蹈春暖夏热秋凉冬冷日月水火山石田土马牛羊群鸡鸭鹅蛋你我他们点线面体刮风下雨雪雨风霜生死存亡三年五载出入平安迎来送往士农工商兵学官警家国天下江河湖海树木森林根深叶茂法正乾坤济世度人企盼期望神清气爽内圣外王格物致知修身养性心平气和思想意念耳闻目见祈祷祝愿之乎者也天长地久严寒酷暑日新月异千变万化前后相随有无相生高下相倾难易相成观望视看逍遥自在仅又还再精气神态车站医院宾馆酒店房屋庐室门扇窗户窗帘幕布饥寒交迫铺盖被褥停休止罢彼此这那呼吸吐纳顺畅通达雕板印刷证道悟法征战讨伐责罪处罚每况愈下尖牙利爪鲜罕少寡奖赏惩罚纷繁复杂涂抹粉刷拍照摄影冒充顶替刻碑勒铭柔软坚硬接连继续只言片语才能本领一定必须操练演习渐缓慢徐居住环境冷热均匀因果报应官府朝廷指挥命令合拢兼并食堂餐厅普天同庆声音响鸣衔枚摘铃过往曾经绿草青萍圆满团圆精微准确言谈论说七嘴八舌以身作则稽查考核学习功课预料猜测感恩戴德知道晓得姣容美色而已罢了喜怒哀乐悲欢离合亭台楼阁哪里什么催促逼迫高压负荷既然那么克己复礼坐标体系述讲话语词段语句腿脚足履沙洲岛屿栽种植育棉麻丝絮但或也许贫穷富裕数额庞巨杰出优秀恳告央求领导管理新闻消息米粮钱币早起晚睡文化教育私徒眷属管制约束拯救援助奔奋猛突深入浅出脱胎换骨超凡脱俗大展宏图莺歌燕舞建邦设都庄严肃穆登载记录交予托付守望相助情同手足欧亚大陆坚稳牢固猫猪狗兔平凡庸俗罢免却除原委底数适值会晤洁净雅素动静自如同产政权结党营私拉帮结伙儿女子孙探讨议论超群绝伦困苦劳顿提拔选举绳墨规矩及第登科采花摘果逾越超过满盈足够跑步行走按劳取酬善恶美丑军队战斗令行禁止涵养素质孔很太甚追逐赶趁印迹踪痕洒扫应对前进后退分门别类事半功倍阅历趣味观察体会针尖锋锐率部突围阴阳向背节约浪费权势名位付恩施惠如影相随奔腾跳跃拾遗补缺记忆忘却完整无缺否认肯确梳妆打扮省市区县柴米油盐酱醋茗茶号令赏罚鹰犬爪牙算计谋划龟鳖鱼虾洗晾晒挂吊钩悬挂职员揽聘屡再仍频刻骨铭心官吏群民陈旧崭新天道无亲常予善人开关闭合操持把握各个击破起承转合去就取舍揪拉牵扯驴骡独特接触挨着等待侍候跑步行走打架斗殴研究探索听闻传说闭关封锁各得其所浪漫洒脱苏醒复活班组连排横排竖列是乃其也完毕终结浩瀚汪洋渺茫烟波奋力拼搏认识错误改正缺点火药指南笔墨纸砚争芳斗艳嗜欲贪恋叫嚷呼喊调运派遣刚毅决断委托承办从夕达旦止于至善灾难祸患圆球浑蛋干侵冒犯纵使虽然补破遮寒检验推算光明黑暗当机立断适宜可堪增补削删起初原先佛道神仙不愧没惭来回往返蓬勃发展神机妙算物极必反胜利凯旋秩序井然环顾周览趁机伺便幽黑昏暗征召募选票据证券考试测验烧菜做饭欺诈伪骗变替更换捉拿缉办详悉审判残羹余饭皮毛表面路程阶段边际界限水滴石穿根茎枝叶瓜果遍地屡再仍频身家性命总结要领解答问题有的放矢纪律严明声律和谐条分缕析伯仲叔季合聚分离本末倒置纤细毫厘缝隙漏洞闸阀泄洪尔汝你侬公母雌雄跟与和同脸面颜容吟念讽诵电闪雷轰主席总统胡搞乱弄紧张放松收敛放纵努力用功幼稚孩童聪明可爱善始令终先辈祖宗浓厚深重器局恢弘中华历史岁月五千文武成康君主霸王治乱存亡用行舍藏建功立业王侯将相公卿大夫对比较量坑矿宝藏捕获叛亡变故非常意志坚强蒙惑迷茫活着死亡改过从良滋味品尝甘甜苦楚臣服戎羌率宾归王治病疗伤救死扶伤真诚善良容忍退让如何怎样遇难呈祥蛟龙凤凰敢于担当身体健康寒露霜降奇偶单双些许少量漂浮沉降斯文鲁莽继承发扬公园广场店铺商场情形状况光亮明敞愉悦喜豫欢快舒畅贪污腐败迅速疾快边关要塞亲戚族脉增光添彩青红皂白景仰膜拜奸坏恶歹改朝换代眼疾手快梭镖盾牌挑担扛抬竞技比赛枪炮子弹秘密武器惊险刺激吉祥瑞益良师益友绝无仅有功成名就恳告央求民主自由宾客朋友翻山越岭跋山涉水漂泊流浪走街串巷推拉摇晃改弦更张困难容易千方百计演剧唱戏闲散飘逸天文地理玄机奥秘撑持维系合适便利现今过昔福祸旦夕休养生息未便不宜间隔距离怜痛惋惜浓淡咸宜忠厚老实读书写字亦也即是迅忽即逝操纵控制设备装置绩纺编织互相支持实验尝试基础扎实衣冠服饰整齐划一型号样式轻重缓急苟且随意头脑首级决断嫌疑旁敲侧击板凳桌椅宗庙社稷暨与和及耳朵眼睛旁观者清当局者迷加减乘除至达到次求真务实稳妥合适金银首饰道德品质准予批示科学技术供给需求三番几次伯仲叔季早起晚睡从头到尾辛苦劳累汉刘曹魏阴晴圆缺刀刃尖锋京师都城锦绣前程心想事成圆滑方正推贤荐能思虑想梦经史子集甲乙丙丁子丑寅卯姓氏名号尊师重教光辉荣耀灵丹妙药简单扼要设局做套批准呈报枪支弹药煤炭燃料生产制造模拟仿效吃苦耐劳金玉珠宝并皆佳妙转圈环绕陷阱圈套萌芽抽条怀揣拥抱护卫保镖逢遇碰遭散虑逍遥安静吵闹宫廷院校修身齐家治国平天下赤橙黄绿青蓝紫黑红白仁义礼智信忠孝勤勇敬谦俭恒思诚谨预慈恕平金木水火土丹朱紫红赤钢铁铜铝锡元角分厘块酸甜苦辣咸变替更换易寻觅找索求天时地利人和锅碗瓢盆碟筷抛掷扔甩丢弃投个十百千万亿兆劫零一二三四五六七八九十拾";
+			var len, num =0, char_cn= char_cn_st.charAt(num);
+			const myAudio = document.getElementById('myAudio');
+			const vel = document.getElementById('vel');
+			var screenwith=window.innerWidth
+			if (screenwith>600){screenwith=600}
+			var drawArea = document.getElementById('draw_area');
+			var drawAreas = document.getElementById('draw_areas');
+			var option = {
+				clear: true,
+				el: drawArea,
+				style: {
+					radicalColor: '#44f',
+					backgroundColor: '#eee',
+					length: screenwith
+				},
+				test:{
+					drawingWidth:50,
+					onTestStatus:({index, status, data})=>{
+						if (status=="complete"){
+							len++
+							if (len<char_cn.length){drow_char()}
+							else{
+								option.type = cnchar.draw.TYPE.NORMAL;
+								cnchar.draw(char_cn, option);
+							}
+						}
+					}
+				}
+			};
+			window.onload = function(){start()};
+			function char_audio(){
+				var i=0;
+				var char_pinyin =char_cn.spell("array",'tone',"flat");
+				function plays(){
+					if (i<char_pinyin.length){
+						myAudio.src="https://yangits.github.io/cnchar-data/voice/"+char_pinyin[i].replace("0","5")+".mp3";
+						myAudio.load(); myAudio.play();
+					}
+					i++;
+				}
+				myAudio.addEventListener('ended',  plays);plays();
+			}
+			function start(){				
+				option.type = cnchar.draw.TYPE.ANIMATION;
+				cnchar.draw(char_cn, option);
+				drawAreas.innerHTML = '';
+				var options = {
+					clear: false,
+					el: drawAreas,
+					type: cnchar.draw.TYPE.STROKE,
+					style: {
+						radicalColor: '#44f',
+						backgroundColor: '#eee',
+						length: screenwith/8
+					}
+				};
+				cnchar.draw(char_cn, options);
+				var res = [
+					"第"+(num +1)+"/"+char_cn_st.length+"个字",
+					"["+char_cn+"]:"+char_cn.spell("array",'low','tone','poly'),
+					"共"+char_cn.stroke()+"画。",
+				]
+				document.getElementById('cnchar-area').innerText = res.join(',');
+			}
+			function drow_char(){
+				option.type = cnchar.draw.TYPE.TEST;
+				cnchar.draw(char_cn.charAt(len), option)
+			}
+			function go(n){
+				if(n==0){
+					if (vel.value==""){start();char_audio();return}
+					if(isNaN(vel.value)){
+						char_cn=vel.value;
+					}else{
+						num=vel.value-1;
+						if(num<0 || num>=char_cn_st.length){num=0}
+						char_cn = char_cn_st.charAt(num)
+						}
+					vel.value="";
+				}else{
+					num += n;
+					if(num<0 || num>=char_cn_st.length){num=0}
+					char_cn = char_cn_st.charAt(num);
+				}
+				start();char_audio();
+			}
+		</script>
+	</body>
+</html>

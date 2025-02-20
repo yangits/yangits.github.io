@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数字方阵</title>
+</head>
+<style>
+    *{
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      margin:0px;
+      padding:0px;
+      text-align: center;
+      margin: auto;
+    }
+    .choose,.topbt{
+      max-width: 500px;
+    }
+    #main {
+      background: white;
+      border: 8px solid darkblue;
+      border-radius: 8px;
+    }
+    #main span {
+      margin: 1px;
+      float: left;
+      text-align: center;
+      line-height: 35px;
+      font-size: 20px;
+      font-weight: 900;
+    }
+    input{
+      width:25%;
+      height: 38px;
+      font-size: 20px;
+      border-radius: 5px;
+      margin: 10px;
+      border: 3px solid mediumblue;
+    }
+    .homec{
+      background: white;
+      color: mediumblue;
+    }
+    .home{
+      background: mediumblue;
+      color: white;
+    }
+    select,button{
+      width: 60%;
+      height: 38px;
+      margin-top: 15px;
+      font-size: 22px;
+      background: mediumblue;
+      color: white;
+      border: 0;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="topbt">
+    <input class="homec" id="hrdbt" type="button" value="华容道" onclick="home_hrd()">
+    <input class="home" id="hfbt" type="button" value="幻方" onclick="home_hf()">
+  </div>
+  <b id="msg"></b>&emsp;<b id="time">耗时: 00 : 00</b>
+  <div  id="main"></div>
+  <div class="choose">
+    <button id="startbt" onclick="start_bt()">开始</button>
+    <select id="choose_hrdbt" onchange="home_hrd()">
+      <option selected>3 × 3</option>
+      <option>4 × 4</option>
+      <option>5 × 5</option>
+      <option>6 × 6</option>
+      <option>7 × 7</option>
+      <option>8 × 8</option>
+    </select>
+    <select id="choose_hfbt" onchange="choose_hf();">
+      <option selected>3 × 3</option>
+      <option>5 × 5</option>
+      <option>7 × 7</option>
+      <option>9 × 9</option>
+      <option>11 × 11</option>
+      <option>13 × 13</option>
+    </select>
+  </div>
+  <script>
+    var main = document.getElementById('main');
+    var choose_hrdbt = document.getElementById('choose_hrdbt');
+    var choose_hfbt = document.getElementById('choose_hfbt');
+    var startbt = document.getElementById('startbt');
+    var hrdbt = document.getElementById('hrdbt');
+    var hfbt = document.getElementById('hfbt');
+    var msg = document.getElementById('msg');
+    var timedata = document.getElementById('time');
+    var screenwidth=window.innerWidth>=500?480:window.innerWidth-20;
+    var numData = [], step = 0, size=3;
+    main.style.width=screenwidth+"px";
+    main.style.height=screenwidth+"px";
+    home_hrd();
+    function home_hrd() {
+      hrdbt.className="homec";
+      hfbt.className="home";
+      choose_hrdbt.style.display="";
+      startbt.style.display="";
+      timedata.style.display="";
+      choose_hfbt.style.display="none";
+      timedata.innerHTML =  "耗时: 00 : 00";
+      step=0;choose_hrd();
+    }
+    function home_hf() {
+      hfbt.className="homec";
+      hrdbt.className="home";
+      choose_hrdbt.style.display="none";
+      startbt.style.display="none";
+      timedata.style.display="none";
+      choose_hfbt.style.display="";
+      choose_hf()
+    }
+    function span_style(size){
+      Array.from(document.getElementsByTagName('span')).forEach(function(span) {
+            span.style.width = (screenwidth)/size-2+'px';
+            span.style.height =(screenwidth)/size-2+'px';
+            span.style.lineHeight =(screenwidth)/size-2+'px';
+            span.style.fontSize =(screenwidth)/size/2+'px';
+            span.style.background=span.innerHTML==""?"white":"rgb(173, 183, 228)"
+      });
+    }
+    function choose_hrd(){//以下是华容道
+      startbt.innerHTML="开始";endTimer();
+      size=choose_hrdbt.selectedIndex+3;
+      msg.innerHTML="步数: "+step;
+      main.innerHTML="";
+      numData = [];
+      for (let i = 1; i < size * size; i++) {
+        numData.push(i);
+        main.innerHTML+='<span>'+i+'</span>';
+      }
+      span_style(size)
+    }
+    function start_bt(){
+      if (startbt.innerHTML=="开始"){
+        main.innerHTML="";step=0;startTimer();
+        msg.innerHTML="步数: "+step;
+        disorganize();
+        for (let i = 0; i < size * size; i++) {
+          main.innerHTML+='<span  onclick="goMove('+(i)+')">'+numData[i]+'</span>';
+        }
+        span_style(size)
+        startbt.innerHTML="重置"
+      }else{
+        timedata.innerHTML =  "耗时: 00 : 00";
+        step=0;choose_hrd();
+      }
+    }
+    function disorganize() {
+      numData.sort(() => { return (0.5 - Math.random()); }); // 随机打乱顺序
+      let num = 0;
+      for (let i = 0; i < numData.length; i++) {
+        for (let x = i + 1; x < numData.length; x++) {
+          if (numData[i] > numData[x]) {
+            num += 1;
+          }
+        }
+      }
+      // 逆序数的数量 必须为偶数才有解
+      if (num % 2 == 0) {
+        numData.push("");return;
+      } else {
+        disorganize(numData);
+      }
+    } 
+    function gameOver() {// 游戏结束
+      // 如果最后一格为空的话 并且 倒数第二格值正确的话，再计算游戏是否结束
+      if (numData[numData.length - 1]=="" && numData[numData.length - 2] == size*size - 1) {
+        for (let i = 1; i < numData.length-1; i++) {
+          if (numData[i-1] != i) {return}
+        }
+        alert("恭喜过关了！");choose_hrd();
+      }
+    }
+    // 移动算法
+    function goMove(n) {
+      let x = '';
+      // 当前点击的 上下左右 方向如果有空位的话，就互换位置
+      if (numData[n - size]=="") {  // 上
+        x = n - size;
+      } else if (numData[n + size]=="") {  // 下
+        x = n + size;
+      } else if (numData[n - 1] =="") {  // 左
+        // 如果是在最左边的话，禁止向左移动
+        for (let h = 1; h < size; h++) {
+          if (n == size * h) return;
+        }
+        x = n - 1;
+      } else if (numData[n + 1]=="") {  // 右
+        // 如果是在最右边的话，禁止向右移动
+        for (let h = 1; h < size; h++) {
+          if (n == size * h - 1) return;
+        }
+        x = n + 1;
+      } else {
+        return; // 没有空位不做任何操作
+      }
+      [numData[n], numData[x]] = [numData[x], numData[n]];
+      step += 1;
+      main.innerHTML="";
+      for (let i = 0; i < size * size; i++) {
+        main.innerHTML+='<span  onclick="goMove('+(i)+')">'+numData[i]+'</span>';
+      }
+      msg.innerHTML="步数: "+step;
+      span_style(size)
+      setTimeout(()=>{gameOver()},20);
+    }
+    var timeStart;
+    var countTime = false;
+    var count = 0;
+    var timerId;
+    function startTimer() {
+      timeStart = new Date();
+      countTime = true;
+      count = 0;
+      timedata.innerHTML =  "耗时: 00 : 00";
+      timerId = setTimeout(timer, 1000);
+    }
+    function timer() {
+      count++;
+      let m = pad(parseInt(count / 60));
+      let s = pad(parseInt(count % 60));
+      timedata.innerHTML = "耗时: " + m + " : " + s;
+      if (countTime) {
+        timerId = setTimeout(timer, 1000);
+      }
+    }
+    function pad(i) {
+      if (i < 10) {
+        return "0" + i;
+      }
+      return i;
+    }
+    function endTimer() {
+      countTime = false;
+      clearTimeout(timerId);
+    }
+    function choose_hf(){//以下是幻方
+      size=choose_hfbt.selectedIndex*2+3;
+      msg.innerHTML="幻方和："+(size**2+1)*size/2;
+      main.innerHTML="";
+      let matrix = magicMatrix(size);
+      for (var i = 0; i < size; i++) {
+          for (var j = 0; j < size; j++) {
+            main.innerHTML+='<span>'+matrix[i][j]+'</span>'
+      }}
+      span_style(size)
+    }
+    function magicMatrix(n) {
+      let matrix = [];
+      var x = 0;
+      var y = (n-1)/2; // 奇数的中心位置
+      for (let i = 0; i < n; i++) {
+        matrix[i] = [];
+        for (let j = 0; j < n; j++) {
+          matrix[i][j] = 0;
+        }
+      }
+      for (let i = 0; i < n * n; i++) {
+        matrix[x][y] = i + 1;
+        var tx = x;
+        var ty = y;
+        // 默认更新为右上角位置
+        x--;if (x < 0) {x += n;}
+        y++;if (y >= n) {y -= n;}
+        // 右上角已有数据, 则回退到正下方位置
+        if (matrix[x][y] !== 0) {
+          x = tx + 1;
+          if (x === n) {x -= n;}
+          y = ty;
+        }
+      }
+      return matrix;
+    }
+  </script>
+</body>
+</html>

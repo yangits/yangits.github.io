@@ -1,0 +1,211 @@
+body{
+    margin: 0px;
+    padding: 0px;
+    white-space: nowrap;
+}
+footer{
+    position: fixed; /* 设置为fixed使其保持在页面上 */
+    width: 100%;
+    background-color: rgb(255, 255, 255); /* 背景色 */
+    bottom: 0px;
+    text-align: center;
+}
+/* login界面设置 */
+.background {
+    position: fixed; /* 设置为fixed使其保持在页面上 */
+    left: 0;
+    right: 0;
+    top: 20px;
+    width: 300px; /* 宽度 */
+    /* height: 300px; */
+    background-color: rgb(255, 255, 255); /* 背景色 */
+    border: 1px solid #ccc; /* 边框样式 */
+    padding: 10px; /* 内边距 */
+    text-align: center;
+    margin: auto;
+    border-radius: 6px;
+}
+.background select{
+    width: 170px; height: 22px;
+}
+.background button{
+    margin: 5px 0;
+}
+.login{
+    position: fixed; /* 设置为fixed使其保持在页面上 */
+    z-index: 1;
+    width: 100%; /* 宽度 */
+    height: 100%; /* 高度 */
+    background-color: rgba(0, 0, 0, 0.5); /* 背景色 */
+    margin: 0px;
+    padding: 0px;
+}
+.good_top{
+    position: fixed; /* 设置为fixed使其保持在页面上 */
+    z-index: 1;
+    width: 100%; /* 宽度 */
+    height: 100%; /* 高度 */
+    display: none;
+    background-color: rgba(0, 0, 0, 0.5); /* 背景色 */
+    margin: 0px;
+    padding: 0px;
+}
+.name_top{
+    position: fixed; /* 设置为fixed使其保持在页面上 */
+    z-index: 1;
+    width: 100%; /* 宽度 */
+    height: 100%; /* 高度 */
+    display: none;
+    background-color: rgba(0, 0, 0, 0.5); /* 背景色 */
+    margin: 0px;
+    padding: 0px;
+}
+.close {
+    text-align: right;
+    /* float: right; 将关闭按钮放到右侧 */
+    cursor: pointer; /* 光标变成手型 */
+
+}
+
+.timsg{
+    min-height: 14px;
+    font-size:10px;
+    color: red; 
+}
+.hide_rows{
+    display: none;
+}
+/* main主界面设置 */
+.goods_table{
+    max-height: 550px;
+    overflow:auto;
+    text-align: center;
+    margin: 0 5%;
+    width: 90%;
+}
+#goods_table{
+    border-color: rgb(0, 0, 0);
+    border-spacing: 0px;
+    text-align: center;
+    margin: auto;
+    width: 100%;
+}
+
+#goods_table td{
+    border-bottom: 1px;
+    text-overflow: ellipsis;
+    word-break:break-all;
+    overflow: hidden;
+    word-wrap: break-word;
+    max-width: 200px;
+}
+.width50{
+    width: 50px;
+}
+/* tr button{
+    padding-left: 2px;
+    padding-right: 2px;
+} */
+.goods_table tr{
+    
+    background-color: #ffffff;
+}
+.goods_table tr:hover{
+    background-color: #cefdff;
+}
+.top_tr{
+    z-index: 0;
+    position: sticky; 
+    top: 0;
+}
+.main_top{
+    text-align: center; 
+    margin: auto;
+    /* padding: 0 10%; */
+    width: 80%;
+}
+.main_top input{
+    width: 100px;
+}
+.mainbody{
+    margin: auto;
+    text-align: center;
+    padding: 10px 0 20px 0;
+    /* min-height: 580px; */
+    width: 100%;
+    height: 100%;
+}
+.right {
+    float: right; /* 将按钮放到右侧 */
+    cursor: pointer; /* 光标变成手型 */
+}
+.left{
+    text-align: left;
+}
+/* 顶黑条设置 */
+.top_row{
+    text-align: center;
+    padding: 10px 0 15px 0;
+    width: 100%; /* 宽度 */
+    height: 20px; /* 高度 */
+    background-color: rgb(51, 51, 51); /* 背景色 */
+    color: rgb(255, 255, 255);
+    font-size:20px;
+}
+.top_row_bt{
+    display: inline-block;
+    width: 100px;
+    background-color: rgba(255, 255, 255, 0); /* 背景色 */
+    color: rgb(255, 255, 255);
+    font-size:16px;
+    font-weight: bold;
+    /* padding: 0 1%; */
+    border: 0px;
+    cursor: pointer; /* 光标变成手型 */
+}
+.top_row_bt:hover{
+    background:rgba(230, 247, 255, 0.96);
+    color: rgb(0, 0, 0);
+    border-radius: 6px;
+    
+}
+
+
+
+
+
+
+
+
+.top_row ul {
+    z-index: 1;
+    position:absolute;
+    list-style: none;
+    display:none;
+    width: 100px;
+    margin: auto;
+    padding: auto;
+    border: auto;
+}
+
+
+.top_row ul li {
+    background-color: rgba(0, 0, 0, 0.5); /* 背景色 */
+    cursor: pointer; /* 光标变成手型 */
+    border-radius: 6px;
+}
+.top_row ul li:hover{
+    background:rgba(230, 247, 255, 0.96);
+    
+}
+.top_row ul li a{
+    font-size:16px;
+    font-weight: bold;
+    padding: 0 2%;
+    border: 0px;
+    color: rgb(0, 247, 255);
+    text-decoration: none;
+}
+.top_row ul li a:hover{  
+    color: rgb(0, 0, 0);
+}

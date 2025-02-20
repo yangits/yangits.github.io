@@ -1,0 +1,120 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>红白机</title>
+    <link href="./css/jsnes.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div class="main">
+    <div class="panel">
+        <div class="controller-area">
+            <div class="controller">
+                <div id="controls-direction">
+                    <div id="controls-rocker"></div>
+                    <button role="BUTTON_UP" class="up joydirection" id="joystick_btn_up">上</button>
+                    <button role="BUTTON_RIGHT" class="right joydirection" id="joystick_btn_right">右</button>
+                    <button role="BUTTON_DOWN" class="down joydirection" id="joystick_btn_down">下</button>
+                    <button role="BUTTON_LEFT" class="left joydirection" id="joystick_btn_left">左</button>
+                </div>
+            </div>
+        </div>
+        <div class="function-area">
+            <div class="screen">
+                <div id="emulator" align="center" style="width:100%;height:100%"></div>
+            </div>
+        </div>
+        <div class="action-area">
+            <div class="function">
+                <button class="controls-center-select joybtn" id="joystick_btn_select" role="BUTTON_SELECT">选 择</button>
+                <button class="controls-center-start joybtn" id="joystick_btn_start" role="BUTTON_START">暂 停</button>
+            </div>
+            <div class="action">
+                <div id="controls-fire">
+                    <button id="joystick_btn_A">A</button>
+                    <button id="joystick_btn_B">B</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    按键1 左(A) 右(D) 上(W) 下(S) A(J) B(K) 暂停(Enter) 选择(Ctrl)
+    按键2 左(4) 右(6) 上(8) 下(2) A(7) B(9) 暂停(1) 选择(3)
+</div>
+</body>
+<script src="./lib/jquery-1.4.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="./lib/dynamicaudio-min.js" type="text/javascript" charset="utf-8"></script>
+<script src="./js/nes.js" type="text/javascript" charset="utf-8"></script>
+<script src="./js/cpu.js" type="text/javascript" charset="utf-8"></script>
+<script src="./js/keyboard.js" type="text/javascript" charset="utf-8"></script>
+<script src="./js/mappers.js" type="text/javascript" charset="utf-8"></script>
+<script src="./js/papu.js" type="text/javascript" charset="utf-8"></script>
+<script src="./js/ppu.js" type="text/javascript" charset="utf-8"></script>
+<script src="./js/rom.js" type="text/javascript" charset="utf-8"></script>
+<script src="./js/ui.js" type="text/javascript" charset="utf-8"></script>
+<script src="./lib/debug.mini.js" type="text/javascript" charset="utf-8"></script>
+<script src="./lib/nipplejs.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="./lib/joystick.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+    var nes;
+    $(function () {
+        nes = new JSNES({
+            'ui': $('#emulator').JSNESUI({
+                "经典热门": [
+                    ['超级玛丽', 'roms/SuperMario.nes'],
+                    ['超级玛丽无敌', 'roms/SuperMariowd.nes'],
+                    ['坦克', 'roms/tanke.nes'],
+                    ['燕山坦克', 'roms/tankeyanshan1990.nes'],
+                    ['魂斗罗1-30S', 'roms/Contra1-30S.nes'],
+                    ['魂斗罗1无敌金身', 'roms/Contra1-1wd.nes'],
+                    ['魂斗罗2无限命', 'roms/Contra1-2wd.nes'],
+                    ['魂斗罗6无限命', 'roms/Contra1-6wd.nes'],
+                    ['魂斗罗7无限命', 'roms/Contra1-7wd.nes'],
+                    ['冒险岛', 'roms/maoixandao.nes'],
+                    ['冒险岛无敌', 'roms/maoixandaowd.nes'],
+                    ['挖金', 'roms/TaoJinZhe.nes'],
+                    ['炸弹人', 'roms/zhadanren.nes'],
+                    ['炸弹人无敌', 'roms/zhadanrenwd.nes'],
+                    ['敲冰块', 'roms/Ice Climber.nes'],
+                    ['西游记1', 'roms/xiyouji.nes'],
+                    ['西游记1汉化', 'roms/xiyouji1.nes'],
+                    ['雪人兄弟', 'roms/SnowBrothers(E).nes'],
+                ],
+            })
+        });
+    });
+    function touchDwon(evt) {
+        nes.keyboard.keyDown({
+            keyCode: evt.keyCode
+        });
+    };
+
+    function touchUp(evt) {
+        nes.keyboard.keyUp({
+            keyCode: evt.keyCode
+        });
+    };
+
+    function select(val) {
+        if (val.substring(0, 1) == "#") {
+            return document.querySelector(val);
+        } else {
+            return document.getElementById(val);
+        }
+    }
+    var joystick = new Joystick({
+        el: select("controls-rocker"),
+        mode: 'static',
+        color: "#808080",
+        size: 150,
+        isFourBtn: false,
+        keyCodes: [87, 83, 65, 68],
+        btn_down_fn: touchDwon,
+        btn_up_fn: touchUp,
+        relative: true,
+    });
+    joystick.init();
+</script>
+</html>
