@@ -131,10 +131,10 @@ Page({
       function backtrack(start, re, currentWeight) {
           // 如果当前重量超过背包容量，直接返回
           if (currentWeight > max_weight) {
-              re = new Array(weights.length).fill(0);
-              return;
+            result.push([...re]);
+            result[result.length-1][start]--
+            return;
           }
-          result.push([...re]);
           for (let i = start; i < weights.length; i++) {
               // 添加当前物品到组合中
               re[i]++;
@@ -184,33 +184,23 @@ Page({
         var weights=this.data.weights_data.split(",").map(Number);
         var nums=this.data.nums_data.split(",").map(Number);
         var max_weight=Number(this.data.max_weight_data);
-        var texts= "开始计算……\n开始动态规划，计算所有下料分布可能……";
+        var texts= "开始计算，计算所有下料分布可能……";
         this.setData({text_result:texts});
-        for (let j = 0; j < weights.length; j++) {
-            if(weights[j]>max_weight){texts += "\n计算停止，出现未知错误，请调整数据。";
-                this.setData({text_result:texts});
-                return;}
-        }
         let num_arrs = this.bag_program(weights, max_weight);
-        texts += "\n动态规划结束，开始线性规划选择最优分布……";
+        texts += "\n开始线性规划选择最优分布……";
         this.setData({text_result:texts});
         let num_arrs_T = [];     //转置矩阵
-        for (let i = 0; i < num_arrs[0].length; i++) { num_arrs_T[i] = []; };
-        for (let i = 0; i < num_arrs.length; i++) {
-            for (let j = 0; j < num_arrs[i].length; j++) { num_arrs_T[j][i] = num_arrs[i][j] * -1; }
+        for (let i = 0; i < num_arrs[i].length; i++) {
+          num_arrs_T[i] = []; 
+          for (let j = 0; j < num_arrs.length; j++) { num_arrs_T[i][j] = num_arrs[j][i] * -1; }
         };
-        let goals = [];        //目标变量系数
-        let x = [];            //定义变量x[i]
-        for (let i = 0; i < num_arrs_T[0].length; i++) {
-            goals[i] = -1; x[i] = "x" + i;
-        };
+        let goals = new Array(num_arrs_T[0].length).fill(-1);  
         let limits = [];       //定义基矩阵
         for (let i = 0; i < num_arrs_T.length; i++) {
             limits[i] = [num_arrs_T[i], nums[i] * -1];
         };
         // 调用getResult函数 对该线性规划问题求解
-        let result =false;
-        result = this.getResult(goals, limits);
+        let result = this.getResult(goals, limits);
         //若该线性规划问题无最优解 则将报错提示输出到网页 并退出函数
         if (!result) {
             texts += "\n计算停止，出现未知错误，请调整数据。";
@@ -218,20 +208,15 @@ Page({
             return;
         }
         //生成求解后的结果文本
-        var Numbers = [];
-        var z = 0; var l = 0; var re = 0;
+        var Numbers = new Array(num_arrs[0].length).fill(0);
+        var z = 0; var l = 0;
         for (let i = 0; i < result.length; i++) {
-          re = Math.round(result[i][1]+0.2);
+          let re = Math.round(result[i][1]+0.2);
           texts += "\n" + (i+1) + "#：余" +  Math.round((max_weight - this.sumarrys(weights, num_arrs[result[i][0]]))*100)/100;
           texts += "，需" + re + "根" + JSON.stringify(this.sumf(weights, num_arrs[result[i][0]]));
           z += re;   //计算目标函数的值
           l += this.sumarrys(weights, num_arrs[result[i][0]]) * re;
-          if (i < 1) {
-              Numbers = this.sumar(num_arrs[result[i][0]], re);
-              }
-          else {
-              Numbers = this.sum(Numbers ,this.sumar(num_arrs[result[i][0]], re))
-          };
+          Numbers = this.sum(Numbers ,this.sumar(num_arrs[result[i][0]], re))
         };
         texts += "\n下料数量分别为：" + JSON.stringify(Numbers);
         texts += "\n所需原料总数目为：" + z;

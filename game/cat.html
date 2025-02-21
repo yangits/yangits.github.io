@@ -74,30 +74,26 @@
         font-size: 20px;
         margin: 10px 10px;
     }
-</style> 
+</style>
 <body>
     <svg id="catsvg" width=100% viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
         <!-- 猫脸轮廓 -->
-        <circle cx="100" cy="100" r="94" fill="#FFD700" stroke="#000" stroke-width="3"/>
-        <!-- 左眼 -->
-        <ellipse cx="70" cy="80" rx="15" ry="20" fill="#FFF" stroke="#000"/>
-        <circle cx="70" cy="85" r="6" fill="#000"/>
-        <!-- 右眼 -->
-        <ellipse cx="130" cy="80" rx="15" ry="20" fill="#FFF" stroke="#000"/>
-        <circle cx="130" cy="85" r="6" fill="#000"/>
-        <!-- 鼻子 -->
-        <path d="M95 115 Q100 125 105 115" stroke="#000" fill="transparent"/>
-        <circle cx="100" cy="115" r="3" fill="#FF6B6B"/>
-        <path d="M 100 150 Q 90 170, 80 160 Q 90 170, 100 160 Z" fill="#000" stroke="#000" stroke-width="2"/>
-        <path d="M 100 150 Q 110 170, 120 160 Q 110 170, 100 160 Z" fill="#000" stroke="#000" stroke-width="2"/>
-        <!-- 胡须 -->
-        <g stroke="#000" stroke-width="2">
-            <line x1="50" y1="110" x2="80" y2="120"/>
-            <line x1="50" y1="120" x2="80" y2="123"/>
-            <line x1="50" y1="130" x2="80" y2="125"/>
-            <line x1="150" y1="110" x2="120" y2="120"/>
-            <line x1="150" y1="120" x2="120" y2="123"/>
-            <line x1="150" y1="130" x2="120" y2="126"/>
+        <circle cx="100" cy="100" r="94" fill="#FFBB00"/>
+        <g fill="#000" stroke="#000" stroke-width="5">
+            <!-- /眼/鼻子/嘴/耳朵/胡须 -->
+            <ellipse cx="60" cy="90" rx="15" ry="20" />
+            <ellipse cx="140" cy="90" rx="15" ry="20"/>
+            <ellipse cx="100" cy="130" rx="15" ry="10"/>
+            <path d="M 100 135 Q 80 175, 60 140 Q 80 180, 100 150 Z"/>
+            <path d="M 100 135 Q 120 175, 140 140 Q 120 180, 100 150 Z"/>
+            <path d="M 50 20 Q 40 10, 20 5 Q 10 10, 20 50" fill="#FFBB00"/>
+            <path d="M 150 20 Q 160 10, 180 5 Q 190 10, 180 50" fill="#FFBB00"/>
+            <line x1="0" y1="110" x2="50" y2="120"/>
+            <line x1="0" y1="130" x2="50" y2="130"/>
+            <line x1="0" y1="150" x2="50" y2="140"/>
+            <line x1="200" y1="110" x2="150" y2="120"/>
+            <line x1="200" y1="130" x2="150" y2="130"/>
+            <line x1="200" y1="150" x2="150" y2="140"/>
         </g>
     </svg>
     <div class="container">
