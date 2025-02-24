@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>羊了个羊</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    .app {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 3vh;
+      box-sizing: border-box;
+    }
+
+    /*** 按钮 ***/
+    button {
+      display: inline-block;
+      margin: 10px 10px;
+      background: #3498db;
+      border-radius: 28px;
+      font-family: Arial;
+      color: #ffffff;
+      font-size: 12px;
+      padding: 10px 20px 10px 20px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .wrap {
+      padding: 44px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+
+    /*** 卡片容器 ***/
+    .container {
+      position: relative;
+      width: 320px;
+      height: 320px;
+      max-width: 500px;
+      /* 不兼容 */
+      /* aspect-ratio: 16/16; */
+    }
+
+    /*** 卡片 ***/
+    .card-wrap {
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 40px;
+      width: 40px;
+      font-size: 30px;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .card {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: calc(100% - 2px);
+      height:calc(100% - 2px);
+      border: 1px solid rgb(100, 100, 100);
+      border-radius: 10px;
+      background-color: #ccc;
+    }
+    .card span {
+      opacity: 0.5;
+      font-size: 24px;
+    }
+    .is-allow {
+      background-color: white;
+    }
+    .is-allow span {
+      opacity: 1;
+    }
+    /*** 卡片动画 ***/
+    @keyframes scaleDraw {
+      0% {
+        transform: scale(1.1);
+      }
+      20% {
+        transform: scale(1);
+      }
+      100% {
+        transform: scale(0);
+      }
+    }
+
+    /*** 卡槽 ***/
+    .card-slot {
+      margin-top: 20px;
+      padding: 10px 20px 10px 20px;
+      border: 1px solid #ccc;
+      height: 50px;
+      width: 280px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>第 <span id="level">1</span> 关</h1>
+    <header>
+      <button onclick="handleReset()">重 置</button>
+      <button onclick="handleSwitch('prev')">上一关</button>
+      <button onclick="handleSwitch('next')">下一关</button>
+    </header>
+    <div class="wrap">
+      <div class="container" id="container"></div>
+    </div>
+    <!-- <div class="card-slot" id="cardSlot"></div> -->
+  </div>
+
+<script>
+const defaultIcons = ['🐑', '🌹', '🐖', '🍚', '👓', '🐭', '😘', '🍑', '⭐', '💩', '💊', '🎈'];
+const defaultOffsetValue = [7, -7, 20, -20, 25, -25, 33, -33, 40, -40];
+const defaultRounds = [3, 6, 9, 3, 6, 3, 3, 6, 3];
+
+let state = {
+  level: 1,
+  cards: [],
+  select: new Map(),
+  config: {
+    base: 40,
+    selectMaxLength: 7,
+    maxCount: 3,
+    animationTime: 400,
+    maxLevel: 10,
+    row: 8,
+    col: 8
+  }
+};
+
+handleReset()
+function handleReset() {
+  state.cards = [];
+  state.select.clear();
+  createCards();
+}
+
+function handleSwitch(type) {
+  if (type === 'prev' && state.level > 1) {
+    state.level--;
+  } else if (type === 'next' && state.level < state.config.maxLevel) {
+    state.level++;
+  }
+  updateLevelDisplay();
+  handleReset();
+}
+
+function updateLevelDisplay() {
+  document.getElementById('level').textContent = state.level;
+}
+
+function createCards() {
+  const icons = defaultIcons.slice(0, 2 * state.level);
+  icons.forEach(icon => {
+    const rounds = defaultRounds[Math.floor(Math.random() * defaultRounds.length)];
+    for (let k = 0; k < rounds; k++) {
+      createCard(icon);
+    }
+  });
+  checkShading();
+  renderCards();
+}
+
+function createCard(icon) {
+  const offset = defaultOffsetValue[Math.floor(Math.random() * defaultOffsetValue.length)];
+  const row = Math.floor(Math.random() * state.config.row);
+  const col = Math.floor(Math.random() * state.config.col);
+  
+  state.cards.push({
+    id: Math.random().toString(32).slice(0, 6),
+    icon,
+    x: col * state.config.base + offset,
+    y: row * state.config.base + offset,
+    not: true,
+    status: 0,
+    clear: false,
+    display: false
+  });
+}
+
+function checkShading() {
+  state.cards.forEach((cur, i) => {
+    cur.not = true;
+    if (cur.status !== 0 || cur.display) return;
+    
+    const x1 = cur.x;
+    const y1 = cur.y;
+    const x2 = x1 + state.config.base;
+    const y2 = y1 + state.config.base;
+
+    for (let j = i + 1; j < state.cards.length; j++) {
+      const compare = state.cards[j];
+      if (compare.status !== 0 || compare.display) continue;
+      
+      const x = compare.x;
+      const y = compare.y;
+      if (!(y + state.config.base <= y1 || y >= y2 || x + state.config.base <= x1 || x >= x2)) {
+        cur.not = false;
+        break;
+      }
+    }
+  });
+}
+
+function renderCards() {
+  const container = document.getElementById('container');
+  container.innerHTML = '';
+  container.style.width = `${state.config.base * state.config.col}px`;
+  container.style.height = `${state.config.base * state.config.row}px`;
+
+  state.cards.forEach(card => {
+    const cardWrap = document.createElement('div');
+    cardWrap.className = 'card-wrap';
+    cardWrap.style.transform = `translateX(${card.x}px) translateY(${card.y}px)`;
+    
+    const cardDiv = document.createElement('div');
+    cardDiv.className = `card ${card.not ? 'is-allow' : ''}`;
+    if (card.clear) {
+      cardDiv.style.animation = `scaleDraw ${state.config.animationTime}ms`;
+    }
+    if (card.display) {
+      cardDiv.style.display = 'none';
+    }
+    
+    cardDiv.innerHTML = `<span>${card.icon}</span>`;
+    cardDiv.addEventListener('click', () => handleCardClick(card));
+    
+    cardWrap.appendChild(cardDiv);
+    container.appendChild(cardWrap);
+  });
+}
+
+function handleCardClick(card) {
+  if (card.status === 1 || !card.not) return;
+  
+  card.status = 1;
+  refreshCardPosition(card);
+  checkShading();
+  renderCards();
+}
+
+function refreshCardPosition(card) {
+  const cards = state.select.get(card.icon) || [];
+  cards.push(card);
+  state.select.set(card.icon, cards);
+  if (cards.length >= state.config.maxCount) {
+    cards.forEach(c => {
+      c.clear = true;
+      setTimeout(() => {
+        c.display = true;
+        state.select.delete(card.icon);
+        checkGameStatus();
+      }, state.config.animationTime);
+    });
+  }
+  // const cardSlot = document.getElementById('cardSlot');
+  let index = 0;
+  state.select.forEach(cards => {
+    cards.forEach(card => {
+      card.x = index * state.config.base + 50;
+      card.y = 400;
+      index++;
+    });
+  });
+}
+function checkGameStatus() {
+  const remaining = state.cards.filter(c => !c.display);
+  if (!remaining.length) {
+    if (state.level < state.config.maxLevel) {
+      alert(`恭喜过关！开始第${state.level + 1}关`);
+      state.level++;
+      updateLevelDisplay();
+      handleReset();
+    } else {
+      alert('恭喜通关！');
+      state.level = 1;
+      updateLevelDisplay();
+      handleReset();
+    }
+  }
+}
+
+</script>
+</body>
+</html>
