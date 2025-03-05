@@ -3,10 +3,8 @@ import sqlite3
 import time
 from Cloud import Cloud_blue
 from flask import Flask, render_template, request
-from flask_socketio import SocketIO, join_room, leave_room, send
 app = Flask(__name__)
 app.secret_key = 'secret'
-socketio = SocketIO(app)
 app.register_blueprint(Cloud_blue)
 def goods_list_num():
     lists_text="品类 text,名称 text,材质 text,规格 text,备注 text,单价 text,单重 text,单位 text,数量 text,操作 text"
@@ -238,33 +236,9 @@ def up_excel():
             return "error"
     else: 
         return "error"
-#以下是聊天功能
-@app.route('/chat')
-def chat():
-    return render_template('chat.html')
-
-# 用户加入聊天室事件
-@socketio.on('join', namespace='/chat')
-def join(message):
-    room = message['room']
-    join_room(room)
-    send({'msg': message['username'] + " 加入了聊天室"}, room=room)
-
-# 用户发送消息事件
-@socketio.on('text', namespace='/chat')
-def text(message):
-    room = message['room']
-    send({'msg': message['username'] + ": " + message['message']}, room=room)
-
-# 用户离开聊天室事件
-@socketio.on('leave', namespace='/chat')
-def leave(message):
-    room = message['room']
-    send({'msg': message['username'] + " 离开了聊天室"}, room=room)
-    leave_room(room)
 def dtime():
     t=time.localtime()
     dtime="{}/{:02d}/{:02d}-{:02d}:{:02d}".format(t.tm_year,t.tm_mon,t.tm_mday,t.tm_hour,t.tm_min)
     return dtime
 if __name__ == '__main__':
-    socketio.run(app , host='0.0.0.0', port=666)
+    app.run(host='0.0.0.0', port=666)
