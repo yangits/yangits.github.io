@@ -51,13 +51,13 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 12%;
-      width: 12%;
+      height: 16%;
+      width: 16%;
       cursor: pointer;
       transition: all 0.2s;
     }
     .card {
-      font-size: 18px;
+      font-size: 26px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -65,7 +65,8 @@
       height:calc(100% - 2px);
       border: 1px solid rgb(100, 100, 100);
       border-radius: 10px;
-      background-color: #ccc;
+      background-color: rgb(160, 160, 160);
+      
     }
     .is-allow {
       background-color: white;
@@ -86,19 +87,19 @@
   </div>
 <script>
 const defaultIcons = ['🐑', '🌹', '🐖', '🍚', '👓', '🐭', '😘', '🍑', '⭐', '💩', '💊', '🎈', '🐵', '🐶', '🦄', '🐷', '🐼', '🐓'];
-const defaultOffsetValue = [3, -3, 8, -8, 12, -12, 16, -16, 20, -20];
+const defaultOffsetValue = [0,10,-10,20,-20];
 let state = {
   level: 1,
   cards: [],
   select: new Map(),
   config: {
-    base: 38,
+    base: 50,
     selectMaxLength: 7,
     maxCount: 3,
-    animationTime: 20,
+    animationTime: 2000,
     maxLevel: 10,
-    row: 8,
-    col: 8
+    row: 6,
+    col: 6
   }
 };
 handleReset()
@@ -118,12 +119,15 @@ function handleSwitch(type) {
 }
 function createCards() {
   const icons = defaultIcons.slice(0, 2 * state.level);
-  icons.forEach(icon => {
-    const rounds = Math.floor(Math.random() * 4+1)*3;
+  for (let i=0;i<=3;i++){
+    icons.forEach(icon => {
+    const rounds = Math.floor(Math.random() * 2+1)*3;
     for (let k = 0; k < rounds; k++) {
       createCard(icon);
     }
   });
+  }
+
   checkShading();
   renderCards();
 }
@@ -200,7 +204,7 @@ function refreshCardPosition(card) {
     cards.forEach(c => {
       c.clear = true;
       c.display = true;
-      card.y = 400;
+      card.y = 380;
       state.select.delete(card.icon);
       setTimeout(() => {
         checkGameStatus();
@@ -210,11 +214,12 @@ function refreshCardPosition(card) {
   let index = 0;
   state.select.forEach(cards => {
     cards.forEach(card => {
-      card.x = index * state.config.base + 20;
+      card.x = index * state.config.base;
       card.y = 380;
       index++;
     });
   });
+  if (index>=7){alert('失败了！');handleReset();return}
 }
 function checkGameStatus() {
   const remaining = state.cards.filter(c => !c.display);
@@ -224,7 +229,6 @@ function checkGameStatus() {
       state.level++;
     } else {
       alert('恭喜通关！');
-      state.level = 1;
     }
     handleReset();
   }
