@@ -37,6 +37,8 @@
       cursor: pointer;
     }
     .wrap {
+      width: 100%;
+      max-width: 450px;
       padding: 24px;
       border: 1px solid #ccc;
       border-radius: 10px;
@@ -66,7 +68,6 @@
       border: 1px solid rgb(100, 100, 100);
       border-radius: 10px;
       background-color: rgb(160, 160, 160);
-      
     }
     .is-allow {
       background-color: white;
@@ -93,10 +94,9 @@ let state = {
   cards: [],
   select: new Map(),
   config: {
-    base: 50,
+    base: window.innerWidth>=450?400/6:(window.innerWidth-50)/6,
     selectMaxLength: 7,
     maxCount: 3,
-    animationTime: 2000,
     maxLevel: 10,
     row: 6,
     col: 6
@@ -121,13 +121,11 @@ function createCards() {
   const icons = defaultIcons.slice(0, 2 * state.level);
   for (let i=0;i<=3;i++){
     icons.forEach(icon => {
-    const rounds = Math.floor(Math.random() * 2+1)*3;
-    for (let k = 0; k < rounds; k++) {
+    for (let k = 0; k < 3; k++) {
       createCard(icon);
     }
   });
   }
-
   checkShading();
   renderCards();
 }
@@ -136,13 +134,11 @@ function createCard(icon) {
   const row = Math.floor(Math.random() * state.config.row);
   const col = Math.floor(Math.random() * state.config.col);
   state.cards.push({
-    id: Math.random().toString(32).slice(0, 6),
     icon,
     x: col * state.config.base + offset,
     y: row * state.config.base + offset,
     not: true,
     status: 0,
-    clear: false,
     display: false
   });
 }
@@ -177,9 +173,6 @@ function renderCards() {
     cardWrap.style.transform = `translateX(${card.x}px) translateY(${card.y}px)`;
     const cardDiv = document.createElement('div');
     cardDiv.className = `card ${card.not ? 'is-allow' : ''}`;
-    if (card.clear) {
-      cardDiv.style.animation = `scaleDraw ${state.config.animationTime}ms`;
-    }
     if (card.display) {
       cardDiv.style.display = 'none';
     }
@@ -201,25 +194,24 @@ function refreshCardPosition(card) {
   cards.push(card);
   state.select.set(card.icon, cards);
   if (cards.length >= state.config.maxCount) {
-    cards.forEach(c => {
-      c.clear = true;
-      c.display = true;
-      card.y = 380;
+    cards.forEach(card => {
+      card.display = true;
+      card.y = state.config.row*state.config.base+50;
       state.select.delete(card.icon);
       setTimeout(() => {
         checkGameStatus();
-      }, state.config.animationTime);
+      }, 20);
     });
   }
   let index = 0;
   state.select.forEach(cards => {
     cards.forEach(card => {
       card.x = index * state.config.base;
-      card.y = 380;
+      card.y = state.config.row*state.config.base+50;
       index++;
     });
   });
-  if (index>=7){alert('失败了！');handleReset();return}
+  if (index>=7){alert('失败了！');handleReset()}
 }
 function checkGameStatus() {
   const remaining = state.cards.filter(c => !c.display);
