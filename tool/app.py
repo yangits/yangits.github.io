@@ -1,7 +1,7 @@
 import os ,sys,time,zipfile
 from io import BytesIO
 from flask import Flask, redirect, request, send_file
-
+from flask_sock import Sock
 #   pyinstaller -F app.py
 filepath =os.path.dirname(os.path.realpath(sys.argv[0]))
 app = Flask(__name__, static_url_path='', static_folder=filepath, template_folder=filepath)
@@ -25,8 +25,8 @@ html0="""<html>
             }
     </script>
 </head>
-<body style="display: flex; justify-content: center; background-color: aliceblue;">
-    <div>
+<body >
+    <div style="max-width:600px;margin: 0 auto;">
         <table border='1' style="border-spacing: 0px;font-size:12px;">
         <caption style="height:40px;line-height: 40px;font-size:16px;">文件共享列表</caption>
         <tr>
@@ -36,6 +36,19 @@ html0="""<html>
             <td width=80px>链接</td>
         </tr>
 """
+# WebSocket 路由
+active_clients = []
+sock = Sock(app)
+@sock.route("/chat")
+def chat(sock):
+    active_clients.append(sock)
+    try:
+        while True:
+            msg = sock.receive()
+            for client in active_clients:
+                client.send(msg)
+    finally:
+        active_clients.remove(sock)
 @app.route("/" , methods=['GET','post'])
 def index():
     # return render_template("./index.html")
@@ -58,7 +71,22 @@ def index():
             <input type="file" name="file"  id="file" multiple>
             <input type="submit" value="上传/首页"  id="upload-btn" onclick="upload()">
             <span>上传进度<span id="myElement">0</span>%</span>
-        </form></div>
+        </form>
+        <div id="output" style="height:100px;overflow-y:scroll; border:1px solid #ccc;"></div>
+        <input type="text" id="msg" placeholder="输入消息" style="width:68%;" onkeydown="if(event.keyCode==13){send()}">
+        <button onclick="send()" style="width:28%;">发送</button>
+        <script>
+            const ws = new WebSocket("ws://" + window.location.host + "/chat");
+            ws.onmessage = (e) => {
+                document.getElementById("output").innerHTML += e.data + "<br>";
+            };
+            function send() {
+                const msg = document.getElementById("msg");
+                ws.send(msg.value);
+                msg.value = '';
+            }
+        </script>
+    </div>
     </body>
     </html>"""
     return html
