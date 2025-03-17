@@ -87,7 +87,7 @@
     </div>
   </div>
 <script>
-const defaultIcons = ['🐑', '🌹', '🐖', '🍚', '👓', '🐭', '😘', '🍑', '⭐', '💊', '🎈', '🐵', '🐶', '🦄', '🐼', '🐓'];
+const defaultIcons = ['🐑','🌹','🐷','🍚','👓','🐭','😘','🍑','⭐','💊','🎈','🐵','🐶','🦄','🐼','🐓','🐍','🐬'];
 const defaultOffsetValue = [0,10,-10,20,-20];
 let state = {
   level: 1,
@@ -97,7 +97,7 @@ let state = {
     base: window.innerWidth>=450?400/6:(window.innerWidth-50)/6,
     selectMaxLength: 7,
     maxCount: 3,
-    maxLevel: 15,
+    maxLevel: 16,
     row: 6,
     col: 6
   }
@@ -118,7 +118,7 @@ function handleSwitch(type) {
   handleReset();
 }
 function createCards() {
-  const icons = defaultIcons.slice(0, state.level+1);
+  const icons = defaultIcons.slice(0, state.level+2);
   for (let i=0;i<=3;i++){
     icons.forEach(icon => {
     for (let k = 0; k < 3; k++) {
