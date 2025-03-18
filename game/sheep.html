@@ -87,20 +87,17 @@
     </div>
   </div>
 <script>
-const defaultIcons = ['🐑','🌹','🐷','🍚','👓','🐭','😘','🍑','🐍','💊','🐬','🐵','🐶','🦄','🐼','🐓','⭐','🎈'];
-const defaultOffsetValue = [0,10,-10,20,-20];
+const defaultIcons = ['🐑','🌹','🐷','🍚','👓','🐭','😘','🍑','🐍','💊',
+'🐬','🐵','🐶','🦄','🐼','🐓','⭐','🎈','💎','🍄','☘️','🍇'];
+const Offset = [0,0,10,-10,20,-20];
 let state = {
   level: 1,
   cards: [],
   select: new Map(),
-  config: {
-    base: window.innerWidth>=450?400/6:(window.innerWidth-50)/6,
-    selectMaxLength: 7,
-    maxCount: 3,
-    maxLevel: 16,
-    row: 6,
-    col: 6
-  }
+  base: window.innerWidth>=450?400/6:(window.innerWidth-50)/6,
+  maxLevel: 20,
+  row: 6,
+  col: 6
 };
 handleReset()
 function handleReset() {
@@ -112,7 +109,7 @@ function handleReset() {
 function handleSwitch(type) {
   if (type === 'prev' && state.level > 1) {
     state.level--;
-  } else if (type === 'next' && state.level < state.config.maxLevel) {
+  } else if (type === 'next' && state.level < state.maxLevel) {
     state.level++;
   }
   handleReset();
@@ -130,13 +127,13 @@ function createCards() {
   renderCards();
 }
 function createCard(icon) {
-  const offset = defaultOffsetValue[Math.floor(Math.random() * defaultOffsetValue.length)];
-  const row = Math.floor(Math.random() * state.config.row);
-  const col = Math.floor(Math.random() * state.config.col);
+  const offset = Offset[Math.floor(Math.random() * Offset.length)];
+  const row = Math.floor(Math.random() * state.row);
+  const col = Math.floor(Math.random() * state.col);
   state.cards.push({
     icon,
-    x: col * state.config.base + offset,
-    y: row * state.config.base + offset,
+    x: col * state.base + offset,
+    y: row * state.base + offset,
     not: true,
     status: 0,
     display: false
@@ -148,14 +145,14 @@ function checkShading() {
     if (cur.status !== 0 || cur.display) return;
     const x1 = cur.x;
     const y1 = cur.y;
-    const x2 = x1 + state.config.base;
-    const y2 = y1 + state.config.base;
+    const x2 = x1 + state.base;
+    const y2 = y1 + state.base;
     for (let j = i + 1; j < state.cards.length; j++) {
       const compare = state.cards[j];
       if (compare.status !== 0 || compare.display) continue;
       const x = compare.x;
       const y = compare.y;
-      if (!(y + state.config.base <= y1 || y >= y2 || x + state.config.base <= x1 || x >= x2)) {
+      if (!(y + state.base <= y1 || y >= y2 || x + state.base <= x1 || x >= x2)) {
         cur.not = false;
         break;
       }
@@ -165,8 +162,8 @@ function checkShading() {
 function renderCards() {
   const container = document.getElementById('container');
   container.innerHTML = '';
-  container.style.width = `${state.config.base * state.config.col}px`;
-  container.style.height = `${state.config.base * state.config.row}px`;
+  container.style.width = `${state.base * state.col}px`;
+  container.style.height = `${state.base * state.row}px`;
   state.cards.forEach(card => {
     const cardWrap = document.createElement('div');
     cardWrap.className = 'card-wrap';
@@ -193,10 +190,10 @@ function refreshCardPosition(card) {
   const cards = state.select.get(card.icon) || [];
   cards.push(card);
   state.select.set(card.icon, cards);
-  if (cards.length >= state.config.maxCount) {
+  if (cards.length >= 3) {
     cards.forEach(card => {
       card.display = true;
-      card.y = state.config.row*state.config.base+50;
+      card.y = state.row*state.base+50;
       state.select.delete(card.icon);
       setTimeout(() => {
         checkGameStatus();
@@ -206,8 +203,8 @@ function refreshCardPosition(card) {
   let index = 0;
   state.select.forEach(cards => {
     cards.forEach(card => {
-      card.x = index * state.config.base;
-      card.y = state.config.row*state.config.base+50;
+      card.x = index * state.base;
+      card.y = state.row*state.base+50;
       index++;
     });
   });
@@ -216,7 +213,7 @@ function refreshCardPosition(card) {
 function checkGameStatus() {
   const remaining = state.cards.filter(c => !c.display);
   if (!remaining.length) {
-    if (state.level < state.config.maxLevel) {
+    if (state.level < state.maxLevel) {
       alert(`恭喜过关！开始第${state.level + 1}关`);
       state.level++;
     } else {
