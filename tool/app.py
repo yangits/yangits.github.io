@@ -35,7 +35,7 @@ def chat(sock):
     finally:
         active_clients.remove(sock)
 @app.route("/" , methods=['GET'])
-@app.route("/path_file/<path:path>", methods=['GET'])
+@app.route("/bin/<path:path>", methods=['GET'])
 def path_file(path=""):
     current_dir = os.path.join(filepath, path)
     file_list = os.listdir(current_dir)
@@ -44,15 +44,15 @@ def path_file(path=""):
         file0=os.path.join(current_dir, file)
         size,mtime=get_size_time(file0)
         if os.path.isfile(file0):
-            file2=os.path.join(path, file);file1=file
+            file2=os.path.join(path, file)
         else:
-            file2="path_file/"+os.path.join(path, file);file1=file+"/"
+            file2="bin/"+os.path.join(path, file);file=file+"/"
         html=html+ """<tr>
                         <td><a href="/%s">%s</a></td>
                         <td>%s</td>
                         <td>%s</td>
                         <td><a href="/dload_file/%s">下载</a></td>
-                    </tr>""" %(file2,file1,size,mtime,os.path.join(path, file1))
+                    </tr>""" %(file2,file,size,mtime,os.path.join(path,file))
     html=html+ """</table> <br>
         <input type="file" name="file" id="file" multiple>
         <input type="button" value="上传/首页"  onclick="upload();">
@@ -93,6 +93,7 @@ def path_file(path=""):
 @app.route("/dload_file/<path:downpath>", methods=['GET'])
 def download_file(downpath):
     folder = os.path.join(filepath, downpath)
+    print(downpath.split("/")[-2])
     if os.path.isfile(folder):
         return send_file(folder, as_attachment=True)
     else:
@@ -103,7 +104,7 @@ def download_file(downpath):
                     file_path = os.path.join(root,file)
                     zf.write(file_path, arcname=os.path.relpath(file_path, folder))# 将文件添加到zip文件中
         in_memory_zip.seek(0)# 将内存文件指针移动到文件开头
-        return send_file(in_memory_zip, download_name=downpath+'.zip', as_attachment=True)
+        return send_file(in_memory_zip, download_name=downpath.split("/")[-2]+'.zip', as_attachment=True)
 @app.route('/upload_file/<path:ulpath>', methods=['POST'])
 @app.route('/upload_file/', methods=['POST'])
 def upload_file(ulpath=""):
