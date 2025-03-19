@@ -59,7 +59,7 @@
       width: calc(100% - 2px);
       height:calc(100% - 2px);
       border: 1px solid rgb(100, 100, 100);
-      border-radius: 5px;
+      border-radius: 3px;
       background-color: rgb(160, 160, 160);
     }
     .is-allow {
@@ -80,15 +80,14 @@
     </div>
   </div>
 <script>
-const defaultIcons = ['🐑','🌹','🐷','🍚','👓','🐭','😘','🍑','🐍','💊',
-'🐬','🐵','🐶','🦄','🐼','🐓','⭐','🎈','💎','🍄','☘️','🍇'];
+const icons = ['🐑','🐷','🍚','🐭','😘','☘️','🍑','💊','🐬','🐶','🦄','🐓'];
 const Offset = [0,10,-10,20,-20];
 let state = {
   level: 1,
   cards: [],
   select: new Map(),
   base: window.innerWidth>=450?400/6:(window.innerWidth-50)/6,
-  maxLevel: 20,
+  maxLevel: 8,
   row: 6,
   col: 6
 };
@@ -108,10 +107,9 @@ function handleSwitch(type) {
   handleReset();
 }
 function createCards() {
-  const icons = defaultIcons.slice(0, state.level+2);
-  for (let i=0;i<=3;i++){
+  for (let i=0;i<state.level;i++){
     icons.forEach(icon => {
-    for (let k = 0; k < 3; k++) {
+    for (let k = 0; k <3; k++) {
       createCard(icon);
     }
     });
