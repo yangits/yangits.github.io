@@ -87,7 +87,7 @@ let state = {
   cards: [],
   select: new Map(),
   base: window.innerWidth>=450?400/6:(window.innerWidth-50)/6,
-  maxLevel: 8,
+  maxLevel: 10,
   row: 6,
   col: 6
 };
@@ -107,10 +107,11 @@ function handleSwitch(type) {
   handleReset();
 }
 function createCards() {
-  for (let i=0;i<state.level;i++){
-    icons.forEach(icon => {
+  const icon = icons.slice(0, state.level+2);
+  for (let i=0;i<=5;i++){
+    icon.forEach(c => {
     for (let k = 0; k <3; k++) {
-      createCard(icon);
+      createCard(c);
     }
     });
   }
