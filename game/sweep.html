@@ -72,32 +72,24 @@
                 '7': "black",
                 '8': "gray"};
         choice('中级')
-        // 1，成一张雷的地图
-        function mineSweepingMap(r, c, num) {
-            map = new Array(r)
-            // 给行数，生成一个 1 维数组
-            var blankMap = function (r,c) {
-                for (var i = 0; i < r; i++) {
-                    map[i] = new Array(c).fill(0)
-                }
+        // 1，成一张地图
+        function SweepMap(r, c, num) {
+            map = new Array(r);
+            for (var i = 0; i < r; i++) {
+                map[i] = new Array(c).fill(0)
             }
-            // 给出地雷数量让后随机写入地雷
-            var writeInMine = function (num) {
-                // 随机位置写入
-                var randomLocation = function () {
-                    var x = Math.floor(Math.random() * r)
-                    var y = Math.floor(Math.random() * c)
-                    if (map[x][y] !== 9) {
-                        map[x][y] = 9
-                    } else {
-                        randomLocation()
-                    }
-                }
-                for (var i = 0; i < num; i++) {
+            var randomLocation = function () {
+                var x = Math.floor(Math.random() * r)
+                var y = Math.floor(Math.random() * c)
+                if (map[x][y] !== 9) {
+                    map[x][y] = 9
+                } else {
                     randomLocation()
                 }
             }
-
+            for (var i = 0; i < num; i++) {
+                randomLocation()
+            }
             // 使用循环给雷的边上所有数 +1 , 已经是雷的除外
             var plus = function (array, x, y) {
                 if (x >= 0 && x < r && y >= 0 && y < c) {
@@ -106,25 +98,20 @@
                     }
                 }
             }
-            var writeInHint = function () {
-                for (var x = 0; x < map.length; x++) {
-                    for (var y = 0; y < map[0].length; y++) {
-                        if (map[x][y] === 9) {
-                            // 上下 6 个
-                            for (var i = -1; i < 2; i++) {
-                                plus(map, x - 1, y + i)
-                                plus(map, x + 1, y + i)
-                            }
-                            // 左右 2 个
-                            plus(map, x, y + 1)
-                            plus(map, x, y - 1)
-                        }
+            for (var x = 0; x < map.length; x++) {
+                for (var y = 0; y < map[0].length; y++) {
+                    if (map[x][y] === 9) {
+                        plus(map, x - 1, y - 1)
+                        plus(map, x + 1, y - 1)
+                        plus(map, x - 1, y)
+                        plus(map, x + 1, y)
+                        plus(map, x - 1, y + 1)
+                        plus(map, x + 1, y + 1)
+                        plus(map, x, y + 1)
+                        plus(map, x, y - 1)
                     }
                 }
             }
-            blankMap(r, c)
-            writeInMine(num)
-            writeInHint()
         }
         function writeHtml() {
             let html=""
@@ -158,35 +145,79 @@
         var clearMineNum = 0
         function makeWhite(x, y) {
             if (x < row && y < col && x >= 0 && y >= 0) {
-                if (table[x*col+y].style.background !== 'white') {
+                if (table[x*col+y].style.background !== 'white'&&table[x*col+y].innerText !== '🚩') {
                     table[x*col+y].style.color=color[table[x*col+y].innerText]
                     table[x*col+y].style.background = 'white'
                     clearMineNum++
                     if (table[x*col+y].innerText === '0') {
-                        showNoMine(x, y)
+                        makeWhite(x - 1, y + 1)
+                        makeWhite(x - 1, y - 1)
+                        makeWhite(x - 1, y)
+                        makeWhite(x + 1, y + 1)
+                        makeWhite(x + 1, y - 1)
+                        makeWhite(x + 1, y)
+                        makeWhite(x, y + 1)
+                        makeWhite(x, y - 1)
+                    }else{
+                        autoFlag(x, y) 
                     }
                 }
             }
         }
-        function showNoMine(x, y) {
-            makeWhite(x - 1, y + 1)
-            makeWhite(x - 1, y - 1)
-            makeWhite(x - 1, y)
-            makeWhite(x + 1, y + 1)
-            makeWhite(x + 1, y - 1)
-            makeWhite(x + 1, y)
-            makeWhite(x, y + 1)
-            makeWhite(x, y - 1)
+        // 获取周围格子
+        function getSurroundingCells(x, y) {
+            const cells = [];
+            const xy = [];
+            for (let dx = -1; dx <= 1; dx++) {
+                for (let dy = -1; dy <= 1; dy++) {
+                    if (dx === 0 && dy === 0) continue;
+                    const nx = x + dx;
+                    const ny = y + dy;
+                    if (nx >= 0 && nx < row && ny >= 0 && ny < col) {
+                        if(table[nx * col + ny].style.background !== 'white'){cells.push(table[nx * col + ny]);}
+                        if(table[nx * col + ny].innerText === '🚩'){xy.push([x, y]);}
+                    }
+                }
+            }
+            return [cells,xy];
+        }
+        // 自动插旗逻辑
+        function autoFlag(x, y) {
+            const num = parseInt(table[x * col + y].innerText);
+            if (isNaN(num) || num <= 0) return;
+            [candidates,dxy] = getSurroundingCells(x, y);
+            if (candidates.length === num) {
+                candidates.forEach(c => {
+                    c.innerText="🚩";
+                    c.style.color="black";
+                });
+            }
+            if (dxy.length === num) {
+                dxy.forEach(c => {
+                    x=c[0];y=c[1]
+                    makeWhite(x - 1, y + 1)
+                    makeWhite(x - 1, y - 1)
+                    makeWhite(x - 1, y)
+                    makeWhite(x + 1, y + 1)
+                    makeWhite(x + 1, y - 1)
+                    makeWhite(x + 1, y)
+                    makeWhite(x, y + 1)
+                    makeWhite(x, y - 1)
+                });
+            }
         }
         // 给所有方块绑定点击事件，点击显示数字，或者 boom
         function show(x,y) {
             if (table[x*col+y].innerText !== '9') {
-                makeWhite(x,y)
+                makeWhite(x,y);autoFlag(x, y) 
                 changeClearMineNum()
             } else{
+                table[x*col+y].style.background = 'white'
+                table[x*col+y].style.color= 'black'
+                table[x*col+y].innerText = '💣'
                 Num=0// 这里做了个小动画，失败的时候慢慢的显示雷的位置
                 var over = setInterval(function () {
-                    if (table[Num].innerText === '9') {
+                    if (table[Num].innerText === '9' ||table[Num].innerText === '🚩') {
                         table[Num].style.background = 'white'
                         table[Num].style.color= 'black'
                         table[Num].innerText = '💣'
@@ -207,7 +238,7 @@
             var residue = document.querySelector('.residue')
             residue.innerText = num
             var time = document.querySelector('.tick')
-            time.innerText = `0`
+            time.innerText = 0
             var i = 1
             clearInterval(stopTime)
             stopTime = setInterval(function () {
@@ -215,7 +246,7 @@
             }, 1000)
             gameBox.innerHTML = ''
             clearMineNum = 0
-            mineSweepingMap(row, col, num)
+            SweepMap(row, col, num)
             writeHtml()
         }
         function choice(level){
