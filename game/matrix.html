@@ -209,10 +209,11 @@
       }
       [numData[n], numData[x]] = [numData[x], numData[n]];
       step += 1;
-      main.innerHTML="";
+      let html="";
       for (let i = 0; i < size * size; i++) {
-        main.innerHTML+='<span  onclick="goMove('+(i)+')">'+numData[i]+'</span>';
+        html+='<span  onclick="goMove('+(i)+')">'+numData[i]+'</span>';
       }
+      main.innerHTML=html;
       msg.innerHTML="步数: "+step;
       span_style(size)
       setTimeout(()=>{gameOver()},20);
@@ -250,12 +251,13 @@
     function choose_hf(){//以下是幻方
       size=choose_hfbt.selectedIndex*2+3;
       msg.innerHTML="幻方和："+(size**2+1)*size/2;
-      main.innerHTML="";
+      let html="";
       let matrix = magicMatrix(size);
       for (var i = 0; i < size; i++) {
           for (var j = 0; j < size; j++) {
-            main.innerHTML+='<span>'+matrix[i][j]+'</span>'
+            html+='<span>'+matrix[i][j]+'</span>'
       }}
+      main.innerHTML=html;
       span_style(size)
     }
     function magicMatrix(n) {

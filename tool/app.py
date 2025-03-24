@@ -93,7 +93,6 @@ def path_file(path=""):
 @app.route("/dload_file/<path:downpath>", methods=['GET'])
 def download_file(downpath):
     folder = os.path.join(filepath, downpath)
-    print(downpath.split("/")[-2])
     if os.path.isfile(folder):
         return send_file(folder, as_attachment=True)
     else:

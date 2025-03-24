@@ -17,9 +17,11 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
+            margin: auto;
         }
         .level {
-            margin-top: 30px;
+            max-width: 500px;
+            margin-top: 10px;
             font-size: 30px;
         }
         .level button {
@@ -29,81 +31,50 @@
             line-height: 35px;
             border-radius: 10px;
         }
-        .row {
-            overflow: hidden;
-            letter-spacing: -8px;
-        }
-        .col {
-            display: inline-block;
-            background: rgba(32, 226, 255, 0.41);
-            border: 1px solid rgb(129, 129, 129);
-            margin: 1px;
-            width: 23px;
-            height: 23px;
-            letter-spacing: normal;
-            position: relative;
-        }
-
-        .col span {
-            display: inline-block;
-            position: relative;
-            top: 2px;
-            opacity: 0;
-            font-weight: bold;
-            /* 标准箭头 */
-            cursor:default;
-        }
         .gameBox {
             width: 100%;
-            max-width: 900px;
-            margin: auto;
-            margin-top: 30px;
+            max-width: 500px;
+            margin-top: 20px;
         }
-
-        .img-flag {
-            background-color: red;
-            border-radius: 50%;
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 18px;
-            height: 18px;
+        .gameBox span {
+            display: inline-block;
+            background: lightblue;
+            border: 1px solid rgb(129, 129, 129);
+            border-radius: 0%;
+            text-align: center;
+            font-weight: 900;
+            color: transparent;
         }
-
-        .hide {
-            display: none;
-        }
-
-        .boom {
-            background: black;
-            border-radius: 50%;
-            background-size: 18px 18px;
-        }
-        .num-1 { color: blue; }
-        .num-2 { color: green; }
-        .num-3 { color: red; }
-        .num-4 { color: navy; }
-        .num-5 { color: maroon; }
-        .num-6 { color: teal; }
-        .num-7 { color: black; }
-        .num-8 { color: gray; }
     </style>
 </head>
-
 <body>
     <div class="level">
-        <button type="button" name="button" class="choice-level">初级</button>
-        <button type="button" name="button" class="choice-level">中级</button>
-        <button type="button" name="button" class="choice-level">高级</button>
+        <button type="button" onclick="choice('初级')">初级</button>
+        <button type="button" onclick="choice('中级')">中级</button>
+        <button type="button" onclick="choice('高级')">高级</button>
     </div>
     <div class="gameBox"></div>
     <div class="info">
         剩余雷数:<span class="residue"></span>&emsp;时间:<span class="tick"></span> S
     </div>
     <script>
+        var screenwidth=window.innerWidth>=500?480:window.innerWidth-20;
+        var gameBox = document.querySelector('.gameBox')
+        var row, col, num,map,table;
+        var color={
+                '0': "transparent",
+                '1': "blue",
+                '2': "green",
+                '3': "red",
+                '4': "navy",
+                '5': "maroon",
+                '6': "teal",
+                '7': "black",
+                '8': "gray"};
+        choice('中级')
         // 1，成一张雷的地图
-        var mineSweepingMap = function (r, c, num) {
-            var map = new Array(r)
+        function mineSweepingMap(r, c, num) {
+            map = new Array(r)
             // 给行数，生成一个 1 维数组
             var blankMap = function (r,c) {
                 for (var i = 0; i < r; i++) {
@@ -151,241 +122,113 @@
                     }
                 }
             }
-
             blankMap(r, c)
             writeInMine(num)
             writeInHint()
-            return map
         }
-        // 2，将雷写入页面
-        var writeHtml = function (map) {
-            // 先通过 y轴数量写入 ul，然后通过 x轴上的数量写入 li
-            var x = document.querySelector('.gameBox')
-            for (var i = 0; i < map.length; i++) {
-                x.innerHTML = x.innerHTML + `<ul class="row x-${i}" data-x="${i}"></ul>`
-            }
-            var z = document.querySelectorAll('.row')
-            for (var i = 0; i < z.length; i++) {
-                for (var j = 0; j < map[0].length; j++) {
-                    var m = map[i][j]
-                    if (m === 0) {m = ''}
-                    z[i].innerHTML = z[i].innerHTML + `
-                        <li class="col y-${j} num-${m}" data-y="${j}">
-                            <span>${m}</span>
-                            <img  class="img-flag hide">
-                        </li>`
+        function writeHtml() {
+            let html=""
+            for (let i = 0; i <row; i++) {
+                for (let j = 0; j < col; j++) {
+                    html+='<span style="width:'+withspan+'px;height:'+withspan+'px;line-height:'+
+                    withspan+'px;font-size: '+withspan/2+'px;" onclick="show('+i+','+j+',this)">'+map[i][j]+'</span>' 
                 }
             }
+            gameBox.innerHTML=html;
+            table = gameBox.children;
         }
         // 判断是否胜利
-        var changeClearMineNum = function (clearMineNum) {
+       function changeClearMineNum() {
             if (clearMineNum === ((col * row) - num)) {
-                var all = document.querySelectorAll('.col')
                 var allNum = 0
                 var stop = setInterval(function () {
                     var r = Math.floor(Math.random() * 256)
                     var g = Math.floor(Math.random() * 256)
-                    all[allNum].children[0].style.opacity = `0`
-                    all[allNum].children[1].style.opacity = '0'
-                    all[allNum].style.background = `rgba(${r},${g},210,0.6)`
-                    allNum++
-                    if (allNum === all.length) {
-                        clearInterval(stop)
-                        if (zz === 0) {
-                            alert('你成功啦~！！晚上吃肉~~！')
-                            initializeGame(row, col, num)
-                        }
+                    table[allNum].style.background = `rgba(${r},${g},210,0.6)`
+                    table[allNum].style.color="transparent";allNum++
+                    if (allNum === table.length) {
+                        clearInterval(stop);clearInterval(stopTime)
+                        alert('你成功啦~！！晚上吃肉~~！')
                         initializeGame(row, col, num)
                     }
-                }, 20)
+                }, 10)
             }
         }
         // 3，扫雷过程
-        var clearMine = function (row, col, num) {
-            var clearMineNum = 0
-            var makeWhite = function (x, y) {
-                if (x < row && y < col && x >= 0 && y >= 0) {
-                    var el = document.querySelector(`.x-${x}`).children[y]
-                    // 需要注意这个 ！== 'white' ，如果不加这个就会进入无限循环
-                    if (el.style.background !== 'white') {
-                        el.style.background = 'white'
-                        el.children[0].style.opacity = '1'
-                        el.children[1].classList.add('hide')
-                        clearMineNum++
-                        changeClearMineNum(clearMineNum)
-                        if (el.innerText === '') {
-                            showNoMine(x, y)
-                        }
+        var clearMineNum = 0
+        function makeWhite(x, y) {
+            if (x < row && y < col && x >= 0 && y >= 0) {
+                if (table[x*col+y].style.background !== 'white') {
+                    table[x*col+y].style.color=color[table[x*col+y].innerText]
+                    table[x*col+y].style.background = 'white'
+                    clearMineNum++
+                    if (table[x*col+y].innerText === '0') {
+                        showNoMine(x, y)
                     }
                 }
             }
-            // 智能扫雷
-            var showNoMine = function (x, y) {
-                makeWhite(x - 1, y + 1)
-                makeWhite(x - 1, y - 1)
-                makeWhite(x - 1, y)
-                makeWhite(x + 1, y + 1)
-                makeWhite(x + 1, y - 1)
-                makeWhite(x + 1, y)
-                makeWhite(x, y + 1)
-                makeWhite(x, y - 1)
-            }
-
-            // 给所有方块绑定点击事件，点击显示数字，或者 boom
-            var show = function () {
-                var x = document.querySelectorAll('.row')
-                for (var i = 0; i < x.length; i++) {
-                    x[i].addEventListener('click', function (event) {
-                        var el = event.target
-                        if (el.tagName != 'LI') {
-                            el = event.target.parentElement
-                        }
-                        // 已经被标记的不能点击
-                        var flag = el.children[1].classList.contains('hide')
-                        if (el.tagName === 'LI' && flag) {
-                            if (el.children[0].innerText !== '9' && el.style.background !== 'white') {
-                                el.children[0].style.opacity = '1'
-                                el.style.background = 'white'
-                                clearMineNum++
-                                changeClearMineNum(clearMineNum)
-                                // console.log(clearMineNum, 'clearMineNum');
-                            } else if (el.children[0].innerText === '9') {
-                                // el.children[0].style.opacity = '1'
-                                zz = 1
-                                el.classList.add('boom')
-                                alert('游戏失败')
-                                var all = document.querySelectorAll('.col')
-                                var ff = []
-                                var allNum = 0
-                                // 这里做了个小动画，失败的时候慢慢的显示雷的位置
-                                for (var i = 0; i < all.length; i++) {
-                                    if (all[i].children[0].innerText === '9') {
-                                        // all[i].style.background = 'red'
-                                        ff[allNum] = all[i]
-                                        allNum++
-                                    }
-                                }
-                                allNum = 0
-                                var time = 60
-                                if (num > 50) {
-                                    time = 10
-                                } else if (num > 10) {
-                                    time = 25
-                                }
-                                var stop = setInterval(function () {
-                                    ff[allNum].classList.add('boom')
-                                    allNum++
-                                    if (allNum === ff.length) {
-                                        clearInterval(stop)
-                                        // console.log('stop');
-                                    }
-                                }, time)
-                            }
-                            // 如果点击的方格为空（什么有没有），那么周围没有点开的空方格都会被点开
-                            if (el.children[0].innerText === '') {
-                                // 获取到位置
-                                var x = parseInt(el.parentElement.dataset.x)
-                                var y = parseInt(el.dataset.y)
-                                // console.log(x,y, 'data');
-                                // 背景变成白色
-                                showNoMine(x, y)
-                            }
-                        }
-                    })
-                }
-                for (var i = 0; i < x.length; i++) {
-                    var mineNum = num
-                    x[i].addEventListener('contextmenu', function (event) {
-                        event.preventDefault();
-                        var btnNum = event.button
-                        var el = event.target
-                        if (el.tagName != 'LI') {
-                            // 因为事件委托的原因
-                            // 如果点击到了 span 上面，那么就会出现 bug
-                            // 所以如果点击到 span 上面，那么 el 就等于 span 的父节点
-                            el = event.target.parentElement
-                        }
-                        if (el.tagName === 'LI') {
-                            var classList = el.children[1].classList
-                            var residue = document.querySelector('.residue')
-                            if (mineNum==0 ||mineNum==num){}
-                            if (classList.contains('hide') && el.style.background !== 'white') {
-                                
-                                if (mineNum !== 0) {
-                                    mineNum--
-                                }
-                                residue.innerText = `${mineNum}`
-                                classList.remove('hide')
-                            } else if (el.style.background !== 'white') {
-                                if (mineNum !== num) {
-                                    mineNum++
-                                }
-                                residue.innerText = `${mineNum}`
-                                classList.add('hide')
-                            }
-                        }
-                    })
-                }
-            }
-            show()
         }
-
+        function showNoMine(x, y) {
+            makeWhite(x - 1, y + 1)
+            makeWhite(x - 1, y - 1)
+            makeWhite(x - 1, y)
+            makeWhite(x + 1, y + 1)
+            makeWhite(x + 1, y - 1)
+            makeWhite(x + 1, y)
+            makeWhite(x, y + 1)
+            makeWhite(x, y - 1)
+        }
+        // 给所有方块绑定点击事件，点击显示数字，或者 boom
+        function show(x,y) {
+            if (table[x*col+y].innerText !== '9') {
+                makeWhite(x,y)
+                changeClearMineNum()
+            } else{
+                Num=0// 这里做了个小动画，失败的时候慢慢的显示雷的位置
+                var over = setInterval(function () {
+                    if (table[Num].innerText === '9') {
+                        table[Num].style.background = 'white'
+                        table[Num].style.color= 'black'
+                        table[Num].innerText = '💣'
+                    }
+                    Num++
+                    if (Num >= table.length) {
+                        clearInterval(over);
+                        clearInterval(stopTime);
+                        alert('游戏失败');
+                        initializeGame(row, col, num)
+                    }
+                }, 10)
+            }
+        }
         // 4，清除画面，然后写入新的画面
         var stopTime
-        var initializeGame = function (row, col, num) {
+        function initializeGame(row, col, num) {
             var residue = document.querySelector('.residue')
-            residue.innerText = `${num}`
+            residue.innerText = num
             var time = document.querySelector('.tick')
             time.innerText = `0`
             var i = 1
             clearInterval(stopTime)
             stopTime = setInterval(function () {
-                time.innerText = `${i++}`
+                time.innerText = i++
             }, 1000)
-            // zz
-            zz = 0
-            // 首先清除原来的地图，然后重新初始化
-            var box = document.querySelector('.gameBox')
-            box.innerHTML = ''
-            var body = document.querySelector('body')
-            body.style.minWidth = `${27 * col}px`
-            var map = mineSweepingMap(row, col, num)
-            writeHtml(map)
-            clearMine(row, col, num)
+            gameBox.innerHTML = ''
+            clearMineNum = 0
+            mineSweepingMap(row, col, num)
+            writeHtml()
         }
-
-        // 5，选择游戏等级，给按钮绑定功能
-        var Btn = function () {
-            var level = document.querySelectorAll('.choice-level')
-            for (var i = 0; i < level.length; i++) {
-                level[i].addEventListener('click', function (event) {
-                    var level = event.target.innerHTML
-                    if (level === '初级') {
-                        row = 9
-                        col = 9
-                        num = 10
-                        initializeGame(row, col, num)
-                    } else if (level === '中级') {
-                        row = 16
-                        col = 16
-                        num = 40
-                        initializeGame(row, col, num)
-                    } else if (level === '高级') {
-                        row = 30
-                        col = 16
-                        num = 99
-                        initializeGame(row, col, num)
-                    }
-                })
+        function choice(level){
+            if (level === '初级') {
+                row=9, col=9, num=10;
+            } else if (level === '中级') {
+                row=16, col=16, num=40;
+            } else if (level === '高级') {
+                row=32, col=16, num=99;
             }
-        }()
-        // zz 用来确定是否已经点到地雷
-        var zz = 0
-        var row = 16
-        var col = 16
-        var num = 40
-        initializeGame(row, col, num)
+            withspan=screenwidth/col;
+            initializeGame(row, col, num)
+        }
     </script>
 </body>
-
 </html>
