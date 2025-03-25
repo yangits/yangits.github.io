@@ -128,21 +128,21 @@
         // 判断是否胜利
        function changeClearMineNum() {
             if (clearMineNum === ((col * row) - num)) {
-                var allNum = 0
+                var allNum = 0;clearInterval(stopTime)
                 var stop = setInterval(function () {
                     var r = Math.floor(Math.random() * 256)
                     var g = Math.floor(Math.random() * 256)
                     table[allNum].style.background = `rgba(${r},${g},210,0.6)`
                     table[allNum].style.color="transparent";allNum++
                     if (allNum >= table.length) {
-                        clearInterval(stop);clearInterval(stopTime)
+                        clearInterval(stop);
                         alert('你成功啦~！！晚上吃肉~~！')
                         initializeGame(row, col, num)
                     }
-                }, 20)
+                }, 5)
             }
         }
-        // 3，扫雷过程
+        // 扫雷过程
         var clearMineNum = 0
         function makeWhite(x, y) {
             if (x < row && y < col && x >= 0 && y >= 0) {
@@ -217,7 +217,7 @@
                 table[x*col+y].style.background = 'white'
                 table[x*col+y].style.color= 'black'
                 table[x*col+y].innerText = '💣'
-                Num=0// 这里做了个小动画，失败的时候慢慢的显示雷的位置
+                Num=0;clearInterval(stopTime);
                 var over = setInterval(function () {
                     if (table[Num].innerText === '9' ||table[Num].innerText === '🚩') {
                         table[Num].style.background = 'white'
@@ -227,14 +227,13 @@
                     Num++
                     if (Num >= table.length) {
                         clearInterval(over);
-                        clearInterval(stopTime);
                         alert('游戏失败');
                         initializeGame(row, col, num)
                     }
-                }, 20)
+                }, 5)
             }
         }
-        // 4，清除画面，然后写入新的画面
+        // 清除画面，然后写入新的画面
         var stopTime
         function initializeGame(row, col, num) {
             residue.innerText = num
