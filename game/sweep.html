@@ -61,7 +61,7 @@
         var screenwidth=window.innerWidth>=500?480:window.innerWidth-20;
         var residue = document.querySelector('.residue')
         var gameBox = document.querySelector('.gameBox')
-        var row, col, num,map,table;
+        var row, col, num,table;
         var color={
                 '0': "transparent",
                 '1': "blue",
@@ -75,7 +75,7 @@
         choice('中级')
         // 1，成一张地图
         function SweepMap(r, c, num) {
-            map = new Array(r);
+            var map = new Array(r);
             for (var i = 0; i < r; i++) {
                 map[i] = new Array(c).fill(0)
             }
@@ -113,8 +113,9 @@
                     }
                 }
             }
+            return map
         }
-        function writeHtml() {
+        function writeHtml(map) {
             let html=""
             for (let i = 0; i <row; i++) {
                 for (let j = 0; j < col; j++) {
@@ -130,16 +131,14 @@
             if (clearMineNum === ((col * row) - num)) {
                 var allNum = 0;clearInterval(stopTime)
                 var stop = setInterval(function () {
-                    var r = Math.floor(Math.random() * 256)
-                    var g = Math.floor(Math.random() * 256)
-                    table[allNum].style.background = `rgba(${r},${g},210,0.6)`
-                    table[allNum].style.color="transparent";allNum++
+                    table[allNum].style.background = 'lightblue';
+                    table[allNum].style.color="transparent";allNum++;
                     if (allNum >= table.length) {
                         clearInterval(stop);
-                        alert('你成功啦~！！晚上吃肉~~！')
-                        initializeGame(row, col, num)
+                        setTimeout(()=>{alert('你成功啦~！！晚上吃肉~~！');
+                        initializeGame(row, col, num)},50);
                     }
-                }, 5)
+                }, 0)
             }
         }
         // 扫雷过程
@@ -150,18 +149,7 @@
                     table[x*col+y].style.color=color[table[x*col+y].innerText]
                     table[x*col+y].style.background = 'white'
                     clearMineNum++
-                    if (table[x*col+y].innerText === '0') {
-                        makeWhite(x - 1, y + 1)
-                        makeWhite(x - 1, y - 1)
-                        makeWhite(x - 1, y)
-                        makeWhite(x + 1, y + 1)
-                        makeWhite(x + 1, y - 1)
-                        makeWhite(x + 1, y)
-                        makeWhite(x, y + 1)
-                        makeWhite(x, y - 1)
-                    }else{
-                        autoFlag(x, y) 
-                    }
+                    autoFlag(x, y) 
                 }
             }
         }
@@ -185,7 +173,6 @@
         // 自动插旗逻辑
         function autoFlag(x, y) {
             const num = parseInt(table[x * col + y].innerText);
-            if (isNaN(num) || num <= 0) return;
             [candidates,dxy] = getSurroundingCells(x, y);
             if (candidates.length === num) {
                 candidates.forEach(c => {
@@ -195,17 +182,14 @@
                 });
             }
             if (dxy.length === num) {
-                dxy.forEach(c => {
-                    x=c[0];y=c[1]
-                    makeWhite(x - 1, y + 1)
-                    makeWhite(x - 1, y - 1)
-                    makeWhite(x - 1, y)
-                    makeWhite(x + 1, y + 1)
-                    makeWhite(x + 1, y - 1)
-                    makeWhite(x + 1, y)
-                    makeWhite(x, y + 1)
-                    makeWhite(x, y - 1)
-                });
+                makeWhite(x - 1, y + 1)
+                makeWhite(x - 1, y - 1)
+                makeWhite(x - 1, y)
+                makeWhite(x + 1, y + 1)
+                makeWhite(x + 1, y - 1)
+                makeWhite(x + 1, y)
+                makeWhite(x, y + 1)
+                makeWhite(x, y - 1)
             }
         }
         // 给所有方块绑定点击事件，点击显示数字，或者 boom
@@ -214,23 +198,16 @@
                 makeWhite(x,y);autoFlag(x, y) 
                 changeClearMineNum()
             } else{
-                table[x*col+y].style.background = 'white'
-                table[x*col+y].style.color= 'black'
-                table[x*col+y].innerText = '💣'
-                Num=0;clearInterval(stopTime);
-                var over = setInterval(function () {
-                    if (table[Num].innerText === '9' ||table[Num].innerText === '🚩') {
-                        table[Num].style.background = 'white'
-                        table[Num].style.color= 'black'
-                        table[Num].innerText = '💣'
+                clearInterval(stopTime);
+                for(let i=0;i < table.length;i++){
+                    if (table[i].innerText === '9') {
+                        table[i].style.background = 'white'
+                        table[i].style.color= 'black'
+                        table[i].innerText = '💣'
                     }
-                    Num++
-                    if (Num >= table.length) {
-                        clearInterval(over);
-                        alert('游戏失败');
-                        initializeGame(row, col, num)
-                    }
-                }, 5)
+                }
+                setTimeout(()=>{alert('游戏失败');
+                initializeGame(row, col, num)},5);
             }
         }
         // 清除画面，然后写入新的画面
@@ -246,8 +223,7 @@
             }, 1000)
             gameBox.innerHTML = ''
             clearMineNum = 0
-            SweepMap(row, col, num)
-            writeHtml()
+            writeHtml(SweepMap(row, col, num))
         }
         function choice(level){
             if (level === '初级') {
