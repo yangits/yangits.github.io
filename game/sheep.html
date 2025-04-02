@@ -87,7 +87,7 @@ let state = {
   cards: [],
   select: new Map(),
   base: window.innerWidth>=450?400/6:(window.innerWidth-50)/6,
-  maxLevel: 10,
+  maxLevel: 8,
   row: 6,
   col: 6
 };
@@ -107,8 +107,8 @@ function handleSwitch(type) {
   handleReset();
 }
 function createCards() {
-  const icon = icons.slice(0, state.level+2);
-  for (let i=0;i<=state.level*0.5+1;i++){
+  const icon = icons.slice(0, state.level+4);
+  for (let i=0;i<=state.level;i++){
     icon.forEach(c => {
     for (let k = 0; k <3; k++) {
       createCard(c);
@@ -153,6 +153,7 @@ function checkShading() {
 }
 function renderCards() {
   const container = document.getElementById('container');
+  const fragment = document.createDocumentFragment();
   container.innerHTML = '';
   container.style.width = `${state.base * state.col}px`;
   container.style.height = `${state.base * state.row}px`;
@@ -166,19 +167,20 @@ function renderCards() {
       cardDiv.style.display = 'none';
     }
     cardDiv.innerHTML = card.icon;
-    cardDiv.addEventListener('click', () => handleCardClick(card));
+    cardDiv.addEventListener('click', () => CardClick(card));
     cardWrap.appendChild(cardDiv);
-    container.appendChild(cardWrap);
+    fragment.appendChild(cardWrap);
   });
+  container.appendChild(fragment); 
 }
-function handleCardClick(card) {
+function CardClick(card) {
   if (card.status === 1 || !card.not) return;
   card.status = 1;
-  refreshCardPosition(card);
+  refreshCard(card);
   checkShading();
   renderCards();
 }
-function refreshCardPosition(card) {
+function refreshCard(card) {
   const cards = state.select.get(card.icon) || [];
   cards.push(card);
   state.select.set(card.icon, cards);
