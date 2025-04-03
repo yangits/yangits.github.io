@@ -10,26 +10,42 @@
 </head>
 <body>
     <div id="spreadsheet"></div>
+    <button onclick="setData()" id="bt">A</button>
 <script>
+    const options = {
+        mode: 'edit',  //edit/read
+        showToolbar:true,showBottomBar:true,showGrid:true,showContextmenu:true,
+        extendToolbar: {right: [{tip: '数据',el: document.getElementById('bt')}]},
+        row: {len:100},col: {len:26,width:80,2:{width: 200},},
+        style: {align: "center",bgcolor: "#fff",color: "#000",
+            border: {
+                top: ["thin", "#000"],
+                bottom: ["thin", "#000"],
+                right: ["thin", "#000"],
+                left: ["thin", "#000"]
+            }
+        }
+    }
     x_spreadsheet.locale('zh-cn');
-    const xs =x_spreadsheet('#spreadsheet',{
-        mode: 'edit',  //模式（edit/read）
-        showToolbar: true,
-        row: { len: 100, height: 25 },
-        col: { len: 26, width: 100 }
+    var data =[["表格","名字"],["序号","名字"],["1","张三"],["2","李四"],["3","王五"]];
+    function data_obj(data) {
+      var obj = {};
+      data.map((item, index) => {
+        obj[index] = {};
+        obj[index]["cells"] = {};
+        item.map((e, i) => {
+          obj[index]["cells"][i] = {text:e};
+        });
+      });
+      return obj;
+    }
+    var xs =x_spreadsheet('#spreadsheet',options)
+            .loadData({name:'sheet1',freeze:'A1',merges:['A1:B1'],rows:data_obj(data)})
+            .change(data => {});
+    xs.on('cell-selected', (cell, ri, ci) => {
+        xs.cellText(3, 3, cell.text).reRender();
+        xs.cellText(2, 3, xs.cell(ri, ci).text).reRender();
         })
-    data = [{name:'Sheet1',freeze:'A1',styles:[],merges:[],
-        rows:{
-            0:{cells:{0:{text:"序号"},1:{text:"名字"}}},
-            1:{cells:{0:{text:"1"},1:{text:"张三"}}},
-            2:{cells:{0:{text:"2"},1:{text:"李四"}}},
-            3:{cells:{0:{text:"3"},1:{text:"王五"}}},
-            len:100},
-        cols:{len:26},
-        validations:[],
-        autofilter:{}}]
-    xs.loadData(data)
-    console.log(xs.getData()[0].rows[0].cells[0].text);
 </script>
 </body>
 </html>
