@@ -1,51 +1,239 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>电子表格</title>
-    <link href="https://unpkg.com/x-data-spreadsheet/dist/xspreadsheet.css" rel="stylesheet" type="text/css"/>
-    <script src="https://unpkg.com/x-data-spreadsheet/dist/xspreadsheet.js"></script>
-    <script src="https://unpkg.com/x-data-spreadsheet/dist/locale/zh-cn.js"></script>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>电子表格</title>
+<style>
+*{
+    margin: 0;
+}
+table {
+    border-collapse: collapse;
+    user-select: none;
+}
+th, td{
+    border: 1px solid #888;
+    padding: 5px;
+    min-width: 80px;
+    position: relative;
+    text-align: center;
+}
+.selected {
+    background-color: #b0d0ff;
+}
+.copycell{
+    box-shadow:inset 0 0 0 1px blue;
+}
+.hidden{
+    display: none;
+    pointer-events: none;
+}
+.col-header{
+    cursor: pointer;
+    background-color: #f0f0f0;
+}
+.row-header,.corner{
+    cursor: pointer;
+    min-width: 30px;
+    background-color: #f0f0f0;
+}
+.cell-input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+</style>
 </head>
 <body>
-    <div id="spreadsheet"></div>
-    <button onclick="setData()" id="bt">A</button>
+<div>
+    <table id="mainTable">
+        <thead>
+            <tr id="tableHeader"><th class="corner"></th></tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+</div>
 <script>
-    const options = {
-        mode: 'edit',  //edit/read
-        showToolbar:true,showBottomBar:true,showGrid:true,showContextmenu:true,
-        extendToolbar: {right: [{tip: '数据',el: document.getElementById('bt')}]},
-        row: {len:100},col: {len:26,width:80,2:{width: 200},},
-        style: {align: "center",bgcolor: "#fff",color: "#000",
-            border: {
-                top: ["thin", "#000"],
-                bottom: ["thin", "#000"],
-                right: ["thin", "#000"],
-                left: ["thin", "#000"]
+const Rows = 100,Cols =26;
+let cpdata=null,selCell = null;
+let isMouseDown = false;
+let startCell = {row: 0,col: 0};
+const tbody = document.getElementById('tableBody');
+function createTable() {
+    const headerRow = document.getElementById('tableHeader');
+    for (let col = 0; col < Cols; col++) {// 创建列头（字母）
+        const th = document.createElement('th');
+        th.className = 'col-header';
+        th.textContent = String.fromCharCode(65 + col);
+        headerRow.appendChild(th);
+    }
+    for (let row = 0; row < Rows; row++) {// 创建行和数据单元格
+        const tr = document.createElement('tr');
+        const th = document.createElement('th');
+        th.className = 'row-header';
+        th.textContent = row + 1;
+        tr.appendChild(th);
+        for (let col = 0; col < Cols; col++) {
+            const td = document.createElement('td');
+            td.dataset.row = row;
+            td.dataset.col = col;
+            tr.appendChild(td);
+        }
+        tbody.appendChild(tr);
+    }
+}
+function handleSelection() {
+    for (let i = selCell[0]; i <= selCell[2]; i++) {
+        for (let j = selCell[1]; j <= selCell[3]; j++) {
+            tbody.rows[i].cells[j+1].classList.add('selected');
+    }}
+}
+function removeSelection() {
+    var sel_els = document.querySelectorAll('.selected');
+    sel_els.forEach((el)=>{
+        el.classList.remove('selected');});
+    selCell=null;
+}
+// 初始化事件监听
+function initEvents() {
+    const table = document.getElementById('mainTable');
+    table.addEventListener('mousedown', (e) => {// 鼠标按下事件
+        const td = e.target.closest('td');
+        if (!td) return;isMouseDown = true;
+        removeSelection();
+        startCell = {
+            row: parseInt(td.dataset.row),
+            col: parseInt(td.dataset.col)
+        };
+        selCell=[startCell.row,startCell.col,startCell.row,startCell.col]
+        handleSelection();
+    });
+    // 鼠标移动事件
+    table.addEventListener('mousemove', (e) => {
+        if (!isMouseDown) return;
+        const td = e.target.closest('td');
+        if (!td) return;removeSelection();
+        selCell=[Math.min(startCell.row, parseInt(td.dataset.row)),
+                Math.min(startCell.col, parseInt(td.dataset.col)),
+                Math.max(startCell.row, parseInt(td.dataset.row)),
+                Math.max(startCell.col, parseInt(td.dataset.col))]
+        handleSelection();
+    });
+    // 鼠标释放事件
+    document.addEventListener('mouseup', () => {
+        isMouseDown = false;
+    });
+    // 双击输入事件
+    table.addEventListener('dblclick', (e) => {
+        const td = e.target.closest('td');
+        if (!td) return;
+        const input = document.createElement('input');
+        input.className = 'cell-input';
+        input.value = td.textContent;
+        input.addEventListener('blur', () => {
+            td.textContent = input.value;
+            input.remove();
+        });
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                td.textContent = input.value;
+                input.remove();
             }
+        });
+        td.appendChild(input);
+        input.focus();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey  && (e.key === 'c'||e.key === 'C')) {
+            if (!selCell) return;// 复制功能 Ctrl+C
+            for (let i = selCell[0]; i <= selCell[2]; i++) {
+                for (let j = selCell[1]; j <= selCell[3]; j++) {
+                tbody.rows[i].cells[j+1].classList.add('copycell');
+                }
+            }
+            cpdata=getData(selCell);
+            navigator.clipboard.writeText(cpdata);
+        }
+        if (e.ctrlKey && (e.key === 'v'||e.key === 'V')) {
+            if (!cpdata || !selCell)return;// 粘贴功能 Ctrl+V
+            for(i=selCell[0];i<=selCell[2];i+=cpdata.length){
+                for(j=selCell[1];j<=selCell[3];j+=cpdata[0].length){
+                    setData(i,j,cpdata);
+            }}
+        }
+        if (e.ctrlKey && (e.key === 'm' || e.key === 'M')) {
+            e.preventDefault();
+            mergeCells(selCell);
+        }
+        if (e.key === 'Escape') {
+            cpdata=null;removeSelection();
+            var sel_els = document.querySelectorAll('.copycell');
+            sel_els.forEach((el)=>{
+                el.classList.remove('copycell');});
+        }
+        if (e.key === 'Delete') {
+            for (let i = selCell[0]; i <= selCell[2]; i++) {
+                for (let j = selCell[1]; j <= selCell[3]; j++) {
+                    tbody.rows[i].cells[j+1].textContent="";
+                }
+            };
+        }
+    });
+}
+var data =[["序号","名字"],["1","张三"],["2","李四"],["3","王五"]];
+function getData(selCell) {
+    let data=[]
+    for (let i = selCell[0]; i <= selCell[2]; i++) {
+        data.push([])
+        for (let j = selCell[1]; j <= selCell[3]; j++) {
+            data[i-selCell[0]].push(tbody.rows[i].cells[j+1].textContent)
         }
     }
-    x_spreadsheet.locale('zh-cn');
-    var data =[["表格","名字"],["序号","名字"],["1","张三"],["2","李四"],["3","王五"]];
-    function data_obj(data) {
-      var obj = {};
-      data.map((item, index) => {
-        obj[index] = {};
-        obj[index]["cells"] = {};
-        item.map((e, i) => {
-          obj[index]["cells"][i] = {text:e};
-        });
-      });
-      return obj;
+    return data
+}
+function setData(row,col,data) {
+    for (let i = 0; i < data.length; i++) {
+        for (let j = 0; j < data[i].length; j++) {
+        // cells[0]是行头，数据从cells[1]开始
+        tbody.rows[i+row].cells[j+col+1].textContent = data[i][j];
+        }
     }
-    var xs =x_spreadsheet('#spreadsheet',options)
-            .loadData({name:'sheet1',freeze:'A1',merges:['A1:B1'],rows:data_obj(data)})
-            .change(data => {});
-    xs.on('cell-selected', (cell, ri, ci) => {
-        xs.cellText(3, 3, cell.text).reRender();
-        xs.cellText(2, 3, xs.cell(ri, ci).text).reRender();
-        })
+}
+function mergeCells(selCell) {// 修改后的合并单元格函数
+    if (!selCell) return;
+    let [sr, sc, er, ec] = selCell;
+    const startTd = tbody.rows[sr].cells[sc+1];
+    startTd.rowSpan = er - sr + 1;
+    startTd.colSpan = ec - sc + 1;
+    if(sr === er && sc === ec){
+        endcell=tbody.rows[sr].cells[sc+1].dataset.merged;
+        if(!endcell)return
+        [er, ec]=endcell.split(",").map(Number);
+        for (let i = sr; i <= er; i++) {
+        for (let j = sc; j <= ec; j++) {
+            if (i === sr && j === sc) {continue}
+            const td = tbody.rows[i].cells[j+1];
+            td.classList.remove('hidden');
+        }
+    }
+    }else{
+        tbody.rows[sr].cells[sc+1].dataset.merged=[er, ec]
+        for (let i = sr; i <= er; i++) {
+        for (let j = sc; j <= ec; j++) {
+            if (i === sr && j === sc) {continue}
+            const td = tbody.rows[i].cells[j+1];
+            td.classList.add('hidden');
+        }}
+    }
+}
+createTable();
+initEvents();
+setData(0,0,data); 
 </script>
 </body>
 </html>
