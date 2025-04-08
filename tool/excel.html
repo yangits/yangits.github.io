@@ -8,17 +8,17 @@
 <style>
 *{
     margin: 0;
-}
-table {
-    border-collapse: collapse;
-    user-select: none;
+    border: 0;
 }
 th, td{
     border: 1px solid #888;
-    padding: 5px;
-    min-width: 80px;
     position: relative;
     text-align: center;
+    font-size: 14px;
+    white-space: nowrap;
+}
+tr:hover{
+    background-color: #cff;
 }
 .selected {
     background-color: #bdf;
@@ -30,16 +30,18 @@ th, td{
     display: none;
     pointer-events: none;
 }
+.col-header,.row-header,.corner{
+    min-width:30px;
+    z-index: 1;
+    position: sticky; 
+    left: 0;
+    top: 0;
+    background-color: #ddd;
+}
 .col-header{
-    cursor: pointer;
-    background-color: #f0f0f0;
+    min-width: 80px;
 }
-.row-header,.corner{
-    cursor: pointer;
-    min-width: 30px;
-    background-color: #f0f0f0;
-}
-.cell-input {
+.cell-input{
     position: absolute;
     left: 0;
     top: 0;
@@ -47,24 +49,28 @@ th, td{
     height: 100%;
     box-sizing: border-box;
 }
+table{
+    margin: 1px;
+    border: 1px solid #888;
+    border-spacing: 0;
+    user-select: none;
+}
 </style>
 </head>
-<body>
-<div>
-    <table id="mainTable">
-        <thead>
-            <tr id="tableHeader"><th class="corner"></th></tr>
-        </thead>
+<body style="display:flex;height:100vh;flex-direction:column;">
+<div class="top"></div>
+<div style="overflow:auto;">
+    <table id="table">
+        <tr id="tableHeader"><th class="corner" style="z-index: 2;"></th></tr>
         <tbody id="tableBody"></tbody>
     </table>
 </div>
 <script>
 const Rows = 100,Cols =26;
-let cpdata=null,selCell = null;
-let isMouseDown = false;
-let startCell = {row: 0,col: 0};
+var cpdata=null,selCell=null,startCell=[0,0];
+var isMouseDown = false;let activeColumn = null;
 const tbody = document.getElementById('tableBody');
-function createTable() {
+(function(){
     const headerRow = document.getElementById('tableHeader');
     for (let col = 0; col < Cols; col++) {// 创建列头（字母）
         const th = document.createElement('th');
@@ -86,7 +92,9 @@ function createTable() {
         }
         tbody.appendChild(tr);
     }
-}
+    var data =[["序号","名字"],["1","张三"],["2","李四"],["3","王五"]];
+    setData(0,0,data); 
+})()
 function handleSelection() {
     for (let i = selCell[0]; i <= selCell[2]; i++) {
         for (let j = selCell[1]; j <= selCell[3]; j++) {
@@ -100,17 +108,29 @@ function removeSelection() {
     selCell=null;
 }
 // 初始化事件监听
-function initEvents() {
-    const table = document.getElementById('mainTable');
+(function () {
+    const table = document.getElementById('table');
+    Array.from(table.rows[0].cells).forEach(th => {
+        th.onmousedown = function(e) {
+            // 当鼠标在列右侧边缘时触发
+            if (this.offsetWidth - e.offsetX < 10) {
+                activeColumn = this;
+                activeColumn.initWidth = this.offsetWidth;
+                activeColumn.initX = e.clientX;
+            }
+        };
+        th.onmousemove = function(e) {
+            // 改变光标样式
+            this.style.cursor = (this.offsetWidth - e.offsetX < 10) 
+                ? 'col-resize' : 'default';
+        };
+    });
     table.addEventListener('mousedown', (e) => {// 鼠标按下事件
         const td = e.target.closest('td');
         if (!td) return;isMouseDown = true;
         removeSelection();
-        startCell = {
-            row: parseInt(td.dataset.row),
-            col: parseInt(td.dataset.col)
-        };
-        selCell=[startCell.row,startCell.col,startCell.row,startCell.col]
+        startCell = [parseInt(td.dataset.row),parseInt(td.dataset.col)];
+        selCell=[startCell[0],startCell[1],startCell[0],startCell[1]];
         handleSelection();
     });
     // 鼠标移动事件
@@ -118,10 +138,10 @@ function initEvents() {
         if (!isMouseDown) return;
         const td = e.target.closest('td');
         if (!td) return;removeSelection();
-        selCell=[Math.min(startCell.row, parseInt(td.dataset.row)),
-                Math.min(startCell.col, parseInt(td.dataset.col)),
-                Math.max(startCell.row, parseInt(td.dataset.row)),
-                Math.max(startCell.col, parseInt(td.dataset.col))]
+        selCell=[Math.min(startCell[0], parseInt(td.dataset.row)),
+                Math.min(startCell[1], parseInt(td.dataset.col)),
+                Math.max(startCell[0], parseInt(td.dataset.row)),
+                Math.max(startCell[1], parseInt(td.dataset.col))]
         handleSelection();
     });
     // 鼠标释放事件
@@ -134,6 +154,7 @@ function initEvents() {
         if (!td) return;
         const input = document.createElement('input');
         input.className = 'cell-input';
+        let text=td.textContent;
         input.value = td.textContent;
         input.addEventListener('blur', () => {
             td.textContent = input.value;
@@ -144,6 +165,10 @@ function initEvents() {
                 td.textContent = input.value;
                 input.remove();
             }
+            if (e.key === 'Escape') {
+                td.textContent=text;
+                input.remove();
+            }
         });
         td.appendChild(input);
         input.focus();
@@ -151,6 +176,9 @@ function initEvents() {
     document.addEventListener('keydown', (e) => {
         if (e.ctrlKey  && (e.key === 'c'||e.key === 'C')) {
             if (!selCell) return;// 复制功能 Ctrl+C
+            var co_els = document.querySelectorAll('.copycell');
+            co_els.forEach((el)=>{
+                el.classList.remove('copycell');});
             for (let i = selCell[0]; i <= selCell[2]; i++) {
                 for (let j = selCell[1]; j <= selCell[3]; j++) {
                 tbody.rows[i].cells[j+1].classList.add('copycell');
@@ -172,8 +200,8 @@ function initEvents() {
         }
         if (e.key === 'Escape') {
             cpdata=null;removeSelection();
-            var sel_els = document.querySelectorAll('.copycell');
-            sel_els.forEach((el)=>{
+            var co_els = document.querySelectorAll('.copycell');
+            co_els.forEach((el)=>{
                 el.classList.remove('copycell');});
         }
         if (e.key === 'Delete') {
@@ -184,8 +212,7 @@ function initEvents() {
             };
         }
     });
-}
-var data =[["序号","名字"],["1","张三"],["2","李四"],["3","王五"]];
+})()
 function getData(selCell) {
     let data=[]
     for (let i = selCell[0]; i <= selCell[2]; i++) {
@@ -231,9 +258,6 @@ function mergeCells(selCell) {// 修改后的合并单元格函数
         }}
     }
 }
-createTable();
-initEvents();
-setData(0,0,data); 
 </script>
 </body>
 </html>
