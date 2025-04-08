@@ -15,7 +15,17 @@ th, td{
     position: relative;
     text-align: center;
     font-size: 14px;
-    white-space: nowrap;
+    /* white-space: nowrap; */
+}
+th{
+    z-index: 1;
+    position: sticky; 
+    left: 0;
+    top: 0;
+    background-color: #ddd;
+}
+.col-header{
+    min-width: 80px;
 }
 tr:hover{
     background-color: #cff;
@@ -29,17 +39,6 @@ tr:hover{
 .hidden{
     display: none;
     pointer-events: none;
-}
-.col-header,.row-header,.corner{
-    min-width:30px;
-    z-index: 1;
-    position: sticky; 
-    left: 0;
-    top: 0;
-    background-color: #ddd;
-}
-.col-header{
-    min-width: 80px;
 }
 .cell-input{
     position: absolute;
@@ -61,14 +60,13 @@ table{
 <div class="top"></div>
 <div style="overflow:auto;">
     <table id="table">
-        <tr id="tableHeader"><th class="corner" style="z-index: 2;"></th></tr>
+        <tr id="tableHeader"><th style="z-index: 2;"></th></tr>
         <tbody id="tableBody"></tbody>
     </table>
 </div>
 <script>
 const Rows = 100,Cols =26;
-var cpdata=null,selCell=null,startCell=[0,0];
-var isMouseDown = false;let activeColumn = null;
+var cpdata=null,selCell=null,startCell=null,activeColumn=null;
 const tbody = document.getElementById('tableBody');
 (function(){
     const headerRow = document.getElementById('tableHeader');
@@ -92,8 +90,8 @@ const tbody = document.getElementById('tableBody');
         }
         tbody.appendChild(tr);
     }
-    var data =[["序号","名字"],["1","张三"],["2","李四"],["3","王五"]];
-    setData(0,0,data); 
+    var data =[["序号","名字","成绩"],["1","张三","90"],["2","李四","80"],["3","王五","70"]];
+    setData(0,0,data);
 })()
 function handleSelection() {
     for (let i = selCell[0]; i <= selCell[2]; i++) {
@@ -112,30 +110,23 @@ function removeSelection() {
     const table = document.getElementById('table');
     Array.from(table.rows[0].cells).forEach(th => {
         th.onmousedown = function(e) {
-            // 当鼠标在列右侧边缘时触发
-            if (this.offsetWidth - e.offsetX < 10) {
-                activeColumn = this;
-                activeColumn.initWidth = this.offsetWidth;
-                activeColumn.initX = e.clientX;
-            }
+            activeColumn=(this.offsetWidth - e.offsetX < 10)?
+                [e.target.closest('th'),this.offsetWidth,e.clientX]:null
         };
         th.onmousemove = function(e) {
-            // 改变光标样式
             this.style.cursor = (this.offsetWidth - e.offsetX < 10) 
                 ? 'col-resize' : 'default';
         };
     });
-    table.addEventListener('mousedown', (e) => {// 鼠标按下事件
+    table.onmousedown = function(e){
         const td = e.target.closest('td');
-        if (!td) return;isMouseDown = true;
-        removeSelection();
+        if (!td) return;removeSelection();
         startCell = [parseInt(td.dataset.row),parseInt(td.dataset.col)];
         selCell=[startCell[0],startCell[1],startCell[0],startCell[1]];
         handleSelection();
-    });
-    // 鼠标移动事件
-    table.addEventListener('mousemove', (e) => {
-        if (!isMouseDown) return;
+    };
+    table.onmousemove = function(e){
+        if (!startCell) return;
         const td = e.target.closest('td');
         if (!td) return;removeSelection();
         selCell=[Math.min(startCell[0], parseInt(td.dataset.row)),
@@ -143,11 +134,14 @@ function removeSelection() {
                 Math.max(startCell[0], parseInt(td.dataset.row)),
                 Math.max(startCell[1], parseInt(td.dataset.col))]
         handleSelection();
-    });
-    // 鼠标释放事件
-    document.addEventListener('mouseup', () => {
-        isMouseDown = false;
-    });
+    };
+    document.onmousemove = function(e) {
+        if(!activeColumn)return;
+        activeColumn[0].style.minWidth=activeColumn[1]+e.clientX-activeColumn[2]+"px"; 
+    };
+    document.onmouseup = function(e) {
+        startCell=null;activeColumn=null;
+    };
     // 双击输入事件
     table.addEventListener('dblclick', (e) => {
         const td = e.target.closest('td');
@@ -161,14 +155,8 @@ function removeSelection() {
             input.remove();
         });
         input.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                td.textContent = input.value;
-                input.remove();
-            }
-            if (e.key === 'Escape') {
-                td.textContent=text;
-                input.remove();
-            }
+            if (e.key === 'Enter') {td.textContent = input.value;input.remove();}
+            if (e.key === 'Escape') {td.textContent=text;input.remove();}
         });
         td.appendChild(input);
         input.focus();
@@ -181,9 +169,8 @@ function removeSelection() {
                 el.classList.remove('copycell');});
             for (let i = selCell[0]; i <= selCell[2]; i++) {
                 for (let j = selCell[1]; j <= selCell[3]; j++) {
-                tbody.rows[i].cells[j+1].classList.add('copycell');
-                }
-            }
+                    tbody.rows[i].cells[j+1].classList.add('copycell');
+            }}
             cpdata=getData(selCell);
             navigator.clipboard.writeText(cpdata);
         }
