@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>电子表格</title>
 <style>
 *{
@@ -50,9 +50,8 @@ tr:hover{
 }
 table{
     margin: 1px;
-    border: 1px solid #888;
-    border-spacing: 0;
     user-select: none;
+    border-collapse: collapse;
 }
 </style>
 </head>
@@ -183,6 +182,15 @@ function removeSelection() {
         }
         if (e.ctrlKey && (e.key === 'm' || e.key === 'M')) {
             e.preventDefault();
+            if (!selCell) return;
+            let [sr, sc, er, ec] = selCell;
+            if(sr != er || sc != ec){
+                for (let i = sr; i <= er; i++) {
+                for (let j = sc; j <= ec; j++) {
+                    const start = tbody.rows[i].cells[j+1];
+                    if(start.rowSpan!=1 || start.colSpan!=1)return;
+                }}
+            }
             mergeCells(selCell);
         }
         if (e.key === 'Escape') {
@@ -219,21 +227,20 @@ function setData(row,col,data) {
     }
 }
 function mergeCells(selCell) {// 修改后的合并单元格函数
-    if (!selCell) return;
     let [sr, sc, er, ec] = selCell;
     const startTd = tbody.rows[sr].cells[sc+1];
     startTd.rowSpan = er - sr + 1;
     startTd.colSpan = ec - sc + 1;
     if(sr === er && sc === ec){
         endcell=tbody.rows[sr].cells[sc+1].dataset.merged;
-        if(!endcell)return
+        if(!endcell)return;
         [er, ec]=endcell.split(",").map(Number);
         for (let i = sr; i <= er; i++) {
         for (let j = sc; j <= ec; j++) {
-            if (i === sr && j === sc) {continue}
             const td = tbody.rows[i].cells[j+1];
             td.classList.remove('hidden');
         }
+        tbody.rows[sr].cells[sc+1].dataset.merged=null
     }
     }else{
         tbody.rows[sr].cells[sc+1].dataset.merged=[er, ec]
