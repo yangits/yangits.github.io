@@ -2,8 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>电子表格</title>
 <style>
 *{
@@ -65,7 +64,7 @@ table{
 </div>
 <script>
 const Rows = 100,Cols =26;
-var cpdata=null,selCell=null,startCell=null,activeColumn=null;
+var cpdata=null,selCell=null,lastCell=null,startCell=null,activeColumn=null;
 const tbody = document.getElementById('tableBody');
 (function(){
     const headerRow = document.getElementById('tableHeader');
@@ -104,8 +103,7 @@ function removeSelection() {
         el.classList.remove('selected');});
     selCell=null;
 }
-// 初始化事件监听
-(function () {
+(function () {//初始化事件监听
     const table = document.getElementById('table');
     Array.from(table.rows[0].cells).forEach(th => {
         th.onmousedown = function(e) {
@@ -113,8 +111,7 @@ function removeSelection() {
                 [e.target.closest('th'),this.offsetWidth,e.clientX]:null
         };
         th.onmousemove = function(e) {
-            this.style.cursor = (this.offsetWidth - e.offsetX < 10) 
-                ? 'col-resize' : 'default';
+            this.style.cursor = (this.offsetWidth - e.offsetX < 10) ? 'col-resize' : 'default';
         };
     });
     table.onmousedown = function(e){
@@ -134,41 +131,36 @@ function removeSelection() {
                 Math.max(startCell[1], parseInt(td.dataset.col))]
         handleSelection();
     };
-    document.onmousemove = function(e) {
+    document.onmousemove = function(e){
         if(!activeColumn)return;
         activeColumn[0].style.minWidth=activeColumn[1]+e.clientX-activeColumn[2]+"px"; 
     };
-    document.onmouseup = function(e) {
+    document.onmouseup = function(e){
         startCell=null;activeColumn=null;
     };
-    // 双击输入事件
-    table.addEventListener('dblclick', (e) => {
+    table.onclick = function(e){// 输入事件
         const td = e.target.closest('td');
-        if (!td) return;
+        if (!td) return;if (lastCell!=td) {lastCell=td;return};
         const input = document.createElement('input');
         input.className = 'cell-input';
         let text=td.textContent;
         input.value = td.textContent;
-        input.addEventListener('blur', () => {
-            td.textContent = input.value;
-            input.remove();
-        });
-        input.addEventListener('keydown', (e) => {
+        input.onblur = function(e){td.textContent = input.value;input.remove();};
+        input.onkeydown = function(e){
             if (e.key === 'Enter') {td.textContent = input.value;input.remove();}
             if (e.key === 'Escape') {td.textContent=text;input.remove();}
-        });
+        };
         td.appendChild(input);
         input.focus();
-    });
-    document.addEventListener('keydown', (e) => {
+    };
+    document.onkeydown = function(e){
         if (e.ctrlKey  && (e.key === 'c'||e.key === 'C')) {
             if (!selCell) return;// 复制功能 Ctrl+C
-            var co_els = document.querySelectorAll('.copycell');
-            co_els.forEach((el)=>{
-                el.classList.remove('copycell');});
+            const co_els = document.querySelectorAll('.copycell');
+            co_els.forEach((el)=>{el.classList.remove('copycell')});
             for (let i = selCell[0]; i <= selCell[2]; i++) {
-                for (let j = selCell[1]; j <= selCell[3]; j++) {
-                    tbody.rows[i].cells[j+1].classList.add('copycell');
+            for (let j = selCell[1]; j <= selCell[3]; j++) {
+                tbody.rows[i].cells[j+1].classList.add('copycell');
             }}
             cpdata=getData(selCell);
             navigator.clipboard.writeText(cpdata);
@@ -176,8 +168,8 @@ function removeSelection() {
         if (e.ctrlKey && (e.key === 'v'||e.key === 'V')) {
             if (!cpdata || !selCell)return;// 粘贴功能 Ctrl+V
             for(i=selCell[0];i<=selCell[2];i+=cpdata.length){
-                for(j=selCell[1];j<=selCell[3];j+=cpdata[0].length){
-                    setData(i,j,cpdata);
+            for(j=selCell[1];j<=selCell[3];j+=cpdata[0].length){
+                setData(i,j,cpdata);
             }}
         }
         if (e.ctrlKey && (e.key === 'm' || e.key === 'M')) {
@@ -195,38 +187,32 @@ function removeSelection() {
         }
         if (e.key === 'Escape') {
             cpdata=null;removeSelection();
-            var co_els = document.querySelectorAll('.copycell');
-            co_els.forEach((el)=>{
-                el.classList.remove('copycell');});
+            const co_els = document.querySelectorAll('.copycell');
+            co_els.forEach((el)=>{el.classList.remove('copycell')})
         }
         if (e.key === 'Delete') {
             for (let i = selCell[0]; i <= selCell[2]; i++) {
-                for (let j = selCell[1]; j <= selCell[3]; j++) {
-                    tbody.rows[i].cells[j+1].textContent="";
-                }
-            };
+            for (let j = selCell[1]; j <= selCell[3]; j++) {
+                tbody.rows[i].cells[j+1].textContent="";
+            }};
         }
-    });
+    };
 })()
 function getData(selCell) {
-    let data=[]
-    for (let i = selCell[0]; i <= selCell[2]; i++) {
-        data.push([])
-        for (let j = selCell[1]; j <= selCell[3]; j++) {
-            data[i-selCell[0]].push(tbody.rows[i].cells[j+1].textContent)
-        }
-    }
+    let data=[];
+    for (let i = selCell[0]; i <= selCell[2]; i++) {data.push([])
+    for (let j = selCell[1]; j <= selCell[3]; j++) {
+        data[i-selCell[0]].push(tbody.rows[i].cells[j+1].textContent)
+    }}
     return data
 }
 function setData(row,col,data) {
     for (let i = 0; i < data.length; i++) {
-        for (let j = 0; j < data[i].length; j++) {
-        // cells[0]是行头，数据从cells[1]开始
+    for (let j = 0; j < data[i].length; j++) {
         tbody.rows[i+row].cells[j+col+1].textContent = data[i][j];
-        }
-    }
+    }}
 }
-function mergeCells(selCell) {// 修改后的合并单元格函数
+function mergeCells(selCell) {
     let [sr, sc, er, ec] = selCell;
     const startTd = tbody.rows[sr].cells[sc+1];
     startTd.rowSpan = er - sr + 1;
@@ -239,9 +225,8 @@ function mergeCells(selCell) {// 修改后的合并单元格函数
         for (let j = sc; j <= ec; j++) {
             const td = tbody.rows[i].cells[j+1];
             td.classList.remove('hidden');
-        }
+        }}
         tbody.rows[sr].cells[sc+1].dataset.merged=null
-    }
     }else{
         tbody.rows[sr].cells[sc+1].dataset.merged=[er, ec]
         for (let i = sr; i <= er; i++) {
