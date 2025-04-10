@@ -7,278 +7,285 @@
     <title>管材排料计算</title>
 </head>
 <style>
-    div {
-        color: black;
-        font-size: 12px;
-        background-color: rgb(206, 203, 203);
-        max-width:450px;
-        text-align: center;
-        margin: auto;
-        border-radius: 10px;
-    }
-    button,input {
-        width: 70%;
-        height: 25px;
-        font-size: 12px;
-        margin-bottom: 5px;
-        border: 0px;
-        border-radius: 5px;
-    }
-    button{
-        margin-top: 5px;
-        height: 30px;
-        width: 180px;
-    }
-    textarea {
-        width: 90%;
-        height: 65vh;
-        resize: none;
-        font-size: 12px;
-        border: 0px;
-        background-color: rgb(255, 255, 255);
-        border-radius: 3px;
-    }
-    a{
-        text-align: center;
-        font-size: 10px;
-    }
+div {
+    color: black;
+    font-size: 12px;
+    background-color: rgb(206, 203, 203);
+    max-width:450px;
+    text-align: center;
+    margin: auto;
+    border-radius: 10px;
+}
+button,input {
+    width: 70%;
+    height: 25px;
+    font-size: 12px;
+    margin-bottom: 5px;
+    border: 0px;
+    border-radius: 5px;
+}
+button{
+    margin-top: 5px;
+    height: 30px;
+    width: 180px;
+}
+textarea {
+    width: 90%;
+    height: 65vh;
+    resize: none;
+    font-size: 12px;
+    border: 0px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 3px;
+}
+a{
+    text-align: center;
+    font-size: 10px;
+}
 </style>
 <body>
-    <div>
-        <br>原材料长: <input id="max_weight" type="text" value="6000" onkeyup="this.value=this.value.replace(/[^0-9\.]/g,'');">
-        <br>下料尺寸: <input id="weights" type="text" value="2300,1988,1050,601,503,459,359" onkeyup="this.value=this.value.replace(/[^0-9\,\.]/g,'');">
-        <br>下料数量: <input id="nums" type="text" value="912,320,1248,320,912,320,1248" onkeyup="this.value=this.value.replace(/[^0-9\,\.]/g,'');">
-        <br><button type="button" id="get_result">开始计算</button>
-        <br><textarea id="text_result" disabled>计算结果:</textarea>
-        <br><a href="../index.html">返回首页</a>
-    </div>
-    <script>
-        function getResult(goal, limit) {
-            //调用getLoosen函数 将原先的限制条件矩阵进行扩充
-            //加入松弛变量，基变量和价值系数
-            var loosen = getLoosen(limit, goal);
-            //建立一个新矩阵 存储扩充后的决策变量及其价值系数
-            var cb = [];
-            for (let i = 0; i < (goal.length + loosen.length); i++) {
-                //插入决策变量，基变量和价值系数
-                cb.push([goal[i] || 0, i]);
+<div>
+    <br>原材料长: <input id="max_weight" type="text" value="6000">
+    <br>下料尺寸: <input id="weights" type="text" value="2300,1988,1050,601,503,459,359">
+    <br>下料数量: <input id="nums" type="text" value="912,320,1248,320,912,320,1248">
+    <br><button type="button" id="get_result">开始计算</button>
+    <br><textarea id="text_result" disabled>计算结果:</textarea>
+    <br><a href="../index.html">返回首页</a>
+</div>
+<script>
+const inputs = document.querySelectorAll('input');
+inputs.forEach(input => {
+    input.setAttribute('inputmode', 'decimal');
+    input.onkeyup=function(){
+        input.value=input.value.replace(/[^0-9\,\.]/g,'');
+    }
+});
+function getResult(goal, limit) {
+    //调用getLoosen函数 将原先的限制条件矩阵进行扩充
+    //加入松弛变量，基变量和价值系数
+    var loosen = getLoosen(limit, goal);
+    //建立一个新矩阵 存储扩充后的决策变量及其价值系数
+    var cb = [];
+    for (let i = 0; i < (goal.length + loosen.length); i++) {
+        //插入决策变量，基变量和价值系数
+        cb.push([goal[i] || 0, i]);
+    }
+    while (false) {
+        //判断是否存在正的检验数,此项目不存在正检验数
+        var max = 0, max_index = null;
+        for (var i = 0; i < cb.length; i++) {
+            var check = getCheckNum(cb, loosen, i);
+            //采取Bland规则 直接取下标最大的正检验数
+            if (check > max) {
+                max = check;
+                max_index = i;
             }
-            while (false) {
-                //判断是否存在正的检验数,此项目不存在正检验数
-                var max = 0, max_index = null;
-                for (var i = 0; i < cb.length; i++) {
-                    var check = getCheckNum(cb, loosen, i);
-                    //采取Bland规则 直接取下标最大的正检验数
-                    if (check > max) {
-                        max = check;
-                        max_index = i;
-                    }
+        }
+        //若存在为正的检验数 则寻找最小的比值数
+        if (typeof max_index == 'number') {
+            var min = Infinity, min_index = null, min_index2 = null;
+            for (var i = 0; i < loosen.length; i++) {
+                var bizhi = getBizhiNum(cb, loosen, i, max_index);
+                //若两个最小的比值数同时存在 则采取Bland规则 选择下标最小的一项
+                if (typeof bizhi == 'number' &&
+                    (bizhi < min || bizhi == min && loosen[i][2] < min_index2)) {
+                    min = bizhi;
+                    min_index = i;
+                    min_index2 = loosen[i][2];
                 }
-                //若存在为正的检验数 则寻找最小的比值数
-                if (typeof max_index == 'number') {
-                    var min = Infinity, min_index = null, min_index2 = null;
-                    for (var i = 0; i < loosen.length; i++) {
-                        var bizhi = getBizhiNum(cb, loosen, i, max_index);
-                        //若两个最小的比值数同时存在 则采取Bland规则 选择下标最小的一项
-                        if (typeof bizhi == 'number' &&
-                            (bizhi < min || bizhi == min && loosen[i][2] < min_index2)) {
-                            min = bizhi;
-                            min_index = i;
-                            min_index2 = loosen[i][2];
-                        }
-                    }
-                    if (typeof min_index == 'number') {
-                        //换入决策变量和价值系数
-                        loosen[min_index][2] = max_index;
-                        loosen[min_index][3] = cb[max_index][0];
-                        //调用updateMartix函数 对矩阵进行初等变换
-                        updateMartix(loosen, min_index, max_index);
-                    }
-                }else break;//若已经不存在正的检验数 则直接跳出循环检索
             }
-            while (true) {
-                //判断是否存在为负数项的约束条件
-                var needAssist = false;
-                for (let i of loosen) {
-                    if (i[1] < 0) {needAssist = true;}
-                }
-                //如果存在，则需要使用对偶单纯形法消去负数项
-                if (needAssist) {
-                    var min = 0, min_index = null;
-                    //寻找b列值最小的负数项 决定换出变量
-                    for (let i = 0; i < loosen.length; i++) {
-                        if (loosen[i][1] < min) {
-                            min = loosen[i][1];
-                            min_index = i;
-                        }
-                    }
-                    //在决定换出变量后 决定换入变量
-                    var min2 = Infinity, min_index2 = null;
-                    for (let i = 0; i < cb.length; i++) {
-                        var num = loosen[min_index][0][i];
-                        if (num >= 0) continue;
-                        if (getCheckNum(cb, loosen, i) >= 0) continue;
-                        var check = (getCheckNum(cb, loosen, i)) / num;
-                        if (check < min2) {
-                            min2 = check;
-                            min_index2 = i;
-                        }
-                    }
-                    if (typeof min_index2 == 'number') {
-                        //若成功寻找到换入变量 则对矩阵进行初等变换
-                        loosen[min_index][2] = min_index2;
-                        loosen[min_index][3] = cb[min_index2][0];
-                        updateMartix(loosen, min_index, min_index2);
-                    }else return false;// 若找不到换入变量 则该矩阵不存在最优解 返回false值 结束函数运行
-                }
-                else break;
+            if (typeof min_index == 'number') {
+                //换入决策变量和价值系数
+                loosen[min_index][2] = max_index;
+                loosen[min_index][3] = cb[max_index][0];
+                //调用updateMartix函数 对矩阵进行初等变换
+                updateMartix(loosen, min_index, max_index);
             }
-            var result = [];
+        }else break;//若已经不存在正的检验数 则直接跳出循环检索
+    }
+    while (true) {
+        //判断是否存在为负数项的约束条件
+        var needAssist = false;
+        for (let i of loosen) {
+            if (i[1] < 0) {needAssist = true;}
+        }
+        //如果存在，则需要使用对偶单纯形法消去负数项
+        if (needAssist) {
+            var min = 0, min_index = null;
+            //寻找b列值最小的负数项 决定换出变量
             for (let i = 0; i < loosen.length; i++) {
-                if(loosen[i][2]>goal.length) {return false}
-                result.push([]);
-                //将b列的值读取入该数组
-                result[i] =[loosen[i][2],loosen[i][1]];
-            }
-            return result;
-        };
-        //进行初等行变换
-        function updateMartix(loosen, index1, index2) {
-            var list = loosen[index1], num = list[0][index2];
-            //对中心点所在行进行除法运算 将该中心点的值变为1
-            for (var i = 0; i < list[0].length; i++) {
-                list[0][i] /= num;
-            }
-            list[1] /= num;
-            //通过加法和乘法运算 将中心点所在列的值变为0
-            for (let i = 0; i < loosen.length; i++) {
-                if (i == index1) continue;
-                var num2 = loosen[i][0][index2];
-                for (let j = 0; j < loosen[i][0].length; j++) {
-                    loosen[i][0][j] -= (loosen[index1][0][j] * num2);
-                }
-                loosen[i][1] -= loosen[index1][1] * num2;
-            }
-        };
-        //使用比值判别法 获取比值数θ
-        function getBizhiNum(cb, loosen, index, maxIndex) {
-            var num = loosen[index][0][maxIndex];
-            //若系数为负 则该行不可能被换出 返回null
-            if (num <= 0) return null;
-            return loosen[index][1] / num;
-        };
-        //获取检验数σ
-        function getCheckNum(cb, loosen, index) {
-            var num = cb[index][0];
-            for (let i = 0; i < loosen.length; i++) {
-                num -= (loosen[i][3] * loosen[i][0][index]);
-            }
-            return num;
-        };
-        //插入松弛变量，决策变量和价值系数
-        function getLoosen(limit, goal) {
-            var loosen = limit.slice(0);
-            for (let i = 0; i < limit.length; i++) {
-                //插入松弛变量
-                for (let j = 0; j < limit.length; j++) {
-                    limit[i][0].push(i == j ? 1 : 0);
-                }
-                //插入决策变量
-                limit[i].push(i + goal.length);
-                //插入价值系数
-                limit[i].push(0);
-            }
-            return loosen;
-        };
-        function bag_program(weights, max_weight) {
-            let result = [];
-            let re = new Array(weights.length).fill(0);
-            function backtrack(start, curWeight) {
-                // 如果当前重量超过背包容量，直接返回
-                if (curWeight > max_weight) {
-                    result.push([...re]);
-                    result[result.length-1][start]--
-                    return;
-                }
-                for (let i = start; i < weights.length; i++) {
-                    re[i]++;
-                    // 递归调用，尝试添加下一个物品
-                    backtrack(i, curWeight + weights[i]);
-                    // 移除当前物品，回溯
-                    re[i]--;
+                if (loosen[i][1] < min) {
+                    min = loosen[i][1];
+                    min_index = i;
                 }
             }
-            // 从第一个物品开始，当前组合为空，当前重量为0
-            backtrack(0, 0);
-            return result;
-        }
-        function sumf(a, b) {   //方案具化
-            let re = [];
-            for (let i = 0; i < a.length; i++) {
-                if (b[i] > 0) {
-                    for (let j = 0; j < b[i]; j++) {
-                        re.push(a[i]);
-                    }
+            //在决定换出变量后 决定换入变量
+            var min2 = Infinity, min_index2 = null;
+            for (let i = 0; i < cb.length; i++) {
+                var num = loosen[min_index][0][i];
+                if (num >= 0) continue;
+                if (getCheckNum(cb, loosen, i) >= 0) continue;
+                var check = (getCheckNum(cb, loosen, i)) / num;
+                if (check < min2) {
+                    min2 = check;
+                    min_index2 = i;
                 }
             }
-            return re;
+            if (typeof min_index2 == 'number') {
+                //若成功寻找到换入变量 则对矩阵进行初等变换
+                loosen[min_index][2] = min_index2;
+                loosen[min_index][3] = cb[min_index2][0];
+                updateMartix(loosen, min_index, min_index2);
+            }else return false;// 若找不到换入变量 则该矩阵不存在最优解 返回false值 结束函数运行
         }
-        function sumarrys(weights, nums) {    //两个数组对应元素积的和
-            let re = 0;
-            for (i = 0; i < weights.length; i++) {
-                re += weights[i] * nums[i];
+        else break;
+    }
+    var result = [];
+    for (let i = 0; i < loosen.length; i++) {
+        if(loosen[i][2]>goal.length) {return false}
+        result.push([]);
+        //将b列的值读取入该数组
+        result[i] =[loosen[i][2],loosen[i][1]];
+    }
+    return result;
+};
+//进行初等行变换
+function updateMartix(loosen, index1, index2) {
+    var list = loosen[index1], num = list[0][index2];
+    //对中心点所在行进行除法运算 将该中心点的值变为1
+    for (var i = 0; i < list[0].length; i++) {
+        list[0][i] /= num;
+    }
+    list[1] /= num;
+    //通过加法和乘法运算 将中心点所在列的值变为0
+    for (let i = 0; i < loosen.length; i++) {
+        if (i == index1) continue;
+        var num2 = loosen[i][0][index2];
+        for (let j = 0; j < loosen[i][0].length; j++) {
+            loosen[i][0][j] -= (loosen[index1][0][j] * num2);
+        }
+        loosen[i][1] -= loosen[index1][1] * num2;
+    }
+};
+//使用比值判别法 获取比值数θ
+function getBizhiNum(cb, loosen, index, maxIndex) {
+    var num = loosen[index][0][maxIndex];
+    //若系数为负 则该行不可能被换出 返回null
+    if (num <= 0) return null;
+    return loosen[index][1] / num;
+};
+//获取检验数σ
+function getCheckNum(cb, loosen, index) {
+    var num = cb[index][0];
+    for (let i = 0; i < loosen.length; i++) {
+        num -= (loosen[i][3] * loosen[i][0][index]);
+    }
+    return num;
+};
+//插入松弛变量，决策变量和价值系数
+function getLoosen(limit, goal) {
+    var loosen = limit.slice(0);
+    for (let i = 0; i < limit.length; i++) {
+        //插入松弛变量
+        for (let j = 0; j < limit.length; j++) {
+            limit[i][0].push(i == j ? 1 : 0);
+        }
+        //插入决策变量
+        limit[i].push(i + goal.length);
+        //插入价值系数
+        limit[i].push(0);
+    }
+    return loosen;
+};
+function bag_program(weights, max_weight) {
+    let result = [];
+    let re = new Array(weights.length).fill(0);
+    function backtrack(start, curWeight) {
+        // 如果当前重量超过背包容量，直接返回
+        if (curWeight > max_weight) {
+            result.push([...re]);
+            result[result.length-1][start]--
+            return;
+        }
+        for (let i = start; i < weights.length; i++) {
+            re[i]++;
+            // 递归调用，尝试添加下一个物品
+            backtrack(i, curWeight + weights[i]);
+            // 移除当前物品，回溯
+            re[i]--;
+        }
+    }
+    // 从第一个物品开始，当前组合为空，当前重量为0
+    backtrack(0, 0);
+    return result;
+}
+function sumf(a, b) {   //方案具化
+    let re = [];
+    for (let i = 0; i < a.length; i++) {
+        if (b[i] > 0) {
+            for (let j = 0; j < b[i]; j++) {
+                re.push(a[i]);
             }
-            return re;
         }
-        function sumar(weights, num) {    //两个数组对应元素的积
-            let re = [];
-            for (i = 0; i < weights.length; i++) {
-                re.push(weights[i] * num);
-            }
-            return re;
-        }
-        function sum(num1, num2) {    //两个数组对应元素的和
-            let re = [];
-            for (i = 0; i < num1.length; i++) {
-                re.push(num1[i] + num2[i]);
-            }
-            return re;
-        }
-        document.getElementById('get_result').onclick = function () {
-            let max_weight = document.getElementById('max_weight').value;
-            let weights = document.getElementById('weights').value.split(",").map(Number);
-            let nums = document.getElementById('nums').value.split(",").map(Number);
-            let text = document.getElementById('text_result');
-            text.value = "开始计算,计算所有下料分布可能……";
-            let num_arrs = bag_program(weights, max_weight);
-            let num_arrs_T = [];     //转置矩阵
-            for (let i = 0; i < num_arrs[i].length; i++) {
-                num_arrs_T[i] = []; 
-                for (let j = 0; j < num_arrs.length; j++) { num_arrs_T[i][j] = num_arrs[j][i] * -1; }
-            };
-            let goals = new Array(num_arrs_T[0].length).fill(-1);        //目标变量系数
-            let limits = [];       //定义基矩阵
-            for (let i = 0; i < num_arrs_T.length; i++) {
-                limits[i] = [num_arrs_T[i], nums[i] * -1];
-            };
-            text.value += "\n开始线性规划选择最优分布……";
-            let result = getResult(goals, limits);
-            if (!result) {text.value += "\n计算停止,出现未知错误,请调整数据。";return;}
-            let Numbers = new Array(num_arrs[0].length).fill(0);
-            let z = 0; l = 0;
-            for (let i = 0; i < result.length; i++) {
-                    re = Math.round(result[i][1]+0.2);
-                    text.value += "\n" + (i+1) + "#:余" + Math.round((max_weight - sumarrys(weights, num_arrs[result[i][0]]))*100)/100;
-                    text.value += ",需" + re + "根" + JSON.stringify(sumf(weights, num_arrs[result[i][0]]));
-                    z += re;   //计算目标函数的值
-                    l += sumarrys(weights, num_arrs[result[i][0]]) * re;
-                    Numbers =sum(Numbers ,sumar(num_arrs[result[i][0]], re))
-            };
-            text.value += "\n下料数量分别为: " + JSON.stringify(Numbers);
-            text.value += "\n所需原料总数目为: " + z;
-            text.value += "\n管材平均利用率为: " + Math.round(l / z / max_weight * 10000) / 100 + "%";
-            text.value += "\n此程序仅供学习和参考,计算结果自行承担风险！";
-        }
-    </script>
+    }
+    return re;
+}
+function sumarrys(weights, nums) {    //两个数组对应元素积的和
+    let re = 0;
+    for (i = 0; i < weights.length; i++) {
+        re += weights[i] * nums[i];
+    }
+    return re;
+}
+function sumar(weights, num) {    //两个数组对应元素的积
+    let re = [];
+    for (i = 0; i < weights.length; i++) {
+        re.push(weights[i] * num);
+    }
+    return re;
+}
+function sum(num1, num2) {    //两个数组对应元素的和
+    let re = [];
+    for (i = 0; i < num1.length; i++) {
+        re.push(num1[i] + num2[i]);
+    }
+    return re;
+}
+document.getElementById('get_result').onclick = function () {
+    let max_weight = document.getElementById('max_weight').value;
+    let weights = document.getElementById('weights').value.split(",").map(Number);
+    let nums = document.getElementById('nums').value.split(",").map(Number);
+    let text = document.getElementById('text_result');
+    text.value = "开始计算,计算所有下料分布可能……";
+    let num_arrs = bag_program(weights, max_weight);
+    let num_arrs_T = [];     //转置矩阵
+    for (let i = 0; i < num_arrs[i].length; i++) {
+        num_arrs_T[i] = []; 
+        for (let j = 0; j < num_arrs.length; j++) { num_arrs_T[i][j] = num_arrs[j][i] * -1; }
+    };
+    let goals = new Array(num_arrs_T[0].length).fill(-1);        //目标变量系数
+    let limits = [];       //定义基矩阵
+    for (let i = 0; i < num_arrs_T.length; i++) {
+        limits[i] = [num_arrs_T[i], nums[i] * -1];
+    };
+    text.value += "\n开始线性规划选择最优分布……";
+    let result = getResult(goals, limits);
+    if (!result) {text.value += "\n计算停止,出现未知错误,请调整数据。";return;}
+    let Numbers = new Array(num_arrs[0].length).fill(0);
+    let z = 0; l = 0;
+    for (let i = 0; i < result.length; i++) {
+            re = Math.round(result[i][1]+0.2);
+            text.value += "\n" + (i+1) + "#:余" + Math.round((max_weight - sumarrys(weights, num_arrs[result[i][0]]))*100)/100;
+            text.value += ",需" + re + "根" + JSON.stringify(sumf(weights, num_arrs[result[i][0]]));
+            z += re;   //计算目标函数的值
+            l += sumarrys(weights, num_arrs[result[i][0]]) * re;
+            Numbers =sum(Numbers ,sumar(num_arrs[result[i][0]], re))
+    };
+    text.value += "\n下料数量分别为: " + JSON.stringify(Numbers);
+    text.value += "\n所需原料总数目为: " + z;
+    text.value += "\n管材平均利用率为: " + Math.round(l / z / max_weight * 10000) / 100 + "%";
+    text.value += "\n此程序仅供学习和参考,计算结果自行承担风险！";
+}
+</script>
 </body>
 </html>

@@ -7,274 +7,275 @@
     <title>金属计算器</title>
 </head>
 <style>
-    .home {
-        font-size: 16px;
-        background-color: rgb(201, 201, 201);
-        max-width: 400px;
-        text-align: center;
-        margin: auto;
-        margin-top: 30px ;
-        line-height: 40px;
-        padding-top: 10px;
-        border-radius: 10px;
-    }
-    input {
-        width:50%;
-        height: 25px;
-        border: 0px;
-        border-radius: 3px;
-    }
-    #clas, #material {
-        font-size: 18px;
-        border: 0px;
-        background-color: rgb(201, 201, 201);
-        text-align: center;
-    }
-    #material{
-        font-size: 14px;
-    }
-    .foot,#PP{
-        text-align: center;
-        color: rgb(110, 110, 110);
-        font-size: 10px;
-        padding-bottom: 6px;
-        line-height: 10px;
-    }
-    a{
-        text-align: center;
-        font-size: 10px;
-    }
-    .red{
-        color: red;}
-    .head {
-        width: 25%;
-        height: 32px;
-        background: rgb(130, 130, 130);
-        color: rgb(255, 255, 255);
-        border: 1px solid #000000;
-        border-radius: 8px;
-        margin: 10px 10px;
-    }
-    .head_active {
-        width: 25%;
-        height: 32px;
-        background: #fff;
-        border: 1px solid #030303;
-        border-radius: 8px;
-        margin: 10px 10px;
-    }
+.home {
+    font-size: 16px;
+    background-color: rgb(201, 201, 201);
+    max-width: 400px;
+    text-align: center;
+    margin: auto;
+    margin-top: 30px ;
+    line-height: 40px;
+    padding-top: 10px;
+    border-radius: 10px;
+}
+input {
+    width:50%;
+    height: 25px;
+    border: 0px;
+    border-radius: 3px;
+}
+#clas, #material {
+    font-size: 18px;
+    border: 0px;
+    background-color: rgb(201, 201, 201);
+    text-align: center;
+}
+#material{
+    font-size: 14px;
+}
+.foot,#PP{
+    margin-top: 10px;
+    text-align: center;
+    color: rgb(110, 110, 110);
+    font-size: 10px;
+    padding-bottom: 6px;
+    line-height: 10px;
+}
+a{
+    text-align: center;
+    font-size: 10px;
+}
+.red{
+    color: red;}
+.head {
+    width: 25%;
+    height: 32px;
+    background: rgb(130, 130, 130);
+    color: rgb(255, 255, 255);
+    border: 1px solid #000000;
+    border-radius: 8px;
+    margin: 10px 10px;
+}
+.head_active {
+    width: 25%;
+    height: 32px;
+    background: #fff;
+    border: 1px solid #030303;
+    border-radius: 8px;
+    margin: 10px 10px;
+}
 </style>
 <body>
-    <div class="home">
-        <div>
-            <button id="jszl" class="head_active"  onclick="jszl()">计算重量</button>
-            <button id="jssl"  class="head" onclick="jssl()">计算数量</button>
-        </div>
-        品类：
-        <select id="clas" onchange="clas_change();">
-            <option selected>钢板</option>
-            <option>圆管</option>
-            <option>方管</option>
-            <option>矩形管</option>
-            <option>圆钢</option>
-            <option>方钢</option>
-            <option>角钢</option>
-        </select>
-        <div id="NNN">重量:<span id="kg_result" class="red">0.000</span>千克</div>
-        <div id="KKG" style="display: none;">数量:<span id="n_result"  class="red">0.000</span>个</div>
-        <div id="TT"><span id="t">*厚度: </span><input id="T" placeholder="0" onkeyup="repl(this);">毫米</div>
-        <div id="WW"><span id="w">*宽度: </span><input id="W" placeholder="0" onkeyup="repl(this);">毫米</div>
-        <div id="AA" style="display: none;"><span id="a">*外长: </span><input id="A" placeholder="0" onkeyup="repl(this);">毫米</div>
-        <div id="BB" style="display: none;"><span id="b">*外宽: </span><input id="B" placeholder="0" onkeyup="repl(this);">毫米</div>
-        <div id="DD" style="display: none;">*外径: <input id="D" placeholder="0" onkeyup="repl(this);">毫米</div>
-        <div id="LL">*长度: <input id="L" placeholder="0" onkeyup="repl(this);">米&emsp;</div>
-        <div id="NN">*数量: <input id="N" placeholder="1" onkeyup="repl(this);">个&emsp;</div>
-        <div id="KG" style="display: none;">*重量: <input id="K" placeholder="0" onkeyup="repl(this);" >千克</div>
-        <span id="PP">密度: <span id="P">7.85</span>g/cm³。材质为: </span>
-        <select id="material" onchange="material_change();">
-            <option selected>碳钢</option>
-            <option>不锈钢</option>
-            <option>铝合金</option>
-        </select>
-        <div  class="foot"><a href="../index.html">返回首页</a></div>
-    </div>
-    <div class="foot">此程序仅供学习和参考，计算结果自行承担风险</div>
-    <script>
-        var head="计算重量";
-        function jszl(){
-            document.getElementById('jszl').className="head_active";
-            document.getElementById('jssl').className="head";
-            document.getElementById("NN").style.display="";
-            document.getElementById("NNN").style.display="";
-            document.getElementById("KG").style.display="none";
-            document.getElementById("KKG").style.display="none";
-            head="计算重量";text_input();
-
-        }
-        function jssl(){
-            document.getElementById('jszl').className="head";
-            document.getElementById('jssl').className="head_active";
-            document.getElementById("NN").style.display="none";
-            document.getElementById("NNN").style.display="none";
-            document.getElementById("KKG").style.display="";
-            document.getElementById("KG").style.display="";
-            head="计算数量";text_input();
-        }
-        function text_input(){   
-            let P=document.getElementById('P').innerHTML
-            let T = parseFloat(document.getElementById('T').value);
-            let W = parseFloat(document.getElementById('W').value);
-            let D = parseFloat(document.getElementById('D').value);
-            let L = parseFloat(document.getElementById('L').value);
-            let A = parseFloat(document.getElementById('A').value);
-            let B = parseFloat(document.getElementById('B').value);
-            let N = parseFloat(document.getElementById('N').value);   
-            let K = parseFloat(document.getElementById('K').value);   
-            let kg_text = document.getElementById('kg_result');
-            let n_text = document.getElementById('n_result');
-            let clas = document.getElementById('clas');
-            if(head=="计算重量"){
-                if (isNaN(N)!=false || N == "0"){N=1};
-                switch(clas.value){
-                    case "钢板":
-                        if(isNaN(T)==false && isNaN(W)==false && isNaN(L)==false){
-                            kg_text.innerHTML =(T*W*L*P*N/1000).toFixed(3);
-                        }else{kg_text.innerHTML ="0.000";};break;
-                    case "圆管":
-                        if(isNaN(T)==false && isNaN(D)==false && isNaN(L)==false){
-                            kg_text.innerHTML =(T*(D-T)*L*3.1415926*P*N/1000).toFixed(3);
-                        }else{kg_text.innerHTML ="0.000";};break;
-                    case "方管":
-                        if(isNaN(T)==false && isNaN(A)==false && isNaN(L)==false){
-                            kg_text.innerHTML =(T*(A-T)*4*L*P*N/1000).toFixed(3);
-                        }else{kg_text.innerHTML ="0.000";};break;
-                    case "矩形管":
-                        if(isNaN(T)==false && isNaN(A)==false && isNaN(B)==false && isNaN(L)==false){
-                            kg_text.innerHTML =(T*(A-B*(-1)-T*2)*2*L*P*N/1000).toFixed(3);
-                        }else{kg_text.innerHTML ="0.000";};break;
-                    case "圆钢":
-                        if(isNaN(D)==false && isNaN(L)==false){
-                            kg_text.innerHTML =(D*D*L*3.1415926/4*P*N/1000).toFixed(3);
-                        }else{kg_text.innerHTML ="0.000";};break; 
-                    case "方钢":
-                        if(isNaN(A)==false && isNaN(L)==false && isNaN(B)==false ){
-                            kg_text.innerHTML =(A*B*L*P*N/1000).toFixed(3);
-                        }else{kg_text.innerHTML ="0.000";};break;
-                    case "角钢":
-                        if(isNaN(T)==false && isNaN(A)==false && isNaN(B)==false && isNaN(L)==false ){
-                            kg_text.innerHTML =(T*(A-B*(-1)-T)*L*P*N/1000).toFixed(3);
-                        }else{kg_text.innerHTML ="0.000";};break;
-                }      
-            }else{
-                if (isNaN(K)!=false){K=0};
-                switch(clas.value){
-                    case "钢板":
-                        if(isNaN(T)==false && isNaN(W)==false && isNaN(L)==false){
-                            n_text.innerHTML =(K/(T*W*L*P)*1000).toFixed(3);
-                        }else{n_text.innerHTML ="0.000";};break;
-                    case "圆管":
-                        if(isNaN(T)==false && isNaN(D)==false && isNaN(L)==false){
-                            n_text.innerHTML =(K/(T*(D-T)*L*3.1415926*P)*1000).toFixed(3);
-                        }else{n_text.innerHTML ="0.000";};break;
-                    case "方管":
-                        if(isNaN(T)==false && isNaN(A)==false && isNaN(L)==false){
-                            n_text.innerHTML =(K/(T*(A-T)*4*L*P)*1000).toFixed(3);
-                        }else{n_text.innerHTML ="0.000";};break;
-                    case "矩形管":
-                        if(isNaN(T)==false && isNaN(A)==false && isNaN(B)==false && isNaN(L)==false){
-                            n_text.innerHTML =(K/(T*(A-B*(-1)-T*2)*2*L*P)*1000).toFixed(3);
-                        }else{n_text.innerHTML ="0.000";};break;
-                    case "圆钢":
-                        if(isNaN(D)==false && isNaN(L)==false){
-                            n_text.innerHTML =(K/(D*D*L*3.1415926/4*P)*1000).toFixed(3);
-                        }else{n_text.innerHTML ="0.000";};break;
-                    case "方钢":
-                        if(isNaN(A)==false && isNaN(L)==false && isNaN(B)==false ){
-                            n_text.innerHTML =(K/(A*B*L*P)*1000).toFixed(3);
-                        }else{n_text.innerHTML ="0.000";};break;
-                    case "角钢":
-                        if(isNaN(T)==false && isNaN(A)==false && isNaN(B)==false && isNaN(L)==false ){
-                            n_text.innerHTML =(K/(T*(A-B*(-1)-T)*L*P)*1000).toFixed(3);
-                        }else{n_text.innerHTML ="0.000";};break;
-                }  
-            }
-        }
-        function repl(obj){
-            obj.value=obj.value.replace(/[^0-9\.]/g,'');
-            text_input();
-        }
-        function material_change(){
-            let P=document.getElementById('P');
-            let material = document.getElementById('material');
-            if (material.value=="碳钢"){
-                P.innerHTML=7.85
-            }
-            if (material.value=="不锈钢"){
-                P.innerHTML=7.93
-            }
-            if (material.value=="铝合金"){
-                P.innerHTML=2.73
-            }
-            text_input();
-        }
-        function clas_change(){
-            let clas = document.getElementById('clas');
-            document.getElementById('kg_result').innerHTML="0.000";
-            document.getElementById('n_result').innerHTML="0.000";
-            document.getElementById('T').value="";
-            document.getElementById('W').value="";
-            document.getElementById('D').value="";
-            document.getElementById('L').value="";
-            document.getElementById('A').value="";
-            document.getElementById('B').value="";
-            document.getElementById('N').value="";
-            document.getElementById('K').value="";
-            document.getElementById("TT").style.display="none";
-            document.getElementById("WW").style.display="none";
-            document.getElementById("LL").style.display="none";
-            document.getElementById("DD").style.display="none";
-            document.getElementById("AA").style.display="none";
-            document.getElementById("BB").style.display="none";
-            switch(clas.value){
-                case "钢板":
-                    document.getElementById("TT").style.display="";
-                    document.getElementById("WW").style.display="";
-                    document.getElementById("LL").style.display="";
-                    break;
-                case "圆管":
-                    document.getElementById("TT").style.display="";
-                    document.getElementById("DD").style.display="";
-                    document.getElementById("LL").style.display="";
-                    break;
-                case "方管":
-                    document.getElementById("TT").style.display="";
-                    document.getElementById("AA").style.display="";
-                    document.getElementById("LL").style.display="";
-                    break;
-                case "矩形管":
-                    document.getElementById("TT").style.display="";
-                    document.getElementById("AA").style.display="";
-                    document.getElementById("BB").style.display="";
-                    document.getElementById("LL").style.display="";
-                    break;
-                case "圆钢":
-                    document.getElementById("DD").style.display="";
-                    document.getElementById("LL").style.display="";
-                    break;
-                case "方钢":
-                    document.getElementById("AA").style.display="";
-                    document.getElementById("BB").style.display="";
-                    document.getElementById("LL").style.display="";
-                    break;
-                case "角钢":
-                    document.getElementById("TT").style.display="";
-                    document.getElementById("AA").style.display="";
-                    document.getElementById("BB").style.display="";
-                    document.getElementById("LL").style.display="";
-                    break;
-            }
-        }
-    </script>
+<div class="home">
+<div>
+    <button id="jszl" class="head_active"  onclick="jszl()">计算重量</button>
+    <button id="jssl"  class="head" onclick="jssl()">计算数量</button>
+</div>
+品类：
+<select id="clas" onchange="clas_change();">
+    <option selected>钢板</option>
+    <option>圆管</option>
+    <option>方管</option>
+    <option>矩形管</option>
+    <option>圆钢</option>
+    <option>方钢</option>
+    <option>角钢</option>
+</select>
+<div id="NNN">重量:<span id="kg_result" class="red">0.000</span>千克</div>
+<div id="KKG" style="display: none;">数量:<span id="n_result"  class="red">0.000</span>个</div>
+<div id="TT"><span id="t">*厚度: </span><input inputmode="decimal" id="T" placeholder="0">毫米</div>
+<div id="WW"><span id="w">*宽度: </span><input id="W" placeholder="0">毫米</div>
+<div id="AA" style="display: none;"><span id="a">*外长: </span><input id="A" placeholder="0">毫米</div>
+<div id="BB" style="display: none;"><span id="b">*外宽: </span><input id="B" placeholder="0">毫米</div>
+<div id="DD" style="display: none;">*外径: <input id="D" placeholder="0">毫米</div>
+<div id="LL">*长度: <input id="L" placeholder="0">米&emsp;</div>
+<div id="NN">*数量: <input id="N" placeholder="1">个&emsp;</div>
+<div id="KG" style="display: none;">*重量: <input id="K" placeholder="0">千克</div>
+<span id="PP">密度: <span id="P">7.85</span>g/cm³。材质为: </span>
+<select id="material" onchange="material_change();">
+    <option selected>碳钢</option>
+    <option>不锈钢</option>
+    <option>铝合金</option>
+</select>
+<div  class="foot"><a href="../index.html">返回首页</a></div>
+</div>
+<div class="foot">此程序仅供学习和参考，计算结果自行承担风险</div>
+<script>
+var head="计算重量";
+const inputs = document.querySelectorAll('input');
+inputs.forEach(input => {
+    input.setAttribute('inputmode', 'decimal');
+    input.onkeyup=function(){
+        input.value=input.value.replace(/[^0-9\.]/g,'');
+        text_input();
+    }
+});
+function jszl(){
+    document.getElementById('jszl').className="head_active";
+    document.getElementById('jssl').className="head";
+    document.getElementById("NN").style.display="";
+    document.getElementById("NNN").style.display="";
+    document.getElementById("KG").style.display="none";
+    document.getElementById("KKG").style.display="none";
+    head="计算重量";text_input();
+}
+function jssl(){
+    document.getElementById('jszl').className="head";
+    document.getElementById('jssl').className="head_active";
+    document.getElementById("NN").style.display="none";
+    document.getElementById("NNN").style.display="none";
+    document.getElementById("KKG").style.display="";
+    document.getElementById("KG").style.display="";
+    head="计算数量";text_input();
+}
+function text_input(){   
+    let P = document.getElementById('P').innerHTML
+    let T = parseFloat(document.getElementById('T').value);
+    let W = parseFloat(document.getElementById('W').value);
+    let D = parseFloat(document.getElementById('D').value);
+    let L = parseFloat(document.getElementById('L').value);
+    let A = parseFloat(document.getElementById('A').value);
+    let B = parseFloat(document.getElementById('B').value);
+    let N = parseFloat(document.getElementById('N').value);
+    let K = parseFloat(document.getElementById('K').value);
+    const kg_text = document.getElementById('kg_result');
+    const n_text = document.getElementById('n_result');
+    const clas = document.getElementById('clas');
+    if(head=="计算重量"){
+        if (isNaN(N)!=false || N == "0"){N=1};
+        switch(clas.value){
+        case "钢板":
+            if(isNaN(T)==false && isNaN(W)==false && isNaN(L)==false){
+                kg_text.innerHTML =(T*W*L*P*N/1000).toFixed(3);
+            }else{kg_text.innerHTML ="0.000";};break;
+        case "圆管":
+            if(isNaN(T)==false && isNaN(D)==false && isNaN(L)==false){
+                kg_text.innerHTML =(T*(D-T)*L*3.1415926*P*N/1000).toFixed(3);
+            }else{kg_text.innerHTML ="0.000";};break;
+        case "方管":
+            if(isNaN(T)==false && isNaN(A)==false && isNaN(L)==false){
+                kg_text.innerHTML =(T*(A-T)*4*L*P*N/1000).toFixed(3);
+            }else{kg_text.innerHTML ="0.000";};break;
+        case "矩形管":
+            if(isNaN(T)==false && isNaN(A)==false && isNaN(B)==false && isNaN(L)==false){
+                kg_text.innerHTML =(T*(A-B*(-1)-T*2)*2*L*P*N/1000).toFixed(3);
+            }else{kg_text.innerHTML ="0.000";};break;
+        case "圆钢":
+            if(isNaN(D)==false && isNaN(L)==false){
+                kg_text.innerHTML =(D*D*L*3.1415926/4*P*N/1000).toFixed(3);
+            }else{kg_text.innerHTML ="0.000";};break; 
+        case "方钢":
+            if(isNaN(A)==false && isNaN(L)==false && isNaN(B)==false ){
+                kg_text.innerHTML =(A*B*L*P*N/1000).toFixed(3);
+            }else{kg_text.innerHTML ="0.000";};break;
+        case "角钢":
+            if(isNaN(T)==false && isNaN(A)==false && isNaN(B)==false && isNaN(L)==false ){
+                kg_text.innerHTML =(T*(A-B*(-1)-T)*L*P*N/1000).toFixed(3);
+            }else{kg_text.innerHTML ="0.000";};break;
+        }      
+    }else{
+        if (isNaN(K)!=false){K=0};
+        switch(clas.value){
+        case "钢板":
+            if(isNaN(T)==false && isNaN(W)==false && isNaN(L)==false){
+                n_text.innerHTML =(K/(T*W*L*P)*1000).toFixed(3);
+            }else{n_text.innerHTML ="0.000";};break;
+        case "圆管":
+            if(isNaN(T)==false && isNaN(D)==false && isNaN(L)==false){
+                n_text.innerHTML =(K/(T*(D-T)*L*3.1415926*P)*1000).toFixed(3);
+            }else{n_text.innerHTML ="0.000";};break;
+        case "方管":
+            if(isNaN(T)==false && isNaN(A)==false && isNaN(L)==false){
+                n_text.innerHTML =(K/(T*(A-T)*4*L*P)*1000).toFixed(3);
+            }else{n_text.innerHTML ="0.000";};break;
+        case "矩形管":
+            if(isNaN(T)==false && isNaN(A)==false && isNaN(B)==false && isNaN(L)==false){
+                n_text.innerHTML =(K/(T*(A-B*(-1)-T*2)*2*L*P)*1000).toFixed(3);
+            }else{n_text.innerHTML ="0.000";};break;
+        case "圆钢":
+            if(isNaN(D)==false && isNaN(L)==false){
+                n_text.innerHTML =(K/(D*D*L*3.1415926/4*P)*1000).toFixed(3);
+            }else{n_text.innerHTML ="0.000";};break;
+        case "方钢":
+            if(isNaN(A)==false && isNaN(L)==false && isNaN(B)==false ){
+                n_text.innerHTML =(K/(A*B*L*P)*1000).toFixed(3);
+            }else{n_text.innerHTML ="0.000";};break;
+        case "角钢":
+            if(isNaN(T)==false && isNaN(A)==false && isNaN(B)==false && isNaN(L)==false ){
+                n_text.innerHTML =(K/(T*(A-B*(-1)-T)*L*P)*1000).toFixed(3);
+            }else{n_text.innerHTML ="0.000";};break;
+        }  
+    }
+}
+function material_change(){
+    const density=[7.85,7.93,2.73]
+    let material = document.getElementById('material').selectedIndex;
+    document.getElementById('P').innerHTML=density[material]
+    text_input();
+}
+function clas_change(){
+    let clas = document.getElementById('clas');
+    document.getElementById('kg_result').innerHTML="0.000";
+    document.getElementById('n_result').innerHTML="0.000";
+    document.getElementById('T').value="";
+    document.getElementById('W').value="";
+    document.getElementById('D').value="";
+    document.getElementById('L').value="";
+    document.getElementById('A').value="";
+    document.getElementById('B').value="";
+    document.getElementById('N').value="";
+    document.getElementById('K').value="";
+    const TT= document.getElementById("TT");
+    const WW= document.getElementById("WW");
+    const LL= document.getElementById("LL");
+    const DD= document.getElementById("DD");
+    const AA= document.getElementById("AA");
+    const BB= document.getElementById("BB");
+    TT.style.display="none";
+    WW.style.display="none";
+    LL.style.display="none";
+    DD.style.display="none";
+    AA.style.display="none";
+    BB.style.display="none";
+    switch(clas.value){
+    case "钢板":
+        TT.style.display="";
+        WW.style.display="";
+        LL.style.display="";
+        break;
+    case "圆管":
+        TT.style.display="";
+        DD.style.display="";
+        LL.style.display="";
+        break;
+    case "方管":
+        TT.style.display="";
+        AA.style.display="";
+        LL.style.display="";
+        break;
+    case "矩形管":
+        TT.style.display="";
+        AA.style.display="";
+        BB.style.display="";
+        LL.style.display="";
+        break;
+    case "圆钢":
+        DD.style.display="";
+        LL.style.display="";
+        break;
+    case "方钢":
+        AA.style.display="";
+        BB.style.display="";
+        LL.style.display="";
+        break;
+    case "角钢":
+        TT.style.display="";
+        AA.style.display="";
+        BB.style.display="";
+        LL.style.display="";
+        break;
+    }
+}
+</script>
 </body>
-
 </html>
