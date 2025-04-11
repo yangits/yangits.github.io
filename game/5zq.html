@@ -46,7 +46,7 @@ const ctx = canvas.getContext('2d');
 const size = 15;
 const cellSize = canvas.width / (size + 1);
 let currentPlayer = 1; // 1: 玩家（黑棋），2: AI（白棋）
-let gameOver = false;
+let gameOver = false,bxy=null;
 let board = Array(size).fill().map(() => Array(size).fill(0));
 // 评分规则
 const scoreRules = {
@@ -76,10 +76,17 @@ function drawBoard() {
 function drawPiece(x, y) {
     ctx.beginPath();
     ctx.arc(cellSize * (x + 1), cellSize * (y + 1), cellSize/2 - 2, 0, Math.PI * 2);
-    ctx.fillStyle = currentPlayer === 1 ? '#000' : '#fff';
+    ctx.fillStyle = currentPlayer === 1 ? '#000' : '#ddd';
     ctx.fill();
-    ctx.strokeStyle = '#666';
+    ctx.strokeStyle ='#666';
     ctx.stroke();
+    if(!bxy)return;
+    if(currentPlayer === 2){
+        ctx.beginPath();
+        ctx.arc(cellSize * (bxy[0] + 1), cellSize * (bxy[1] + 1), cellSize/2 - 2, 0, Math.PI * 2);
+        ctx.fillStyle = '#fff';
+        ctx.fill();
+    };
 }
 // AI评分函数
 function evaluatePosition(x, y, player) {
@@ -162,7 +169,7 @@ function aiMove() {
     if (bestMoves.length > 0) {
         const {x, y} = bestMoves[Math.floor(Math.random() * bestMoves.length)];
         setTimeout(() => {
-            placePiece(x, y);
+            placePiece(x, y);bxy=[x,y]
         }, 100); // AI思考延迟
     }
 }
@@ -219,7 +226,7 @@ canvas.addEventListener('click', (e) => {
 function resetGame() {
     board = Array(size).fill().map(() => Array(size).fill(0));
     currentPlayer = 1;
-    gameOver = false;
+    gameOver = false;bxy=null;
     status.textContent = '玩家回合';
     drawBoard();
 }
