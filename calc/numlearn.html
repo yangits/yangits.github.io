@@ -1,500 +1,500 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1,maximum-scale=1,user-scalable=no">
-    <title>口算练习机</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1,maximum-scale=1,user-scalable=no">
+<title>口算练习机</title>
 </head>
- <style>
-    *{
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        -khtml-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-        margin:0px;
-        padding:0px;
-    }
-    body {
-        max-width: 380px;
-        background: #019CD6;
-        user-select: none;
-        overflow: hidden;
-        text-align: center;
-        margin: auto;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-    .top{
-        position: fixed; /* 设置为fixed使其保持在页面上 */
-        z-index: 1;
-        width: 100%; /* 宽度 */
-        height: 100%; /* 高度 */
-        margin: auto;
-        top: 0;left: 0;
-        padding: 0px;
-    }
-    textarea{
-        color: #000;
-        height: 75%;
-        line-height: 28px;
-        text-align: left;
-        width: 100%;
-        background: #019CD6;
-        font-size: 28px;
-    }
-    .game{
-        width:85%;
-        margin: 10px auto;
-        border-radius: 15px;
-        border: 10px inset;
-        border-color: #23a4d3 #4dbde3 #59c6e8 #019CD6;
-        overflow: hidden;
-        background-color: #9facaa;
-    }
-    .game canvas{
-        border-radius: 5px;
-        background-color: #9facaa;
-        width:100%;
-    }
-    .bt1 button{
-        margin: 15px 10px;
-        outline: none;
-        cursor: pointer;
-        width: 16%;
-        height: 50px;
-        border-radius: 5px;
-        font-size: 20px;
-        background: #e25c03;
-    }
-    .bt2 button{
-        margin: 15px 10px;
-        outline: none;
-        cursor: pointer;
-        width: 16%;
-        height: 56px;
-        border-radius: 50%;
-    }   
-     .bt3{
-        margin: 15px 10px;
-        outline: none;
-        cursor: pointer;
-        width: 20%;
-        height: 50px;
-        border-radius: 5px;
-        background: #d85904;
-    }
-    .ok{
-        margin: 10px 20px;
-        outline: none;
-        cursor: pointer;
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        background: #dd7703;
-    }
-    button{
-        user-select: none;
-        text-align: center;
-        font-size: 30px;
-        border: 0px;
-        background: linear-gradient(145deg, #decb02, #c1b002);
-        box-shadow:  4px 4px 8px #555555,-4px -4px 8px #7ed2d2;
-    }
-    button:active {
-        background: linear-gradient(145deg, #a69700, #c5b400);
-        box-shadow:  2px 2px 4px #555555,-2px -2px 4px #7ed2d2;
-    }
- </style>
+<style>
+*{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    margin:0px;
+    padding:0px;
+}
+body {
+    max-width: 380px;
+    background: #019CD6;
+    user-select: none;
+    overflow: hidden;
+    text-align: center;
+    margin: auto;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.top{
+    position: fixed; /* 设置为fixed使其保持在页面上 */
+    z-index: 1;
+    width: 100%; /* 宽度 */
+    height: 100%; /* 高度 */
+    margin: auto;
+    top: 0;left: 0;
+    padding: 0px;
+}
+textarea{
+    color: #000;
+    height: 75%;
+    line-height: 28px;
+    text-align: left;
+    width: 100%;
+    background: #019CD6;
+    font-size: 28px;
+}
+.game{
+    width:85%;
+    margin: 10px auto;
+    border-radius: 15px;
+    border: 10px inset;
+    border-color: #23a4d3 #4dbde3 #59c6e8 #019CD6;
+    overflow: hidden;
+    background-color: #9facaa;
+}
+.game canvas{
+    border-radius: 5px;
+    background-color: #9facaa;
+    width:100%;
+}
+.bt1 button{
+    margin: 15px 10px;
+    outline: none;
+    cursor: pointer;
+    width: 16%;
+    height: 50px;
+    border-radius: 5px;
+    font-size: 20px;
+    background: #e25c03;
+}
+.bt2 button{
+    margin: 15px 10px;
+    outline: none;
+    cursor: pointer;
+    width: 16%;
+    height: 56px;
+    border-radius: 50%;
+}   
+.bt3{
+    margin: 15px 10px;
+    outline: none;
+    cursor: pointer;
+    width: 20%;
+    height: 50px;
+    border-radius: 5px;
+    background: #d85904;
+}
+.ok{
+    margin: 10px 20px;
+    outline: none;
+    cursor: pointer;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #dd7703;
+}
+button{
+    user-select: none;
+    text-align: center;
+    font-size: 30px;
+    border: 0px;
+    background: linear-gradient(145deg, #decb02, #c1b002);
+    box-shadow:  4px 4px 8px #555555,-4px -4px 8px #7ed2d2;
+}
+button:active {
+    background: linear-gradient(145deg, #a69700, #c5b400);
+    box-shadow:  2px 2px 4px #555555,-2px -2px 4px #7ed2d2;
+}
+</style>
 <body>
-    <div class="top" id="topmain" style="display: none;">
-        <button style="width: 100%;background: rgba(0, 0, 0, 0);height:25%;" onclick="back()"></button>
-        <canvas id="board" style="width: 100%;background: #019CD6; height: 75%;display: none;"></canvas>
-        <textarea id="historys" disabled style="display: none;"></textarea>
+<div class="top" id="topmain" style="display:none;">
+    <button style="width: 100%;background: rgba(0, 0, 0, 0);height:150px;" onclick="back()"></button>
+    <canvas id="board" style="background:#019CD6;display: none;"></canvas>
+    <textarea id="historys" disabled style="display: none;"></textarea>
+</div>
+<div id="main">
+    <audio id="myAudio"></audio>
+    <div class="game"><canvas id="game" width="320" height="120"></canvas></div>
+    <div class="bt1">
+        <button type="button" onclick="settitle++;numtitle=0;set_title()">功能</button>
+        <button type="button" onclick="numtitle++;num_title()">范围</button>
+        <button type="button" onclick="topboard()">画板</button>
+        <button type="button" onclick="topbt()">记录</button>
     </div>
-    <div id="main" ondblclick="">
-        <audio id="myAudio"></audio>
-        <div class="game"><canvas id="game" width="320" height="120"></canvas></div>
-        <div class="bt1">
-            <button type="button" onclick="settitle++;numtitle=0;set_title()">功能</button>
-            <button type="button" onclick="numtitle++;num_title()">范围</button>
-            <button type="button" onclick="topboard()">画板</button>
-            <button type="button" onclick="topbt()">记录</button>
-        </div>
-        <div class="bt2"> 
-            <button type="button" onclick="numbt('1')">1</button>
-            <button type="button" onclick="numbt('2')">2</button>
-            <button type="button" onclick="numbt('3')">3</button>
-            <button type="button" onclick="borsbt('>')">&gt;</button>
-        </div>
-        <div class="bt2"> 
-            <button type="button" onclick="numbt('4')">4</button>
-            <button type="button" onclick="numbt('5')">5</button>
-            <button type="button" onclick="numbt('6')">6</button>
-            <button type="button" onclick="borsbt('<')">&lt;</button>
-        </div>
-        <div class="bt2"> 
-            <button type="button" onclick="numbt('7')">7</button>
-            <button type="button" onclick="numbt('8')">8</button>
-            <button type="button" onclick="numbt('9')">9</button>
-            <button type="button" onclick="numbt('0')">0</button>
-        </div>
-        <div >
-            <button type="button" class="bt3" onclick="borsbt('=')">=</button>
-            <button type="button" class="ok" onclick="ok()">OK</button>
-            <button type="button" class="bt3" onclick="answer=answer.slice(0, -1);draw_answer();">×</button>
-        </div>
+    <div class="bt2"> 
+        <button type="button" onclick="numbt('1')">1</button>
+        <button type="button" onclick="numbt('2')">2</button>
+        <button type="button" onclick="numbt('3')">3</button>
+        <button type="button" onclick="borsbt('>')">&gt;</button>
     </div>
- <script>
-    document.getElementById("main").addEventListener('touchmove', function(e) {
-        event.preventDefault();},{ passive: false });
-    var board  = document.getElementById('board');
-    var board_Context = board.getContext('2d');
-    var topmain = document.getElementById("topmain");
-    var recordbt = document.getElementById("record");
-    var game = document.getElementById("game");
-    var historys = document.getElementById("historys");
-    var myAudio = document.getElementById('myAudio');
-    var Context=game.getContext("2d");Context.lineWidth=3;//线宽
-    var numtitle=0,settitle=0,historysnum=0;
-    var settitles=["加减运算","专项练习","混合运算","乘法运算","除法运算","算式比大小","分数比大小"];
-    var numtitles=[["0—10数字","0—20数字","20—100数字","100—1000数字"],
-            ["破十法练习","加法进位练习","减法借位练习","九九乘法表"],
-            ["1A+1B-1C","AA+BB-CC","A×B+/-CC","A÷B+/-CC"],
-            ["A×B","AA×B","AAA×B","AA×BB"],
-            ["AA÷B","AAA÷B","AAAA÷B","AAAA÷BB"],
-            ["AA〇BB","A+/-B〇C","1A+/-1B〇1C","AA+/-BB〇CC"],
-            ["AA/BB〇CC/BB","AA/BB〇AA/CC","A/B〇C/D"]];
-    var text, a, b, c, d, fh;
-    var answer,ans;set_title();
-    function set_title(){//标题功能绘制
-        if(settitle>=settitles.length){settitle=0}
-        Context.font = "15px Arial";
-        Context.clearRect(0, 0, 320, 20);
-        Context.fillText((settitle+1)+"、"+settitles[settitle], 10, 15);
-        num_title();
-    }
-    function num_title(){//标题范围绘制
-        if(numtitle>=numtitles[settitle].length){numtitle=0}
-        Context.font = "15px Arial";
-        Context.clearRect(130, 0, 320, 20);
-        Context.fillText((settitle+1)+"-"+(numtitle+1)+"、"+numtitles[settitle][numtitle], 130, 15);
-        start();
-    }
-    function draw_calc(text){//算式绘制
-        Context.font = "40px Arial";
-        Context.clearRect(0, 20, 320, 120);
-        Context.fillText(text, 20, 60);
-        Context.fillText("=", 10, 110);
-    } 
-    function draw_score(){//分数绘制
-        Context.font = "30px Arial";
-        if (a<10){bl=10}else{bl=0}
-        Context.clearRect(0, 20, 320, 120);
-        Context.fillText(a, 15+bl, 60);
-        Context.fillText(b, 15+bl, 110);
-        Context.fillText(c, 110+bl, 60);
-        Context.fillText(d, 110+bl, 110);
-        Context.beginPath();Context.moveTo(10,73); Context.lineTo(150,73); Context.stroke(); 
-    }
-    function draw_answer(){//答案绘制
-        Context.font = "40px Arial";
-        Context.clearRect(260, 20, 320, 120);
-        if (settitles[settitle]=="分数比大小"){           
-            Context.clearRect(55, 20,50, 120);
-            Context.fillText("〇", 60,85);
-            Context.fillText(answer, 68,85);return}
-        Context.clearRect(60, 70, 320, 120);
-        Context.fillText(answer, 60, 110);
-    }
-    function draw_torf(torf){//对错绘制
-        Context.fillText(torf, 275, 110);
-        smile(265,28,40,torf)
-    }
-    function numbt(num){//输入、删除数字
-        if (settitle>=5){return}//输入数字的禁止输入符号
-        if (answer.length<4){answer=answer+num};
-        draw_answer();
-    }
-    function borsbt(bors){//输入大、小于号
-        if (settitle<5){return}//输入符号的禁止数字
-        answer=bors;draw_answer();
-    }
-    function smile(j,i,a,torf){//表情绘制
+    <div class="bt2"> 
+        <button type="button" onclick="numbt('4')">4</button>
+        <button type="button" onclick="numbt('5')">5</button>
+        <button type="button" onclick="numbt('6')">6</button>
+        <button type="button" onclick="borsbt('<')">&lt;</button>
+    </div>
+    <div class="bt2"> 
+        <button type="button" onclick="numbt('7')">7</button>
+        <button type="button" onclick="numbt('8')">8</button>
+        <button type="button" onclick="numbt('9')">9</button>
+        <button type="button" onclick="numbt('0')">0</button>
+    </div>
+    <div >
+        <button type="button" class="bt3" onclick="borsbt('=')">=</button>
+        <button type="button" class="ok" onclick="ok()">OK</button>
+        <button type="button" class="bt3" onclick="answer=answer.slice(0, -1);draw_answer();">×</button>
+    </div>
+</div>
+<script>
+document.getElementById("main").addEventListener('touchmove', function(e) {
+    event.preventDefault();},{ passive: false });
+const board  = document.getElementById('board');
+const board_Context = board.getContext('2d');
+const topmain = document.getElementById("topmain");
+const recordbt = document.getElementById("record");
+const game = document.getElementById("game");
+const historys = document.getElementById("historys");
+const myAudio = document.getElementById('myAudio');
+board.style.height=window.innerHeight-150+"px";
+historys.style.height=window.innerHeight-160+"px";
+const Context=game.getContext("2d");Context.lineWidth=3;//线宽
+var numtitle=0,settitle=0,historysnum=0;
+const settitles=["加减运算","专项练习","混合运算","乘法运算","除法运算","算式比大小","分数比大小"];
+const numtitles=[["0—10数字","0—20数字","20—100数字","100—1000数字"],
+        ["破十法练习","加法进位练习","减法借位练习","九九乘法表"],
+        ["1A+1B-1C","AA+BB-CC","A×B+/-CC","A÷B+/-CC"],
+        ["A×B","AA×B","AAA×B","AA×BB"],
+        ["AA÷B","AAA÷B","AAAA÷B","AAAA÷BB"],
+        ["AA〇BB","A+/-B〇C","1A+/-1B〇1C","AA+/-BB〇CC"],
+        ["AA/BB〇CC/BB","AA/BB〇AA/CC","A/B〇C/D"]];
+var text, a, b, c, d, fh;
+var answer,ans;set_title();
+function set_title(){//标题功能绘制
+    if(settitle>=settitles.length){settitle=0}
+    Context.font = "15px Arial";
+    Context.clearRect(0, 0, 320, 20);
+    Context.fillText((settitle+1)+"、"+settitles[settitle], 10, 15);
+    num_title();
+}
+function num_title(){//标题范围绘制
+    if(numtitle>=numtitles[settitle].length){numtitle=0}
+    Context.font = "15px Arial";
+    Context.clearRect(130, 0, 320, 20);
+    Context.fillText((settitle+1)+"-"+(numtitle+1)+"、"+numtitles[settitle][numtitle], 130, 15);
+    start();
+}
+function draw_calc(text){//算式绘制
+    Context.font = "40px Arial";
+    Context.clearRect(0, 20, 320, 120);
+    Context.fillText(text, 20, 60);
+    Context.fillText("=", 10, 110);
+} 
+function draw_score(){//分数绘制
+    Context.font = "30px Arial";
+    if (a<10){bl=10}else{bl=0}
+    Context.clearRect(0, 20, 320, 120);
+    Context.fillText(a, 15+bl, 60);
+    Context.fillText(b, 15+bl, 110);
+    Context.fillText(c, 110+bl, 60);
+    Context.fillText(d, 110+bl, 110);
+    Context.beginPath();Context.moveTo(10,73); Context.lineTo(150,73); Context.stroke(); 
+}
+function draw_answer(){//答案绘制
+    Context.font = "40px Arial";
+    Context.clearRect(260, 20, 320, 120);
+    if (settitles[settitle]=="分数比大小"){           
+        Context.clearRect(55, 20,50, 120);
+        Context.fillText("〇", 60,85);
+        Context.fillText(answer, 68,85);return}
+    Context.clearRect(60, 70, 320, 120);
+    Context.fillText(answer, 60, 110);
+}
+function draw_torf(torf){//对错绘制
+    Context.fillText(torf, 275, 110);
+    smile(265,28,40,torf)
+}
+function numbt(num){//输入、删除数字
+    if (settitle>=5){return}//输入数字的禁止输入符号
+    if (answer.length<4){answer=answer+num};
+    draw_answer();
+}
+function borsbt(bors){//输入大、小于号
+    if (settitle<5){return}//输入符号的禁止数字
+    answer=bors;draw_answer();
+}
+function smile(j,i,a,torf){//表情绘制
+    Context.beginPath();
+    Context.arc(j+ a/2,i+ a/2, a/2, 0, 2 * Math.PI, true);
+    Context.stroke();  
+    Context.beginPath(); 
+    Context.arc(j+ a/3,i+ a/3, a/8, 0, 2 * Math.PI, false);
+    Context.fill();
+    Context.arc(j+ 2*a/3,i+ a/3, a/8, 0, 2 * Math.PI, false);
+    Context.fill();
+    if(torf=="✓"){//笑脸绘制
         Context.beginPath();
-        Context.arc(j+ a/2,i+ a/2, a/2, 0, 2 * Math.PI, true);
-        Context.stroke();  
-        Context.beginPath(); 
-        Context.arc(j+ a/3,i+ a/3, a/8, 0, 2 * Math.PI, false);
-        Context.fill();
-        Context.arc(j+ 2*a/3,i+ a/3, a/8, 0, 2 * Math.PI, false);
-        Context.fill();
-        if(torf=="✓"){//笑脸绘制
-            Context.beginPath();
-            Context.arc(j+ a/2,i+ a/2, a/4, 0,Math.PI, false);
-            Context.stroke(); 
-            myAudio.src="./true.mp3";
-            myAudio.load(); myAudio.play();
-        }else{//苦脸绘制
-            Context.beginPath();
-            Context.arc(j+ a/2,i+ a*4/5, a/4, Math.PI,0, false);
-            Context.stroke(); 
-            myAudio.src="./false.mp3";
-            myAudio.load(); myAudio.play();
-        }
+        Context.arc(j+ a/2,i+ a/2, a/4, 0,Math.PI, false);
+        Context.stroke(); 
+        myAudio.src="./true.mp3";
+        myAudio.load(); myAudio.play();
+    }else{//苦脸绘制
+        Context.beginPath();
+        Context.arc(j+ a/2,i+ a*4/5, a/4, Math.PI,0, false);
+        Context.stroke(); 
+        myAudio.src="./false.mp3";
+        myAudio.load(); myAudio.play();
     }
-    function rand(min,max){
-        return Math.floor(Math.random()*(max-min)+min);
-    }
-    function start(){//初始化
-        answer="";let min,max;
-        switch (settitle){
-        case 0://加减
-            switch (numtitle){
-            case 0:min=1;max=10;break;
-            case 1:min=1;max=20;break;
-            case 2:min=20;max=100;break;
-            case 3:min=100;max=1000;break;
-            };   
-            if (Math.random()<0.5){
-                a=rand(min,max-min);b=rand(min,max-a);
-                text=a+" + "+b;ans=a+b;
-            }else{
-                a=rand(min,max);b=rand(min,a);
-                text=a+" - "+b;ans=a-b;
-            };
-            draw_calc(text);draw_answer();
-            break; 
-        case 1:  //专项
-            switch (numtitle){  
-            case 0:
-                a=10;b=rand(1,10);
-                text=a+" - "+b;ans=a-b;
-                break;
-            case 1:     
-                a=rand(2,10);b=rand(11-a,9);
-                text=a+" + "+b;ans=a+b;
-                break;
-            case 2:
-                a=rand(11,19);b=rand(a-9,9);
-                text=a+" - "+b;ans=a-b;
-                break;
-            case 3:
-                a=rand(1,10);b=rand(1,10);
-                text=a+" × "+b;ans=a*b;
-                break;
-            };
-            draw_calc(text);draw_answer();
-            break;
-        case 2:  //混合运算
-            switch (numtitle){  
-                case 0:
-                    if (Math.random()<0.5){
-                        a=rand(1,15);b=rand(1,15-a);
-                        text=a+" + "+b;c=a+b;
-                    }else{
-                        a=rand(10,20);b=rand(1,a-5);
-                        text=a+" - "+b;c=a-b;
-                    };
-                    if (Math.random()<0.5){
-                        d=rand(1,20-c);ans=c+d;
-                        text +=" + "+d;
-                    }else{
-                        d=rand(1,c);ans=c-d;
-                        text +=" - "+d;
-                    };break;
-                case 1:
-                    if (Math.random()<0.5){
-                        a=rand(20,50);b=rand(20,50-a);
-                        text=a+" + "+b;c=a+b;
-                    }else{
-                        a=rand(50,100);b=rand(20,a-30);
-                        text=a+" - "+b;c=a-b;
-                    };
-                    if (Math.random()<0.5){
-                        d=rand(20,100-c);ans=c+d;
-                        text +=" + "+d;
-                    }else{
-                        d=rand(20,c);ans=c-d;
-                        text +=" - "+d;
-                    };break;
-                case 2:
-                    a=rand(1,10);b=rand(1,10);c=a*b;
-                    text=a+" × "+b;
-                    if (Math.random()<0.5){
-                        d=rand(1,100-c);ans=c+d;
-                        text +=" + "+d;
-                    }else{
-                        d=rand(1,c);ans=c-d;
-                        text +=" - "+d;
-                    };break;
-                case 3:
-                    a=rand(1,10);b=rand(1,10);
-                    text=a*b+" ÷ "+b;
-                    if (Math.random()<0.5){
-                        d=rand(1,100-a);ans=a+d;
-                        text +=" + "+d;
-                    }else{
-                        d=rand(1,a);ans=a-d;
-                        text +=" - "+d;
-                    };break;
-            };
-            draw_calc(text);draw_answer();
-            break;
-        case 3:  //乘法
-            switch (numtitle){
-            case 0:
-                a=rand(1,10);b=rand(1,10);
-                break;
-            case 1:
-                a=rand(10,100);b=rand(1,10);
-                break;
-            case 2:
-                a=rand(100,1000);b=rand(1,10);
-            break;
-            case 3:
-                a=rand(10,100);b=rand(10,100);
-                break;
-            };text=a+" × "+b;ans=a*b;
-            draw_calc(text);draw_answer();
-            break;
-        case 4:  //除法
-            switch (numtitle){
-            case 0:
-                a=rand(1,10);b=rand(1,10);
-                break;
-            case 1:
-                a=rand(10,100);b=rand(1,10);
-                break;
-            case 2:
-                a=rand(100,1000);b=rand(1,10);
-            break;
-            case 3:
-                a=rand(10,100);b=rand(10,100);
-                break;
-            };text=a*b+" ÷ "+b;ans=a;
-            draw_calc(text);draw_answer();
-            break;
-        case 5: //算式比大小
-            switch (numtitle){
-            case 0:
-                a=rand(1,100); c=rand(1,100);ans=a;fh="";b="";
-                break;
-            case 1:
-                if (Math.random()<0.5){
-                    fh=" + ";
-                    a=rand(1,10);b=rand(1,10-a);ans=a+b;
-
-                }else{
-                    fh=" - ";
-                    a=rand(1,10);b=rand(1,a);ans=a-b;
-                }
-                c=rand(1,10);
-                break;
-            case 2:
-                if (Math.random()<0.5){
-                    fh=" + ";
-                    a=rand(1,20);b=rand(1,20-a);ans=a+b;
-                    
-                }else{
-                    fh=" - ";
-                    a=rand(1,20);b=rand(1,a);ans=a-b;
-                }
-                c=rand(1,20);
-                break;
-            case 3:
-                if (Math.random()<0.5){
-                    fh=" + ";
-                    a=rand(20,100); b=rand(20,100-a);ans=a+b;
-                }else{
-                    fh=" - ";
-                    a=rand(20,100);b=rand(20,a);ans=a-b;
-                }
-                c=rand(20,100);
-                break;
-            }; text=a+fh+b+"〇"+c;
-            draw_calc(text);draw_answer();
-            break;
-        case 6://分数比大小
-            switch (numtitle){
-            case 0:
-                a=rand(10,100);b=rand(11,100);c=rand(10,100);d=b;
-                break;
-            case 1:
-                a=rand(10,100);b=rand(11,100);c=a;d=rand(11,100);
-                break;
-            case 2:
-                a=rand(1,10); b=rand(2,10);c=rand(1,10);d=rand(2,10);
-                while(b==d){d=rand(2,10);}break;
-            }
-            text=a+"/"+b+"〇"+c+"/"+d;
-            draw_score();draw_answer();ans=a/b;c=c/d
-        }
-    }
-    function historys_add(text){
-        historysnum++;text=text.replace(/ /g,"");
-        historys.innerHTML+=historysnum+";"+text+"\n";
-    }
-    function ok(){//判断对错
-        if (answer==""){return};
-        if(isNaN(answer)){//判断是否是数字
-            if (ans>c && answer==">" || ans<c && answer=="<"|| ans==c && answer=="="){
-                draw_torf("✓");historys_add(text.replace("〇",answer)+";✓");
-                setTimeout(()=>{start()},600);
-            }else{
-                draw_torf("x");historys_add(text.replace("〇",answer)+";x");
-                answer="";setTimeout(()=>{draw_answer()},600);
-            };
+}
+function rand(min,max){
+    return Math.floor(Math.random()*(max-min)+min);
+}
+function start(){//初始化
+    answer="";let min,max;
+    switch (settitle){
+    case 0://加减
+        switch (numtitle){
+        case 0:min=1;max=10;break;
+        case 1:min=1;max=20;break;
+        case 2:min=20;max=100;break;
+        case 3:min=100;max=1000;break;
+        };   
+        if (Math.random()<0.5){
+            a=rand(min,max-min);b=rand(min,max-a);
+            text=a+" + "+b;ans=a+b;
         }else{
-            if (answer==ans){
-                draw_torf("✓");historys_add(text+"="+answer+";✓");
-                setTimeout(()=>{start()},600);
+            a=rand(min,max);b=rand(min,a);
+            text=a+" - "+b;ans=a-b;
+        };
+        draw_calc(text);draw_answer();
+        break; 
+    case 1:  //专项
+        switch (numtitle){  
+        case 0:
+            a=10;b=rand(1,10);
+            text=a+" - "+b;ans=a-b;
+            break;
+        case 1:     
+            a=rand(2,10);b=rand(11-a,9);
+            text=a+" + "+b;ans=a+b;
+            break;
+        case 2:
+            a=rand(11,19);b=rand(a-9,9);
+            text=a+" - "+b;ans=a-b;
+            break;
+        case 3:
+            a=rand(1,10);b=rand(1,10);
+            text=a+" × "+b;ans=a*b;
+            break;
+        };
+        draw_calc(text);draw_answer();
+        break;
+    case 2:  //混合运算
+        switch (numtitle){  
+        case 0:
+            if (Math.random()<0.5){
+                a=rand(1,15);b=rand(1,15-a);
+                text=a+" + "+b;c=a+b;
             }else{
-                draw_torf("x");historys_add(text+"="+answer+";x");
-                answer="";setTimeout(()=>{draw_answer()},600);
+                a=rand(10,20);b=rand(1,a-5);
+                text=a+" - "+b;c=a-b;
             };
+            if (Math.random()<0.5){
+                d=rand(1,20-c);ans=c+d;
+                text +=" + "+d;
+            }else{
+                d=rand(1,c);ans=c-d;
+                text +=" - "+d;
+            };break;
+        case 1:
+            if (Math.random()<0.5){
+                a=rand(20,50);b=rand(20,50-a);
+                text=a+" + "+b;c=a+b;
+            }else{
+                a=rand(50,100);b=rand(20,a-30);
+                text=a+" - "+b;c=a-b;
+            };
+            if (Math.random()<0.5){
+                d=rand(20,100-c);ans=c+d;
+                text +=" + "+d;
+            }else{
+                d=rand(20,c);ans=c-d;
+                text +=" - "+d;
+            };break;
+        case 2:
+            a=rand(1,10);b=rand(1,10);c=a*b;
+            text=a+" × "+b;
+            if (Math.random()<0.5){
+                d=rand(1,100-c);ans=c+d;
+                text +=" + "+d;
+            }else{
+                d=rand(1,c);ans=c-d;
+                text +=" - "+d;
+            };break;
+        case 3:
+            a=rand(1,10);b=rand(1,10);
+            text=a*b+" ÷ "+b;
+            if (Math.random()<0.5){
+                d=rand(1,100-a);ans=a+d;
+                text +=" + "+d;
+            }else{
+                d=rand(1,a);ans=a-d;
+                text +=" - "+d;
+            };break;
+        };
+        draw_calc(text);draw_answer();
+        break;
+    case 3:  //乘法
+        switch (numtitle){
+        case 0:
+            a=rand(1,10);b=rand(1,10);
+            break;
+        case 1:
+            a=rand(10,100);b=rand(1,10);
+            break;
+        case 2:
+            a=rand(100,1000);b=rand(1,10);
+        break;
+        case 3:
+            a=rand(10,100);b=rand(10,100);
+            break;
+        };text=a+" × "+b;ans=a*b;
+        draw_calc(text);draw_answer();
+        break;
+    case 4:  //除法
+        switch (numtitle){
+        case 0:
+            a=rand(1,10);b=rand(1,10);
+            break;
+        case 1:
+            a=rand(10,100);b=rand(1,10);
+            break;
+        case 2:
+            a=rand(100,1000);b=rand(1,10);
+        break;
+        case 3:
+            a=rand(10,100);b=rand(10,100);
+            break;
+        };text=a*b+" ÷ "+b;ans=a;
+        draw_calc(text);draw_answer();
+        break;
+    case 5: //算式比大小
+        switch (numtitle){
+        case 0:
+            a=rand(1,100); c=rand(1,100);ans=a;fh="";b="";
+            break;
+        case 1:
+            if (Math.random()<0.5){
+                fh=" + ";
+                a=rand(1,10);b=rand(1,10-a);ans=a+b;
+
+            }else{
+                fh=" - ";
+                a=rand(1,10);b=rand(1,a);ans=a-b;
+            }
+            c=rand(1,10);
+            break;
+        case 2:
+            if (Math.random()<0.5){
+                fh=" + ";
+                a=rand(1,20);b=rand(1,20-a);ans=a+b;
+                
+            }else{
+                fh=" - ";
+                a=rand(1,20);b=rand(1,a);ans=a-b;
+            }
+            c=rand(1,20);
+            break;
+        case 3:
+            if (Math.random()<0.5){
+                fh=" + ";
+                a=rand(20,100); b=rand(20,100-a);ans=a+b;
+            }else{
+                fh=" - ";
+                a=rand(20,100);b=rand(20,a);ans=a-b;
+            }
+            c=rand(20,100);
+            break;
+        }; text=a+fh+b+"〇"+c;
+        draw_calc(text);draw_answer();
+        break;
+    case 6://分数比大小
+        switch (numtitle){
+        case 0:
+            a=rand(10,100);b=rand(11,100);c=rand(10,100);d=b;
+            break;
+        case 1:
+            a=rand(10,100);b=rand(11,100);c=a;d=rand(11,100);
+            break;
+        case 2:
+            a=rand(1,10); b=rand(2,10);c=rand(1,10);d=rand(2,10);
+            while(b==d){d=rand(2,10);}break;
         }
+        text=a+"/"+b+"〇"+c+"/"+d;
+        draw_score();draw_answer();ans=a/b;c=c/d
     }
-    function topbt(){//记录
-        topmain.style.display="";
-        historys.style.display="";
-        board.style.display="none";
+}
+function historys_add(text){
+    historysnum++;text=text.replace(/ /g,"");
+    historys.innerHTML+=historysnum+";"+text+"\n";
+}
+function ok(){//判断对错
+    if (answer==""){return};
+    if(isNaN(answer)){//判断是否是数字
+        if (ans>c && answer==">" || ans<c && answer=="<"|| ans==c && answer=="="){
+            draw_torf("✓");historys_add(text.replace("〇",answer)+";✓");
+            setTimeout(()=>{start()},600);
+        }else{
+            draw_torf("x");historys_add(text.replace("〇",answer)+";x");
+            answer="";setTimeout(()=>{draw_answer()},600);
+        };
+    }else{
+        if (answer==ans){
+            draw_torf("✓");historys_add(text+"="+answer+";✓");
+            setTimeout(()=>{start()},600);
+        }else{
+            draw_torf("x");historys_add(text+"="+answer+";x");
+            answer="";setTimeout(()=>{draw_answer()},600);
+        };
     }
-    function topboard(){//画板
-        topmain.style.display="";
-        historys.style.display="none";
-        board.style.display="";
-        board.width=window.innerWidth;
-        board.height=window.innerHeight*0.8;
-        board_Context.lineWidth=2;//线宽
-        var startX;
-        var startY;
-        board.addEventListener('touchstart', function(e) {
-            event.preventDefault(); // 防止默认行为，如滚动
-            var touch = event.touches[0]; // 获取第一个触点
-            startX = touch.pageX - board.offsetLeft;
-            startY = touch.pageY - board.offsetTop;
-            board_Context.beginPath(); // 开始绘制新路径
-            board_Context.moveTo(startX, startY); // 移动到起点
-        });
-        board.addEventListener('touchmove', function(e) {
-            event.preventDefault();
-            var touch = event.touches[0];
-            var moveX = touch.pageX - board.offsetLeft;
-            var moveY = touch.pageY - board.offsetTop;
-            board_Context.lineTo(moveX, moveY); // 绘制直线到移动点
-            board_Context.stroke(); // 绘制路径
-        });
-    }
-    function back(){
-        topmain.style.display="none";
-        historys.style.display="none";
-        board.style.display="none";
-        board_Context.clearRect(0, 0, board.width, board.height);
-    }
- </script>
+}
+function topbt(){//记录
+    topmain.style.display="";
+    historys.style.display="";
+}
+function topboard(){//画板
+    topmain.style.display="";
+    board.style.display="";
+    board.width=window.innerWidth;
+    board.height=window.innerHeight*0.8;
+    board_Context.lineWidth=2;//线宽
+    var startX;
+    var startY;
+    board.addEventListener('touchstart', function(e) {
+        event.preventDefault(); // 防止默认行为，如滚动
+        var touch = event.touches[0]; // 获取第一个触点
+        startX = touch.pageX - board.offsetLeft;
+        startY = touch.pageY - board.offsetTop;
+        board_Context.beginPath(); // 开始绘制新路径
+        board_Context.moveTo(startX, startY); // 移动到起点
+    });
+    board.addEventListener('touchmove', function(e) {
+        event.preventDefault();
+        var touch = event.touches[0];
+        var moveX = touch.pageX - board.offsetLeft;
+        var moveY = touch.pageY - board.offsetTop;
+        board_Context.lineTo(moveX, moveY); // 绘制直线到移动点
+        board_Context.stroke(); // 绘制路径
+    });
+}
+function back(){
+    topmain.style.display="none";
+    historys.style.display="none";
+    board.style.display="none";
+    board_Context.clearRect(0, 0, board.width, board.height);
+}
+</script>
 </body>
 </html>

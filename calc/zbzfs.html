@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>直线坐标正反算</title>
+</head>
+<style>
+.home {
+    font-size: 16px;
+    background-color: #ccc;
+    max-width: 400px;
+    text-align: center;
+    margin: auto;
+    margin-top: 30px ;
+    line-height: 40px;
+    padding-top: 10px;
+    border-radius: 10px;
+}
+input {
+    width:60%;
+    height: 25px;
+    border: 0px;
+    border-radius: 3px;
+}
+.head {
+    width: 25%;
+    height: 32px;
+    background: rgb(130, 130, 130);
+    color: rgb(255, 255, 255);
+    border: 1px solid #000000;
+    border-radius: 8px;
+    margin: 10px 10px;
+}
+.head_active {
+    width: 25%;
+    height: 32px;
+    background: #fff;
+    border: 1px solid #030303;
+    border-radius: 8px;
+    margin: 10px 10px;
+}
+.foot{
+    margin-top: 10px;
+    text-align: center;
+    color: #888;
+    font-size: 10px;
+    padding-bottom: 6px;
+    line-height: 10px;
+}
+a{
+    text-align: center;
+    font-size: 10px;
+}
+</style>
+<body>
+<div class="home">
+    <div><span>起点X: </span><input id="Ax" placeholder="0"></div>
+    <div><span>起点Y: </span><input id="Ay" placeholder="0"></div>
+    <div><span>终点X: </span><input id="Bx" placeholder="0"></div>
+    <div><span>终点Y: </span><input id="By" placeholder="0"></div>
+    <div>
+        <button id="jszs" class="head_active"  onclick="btzs()">正算</button>
+        <button id="jsfs"  class="head" onclick="btfs()">反算</button>
+    </div>
+    <div><span>里程K: </span><input id="K" placeholder="0"></div>
+    <div><span>偏距D: </span><input id="D" placeholder="0"></div>
+    <div><span>目标X: </span><input id="Px" placeholder="0" disabled></div>
+    <div><span>目标Y: </span><input id="Py" placeholder="0" disabled></div>
+    <div  class="foot"><a href="../index.html">返回首页</a></div>
+</div>
+<div class="foot">此程序仅供学习和参考，计算结果自行承担风险</div>
+<script>
+var head="正算",A,B;
+const Px=document.getElementById('Px')
+const Py=document.getElementById('Py')
+const K=document.getElementById('K')
+const D=document.getElementById('D')
+const Ax=document.getElementById('Ax')
+const Ay=document.getElementById('Ay')
+const Bx=document.getElementById('Bx')
+const By=document.getElementById('By')
+const inputs = document.querySelectorAll('input');
+inputs.forEach(input => {
+    input.setAttribute('inputmode', 'decimal');
+    input.onkeyup=function(){
+        input.value=input.value.replace(/[^0-9\.\-]/g,'');
+    }
+});
+function text_input(){  
+    A=[+Ax.value,+Ay.value];
+    B=[+Bx.value,+By.value];
+    if(head=="正算"){
+        re=ZS(K.value,D.value);
+        Px.value=re[0].toFixed(3);
+        Py.value=re[1].toFixed(3);
+    }else{
+        re=FS(Px.value,Py.value);
+        K.value=re[0].toFixed(3);
+        D.value=re[1].toFixed(3);
+    }
+}
+function btzs(){
+    document.getElementById('jszs').className="head_active";
+    document.getElementById('jsfs').className="head";
+    Px.disabled=true;Py.disabled=true;
+    K.disabled=false;D.disabled=false;
+    head="正算";text_input();
+}
+function btfs(){
+    document.getElementById('jszs').className="head";
+    document.getElementById('jsfs').className="head_active";
+    Px.disabled=false;Py.disabled=false
+    K.disabled=true;D.disabled=true;
+    head="反算";text_input();
+}
+function FS(xp, yp) {
+    // 计算直线AB的向量
+    const dx = B[0] - A[0];
+    const dy = B[1] - A[1];
+    const LL =  dx ** 2 + dy ** 2;
+    const t = ((xp - A[0]) * dx + (yp - A[1]) * dy) / LL;
+    // 投影点坐标
+    const xp0 = A[0] + t * dx; 
+    const yp0 = A[1] + t * dy;
+    // 计算里程（沿AB方向）
+    const K = t * Math.sqrt(LL);
+    // 计算偏距（带方向左负右正）叉积判断方向
+    const ds = (dx * ( yp - yp0) - dy * (xp - xp0)) > 0 ? 1 : -1;
+    const D = ds * Math.sqrt((xp - xp0) ** 2 + (yp - yp0) ** 2);
+    return [K, D];
+}
+function ZS(K, D) {
+    // 计算直线AB的方向角
+    const dx = B[0] - A[0];
+    const dy = B[1] - A[1];
+    const fwj = Math.atan2(dy, dx);
+    // 计算投影点坐标
+    const t = K / Math.sqrt(dx ** 2 + dy ** 2);
+    const xp0 = A[0] + t * dx;
+    const yp0 = A[1] + t * dy;
+    // 沿垂直方向偏移
+    const xp = xp0 - D * Math.sin(fwj);
+    const yp = yp0 + D * Math.cos(fwj);
+    return [xp, yp];
+}
+</script>
+</body>
+</html>

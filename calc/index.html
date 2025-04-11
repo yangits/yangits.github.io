@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>管材排料计算</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>管材排料计算</title>
 </head>
 <style>
 div {
@@ -45,21 +45,17 @@ a{
 </style>
 <body>
 <div>
-    <br>原材料长: <input id="max_weight" type="text" value="6000">
-    <br>下料尺寸: <input id="weights" type="text" value="2300,1988,1050,601,503,459,359">
-    <br>下料数量: <input id="nums" type="text" value="912,320,1248,320,912,320,1248">
-    <br><button type="button" id="get_result">开始计算</button>
-    <br><textarea id="text_result" disabled>计算结果:</textarea>
-    <br><a href="../index.html">返回首页</a>
+<br>原材料长: <input id="max_weight" type="text" value="6000" 
+    inputmode="decimal" onkeyup="this.value=this.value.replace(/[^0-9\.]/g,'');">
+<br>下料尺寸: <input id="weights" type="text" value="2300,1988,1050,601,503,459,359" 
+    inputmode="decimal" onkeyup="this.value=this.value.replace(/[^0-9\,\.]/g,'');">
+<br>下料数量: <input id="nums" type="text" value="912,320,1248,320,912,320,1248" 
+    inputmode="decimal" onkeyup="this.value=this.value.replace(/[^0-9\,]/g,'');">
+<br><button type="button" id="get_result">开始计算</button>
+<br><textarea id="text_result" disabled>计算结果:</textarea>
+<br><a href="../index.html">返回首页</a>
 </div>
 <script>
-const inputs = document.querySelectorAll('input');
-inputs.forEach(input => {
-    input.setAttribute('inputmode', 'decimal');
-    input.onkeyup=function(){
-        input.value=input.value.replace(/[^0-9\,\.]/g,'');
-    }
-});
 function getResult(goal, limit) {
     //调用getLoosen函数 将原先的限制条件矩阵进行扩充
     //加入松弛变量，基变量和价值系数

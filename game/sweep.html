@@ -1,241 +1,241 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>扫雷</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            box-sizing: border-box;
-            user-select: none;
-            justify-content: center;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            margin: auto;
-        }
-        .level {
-            max-width: 500px;
-            margin-top: 10px;
-            font-size: 30px;
-        }
-        .level button {
-            width: 26%;
-            height: 35px;
-            font-size: 16px;
-            line-height: 35px;
-            border-radius: 10px;
-        }
-        .gameBox {
-            width: 100%;
-            max-width: 500px;
-            margin-top: 20px;
-        }
-        .gameBox span {
-            display: inline-block;
-            background: lightblue;
-            border: 1px solid rgb(129, 129, 129);
-            border-radius: 0%;
-            text-align: center;
-            font-weight: 900;
-            color: transparent;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>扫雷</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    user-select: none;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: auto;
+}
+.level {
+    max-width: 500px;
+    margin-top: 10px;
+    font-size: 30px;
+}
+.level button {
+    width: 26%;
+    height: 35px;
+    font-size: 16px;
+    line-height: 35px;
+    border-radius: 10px;
+}
+.gameBox {
+    width: 100%;
+    max-width: 500px;
+    margin-top: 20px;
+}
+.gameBox span {
+    display: inline-block;
+    background: lightblue;
+    border: 1px solid rgb(129, 129, 129);
+    border-radius: 0%;
+    text-align: center;
+    font-weight: 900;
+    color: transparent;
+}
+</style>
 </head>
 <body>
-    <div class="level">
-        <button type="button" onclick="choice('初级')">初级</button>
-        <button type="button" onclick="choice('中级')">中级</button>
-        <button type="button" onclick="choice('高级')">高级</button>
-    </div>
-    <div class="gameBox"></div>
-    <div class="info">
-        剩余雷数:<span class="residue"></span>&emsp;时间:<span class="tick"></span> S
-    </div>
-    <script>
-        var screenwidth=window.innerWidth>=500?480:window.innerWidth-20;
-        var residue = document.querySelector('.residue')
-        var gameBox = document.querySelector('.gameBox')
-        var row, col, num,table;
-        var color={
-                '0': "transparent",
-                '1': "blue",
-                '2': "green",
-                '3': "red",
-                '4': "navy",
-                '5': "maroon",
-                '6': "teal",
-                '7': "black",
-                '8': "gray"};
-        choice('中级')
-        // 1，成一张地图
-        function SweepMap(r, c, num) {
-            var map = new Array(r);
-            for (var i = 0; i < r; i++) {
-                map[i] = new Array(c).fill(0)
-            }
-            var randomLocation = function () {
-                var x = Math.floor(Math.random() * r)
-                var y = Math.floor(Math.random() * c)
-                if (map[x][y] !== 9) {
-                    map[x][y] = 9
-                } else {
-                    randomLocation()
-                }
-            }
-            for (var i = 0; i < num; i++) {
-                randomLocation()
-            }
-            // 使用循环给雷的边上所有数 +1 , 已经是雷的除外
-            var plus = function (array, x, y) {
-                if (x >= 0 && x < r && y >= 0 && y < c) {
-                    if (array[x][y] !== 9) {
-                        array[x][y] += 1
-                    }
-                }
-            }
-            for (var x = 0; x < map.length; x++) {
-                for (var y = 0; y < map[0].length; y++) {
-                    if (map[x][y] === 9) {
-                        plus(map, x - 1, y - 1)
-                        plus(map, x + 1, y - 1)
-                        plus(map, x - 1, y)
-                        plus(map, x + 1, y)
-                        plus(map, x - 1, y + 1)
-                        plus(map, x + 1, y + 1)
-                        plus(map, x, y + 1)
-                        plus(map, x, y - 1)
-                    }
-                }
-            }
-            return map
+<div class="level">
+    <button type="button" onclick="choice('初级')">初级</button>
+    <button type="button" onclick="choice('中级')">中级</button>
+    <button type="button" onclick="choice('高级')">高级</button>
+</div>
+<div class="gameBox"></div>
+<div class="info">
+    剩余雷数:<span class="residue"></span>&emsp;时间:<span class="tick"></span> S
+</div>
+<script>
+var screenwidth=window.innerWidth>=500?480:window.innerWidth-20;
+var residue = document.querySelector('.residue')
+var gameBox = document.querySelector('.gameBox')
+var row, col, num,table;
+var color={
+        '0': "transparent",
+        '1': "blue",
+        '2': "green",
+        '3': "red",
+        '4': "navy",
+        '5': "maroon",
+        '6': "teal",
+        '7': "black",
+        '8': "gray"};
+choice('中级')
+// 1，成一张地图
+function SweepMap(r, c, num) {
+    var map = new Array(r);
+    for (var i = 0; i < r; i++) {
+        map[i] = new Array(c).fill(0)
+    }
+    var randomLocation = function () {
+        var x = Math.floor(Math.random() * r)
+        var y = Math.floor(Math.random() * c)
+        if (map[x][y] !== 9) {
+            map[x][y] = 9
+        } else {
+            randomLocation()
         }
-        function writeHtml(map) {
-            let html=""
-            for (let i = 0; i <row; i++) {
-                for (let j = 0; j < col; j++) {
-                    html+='<span style="width:'+withspan+'px;height:'+withspan+'px;line-height:'+
-                    withspan+'px;font-size: '+withspan/2+'px;" onclick="show('+i+','+j+',this)">'+map[i][j]+'</span>' 
-                }
-            }
-            gameBox.innerHTML=html;
-            table = gameBox.children;
-        }
-        // 判断是否胜利
-       function changeClearMineNum() {
-            if (clearMineNum === ((col * row) - num)) {
-                var allNum = 0;clearInterval(stopTime)
-                var stop = setInterval(function () {
-                    table[allNum].style.background = 'lightblue';
-                    table[allNum].style.color="transparent";allNum++;
-                    if (allNum >= table.length) {
-                        clearInterval(stop);
-                        setTimeout(()=>{alert('你成功啦~！！晚上吃肉~~！');
-                        initializeGame(row, col, num)},50);
-                    }
-                }, 0)
+    }
+    for (var i = 0; i < num; i++) {
+        randomLocation()
+    }
+    // 使用循环给雷的边上所有数 +1 , 已经是雷的除外
+    var plus = function (array, x, y) {
+        if (x >= 0 && x < r && y >= 0 && y < c) {
+            if (array[x][y] !== 9) {
+                array[x][y] += 1
             }
         }
-        // 扫雷过程
-        var clearMineNum = 0
-        function makeWhite(x, y) {
-            if (x < row && y < col && x >= 0 && y >= 0) {
-                if (table[x*col+y].style.background !== 'white'&&table[x*col+y].innerText !== '🚩') {
-                    table[x*col+y].style.color=color[table[x*col+y].innerText]
-                    table[x*col+y].style.background = 'white'
-                    clearMineNum++
-                    autoFlag(x, y) 
-                }
+    }
+    for (var x = 0; x < map.length; x++) {
+        for (var y = 0; y < map[0].length; y++) {
+            if (map[x][y] === 9) {
+                plus(map, x - 1, y - 1)
+                plus(map, x + 1, y - 1)
+                plus(map, x - 1, y)
+                plus(map, x + 1, y)
+                plus(map, x - 1, y + 1)
+                plus(map, x + 1, y + 1)
+                plus(map, x, y + 1)
+                plus(map, x, y - 1)
             }
         }
-        // 获取周围格子
-        function getSurroundingCells(x, y) {
-            const cells = [];
-            const xy = [];
-            for (let dx = -1; dx <= 1; dx++) {
-                for (let dy = -1; dy <= 1; dy++) {
-                    if (dx === 0 && dy === 0) continue;
-                    const nx = x + dx;
-                    const ny = y + dy;
-                    if (nx >= 0 && nx < row && ny >= 0 && ny < col) {
-                        if(table[nx * col + ny].style.background !== 'white'){cells.push(table[nx * col + ny]);}
-                        if(table[nx * col + ny].innerText === '🚩'){xy.push([x, y]);}
-                    }
-                }
-            }
-            return [cells,xy];
+    }
+    return map
+}
+function writeHtml(map) {
+    let html=""
+    for (let i = 0; i <row; i++) {
+        for (let j = 0; j < col; j++) {
+            html+='<span style="width:'+withspan+'px;height:'+withspan+'px;line-height:'+
+            withspan+'px;font-size: '+withspan/2+'px;" onclick="show('+i+','+j+',this)">'+map[i][j]+'</span>' 
         }
-        // 自动插旗逻辑
-        function autoFlag(x, y) {
-            const num = parseInt(table[x * col + y].innerText);
-            [candidates,dxy] = getSurroundingCells(x, y);
-            if (candidates.length === num) {
-                candidates.forEach(c => {
-                    if(c.innerText!=="🚩"){residue.innerText =residue.innerText-1}
-                    c.innerText="🚩";
-                    c.style.color="black";
-                });
+    }
+    gameBox.innerHTML=html;
+    table = gameBox.children;
+}
+// 判断是否胜利
+function changeClearMineNum() {
+    if (clearMineNum === ((col * row) - num)) {
+        var allNum = 0;clearInterval(stopTime)
+        var stop = setInterval(function () {
+            table[allNum].style.background = 'lightblue';
+            table[allNum].style.color="transparent";allNum++;
+            if (allNum >= table.length) {
+                clearInterval(stop);
+                setTimeout(()=>{alert('你成功啦~！！晚上吃肉~~！');
+                initializeGame(row, col, num)},50);
             }
-            if (dxy.length === num) {
-                makeWhite(x - 1, y + 1)
-                makeWhite(x - 1, y - 1)
-                makeWhite(x - 1, y)
-                makeWhite(x + 1, y + 1)
-                makeWhite(x + 1, y - 1)
-                makeWhite(x + 1, y)
-                makeWhite(x, y + 1)
-                makeWhite(x, y - 1)
-            }
+        }, 0)
+    }
+}
+// 扫雷过程
+var clearMineNum = 0
+function makeWhite(x, y) {
+    if (x < row && y < col && x >= 0 && y >= 0) {
+        if (table[x*col+y].style.background !== 'white'&&table[x*col+y].innerText !== '🚩') {
+            table[x*col+y].style.color=color[table[x*col+y].innerText]
+            table[x*col+y].style.background = 'white'
+            clearMineNum++
+            autoFlag(x, y) 
         }
-        // 给所有方块绑定点击事件，点击显示数字，或者 boom
-        function show(x,y) {
-            if (table[x*col+y].innerText !== '9') {
-                makeWhite(x,y);autoFlag(x, y) 
-                changeClearMineNum()
-            } else{
-                clearInterval(stopTime);
-                for(let i=0;i < table.length;i++){
-                    if (table[i].innerText === '9') {
-                        table[i].style.background = 'white'
-                        table[i].style.color= 'black'
-                        table[i].innerText = '💣'
-                    }
-                }
-                setTimeout(()=>{alert('游戏失败');
-                initializeGame(row, col, num)},5);
+    }
+}
+// 获取周围格子
+function getSurroundingCells(x, y) {
+    const cells = [];
+    const xy = [];
+    for (let dx = -1; dx <= 1; dx++) {
+        for (let dy = -1; dy <= 1; dy++) {
+            if (dx === 0 && dy === 0) continue;
+            const nx = x + dx;
+            const ny = y + dy;
+            if (nx >= 0 && nx < row && ny >= 0 && ny < col) {
+                if(table[nx * col + ny].style.background !== 'white'){cells.push(table[nx * col + ny]);}
+                if(table[nx * col + ny].innerText === '🚩'){xy.push([x, y]);}
             }
         }
-        // 清除画面，然后写入新的画面
-        var stopTime
-        function initializeGame(row, col, num) {
-            residue.innerText = num
-            var time = document.querySelector('.tick')
-            time.innerText = 0
-            var i = 1
-            clearInterval(stopTime)
-            stopTime = setInterval(function () {
-                time.innerText = i++
-            }, 1000)
-            gameBox.innerHTML = ''
-            clearMineNum = 0
-            writeHtml(SweepMap(row, col, num))
-        }
-        function choice(level){
-            if (level === '初级') {
-                row=9, col=9, num=10;
-            } else if (level === '中级') {
-                row=16, col=16, num=40;
-            } else if (level === '高级') {
-                row=32, col=16, num=99;
+    }
+    return [cells,xy];
+}
+// 自动插旗逻辑
+function autoFlag(x, y) {
+    const num = parseInt(table[x * col + y].innerText);
+    [candidates,dxy] = getSurroundingCells(x, y);
+    if (candidates.length === num) {
+        candidates.forEach(c => {
+            if(c.innerText!=="🚩"){residue.innerText =residue.innerText-1}
+            c.innerText="🚩";
+            c.style.color="black";
+        });
+    }
+    if (dxy.length === num) {
+        makeWhite(x - 1, y + 1)
+        makeWhite(x - 1, y - 1)
+        makeWhite(x - 1, y)
+        makeWhite(x + 1, y + 1)
+        makeWhite(x + 1, y - 1)
+        makeWhite(x + 1, y)
+        makeWhite(x, y + 1)
+        makeWhite(x, y - 1)
+    }
+}
+// 给所有方块绑定点击事件，点击显示数字，或者 boom
+function show(x,y) {
+    if (table[x*col+y].innerText !== '9') {
+        makeWhite(x,y);autoFlag(x, y) 
+        changeClearMineNum()
+    } else{
+        clearInterval(stopTime);
+        for(let i=0;i < table.length;i++){
+            if (table[i].innerText === '9') {
+                table[i].style.background = 'white'
+                table[i].style.color= 'black'
+                table[i].innerText = '💣'
             }
-            withspan=screenwidth/col;
-            initializeGame(row, col, num)
         }
-    </script>
+        setTimeout(()=>{alert('游戏失败');
+        initializeGame(row, col, num)},5);
+    }
+}
+// 清除画面，然后写入新的画面
+var stopTime
+function initializeGame(row, col, num) {
+    residue.innerText = num
+    var time = document.querySelector('.tick')
+    time.innerText = 0
+    var i = 1
+    clearInterval(stopTime)
+    stopTime = setInterval(function () {
+        time.innerText = i++
+    }, 1000)
+    gameBox.innerHTML = ''
+    clearMineNum = 0
+    writeHtml(SweepMap(row, col, num))
+}
+function choice(level){
+    if (level === '初级') {
+        row=9, col=9, num=10;
+    } else if (level === '中级') {
+        row=16, col=16, num=40;
+    } else if (level === '高级') {
+        row=32, col=16, num=99;
+    }
+    withspan=screenwidth/col;
+    initializeGame(row, col, num)
+}
+</script>
 </body>
 </html>

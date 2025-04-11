@@ -165,7 +165,7 @@
 				curLevel[i]=curLevel[i].split("")
 			}
 			curMap = copyArray(curLevel);//当前的游戏地图
-			curLevel.length>curLevel[0].length?n =560/curLevel.length:n =560/curLevel[0].length;
+			n =curLevel.length>curLevel[0].length?560/curLevel.length:560/curLevel[0].length;
 			a=n-2;steps=[];moveTimes = 0;//游戏关卡移动步数清零
 			DrawMap(curMap);//绘制当前地图
 		}

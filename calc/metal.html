@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>金属计算器</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>金属计算器</title>
 </head>
 <style>
 .home {
@@ -83,7 +83,7 @@ a{
 </select>
 <div id="NNN">重量:<span id="kg_result" class="red">0.000</span>千克</div>
 <div id="KKG" style="display: none;">数量:<span id="n_result"  class="red">0.000</span>个</div>
-<div id="TT"><span id="t">*厚度: </span><input inputmode="decimal" id="T" placeholder="0">毫米</div>
+<div id="TT"><span id="t">*厚度: </span><input id="T" placeholder="0">毫米</div>
 <div id="WW"><span id="w">*宽度: </span><input id="W" placeholder="0">毫米</div>
 <div id="AA" style="display: none;"><span id="a">*外长: </span><input id="A" placeholder="0">毫米</div>
 <div id="BB" style="display: none;"><span id="b">*外宽: </span><input id="B" placeholder="0">毫米</div>
@@ -227,53 +227,23 @@ function clas_change(){
     document.getElementById('K').value="";
     const TT= document.getElementById("TT");
     const WW= document.getElementById("WW");
-    const LL= document.getElementById("LL");
     const DD= document.getElementById("DD");
     const AA= document.getElementById("AA");
     const BB= document.getElementById("BB");
-    TT.style.display="none";
+    TT.style.display="";
     WW.style.display="none";
-    LL.style.display="none";
     DD.style.display="none";
     AA.style.display="none";
     BB.style.display="none";
     switch(clas.value){
-    case "钢板":
-        TT.style.display="";
-        WW.style.display="";
-        LL.style.display="";
-        break;
-    case "圆管":
-        TT.style.display="";
-        DD.style.display="";
-        LL.style.display="";
-        break;
-    case "方管":
-        TT.style.display="";
-        AA.style.display="";
-        LL.style.display="";
-        break;
-    case "矩形管":
-        TT.style.display="";
-        AA.style.display="";
-        BB.style.display="";
-        LL.style.display="";
-        break;
-    case "圆钢":
-        DD.style.display="";
-        LL.style.display="";
-        break;
-    case "方钢":
-        AA.style.display="";
-        BB.style.display="";
-        LL.style.display="";
-        break;
-    case "角钢":
-        TT.style.display="";
-        AA.style.display="";
-        BB.style.display="";
-        LL.style.display="";
-        break;
+    case "钢板":WW.style.display="";break;
+    case "圆管":DD.style.display="";break;
+    case "方管":AA.style.display="";break;
+    case "矩形管":AA.style.display="";BB.style.display="";break;
+    case "圆钢":TT.style.display="none";DD.style.display="";break;
+    case "方钢":TT.style.display="none";AA.style.display="";
+        BB.style.display="";break;
+    case "角钢":AA.style.display="";BB.style.display="";break;
     }
 }
 </script>

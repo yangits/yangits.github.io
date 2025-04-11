@@ -1,194 +1,194 @@
 <!DOCTYPE html> 
 <html lang="en"> 
 <head> 
-    <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>圈小猫</title> 
+<meta charset="UTF-8"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<title>圈小猫</title> 
 </head> 
 <style> 
-    *{
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        -khtml-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-        margin:0px;
-        padding:0px;
-    }
-    body { 
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #f0f0f0;
-        padding-top: 20px;
-    }
-   .container { 
-        max-width: 450px;
-        width: 90%;
-        aspect-ratio: 1/1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-   .grid {
-        width:100%;
-        height:100%;
-        display: grid;
-        grid-template-columns: repeat(11, 8.5%);
-        grid-template-rows: repeat(11, 8.5%);
-        gap: 1px;
-    }
-   .grid :nth-child(22n), 
-   .grid :nth-child(22n-1), 
-   .grid :nth-child(22n-2), 
-   .grid :nth-child(22n-3), 
-   .grid :nth-child(22n-4), 
-   .grid :nth-child(22n-5), 
-   .grid :nth-child(22n-6), 
-   .grid :nth-child(22n-7), 
-   .grid :nth-child(22n-8), 
-   .grid :nth-child(22n-9),
-   .grid :nth-child(22n-10){
-        margin-left: 50%;
-    }
-   .cell {
-        width: 100%;
-        height: 100%;
-        background-color: lightblue;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-    }
-   .controls {
-        width: 100%;
-        text-align: center;
-        margin: auto;
-    }
-    button {
-        width: 25%;
-        height: 50px;
-        border-radius: 30%;
-        font-size: 20px;
-        margin: 10px 10px;
-    }
+*{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    margin:0px;
+    padding:0px;
+}
+body { 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+    padding-top: 20px;
+}
+.container { 
+    max-width: 450px;
+    width: 90%;
+    aspect-ratio: 1/1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.grid {
+    width:100%;
+    height:100%;
+    display: grid;
+    grid-template-columns: repeat(11, 8.5%);
+    grid-template-rows: repeat(11, 8.5%);
+    gap: 1px;
+}
+.grid :nth-child(22n), 
+.grid :nth-child(22n-1), 
+.grid :nth-child(22n-2), 
+.grid :nth-child(22n-3), 
+.grid :nth-child(22n-4), 
+.grid :nth-child(22n-5), 
+.grid :nth-child(22n-6), 
+.grid :nth-child(22n-7), 
+.grid :nth-child(22n-8), 
+.grid :nth-child(22n-9),
+.grid :nth-child(22n-10){
+    margin-left: 50%;
+}
+.cell {
+    width: 100%;
+    height: 100%;
+    background-color: lightblue;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.controls {
+    width: 100%;
+    text-align: center;
+    margin: auto;
+}
+button {
+    width: 25%;
+    height: 50px;
+    border-radius: 30%;
+    font-size: 20px;
+    margin: 10px 10px;
+}
 </style>
 <body>
-    <svg id="catsvg" width=100% viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-        <!-- 猫脸轮廓 -->
-        <circle cx="100" cy="100" r="94" fill="#FFBB00"/>
-        <g fill="#000" stroke="#000" stroke-width="5">
-            <!-- /眼/鼻子/嘴/耳朵/胡须 -->
-            <ellipse cx="60" cy="90" rx="15" ry="20" />
-            <ellipse cx="140" cy="90" rx="15" ry="20"/>
-            <ellipse cx="100" cy="130" rx="15" ry="10"/>
-            <path d="M 100 135 Q 80 175, 60 140 Q 80 180, 100 150 Z"/>
-            <path d="M 100 135 Q 120 175, 140 140 Q 120 180, 100 150 Z"/>
-            <path d="M 50 20 Q 40 10, 20 5 Q 10 10, 20 50" fill="#FFBB00"/>
-            <path d="M 150 20 Q 160 10, 180 5 Q 190 10, 180 50" fill="#FFBB00"/>
-            <line x1="0" y1="110" x2="50" y2="120"/>
-            <line x1="0" y1="130" x2="50" y2="130"/>
-            <line x1="0" y1="150" x2="50" y2="140"/>
-            <line x1="200" y1="110" x2="150" y2="120"/>
-            <line x1="200" y1="130" x2="150" y2="130"/>
-            <line x1="200" y1="150" x2="150" y2="140"/>
-        </g>
-    </svg>
-    <div class="container">
-        <div style="font-size: 20px;">点击小圆点，围住小猫</div><br>
-        <div class="grid"></div> <!-- 生成网格 --> 
-        <div class="controls">
-            <button onclick="level=level<=1?level:level-1;reset()">减少</button> 
-            <button onclick="reset()">刷新</button> 
-            <button onclick="level=level>=16?level:level+1;reset()">增加</button> 
-        </div>
+<svg id="catsvg" width=100% viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <!-- 猫脸轮廓 -->
+    <circle cx="100" cy="100" r="94" fill="#FFBB00"/>
+    <g fill="#000" stroke="#000" stroke-width="5">
+        <!-- /眼/鼻子/嘴/耳朵/胡须 -->
+        <ellipse cx="60" cy="90" rx="15" ry="20" />
+        <ellipse cx="140" cy="90" rx="15" ry="20"/>
+        <ellipse cx="100" cy="130" rx="15" ry="10"/>
+        <path d="M 100 135 Q 80 175, 60 140 Q 80 180, 100 150 Z"/>
+        <path d="M 100 135 Q 120 175, 140 140 Q 120 180, 100 150 Z"/>
+        <path d="M 50 20 Q 40 10, 20 5 Q 10 10, 20 50" fill="#FFBB00"/>
+        <path d="M 150 20 Q 160 10, 180 5 Q 190 10, 180 50" fill="#FFBB00"/>
+        <line x1="0" y1="110" x2="50" y2="120"/>
+        <line x1="0" y1="130" x2="50" y2="130"/>
+        <line x1="0" y1="150" x2="50" y2="140"/>
+        <line x1="200" y1="110" x2="150" y2="120"/>
+        <line x1="200" y1="130" x2="150" y2="130"/>
+        <line x1="200" y1="150" x2="150" y2="140"/>
+    </g>
+</svg>
+<div class="container">
+    <div style="font-size: 20px;">点击小圆点，围住小猫</div><br>
+    <div class="grid"></div> <!-- 生成网格 --> 
+    <div class="controls">
+        <button onclick="level=level<=1?level:level-1;reset()">减少</button> 
+        <button onclick="reset()">刷新</button> 
+        <button onclick="level=level>=16?level:level+1;reset()">增加</button> 
     </div>
-    <script>
-        const catsvg = document.getElementById('catsvg');
-        const grid = document.querySelector('.grid');
-        const gridSize = 11;
-        const cells = [];
-        var level=8;
-        var cat=[5,5]//初始小猫位置
-        const direction = [ 
-            [-1, 0],[-1, 1],  // 左上 // 右上 
-            [0, -1],[0, 1],  // 左 //右 
-            [1, 0],[1, 1]   // 左下 // 右下 
-        ];
-        const direction1 = [ 
-            [-1, -1],[-1, 0],  // 左上 // 右上 
-            [0, -1],[0, 1],  // 左 //右 
-            [1, -1],[1, 0]   // 左下 // 右下 
-        ];
-        // 创建网格
-        for (let i = 0; i < gridSize * gridSize; i++) {
-            const cell = document.createElement('div');
-            cell.classList.add('cell');
-            cell.addEventListener('click',  () => {
-                if (cell.style.backgroundColor  == 'lightblue'){ 
-                    cell.style.backgroundColor  = 'black';
-                    setTimeout(()=>{catmove();},20);
-                }
-            });
-            grid.appendChild(cell);  
-            cells.push(cell);
+</div>
+<script>
+const catsvg = document.getElementById('catsvg');
+const grid = document.querySelector('.grid');
+const gridSize = 11;
+const cells = [];
+var level=8;
+var cat=[5,5]//初始小猫位置
+const direction = [ 
+    [-1, 0],[-1, 1],  // 左上 // 右上 
+    [0, -1],[0, 1],  // 左 //右 
+    [1, 0],[1, 1]   // 左下 // 右下 
+];
+const direction1 = [ 
+    [-1, -1],[-1, 0],  // 左上 // 右上 
+    [0, -1],[0, 1],  // 左 //右 
+    [1, -1],[1, 0]   // 左下 // 右下 
+];
+// 创建网格
+for (let i = 0; i < gridSize * gridSize; i++) {
+    const cell = document.createElement('div');
+    cell.classList.add('cell');
+    cell.addEventListener('click',  () => {
+        if (cell.style.backgroundColor  == 'lightblue'){ 
+            cell.style.backgroundColor  = 'black';
+            setTimeout(()=>{catmove();},20);
         }
-        reset();// 重置 
-        function reset(){
-            cells.forEach(cell  => { 
-                cell.style.backgroundColor  = 'lightblue';
-            });
-            cat=[5,5];
-            cells[cat[0]*gridSize+cat[1]].style.backgroundColor  = 'black';
-            cells[cat[0]*gridSize+cat[1]].appendChild(catsvg); 
-            for (let i=0;i<level;i++){
-                let rand =Math.floor(Math.random() * 121)
-                if(cells[rand].style.backgroundColor  == 'black'){i--}
-                cells[rand].style.backgroundColor  = 'black';
-            }
-            direction.sort(() => 0.5 - Math.random());
-        };
-        function catmove(){
-            const step = solve_step();
-            if(!step){
-                alert("小猫已无路可走！"); reset()
-            }else{
-                cells[cat[0]*gridSize+cat[1]].style.backgroundColor  = 'lightblue';
-                cat[0] += step[0]; cat[1] += step[1];
-                cells[cat[0]*gridSize+cat[1]].style.backgroundColor  = 'black';
-                cells[cat[0]*gridSize+cat[1]].appendChild(catsvg);
-                if (cat[0]  === 0 || cat[0] === 10 || cat[1]  === 0 || cat[1]  === 10){ 
-                    setTimeout(()=>{alert("小猫已逃跑！"); reset()},20);
-                }
+    });
+    grid.appendChild(cell);  
+    cells.push(cell);
+}
+reset();// 重置 
+function reset(){
+    cells.forEach(cell  => { 
+        cell.style.backgroundColor  = 'lightblue';
+    });
+    cat=[5,5];
+    cells[cat[0]*gridSize+cat[1]].style.backgroundColor  = 'black';
+    cells[cat[0]*gridSize+cat[1]].appendChild(catsvg); 
+    for (let i=0;i<level;i++){
+        let rand =Math.floor(Math.random() * 121)
+        if(cells[rand].style.backgroundColor  == 'black'){i--}
+        cells[rand].style.backgroundColor  = 'black';
+    }
+    direction.sort(() => 0.5 - Math.random());
+};
+function catmove(){
+    const step = solve_step();
+    if(!step){
+        alert("小猫已无路可走！"); reset()
+    }else{
+        cells[cat[0]*gridSize+cat[1]].style.backgroundColor  = 'lightblue';
+        cat[0] += step[0]; cat[1] += step[1];
+        cells[cat[0]*gridSize+cat[1]].style.backgroundColor  = 'black';
+        cells[cat[0]*gridSize+cat[1]].appendChild(catsvg);
+        if (cat[0]  === 0 || cat[0] === 10 || cat[1]  === 0 || cat[1]  === 10){ 
+            setTimeout(()=>{alert("小猫已逃跑！"); reset()},20);
+        }
+    }
+}
+// BFS算法实现
+function solve_step() {
+    const queue = [{ row: cat[0], col: cat[1], steps: 0, path: [] }];
+    const visited = new Set();
+    visited.add(`${cat[0]},${cat[1]}`);
+    while (queue.length  > 0){
+        const current = queue.shift();
+        if (current.row  === 0 || current.row  === 10 || current.col  === 0 || current.col  === 10) { 
+            const nextStep = current.path.length  > 0? current.path[0]  : null;
+            return nextStep;// 到达边缘，返回
+        }
+        const directions = current.row  % 2 != 0? direction : direction1;
+        for (const [dr, dc] of directions) { // 遍历六个方向 
+            const newRow = current.row  + dr;
+            const newCol = current.col  + dc;
+            const key = `${newRow},${newCol}`;
+            if (newRow >= 0 && newRow <= 10 && newCol >= 0 && newCol <= 10 &&  // 检查是否边界、访问过、墙体 
+                !visited.has(key)  && cells[newRow * gridSize + newCol].style.backgroundColor!==  'black'
+            ){  visited.add(key);
+                queue.push({row: newRow, col: newCol, steps: current.steps  + 1, path: [...current.path,  [dr, dc]]}); 
             }
         }
-        // BFS算法实现
-        function solve_step() {
-            const queue = [{ row: cat[0], col: cat[1], steps: 0, path: [] }];
-            const visited = new Set();
-            visited.add(`${cat[0]},${cat[1]}`);
-            while (queue.length  > 0){
-                const current = queue.shift();
-                if (current.row  === 0 || current.row  === 10 || current.col  === 0 || current.col  === 10) { 
-                    const nextStep = current.path.length  > 0? current.path[0]  : null;
-                    return nextStep;// 到达边缘，返回
-                }
-                const directions = current.row  % 2 != 0? direction : direction1;
-                for (const [dr, dc] of directions) { // 遍历六个方向 
-                    const newRow = current.row  + dr;
-                    const newCol = current.col  + dc;
-                    const key = `${newRow},${newCol}`;
-                    if (newRow >= 0 && newRow <= 10 && newCol >= 0 && newCol <= 10 &&  // 检查是否边界、访问过、墙体 
-                       !visited.has(key)  && cells[newRow * gridSize + newCol].style.backgroundColor!==  'black'
-                    ){  visited.add(key);
-                        queue.push({row: newRow, col: newCol, steps: current.steps  + 1, path: [...current.path,  [dr, dc]]}); 
-                    }
-                }
-            }
-            return false; // 无法逃脱
-        }
-    </script>
+    }
+    return false; // 无法逃脱
+}
+</script>
 </body>
 </html>
