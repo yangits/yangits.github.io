@@ -142,7 +142,7 @@ function removeSelection() {
     document.onmouseup = function(e){
         startCell=null;activeColumn=null;
     };
-    table.ondblclick = function(e){// 输入事件
+    const inputkey= function(e){// 输入事件
         const td = e.target.closest('td');if (!td) return;
         const input = document.createElement('input');
         input.className = 'cell-input';
@@ -155,7 +155,7 @@ function removeSelection() {
         };
         td.appendChild(input);
         input.focus();
-    };
+    };table.ondblclick=inputkey;table.ontouchend=inputkey;
     document.onkeydown = function(e){
         if (e.ctrlKey  && (e.key === 'c'||e.key === 'C')) {
             if (!selCell) return;// 复制功能 Ctrl+C
