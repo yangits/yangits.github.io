@@ -503,7 +503,7 @@ function delete_id(delete_id){
 function up_excel(){Id("file_excel").click()}
 function up_file_excel(){
     var reader_csv= new FileReader()
-    reader_csv.readAsText(Id("file_excel").files[0],"gb2312")//,"ansi"utf-8
+    reader_csv.readAsText(Id("file_excel").files[0],"GBK")//,"ansi"utf-8
     reader_csv.onload=function(){     
         var csv_str=reader_csv.result;
         var fdata = new FormData();
@@ -541,12 +541,10 @@ function tabledown() {
       }
       csv.push(row.join(","));
     }
-    var csvFile = new Blob([csv.join("\n")], {type: "text/csv"});//;charset=gb2312
+    var csvFile = new Blob(["\ufeff" + dat], {type: "text/csv;charset=UTF-8;"})
     var downloadLink = document.createElement("a");
     downloadLink.download = Id("foot_storename").innerText+nowTime+".csv";
     downloadLink.href = window.URL.createObjectURL(csvFile);
-    // downloadLink.style.display = "none";
-    // document.body.appendChild(downloadLink);
     downloadLink.click();
     downloadLink=null;
 
