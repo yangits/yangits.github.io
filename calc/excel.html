@@ -142,7 +142,7 @@ function removeSelection() {
     document.onmouseup = function(e){
         startCell=null;activeColumn=null;
     };
-    const inputkey= function(e){// 输入事件
+    table.ondblclick= function(e){// 输入事件
         const td = e.target.closest('td');if (!td) return;
         const input = document.createElement('input');
         input.className = 'cell-input';
@@ -155,7 +155,7 @@ function removeSelection() {
         };
         td.appendChild(input);
         input.focus();
-    };table.ondblclick=inputkey;table.ontouchend=inputkey;
+    };
     document.onkeydown = function(e){
         if (e.ctrlKey  && (e.key === 'c'||e.key === 'C')) {
             if (!selCell) return;// 复制功能 Ctrl+C
@@ -245,16 +245,14 @@ function upexcel(file){
     const reader = new FileReader();
     reader.readAsText(file, 'GBK');
     reader.onload = function() {
-        const csvText = reader.result;
+        const csvText = reader.result.replace(/\r/g,"");
         const rows = csvText.split('\n');
         const dat = rows.map(row => row.split(','));
-        console.log(dat);
         setData(0,0,dat);
     };
 }
 function toExcel() {
     const dat =getData([0,0,Rows-1,Cols-1]).join('\n');
-    console.log(dat);
     const blob = new Blob(["\ufeff" + dat], {type: "text/csv;charset=UTF-8;"});
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
