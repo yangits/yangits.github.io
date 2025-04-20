@@ -55,7 +55,11 @@ table{
 </style>
 </head>
 <body style="display:flex;height:100vh;flex-direction:column;">
-<div class="top"></div>
+<div class="top">
+    <button onclick="toExcel()">导出</button>
+    <input type="file" accept="text/csv"  id="file" onchange="upexcel(this.files[0])" style="display: none;">
+    <button onclick="document.getElementById('file').click()">导入</button>
+</div>
 <div style="overflow:auto;">
     <table id="table">
         <tr id="tableHeader"><th style="z-index: 2;"></th></tr>
@@ -63,8 +67,8 @@ table{
     </table>
 </div>
 <script>
-const Rows = 100,Cols =26;
-var cpdata=null,selCell=null,lastCell=null,startCell=null,activeColumn=null;
+const Rows = 50,Cols =12;
+var cpdata=null,selCell=null,startCell=null,activeColumn=null;
 const tbody = document.getElementById('tableBody');
 (function(){
     const headerRow = document.getElementById('tableHeader');
@@ -138,14 +142,13 @@ function removeSelection() {
     document.onmouseup = function(e){
         startCell=null;activeColumn=null;
     };
-    table.onclick = function(e){// 输入事件
-        const td = e.target.closest('td');
-        if (!td) return;if (lastCell!=td) {lastCell=td;return};
+    table.ondblclick= function(e){// 输入事件
+        const td = e.target.closest('td');if (!td) return;
         const input = document.createElement('input');
         input.className = 'cell-input';
         let text=td.textContent;
         input.value = td.textContent;
-        input.onblur = function(e){td.textContent = input.value;input.remove();};
+        input.onblur = function(e){td.textContent = input.value;input.remove()};
         input.onkeydown = function(e){
             if (e.key === 'Enter') {td.textContent = input.value;input.remove();}
             if (e.key === 'Escape') {td.textContent=text;input.remove();}
@@ -163,7 +166,7 @@ function removeSelection() {
                 tbody.rows[i].cells[j+1].classList.add('copycell');
             }}
             cpdata=getData(selCell);
-            navigator.clipboard.writeText(cpdata);
+            navigator.clipboard.writeText(cpdata.join('\n'));
         }
         if (e.ctrlKey && (e.key === 'v'||e.key === 'V')) {
             if (!cpdata || !selCell)return;// 粘贴功能 Ctrl+V
@@ -236,6 +239,25 @@ function mergeCells(selCell) {
             td.classList.add('hidden');
         }}
     }
+}
+function upexcel(file){
+    if(!file)return;
+    const reader = new FileReader();
+    reader.readAsText(file, 'GBK');
+    reader.onload = function() {
+        const csvText = reader.result.replace(/\r/g,"");
+        const rows = csvText.split('\n');
+        const dat = rows.map(row => row.split(','));
+        setData(0,0,dat);
+    };
+}
+function toExcel() {
+    const dat =getData([0,0,Rows-1,Cols-1]).join('\n');
+    const blob = new Blob(["\ufeff" + dat], {type: "text/csv;charset=UTF-8;"});
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "table.csv";link.click();
+    URL.revokeObjectURL(link.href);
 }
 </script>
 </body>
