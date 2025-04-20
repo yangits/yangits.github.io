@@ -147,14 +147,20 @@ canvas{
 </div>
 </div>
 <script>
-const canvas = document.getElementById('game');
-const ctx = canvas.getContext('2d');
+const maincanvas = document.getElementById('game');
+const ctx = maincanvas.getContext('2d');
+const backcanvas = document.createElement('canvas');
+const backctx = backcanvas.getContext('2d');
 const Block = 20;
 const COLS = 10;
 const ROWS = 20;
-canvas.width = Block * COLS+100;
-canvas.height = Block * ROWS;
+maincanvas.width = Block * COLS+100;
+maincanvas.height = Block * ROWS;
+backcanvas.width = Block * COLS+100;
+backcanvas.height = Block * ROWS;
 ctx.font = "22px Arial";ctx.lineWidth=3;
+ctx.fillStyle = '#000';ctx.strokeStyle = '#000';
+backctx.font = "22px Arial";backctx.lineWidth=3;
 let score = 0,Level= 0,best=0,fps=60;
 let arena = createArena();
 let currentPiece;
@@ -184,46 +190,60 @@ function createPiece() {
         y: 0
     };
 }
-function drawBack(x, y) {
-    ctx.fillStyle = '#9aa5a3';ctx.strokeStyle = '#9aa5a3';
+
+function drawBlock(ctx,x, y) {
     ctx.fillRect((x+0.3) * Block, (y+0.3) * Block, Block*0.4, Block*0.4);
     ctx.strokeRect((x+0.125) * Block, (y+0.125) * Block, Block*0.75, Block*0.75);
 }
-function drawBlock(x, y) {
-    ctx.fillStyle = '#000';ctx.strokeStyle = '#000';
-    ctx.fillRect((x+0.3) * Block, (y+0.3) * Block, Block*0.4, Block*0.4);
-    ctx.strokeRect((x+0.125) * Block, (y+0.125) * Block, Block*0.75, Block*0.75);
-}
-function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+function backdraw(){
+    backctx.clearRect(0, 0, backcanvas.width, backcanvas.height);
     // 绘制场地
+    backctx.fillStyle = '#9aa5a3';backctx.strokeStyle = '#9aa5a3';
     arena.forEach((row, y) => {
         row.forEach((value, x) => {
-            gameOver||value? drawBlock(x, y):drawBack(x, y)
+            drawBlock(backctx,x, y)
         });
     });
     for(let i=0;i<4;i++){
         for(let j=0;j<4;j++){
-            drawBack(COLS+i+0.5, j+7);
+            drawBlock(backctx,COLS+i+0.5, j+7);
         }
     }
-    if (nextPiece && currentPiece) {
+    backctx.fillStyle = '#000';backctx.strokeStyle = '#000';
+    arena.forEach((row, y) => {
+        row.forEach((value, x) => {
+            if(gameOver||value)drawBlock(backctx,x, y)
+        });
+    });
+    if (nextPiece) {
         nextPiece.shape.forEach(Block => {
-            drawBlock(COLS+1.5 + Block[0],  8+ Block[1]);});
-        currentPiece.shape.forEach(Block => {
-            drawBlock(currentPiece.x + Block[0], currentPiece.y + Block[1]);});
+            drawBlock(backctx,COLS+1.5 + Block[0],  8+ Block[1]);});
     }
-    ctx.fillStyle = '#000';ctx.strokeStyle = '#000';
-    ctx.moveTo(Block * COLS+3,0); ctx.lineTo(Block * COLS+3,Block * ROWS); ctx.stroke(); 
-    ctx.fillText("Score", Block * COLS+10,Block*1.5);
-    ctx.fillText(score, Block * COLS+10,Block*3);
-    ctx.fillText("Level", Block * COLS+10,Block*4.5);
-    ctx.fillText(Level, Block * COLS+10,Block*6);
-    ctx.fillText("Best", Block * COLS+10,Block*12.5);
-    ctx.fillText(best=score>best?score:best, Block * COLS+10,Block*14);
+    backctx.fillStyle = '#000';backctx.strokeStyle = '#000';
+    backctx.moveTo(Block * COLS+3,0); backctx.lineTo(Block * COLS+3,Block * ROWS); backctx.stroke(); 
+    backctx.fillText("Score", Block * COLS+10,Block*1.5);
+    backctx.fillText(score, Block * COLS+10,Block*3);
+    backctx.fillText("Level", Block * COLS+10,Block*4.5);
+    backctx.fillText(Level, Block * COLS+10,Block*6);
+    backctx.fillText("Best", Block * COLS+10,Block*12.5);
+    backctx.fillText(best=score>best?score:best, Block * COLS+10,Block*14);
     if(Pause){
-        ctx.fillText("PAUSE", Block * COLS+10,Block*16);}
-    ctx.fillText("FPS", Block * COLS+10,Block*18);
+        backctx.fillText("PAUSE", Block * COLS+10,Block*16);}
+    backctx.fillText("FPS", Block * COLS+10,Block*18);
+
+}
+function draw() {
+    ctx.clearRect(0, 0, backcanvas.width, backcanvas.height);
+    ctx.drawImage(backcanvas,
+        0,0,backcanvas.width,backcanvas.height,
+        0,0,backcanvas.width,backcanvas.height
+    )
+
+    if (currentPiece) {
+        currentPiece.shape.forEach(Block => {
+            drawBlock(ctx,currentPiece.x + Block[0], currentPiece.y + Block[1]);});
+    }
     ctx.fillText(fps, Block * COLS+10,Block*19.5);
 }
 function isCollision(piece, offsetX, offsetY) {
@@ -258,7 +278,7 @@ function rotatePiece() {
     const rotated = currentPiece.shape.map(Block => [-Block[1], Block[0]]);
     const original = currentPiece.shape;
     currentPiece.shape = rotated;
-    const offsets = [0, 1, -1, 2, -2];
+    const offsets = [0, 1, -1];
     for (let offset of offsets) {
         currentPiece.x += offset;
         if (!isCollision(currentPiece, 0, 0)) return;
@@ -288,7 +308,7 @@ function resetGame() {
     score = 0;gameOver = true;Pause=false;
     currentPiece = null;
     nextPiece =  null;
-    draw();
+    backdraw();draw();
 }
 function startGame() {
     if(gameOver){
@@ -296,16 +316,17 @@ function startGame() {
         score = 0;gameOver = false;Pause=false;
         currentPiece = createPiece();
         nextPiece = createPiece();
-        update();
+        backdraw();update();
     }else{
         Pause=Pause?false: true;
+        backdraw();draw();
     }
 }
 let ticks=0,last=0
 function update() {
     if(!Pause){dropCounter += Date.now() - lastTime;}
     lastTime = Date.now();ticks++;
-    if (ticks >= 60) {  // 每30帧统计一次
+    if (ticks >= 30) {
         fps = Math.round(1000 / ((Date.now() - last) / ticks));
         last = Date.now();
         ticks = 0;
@@ -317,7 +338,7 @@ function update() {
             isPressed={};isPressed['key']=true
             mergePiece();clearLines();
             currentPiece = nextPiece;
-            nextPiece = createPiece();
+            nextPiece = createPiece();backdraw();
             if (isCollision(currentPiece, 0, 0)) {
                 gameOver = true;resetGame();
             }
@@ -336,7 +357,7 @@ function startclick(callback,el) {
     }
     if(el==="drop"){startLoop();return}
     clearTimeout(startTime[el])
-    startTime[el]= setTimeout(startLoop, 180);
+    startTime[el]= setTimeout(startLoop, 200);
 }
 function isMobile() {
     return typeof window.orientation !== 'undefined';}
@@ -346,7 +367,7 @@ buttons.forEach(el => {
         e.preventDefault();el.classList.add('active');
         if(el.id==="reset"){resetGame()};
         if(el.id==="start"){startGame()};
-        if(isPressed[el.id] || Pause ||gameOver)return;
+        if(Pause ||gameOver)return;
         if(el.id==="drop"){startclick(moveDown,"drop")}
         if(el.id==="rotate"){startclick(rotatePiece,"rotate")}
         if(el.id==="left"){startclick(moveLeft,"left")}
@@ -354,7 +375,6 @@ buttons.forEach(el => {
     });
     el.addEventListener(isMobile()?'touchend':'mouseup', ()=>{ 
         isPressed[el.id]= false;el.classList.remove('active');
-        // for (i=Time.length-1;i>=0;i--){clearTimeout(Time.shift())}
     });
 });
 document.onkeydown = function(e){
