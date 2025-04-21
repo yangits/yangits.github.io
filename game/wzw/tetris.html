@@ -18,7 +18,6 @@ body {
     justify-content: center;
     align-items: center;
 }
-
 .d-inline {
     display: inline-Block;
 }
@@ -38,7 +37,7 @@ body {
     cursor: pointer;
     box-shadow:  4px 4px 8px #555555,
     -4px -4px 8px #7ed2d2;
-    margin: 0px 25px;
+    margin: 0px 22px;
 }
 .btn.small {
     width: 26px;
@@ -54,7 +53,6 @@ body {
     box-shadow:  8px 8px 20px #555555,
     -8px -8px 20px #7ed2d2;
 }
-
 .active {
     background: linear-gradient(145deg, #a69700, #c5b400);
     box-shadow:  2px 2px 4px #555555,
@@ -84,7 +82,6 @@ body {
     align-items: center;
     -webkit-align-items: flex-start;
 }
-
 .game .game-head {
     margin-top: 10px;
     white-space: nowrap;
@@ -138,7 +135,7 @@ canvas{
             <button class="btn" id="rotate">上</button><br>
             <button class="btn" id="left">左</button>
             <button class="btn" id="right">右</button><br>
-            <button class="btn" id="drop">下</button>
+            <button class="btn" id="down">下</button>
         </div>
         <div>
             <button class="big btn" id="rotate">旋转</button>
@@ -151,9 +148,7 @@ const maincanvas = document.getElementById('game');
 const ctx = maincanvas.getContext('2d');
 const backcanvas = document.createElement('canvas');
 const backctx = backcanvas.getContext('2d');
-const Block = 20;
-const COLS = 10;
-const ROWS = 20;
+const Block = 20,COLS = 10,ROWS = 20;
 maincanvas.width = Block * COLS+100;
 maincanvas.height = Block * ROWS;
 backcanvas.width = Block * COLS+100;
@@ -162,14 +157,10 @@ ctx.font = "22px Arial";ctx.lineWidth=3;
 ctx.fillStyle = '#000';ctx.strokeStyle = '#000';
 backctx.font = "22px Arial";backctx.lineWidth=3;
 let score = 0,Level= 0,best=0,fps=60;
-let arena = createArena();
-let currentPiece;
-let nextPiece;
-let gameOver = true;
-let Pause=false;
-let lastTime = 0;
-let dropCounter = 0;
-let dropInterval = 1000;
+let fpsstep=0,lastfps=0,lastTime = 0;
+let currentPiece,nextPiece,arena;
+let gameOver = true,Pause=false;
+let downCounter = 0, downspeed = 1000;
 const PIECES = [
 [[0,0], [1,0], [0,1], [1,1]],// O
 [[-1,0], [0,0], [1,0], [2,0]],// I
@@ -179,10 +170,10 @@ const PIECES = [
 [[-1,0], [0,0], [1,0], [-1,1]],// J
 [[-1,0], [0,0], [0,1], [1,1]],// Z
 ];
-function createArena() {
+function createArena(){
     return Array(ROWS).fill().map(() => Array(COLS).fill(0));
 }
-function createPiece() {
+function createPiece(){
     const piece = PIECES[Math.floor(Math.random() * PIECES.length)];
     return {
         shape: piece,
@@ -190,20 +181,15 @@ function createPiece() {
         y: 0
     };
 }
-
-function drawBlock(ctx,x, y) {
+function drawBlock(ctx,x, y){
     ctx.fillRect((x+0.3) * Block, (y+0.3) * Block, Block*0.4, Block*0.4);
     ctx.strokeRect((x+0.125) * Block, (y+0.125) * Block, Block*0.75, Block*0.75);
 }
-
 function backdraw(){
     backctx.clearRect(0, 0, backcanvas.width, backcanvas.height);
-    // 绘制场地
     backctx.fillStyle = '#9aa5a3';backctx.strokeStyle = '#9aa5a3';
     arena.forEach((row, y) => {
-        row.forEach((value, x) => {
-            drawBlock(backctx,x, y)
-        });
+        row.forEach((value, x) => {drawBlock(backctx,x, y)});
     });
     for(let i=0;i<4;i++){
         for(let j=0;j<4;j++){
@@ -213,54 +199,49 @@ function backdraw(){
     backctx.fillStyle = '#000';backctx.strokeStyle = '#000';
     arena.forEach((row, y) => {
         row.forEach((value, x) => {
-            if(gameOver||value)drawBlock(backctx,x, y)
-        });
+            if(gameOver||value)drawBlock(backctx,x, y)});
     });
-    if (nextPiece) {
+    if (nextPiece){
         nextPiece.shape.forEach(Block => {
             drawBlock(backctx,COLS+1.5 + Block[0],  8+ Block[1]);});
     }
-    backctx.fillStyle = '#000';backctx.strokeStyle = '#000';
     backctx.moveTo(Block * COLS+3,0); backctx.lineTo(Block * COLS+3,Block * ROWS); backctx.stroke(); 
     backctx.fillText("Score", Block * COLS+10,Block*1.5);
     backctx.fillText(score, Block * COLS+10,Block*3);
     backctx.fillText("Level", Block * COLS+10,Block*4.5);
     backctx.fillText(Level, Block * COLS+10,Block*6);
     backctx.fillText("Best", Block * COLS+10,Block*12.5);
-    backctx.fillText(best=score>best?score:best, Block * COLS+10,Block*14);
-    if(Pause){
-        backctx.fillText("PAUSE", Block * COLS+10,Block*16);}
+    backctx.fillText(best, Block * COLS+10,Block*14);
+    if(Pause){backctx.fillText("PAUSE", Block * COLS+10,Block*16);}
     backctx.fillText("FPS", Block * COLS+10,Block*18);
-
 }
-function draw() {
+function draw(){
     ctx.clearRect(0, 0, backcanvas.width, backcanvas.height);
     ctx.drawImage(backcanvas,
         0,0,backcanvas.width,backcanvas.height,
         0,0,backcanvas.width,backcanvas.height
     )
-
     if (currentPiece) {
-        currentPiece.shape.forEach(Block => {
+        currentPiece.shape.forEach(Block =>{
             drawBlock(ctx,currentPiece.x + Block[0], currentPiece.y + Block[1]);});
     }
     ctx.fillText(fps, Block * COLS+10,Block*19.5);
 }
-function isCollision(piece, offsetX, offsetY) {
+function isCollision(piece, offsetX, offsetY){
     return piece.shape.some(Block => {
         const x = piece.x + Block[0] + offsetX;
         const y = piece.y + Block[1] + offsetY;
         return x < 0 || x >= COLS || y >= ROWS || (y >= 0 && arena[y][x]);
     });
 }
-function mergePiece() {
+function mergePiece(){
     currentPiece.shape.forEach(Block => {
         const x = currentPiece.x + Block[0];
         const y = currentPiece.y + Block[1];
         if (y >= 0) arena[y][x] = 1;
     });
 }
-function clearLines() {
+function clearLines(){
     let lines = 0;
     outer: for (let y = ROWS - 1; y >= 0; y--) {
         for (let x = 0; x < COLS; x++) {
@@ -272,45 +253,43 @@ function clearLines() {
         y++;
     }
     score += [0, 100, 300, 500, 800][lines];
+    best=score>best?score:best;
+    if(score>=10000*(Level+1)){Level++;downspeed=(0.8-Level*0.001)**Level*1000};
 }
-function rotatePiece() {
+function rotatePiece(){
     if(!currentPiece || currentPiece.shape==PIECES[0])return;
     const rotated = currentPiece.shape.map(Block => [-Block[1], Block[0]]);
     const original = currentPiece.shape;
     currentPiece.shape = rotated;
     const offsets = [0, 1, -1];
-    for (let offset of offsets) {
+    for (let offset of offsets){
         currentPiece.x += offset;
         if (!isCollision(currentPiece, 0, 0)) return;
         currentPiece.x -= offset;
     }
     currentPiece.shape = original;
 }
-function moveLeft() {
+function moveLeft(){
     if (!currentPiece) return;
-    if (!isCollision(currentPiece, -1, 0)) {
-        currentPiece.x--}else{isPressed={}};
+    if (!isCollision(currentPiece, -1, 0))currentPiece.x--
 }
-function moveRight() {
+function moveRight(){
     if (!currentPiece) return;
-    if (!isCollision(currentPiece, 1, 0)) {
-        currentPiece.x++}else{isPressed={}};
+    if (!isCollision(currentPiece, 1, 0))currentPiece.x++;
 }
-function moveDown() {
+function moveDown(){
     if (!currentPiece) return;
-    if (!isCollision(currentPiece, 0, 1)) {
-        currentPiece.y++;}
-    else{
-        dropCounter=dropInterval;isPressed={}}
+    if (!isCollision(currentPiece, 0, 1)){currentPiece.y++;}
+      else{downCounter=1000;}
 }
-function resetGame() {
+function resetGame(){
     arena = createArena();isPressed={};
     score = 0;gameOver = true;Pause=false;
     currentPiece = null;
     nextPiece =  null;
     backdraw();draw();
 }
-function startGame() {
+function startGame(){
     if(gameOver){
         arena = createArena();isPressed={};
         score = 0;gameOver = false;Pause=false;
@@ -322,53 +301,54 @@ function startGame() {
         backdraw();draw();
     }
 }
-let ticks=0,last=0
-function update() {
-    if(!Pause){dropCounter += Date.now() - lastTime;}
-    lastTime = Date.now();ticks++;
-    if (ticks >= 30) {
-        fps = Math.round(1000 / ((Date.now() - last) / ticks));
-        last = Date.now();
-        ticks = 0;
-    }
-    if (dropCounter > dropInterval) {
-        if (!isCollision(currentPiece, 0, 1)) {
+function update(){
+    if(!Pause){downCounter += Date.now() - lastTime;}
+    lastTime = Date.now();fpsstep++
+    if(fpsstep>60){
+        fps = Math.round(1000/(Date.now()-lastfps)*fpsstep);
+        lastfps=Date.now();fpsstep=0;}
+    if (downCounter > downspeed){
+        if (!isCollision(currentPiece, 0, 1)){
             currentPiece.y++;
         } else {
-            isPressed={};isPressed['key']=true
+            isPressed["down"]=false;
             mergePiece();clearLines();
             currentPiece = nextPiece;
             nextPiece = createPiece();backdraw();
-            if (isCollision(currentPiece, 0, 0)) {
+            if (isCollision(currentPiece, 0, 0)){
                 gameOver = true;resetGame();
             }
         }
-        dropCounter = 0;
+        downCounter = 0;
     }
     if (gameOver) return;
     draw();requestAnimationFrame(update);
 }
 let isPressed = {},startTime={}
 function startclick(callback,el) {
-    isPressed[el]= true;callback();
+    callback();isPressed[el]= true;
     function startLoop() {
         if(!isPressed[el])return;
         callback();setTimeout(startLoop, 20);
     }
-    if(el==="drop"){startLoop();return}
-    clearTimeout(startTime[el])
-    startTime[el]= setTimeout(startLoop, 200);
+    if(el==="down"){startLoop();return}
+    clearTimeout(startTime[el]);
+    startTime[el]= setTimeout(startLoop, 180);
 }
-function isMobile() {
-    return typeof window.orientation !== 'undefined';}
+function isMobile() {return typeof window.orientation !== 'undefined';}
 const buttons = document.querySelectorAll('button');
 buttons.forEach(el => {
     el.addEventListener(isMobile()?'touchstart':'mousedown', (e) => {
         e.preventDefault();el.classList.add('active');
         if(el.id==="reset"){resetGame()};
         if(el.id==="start"){startGame()};
-        if(Pause ||gameOver)return;
-        if(el.id==="drop"){startclick(moveDown,"drop")}
+        if(Pause)return;
+        if(gameOver){
+            if(el.id==="left"){Level=Level>0?Level-1:15}
+            if(el.id==="right"){Level=Level<15?Level+1:0}
+            downspeed=(0.8-Level*0.001)**Level*1000;
+            backdraw();draw();return};
+        if(el.id==="down"){startclick(moveDown,"down")}
         if(el.id==="rotate"){startclick(rotatePiece,"rotate")}
         if(el.id==="left"){startclick(moveLeft,"left")}
         if(el.id==="right"){startclick(moveRight,"right")}
@@ -377,18 +357,9 @@ buttons.forEach(el => {
         isPressed[el.id]= false;el.classList.remove('active');
     });
 });
-document.onkeydown = function(e){
-    if(isPressed['key'] || Pause ||gameOver)return;
-    if (e.key === 'a') {moveLeft()}
-    if (e.key === 'd') {moveRight()}
-    if (e.key === 's') {moveDown()}
-    if (e.key === 'w') {rotatePiece()}
-    if (e.key === 'Enter') {rotatePiece()}
-    if (e.key === 'r') {resetGame()}
-    if (e.key === ' ') {startGame()}
-}
-document.onkeyup = function(e){isPressed['key']=false;isPressed = {};}
 resetGame();
+// localStorage.getItem()
+// localStorage.setItem()
 </script>
 </body>
 </html>
