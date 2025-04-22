@@ -19,22 +19,15 @@ body {
     align-items: center;
 }
 .d-inline {
+    margin-left: 50px;
     display: inline-Block;
 }
-.sline {
-    text-align: center;
-    margin: 0px auto;
-    padding-left: 80px;
-}
 .btn {
-    outline: none;
     border: 1px solid #ddc905;
     border-radius: 50%;
     background: linear-gradient(145deg, #decb02, #c1b002);
-    transition-duration: 30ms;
     width: 60px;
     height: 60px;
-    cursor: pointer;
     box-shadow:  4px 4px 8px #555555,
     -4px -4px 8px #7ed2d2;
     margin: 0px 22px;
@@ -42,7 +35,7 @@ body {
 .btn.small {
     width: 26px;
     height: 26px;
-    margin: 5px 15px;
+    margin: 5px 0px;
     box-shadow:  3px 3px 6px #555555,
     -3px -3px 6px #7ed2d2;
 }
@@ -60,40 +53,14 @@ body {
 }
 .text-center {
     text-align: center;
-}
-.text-center.small {
     font-size: 12px;
 }
-.game {
-    text-align: center;
+#screen {
     margin: auto;
-    max-width: 450px;
-    background: #019CD6;
-    width:100%;
-    display: flex;
-    display: -webkit-flex;
-
-    justify-content: center;
-    -webkit-justify-content: center;
-
-    flex-wrap: wrap;
-    -webkit-flex-wrap: wrap;
-
-    align-items: center;
-    -webkit-align-items: flex-start;
-}
-.game .game-head {
-    margin-top: 10px;
-    white-space: nowrap;
-    position: relative;
-    display: inline-Block;
-    border: 4px solid #280000;
-    width: 75%;
-}
-.game-head #screen {
-    border: 20px inset;
+    margin-top: 20px;
+    width: 70%;
+    border: 20px inset #000;
     border-color: #0a90bf #4dbde3 #59c6e8 #019CD6;
-    overflow: hidden;
     background-color: #9facaa;
 }
 canvas{
@@ -101,8 +68,7 @@ canvas{
     margin: 0;
     padding: 0;
 }
-.game-body .controller-flex {
-    padding-top: 10px;
+.controller-flex {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -111,37 +77,23 @@ canvas{
 </style>
 </head>
 <body>
-<div class="game">
-<div class="game-head ">
-    <div id="screen"><canvas id="game"></canvas></div>
+<div id="screen"><canvas id="game"></canvas></div>
+<div class="d-inline">
+    <button class="btn  small" id="start"></button>
+    <div class=" text-center small">开始</div>
 </div>
-<div class="game-body">
-    <div class="sline">
-        <div class="d-inline">
-            <button class="btn  small" id="start"></button>
-            <div class=" text-center small">开始</div>
-        </div>
-        <div class="d-inline">
-            <button class="btn  small" id="onoff"></button>
-            <div class="text-center small">开关</div>
-        </div>
-        <div class="d-inline">
-            <button class="btn  small" id="reset"></button>
-            <div class="text-center small">复位</div>
-        </div>
-    </div>
-    <div class="controller-flex">
-        <div class="controller-left">
-            <button class="btn" id="rotate">上</button><br>
-            <button class="btn" id="left">左</button>
-            <button class="btn" id="right">右</button><br>
-            <button class="btn" id="down">下</button>
-        </div>
-        <div>
-            <button class="big btn" id="rotate">旋转</button>
-        </div>
-    </div>
+<div class="d-inline">
+    <button class="btn  small" id="reset"></button>
+    <div class="text-center small">复位</div>
 </div>
+<div class="controller-flex">
+    <div>
+        <button class="btn" id="rotate">上</button><br>
+        <button class="btn" id="left">左</button>
+        <button class="btn" id="right">右</button><br>
+        <button class="btn" id="down">下</button>
+    </div>
+    <div><button class="big btn" id="rotate">旋转</button></div>
 </div>
 <script>
 const maincanvas = document.getElementById('game');
@@ -156,11 +108,9 @@ backcanvas.height = Block * ROWS;
 ctx.font = "22px Arial";ctx.lineWidth=3;
 ctx.fillStyle = '#000';ctx.strokeStyle = '#000';
 backctx.font = "22px Arial";backctx.lineWidth=3;
-let score = 0,Level= 0,best=0,fps=60;
-let fpsstep=0,lastfps=0,lastTime = 0;
-let currentPiece,nextPiece,arena;
-let gameOver = true,Pause=false;
-let downCounter = 0, downspeed = 1000;
+let fpsstep=0,lastfps=Date.now(),lastTime=Infinity,downCounter= 0,fps=60;
+let currentPiece,nextPiece,arena,score,Level,best,downspeed;
+let gameOver = false,Pause=false;
 const PIECES = [
 [[0,0], [1,0], [0,1], [1,1]],// O
 [[-1,0], [0,0], [1,0], [2,0]],// I
@@ -192,18 +142,18 @@ function backdraw(){
         row.forEach((value, x) => {drawBlock(backctx,x, y)});
     });
     for(let i=0;i<4;i++){
-        for(let j=0;j<4;j++){
-            drawBlock(backctx,COLS+i+0.5, j+7);
-        }
+        for(let j=0;j<4;j++)drawBlock(backctx,COLS+i+0.5, j+7);
     }
     backctx.fillStyle = '#000';backctx.strokeStyle = '#000';
-    arena.forEach((row, y) => {
+    if(!gameOver){
+        arena.forEach((row, y) => {
         row.forEach((value, x) => {
-            if(gameOver||value)drawBlock(backctx,x, y)});
-    });
-    if (nextPiece){
-        nextPiece.shape.forEach(Block => {
+            if(value)drawBlock(backctx,x, y)});
+        });
+        if(nextPiece){
+            nextPiece.shape.forEach(Block => {
             drawBlock(backctx,COLS+1.5 + Block[0],  8+ Block[1]);});
+        }
     }
     backctx.moveTo(Block * COLS+3,0); backctx.lineTo(Block * COLS+3,Block * ROWS); backctx.stroke(); 
     backctx.fillText("Score", Block * COLS+10,Block*1.5);
@@ -221,7 +171,7 @@ function draw(){
         0,0,backcanvas.width,backcanvas.height,
         0,0,backcanvas.width,backcanvas.height
     )
-    if (currentPiece) {
+    if (currentPiece && !gameOver) {
         currentPiece.shape.forEach(Block =>{
             drawBlock(ctx,currentPiece.x + Block[0], currentPiece.y + Block[1]);});
     }
@@ -282,28 +232,41 @@ function moveDown(){
     if (!isCollision(currentPiece, 0, 1)){currentPiece.y++;}
       else{downCounter=1000;}
 }
-function resetGame(){
-    arena = createArena();isPressed={};
-    score = 0;gameOver = true;Pause=false;
-    currentPiece = null;
-    nextPiece =  null;
-    backdraw();draw();
+function clearItem(){
+    localStorage.removeItem("arena");
+    localStorage.removeItem("score");
+    localStorage.removeItem("Level");
+}
+function saveItem(){
+    localStorage.setItem("arena",JSON.stringify(arena));
+    localStorage.setItem("score",score);
+    localStorage.setItem("Level",Level);
+    localStorage.setItem("best",best);
+}
+function tfItem(name,val){
+    return localStorage.getItem(name)?parseInt(localStorage.getItem(name)):val
+}
+function loadGame(){
+    arena = localStorage.getItem("arena")?
+        JSON.parse(localStorage.getItem("arena")):createArena()
+    score = tfItem("score",0);Level=tfItem("Level",0);best=tfItem("best",0);
+    downCounter=0;downspeed=(0.8-Level*0.001)**Level*1000;
+    currentPiece = createPiece();
+    nextPiece =  createPiece();
+    backdraw();update();
 }
 function startGame(){
     if(gameOver){
-        arena = createArena();isPressed={};
-        score = 0;gameOver = false;Pause=false;
-        currentPiece = createPiece();
-        nextPiece = createPiece();
-        backdraw();update();
+        gameOver = false;clearItem();loadGame();
     }else{
-        Pause=Pause?false: true;
-        backdraw();draw();
+        Pause=Pause?false:true;
+        backdraw();update();
     }
 }
 function update(){
-    if(!Pause){downCounter += Date.now() - lastTime;}
-    lastTime = Date.now();fpsstep++
+    downCounter +=Date.now() - lastTime;
+    console.log(downCounter);
+    lastTime = Date.now();fpsstep++;
     if(fpsstep>60){
         fps = Math.round(1000/(Date.now()-lastfps)*fpsstep);
         lastfps=Date.now();fpsstep=0;}
@@ -314,15 +277,15 @@ function update(){
             isPressed["down"]=false;
             mergePiece();clearLines();
             currentPiece = nextPiece;
-            nextPiece = createPiece();backdraw();
+            nextPiece = createPiece();
+            saveItem();backdraw();
             if (isCollision(currentPiece, 0, 0)){
-                gameOver = true;resetGame();
-            }
+                Pause=false;gameOver = true;clearItem();loadGame()};
         }
         downCounter = 0;
     }
-    if (gameOver) return;
-    draw();requestAnimationFrame(update);
+    draw();if(Pause || gameOver)return
+    requestAnimationFrame(update);
 }
 let isPressed = {},startTime={}
 function startclick(callback,el) {
@@ -340,7 +303,7 @@ const buttons = document.querySelectorAll('button');
 buttons.forEach(el => {
     el.addEventListener(isMobile()?'touchstart':'mousedown', (e) => {
         e.preventDefault();el.classList.add('active');
-        if(el.id==="reset"){resetGame()};
+        if(el.id==="reset"){Pause=false;gameOver = true;clearItem();loadGame()};
         if(el.id==="start"){startGame()};
         if(Pause)return;
         if(gameOver){
@@ -357,9 +320,7 @@ buttons.forEach(el => {
         isPressed[el.id]= false;el.classList.remove('active');
     });
 });
-resetGame();
-// localStorage.getItem()
-// localStorage.setItem()
+loadGame();
 </script>
 </body>
 </html>
