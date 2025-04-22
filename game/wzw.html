@@ -14,13 +14,10 @@ body {
     overflow: hidden;
     text-align: center;
     margin: auto;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
-.d-inline {
-    margin-left: 50px;
-    display: inline-Block;
+.inline {
+    width: 50%;
+    margin-left: 40%;
 }
 .btn {
     border: 1px solid #ddc905;
@@ -52,13 +49,12 @@ body {
     -2px -2px 4px #7ed2d2;
 }
 .text-center {
-    text-align: center;
     font-size: 12px;
 }
 #screen {
     margin: auto;
-    margin-top: 20px;
-    width: 70%;
+    margin-top: 10px;
+    width: 66%;
     border: 20px inset #000;
     border-color: #0a90bf #4dbde3 #59c6e8 #019CD6;
     background-color: #9facaa;
@@ -68,7 +64,7 @@ canvas{
     margin: 0;
     padding: 0;
 }
-.controller-flex {
+.controller {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -78,22 +74,20 @@ canvas{
 </head>
 <body>
 <div id="screen"><canvas id="game"></canvas></div>
-<div class="d-inline">
-    <button class="btn  small" id="start"></button>
-    <div class=" text-center small">开始</div>
+<div class="inline">
+    <button class="btn small" id="start"></button>&emsp;&emsp;
+    <button class="btn small" id="reset"></button><br>
+    <span class=" text-center">开始</span>&emsp;&emsp;
+    <span class="text-center">复位</span>
 </div>
-<div class="d-inline">
-    <button class="btn  small" id="reset"></button>
-    <div class="text-center small">复位</div>
-</div>
-<div class="controller-flex">
+<div class="controller">
     <div>
         <button class="btn" id="rotate">上</button><br>
         <button class="btn" id="left">左</button>
         <button class="btn" id="right">右</button><br>
         <button class="btn" id="down">下</button>
     </div>
-    <div><button class="big btn" id="rotate">旋转</button></div>
+    <div><button class="btn big" id="rotate">旋转</button></div>
 </div>
 <script>
 const maincanvas = document.getElementById('game');
@@ -118,11 +112,7 @@ const PIECES = [
 [[-1,0], [0,0], [1,0], [0,1]],// T
 [[-1,0], [0,0], [1,0], [1,1]],// L
 [[-1,0], [0,0], [1,0], [-1,1]],// J
-[[-1,0], [0,0], [0,1], [1,1]],// Z
-];
-function createArena(){
-    return Array(ROWS).fill().map(() => Array(COLS).fill(0));
-}
+[[-1,0], [0,0], [0,1], [1,1]]];// Z
 function createPiece(){
     const piece = PIECES[Math.floor(Math.random() * PIECES.length)];
     return {
@@ -162,16 +152,15 @@ function backdraw(){
     backctx.fillText(Level, Block * COLS+10,Block*6);
     backctx.fillText("Best", Block * COLS+10,Block*12.5);
     backctx.fillText(best, Block * COLS+10,Block*14);
-    if(Pause){backctx.fillText("PAUSE", Block * COLS+10,Block*16);}
+    if(Pause)backctx.fillText("PAUSE", Block * COLS+10,Block*16);
     backctx.fillText("FPS", Block * COLS+10,Block*18);
 }
 function draw(){
     ctx.clearRect(0, 0, backcanvas.width, backcanvas.height);
     ctx.drawImage(backcanvas,
         0,0,backcanvas.width,backcanvas.height,
-        0,0,backcanvas.width,backcanvas.height
-    )
-    if (currentPiece && !gameOver) {
+        0,0,backcanvas.width,backcanvas.height)
+    if (currentPiece && !gameOver){
         currentPiece.shape.forEach(Block =>{
             drawBlock(ctx,currentPiece.x + Block[0], currentPiece.y + Block[1]);});
     }
@@ -195,8 +184,7 @@ function clearLines(){
     let lines = 0;
     outer: for (let y = ROWS - 1; y >= 0; y--) {
         for (let x = 0; x < COLS; x++) {
-            if (!arena[y][x]) continue outer;
-        }
+            if (!arena[y][x]) continue outer;}
         const row = arena.splice(y, 1)[0].fill(0);
         arena.unshift(row);
         lines++;
@@ -211,7 +199,7 @@ function rotatePiece(){
     const rotated = currentPiece.shape.map(Block => [-Block[1], Block[0]]);
     const original = currentPiece.shape;
     currentPiece.shape = rotated;
-    const offsets = [0, 1, -1];
+    const offsets = [0, 1, -1,2,-2];
     for (let offset of offsets){
         currentPiece.x += offset;
         if (!isCollision(currentPiece, 0, 0)) return;
@@ -248,7 +236,8 @@ function tfItem(name,val){
 }
 function loadGame(){
     arena = localStorage.getItem("arena")?
-        JSON.parse(localStorage.getItem("arena")):createArena()
+        JSON.parse(localStorage.getItem("arena")):
+        Array(ROWS).fill().map(() => Array(COLS).fill(0));
     score = tfItem("score",0);Level=tfItem("Level",0);best=tfItem("best",0);
     downCounter=0;downspeed=(0.8-Level*0.001)**Level*1000;
     currentPiece = createPiece();
@@ -264,16 +253,15 @@ function startGame(){
     }
 }
 function update(){
-    downCounter +=Date.now() - lastTime;
-    console.log(downCounter);
+    downCounter += Date.now()-lastTime;
     lastTime = Date.now();fpsstep++;
     if(fpsstep>60){
         fps = Math.round(1000/(Date.now()-lastfps)*fpsstep);
         lastfps=Date.now();fpsstep=0;}
-    if (downCounter > downspeed){
-        if (!isCollision(currentPiece, 0, 1)){
+    if(downCounter > downspeed){
+        if(!isCollision(currentPiece, 0, 1)){
             currentPiece.y++;
-        } else {
+        }else{
             isPressed["down"]=false;
             mergePiece();clearLines();
             currentPiece = nextPiece;
@@ -284,7 +272,7 @@ function update(){
         }
         downCounter = 0;
     }
-    draw();if(Pause || gameOver)return
+    draw();if(Pause || gameOver)return;
     requestAnimationFrame(update);
 }
 let isPressed = {},startTime={}
@@ -304,7 +292,7 @@ buttons.forEach(el => {
     el.addEventListener(isMobile()?'touchstart':'mousedown', (e) => {
         e.preventDefault();el.classList.add('active');
         if(el.id==="reset"){Pause=false;gameOver = true;clearItem();loadGame()};
-        if(el.id==="start"){startGame()};
+        if(el.id==="start")startGame();
         if(Pause)return;
         if(gameOver){
             if(el.id==="left"){Level=Level>0?Level-1:15}
