@@ -91,7 +91,7 @@ function nes_init(canvas_id) {
     framebuffer_u8 = new Uint8ClampedArray(buffer);
     framebuffer_u32 = new Uint32Array(buffer);
     var audio_ctx = new AudioContext();
-    var script_processor = audio_ctx.createScriptProcessor(AUDIO_BUFFERING, 1, 1);
+    var script_processor = audio_ctx.createScriptProcessor(AUDIO_BUFFERING, 0, 1);
     script_processor.onaudioprocess = audio_callback;
     script_processor.connect(audio_ctx.destination);
 }
