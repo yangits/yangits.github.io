@@ -2,7 +2,7 @@ var SCREEN_WIDTH = 256;
 var SCREEN_HEIGHT = 240;
 var FRAMEBUFFER_SIZE = SCREEN_WIDTH * SCREEN_HEIGHT;
 var canvas_ctx, image;
-var framebuffer_u8, framebuffer_u32F;
+var framebuffer_u8, framebuffer_u32;
 var AUDIO_BUFFERING = 512;
 var SAMPLE_COUNT = 4 * 1024;
 var SAMPLE_MASK = SAMPLE_COUNT - 1;
@@ -21,7 +21,7 @@ var nes = new jsnes.NES({
         audio_write_cursor = (audio_write_cursor + 1) & SAMPLE_MASK;
     },
 });
-var fps = 64.098;
+var fps = 60;
 var now;
 var then = Date.now();
 var interval = 1000 / fps;
@@ -90,9 +90,8 @@ function nes_init(canvas_id) {
     var buffer = new ArrayBuffer(image.data.length);
     framebuffer_u8 = new Uint8ClampedArray(buffer);
     framebuffer_u32 = new Uint32Array(buffer);
-    var AudioContext = window.AudioContext || window.webkitAudioContext;
     var audio_ctx = new AudioContext();
-    var script_processor = audio_ctx.createScriptProcessor(AUDIO_BUFFERING, 0, 2);
+    var script_processor = audio_ctx.createScriptProcessor(AUDIO_BUFFERING, 1, 1);
     script_processor.onaudioprocess = audio_callback;
     script_processor.connect(audio_ctx.destination);
 }
