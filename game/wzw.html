@@ -308,6 +308,8 @@ buttons.forEach(el => {
         isPressed[el.id]= false;el.classList.remove('active');
     });
 });
+document.addEventListener('touchstart', (event) =>{
+    event.preventDefault();}, {passive:false});
 loadGame();
 </script>
 </body>

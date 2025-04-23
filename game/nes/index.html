@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="format-detection" content="telephone=no,address=no">
+<meta name="apple-mobile-web-app-status-bar-style" content="white">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>红白机游戏厅</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+}
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    margin: 0 auto;
+}
+.left-control {
+    position: absolute;
+    left: 10px;
+    height: 160px;
+    width: 160px;
+    text-align: center;
+    color: white;
+}
+.left-control div:active {
+    background-color: pink;
+}
+.left-control div {
+    color: red;
+    background-color: yellow;
+    position: absolute;
+    border: 1px solid lightgray;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+}
+.left-control .up {
+    left: 50%;
+    transform: translateX(-50%);
+}
+.left-control .down {
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+}
+.left-control .left {
+    top: 50%;
+    transform: translateY(-50%);
+}
+.left-control .right {
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0;
+}
+.left-control .ctl {
+    width: 60px;
+    height: 30px;
+    background-color: pink;
+    position: absolute;
+    bottom: -50%;
+    text-align: center;
+    line-height: 30px;
+    color: white;
+}
+.left-control .ctl:active {
+    background-color: red;
+}
+.left-control .select {
+    left: 10px;
+}
+.left-control .start {
+    left: 100px;
+}
+.right-control {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    height: 200px;
+    transform: translateY(-50%);
+    width: 190px;
+}
+.right-control .btn {
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    left: 4px;
+    border-radius: 60px;
+    line-height: 60px;
+    text-align: center;
+    color: white;
+}
+.right-control .btn:active {
+    border: 3px solid yellow;
+}
+.right-control .b {
+    background-color: red;
+    left: 40px;
+    top: 110px;
+}
+.right-control .a {
+    background-color: black;
+    left: 120px;
+    top: 60px;
+}
+@media all and (orientation : landscape) {
+    /*横屏*/
+    html,
+    body {
+        max-height: 600px;
+        max-width: 1000px;
+    }
+    .screen {
+        margin: auto;
+        width: 60%;
+    }
+    .left-control {
+        top: 15%;
+    }
+    .right-control {
+        top: 50%;
+    }
+}
+@media all and (orientation : portrait) {
+    /*竖屏*/
+    .screen {
+        margin: auto;
+        width: 100%;
+    }
+    .left-control {top: 58%;}
+    .right-control {top: 70%;}
+}
+</style>
+<!-- src="https://unpkg.com/jsnes/dist/jsnes.min.js" -->
+<script type="text/javascript" src="./jsnes.min.js"></script>
+<script type="text/javascript" src="./nes-embed.js"></script>
+<script>
+const link="https://yangits.github.io/data/roms/"
+window.onload = function () {
+nes_load_url("nes-canvas", link+"SuperMariowd.nes");}
+</script>
+</head>
+<body>
+    <div class="screen">
+        <canvas id="nes-canvas" width="256" height="240" style="width: 100%"></canvas>
+    </div>
+    <div class="left-control">
+        <div key="up" class="direct up">上</div>
+        <div key="down" class="direct down">下</div>
+        <div key="left" class="direct left">左</div>
+        <div key="right" class="direct right">右</div>
+        <span key="select" class="ctl select">select</span>
+        <span key="start" class="ctl start">start</span>
+    </div>
+    <div class="right-control">
+        <div key="a" class="btn a">A</div>
+        <div key="b" class="btn b">B</div>
+    </div>
+</body>
+</html>
