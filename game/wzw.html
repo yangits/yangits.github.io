@@ -279,7 +279,7 @@ function startclick(callback,key){
     startTime[key]= setTimeout(startLoop, 180);
 }
 document.addEventListener('touchstart', (event) =>{
-    event.target.closest('button').classList.add('active');event.preventDefault();
+    event.preventDefault();event.target.closest('button').classList.add('active');
     touchEvent(event.target.getAttribute("key"))}, {passive:false});
 document.addEventListener('touchend', (event) =>{
     event.target.closest('button').classList.remove('active');

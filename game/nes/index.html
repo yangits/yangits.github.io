@@ -69,7 +69,7 @@ canvas{
 </style>
 </head>
 <body>
-<canvas id="game"></canvas>
+<canvas id="game"  width="256" height="240"></canvas>
 <div class="inline">
     <button class="btn small" key="select"></button>
     <span class=" text-center">选择</span>
@@ -97,8 +97,6 @@ const ScreenHeight = 240;
 const canvasGame = document.getElementById("game");
 const canvas_ctx = canvasGame.getContext("2d");
 var image = canvas_ctx.getImageData(0, 0, ScreenWidth, ScreenHeight);
-canvasGame.width=ScreenWidth;
-canvasGame.height=ScreenHeight;
 var framebuffer_u8, framebuffer_u32;
 var AudioBuffering = 512;
 var SampleMask = 4 * 1024 - 1;
@@ -175,8 +173,8 @@ function nes_load_url(path) {
 document.addEventListener('keydown', (event) => {touchEvent(nes.buttonDown, event.key)});
 document.addEventListener('keyup', (event) => {touchEvent(nes.buttonUp, event.key)});
 document.addEventListener('touchstart', (event) => {
-    event.target.closest('button').classList.add('active');
-    event.preventDefault();touchEvent(nes.buttonDown, event.target.getAttribute("key"))}, {passive: false});
+    event.preventDefault();event.target.closest('button').classList.add('active');
+    touchEvent(nes.buttonDown, event.target.getAttribute("key"))}, {passive: false});
 document.addEventListener('touchend', (event) => {
     event.target.closest('button').classList.remove('active');
     touchEvent(nes.buttonUp, event.target.getAttribute("key"))}, {passive: false});
