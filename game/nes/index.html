@@ -1,172 +1,197 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-<meta name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-touch-fullscreen" content="yes">
-<meta name="format-detection" content="telephone=no,address=no">
-<meta name="apple-mobile-web-app-status-bar-style" content="white">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
 <title>红白机游戏厅</title>
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    user-select: none;
-}
-html,
-body {
-    width: 100%;
+body{
     height: 100%;
+    width: 100%;
+    max-width: 500px;
+    background: #019CD6;
+    user-select: none;
     overflow: hidden;
-    position: relative;
-    margin: 0 auto;
-}
-.left-control {
-    position: absolute;
-    left: 10px;
-    height: 160px;
-    width: 160px;
     text-align: center;
-    color: white;
+    margin: auto;
 }
-.left-control div:active {
-    background-color: pink;
+.inline{
+    width: 50%;
+    margin-left: 42%;
 }
-.left-control div {
-    color: red;
-    background-color: yellow;
-    position: absolute;
-    border: 1px solid lightgray;
-    width: 50px;
-    height: 50px;
-    line-height: 50px;
-}
-.left-control .up {
-    left: 50%;
-    transform: translateX(-50%);
-}
-.left-control .down {
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 0;
-}
-.left-control .left {
-    top: 50%;
-    transform: translateY(-50%);
-}
-.left-control .right {
-    top: 50%;
-    transform: translateY(-50%);
-    right: 0;
-}
-.left-control .ctl {
-    width: 60px;
-    height: 30px;
-    background-color: pink;
-    position: absolute;
-    bottom: -50%;
-    text-align: center;
-    line-height: 30px;
-    color: white;
-}
-.left-control .ctl:active {
-    background-color: red;
-}
-.left-control .select {
-    left: 10px;
-}
-.left-control .start {
-    left: 100px;
-}
-.right-control {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    height: 200px;
-    transform: translateY(-50%);
-    width: 190px;
-}
-.right-control .btn {
+.btn{
+    border: 1px solid #ddc905;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #decb02, #c1b002);
     width: 60px;
     height: 60px;
-    position: absolute;
-    left: 4px;
-    border-radius: 60px;
-    line-height: 60px;
-    text-align: center;
-    color: white;
+    box-shadow:  4px 4px 8px #555555,
+    -4px -4px 8px #7ed2d2;
+    margin: 0px 2px;
 }
-.right-control .btn:active {
-    border: 3px solid yellow;
+.btn.small{
+    width: 26px;
+    height: 26px;
+    margin: 5px 0px 0px 15px;
 }
-.right-control .b {
-    background-color: red;
-    left: 40px;
-    top: 110px;
+.btn.big{
+    margin-left: 15px;
+    width: 85px;
+    height: 85px;
+    box-shadow:  8px 8px 20px #555555,
+    -8px -8px 20px #7ed2d2;
 }
-.right-control .a {
-    background-color: black;
-    left: 120px;
-    top: 60px;
+.active{
+    background: linear-gradient(145deg, #a69700, #c5b400);
+    box-shadow:  2px 2px 4px #555555,
+    -2px -2px 4px #7ed2d2;
 }
-@media all and (orientation : landscape) {
-    /*横屏*/
-    html,
-    body {
-        max-height: 600px;
-        max-width: 1000px;
-    }
-    .screen {
-        margin: auto;
-        width: 60%;
-    }
-    .left-control {
-        top: 15%;
-    }
-    .right-control {
-        top: 50%;
-    }
+.text-center{
+    font-size: 12px;
 }
-@media all and (orientation : portrait) {
-    /*竖屏*/
-    .screen {
-        margin: auto;
-        width: 100%;
-    }
-    .left-control {top: 58%;}
-    .right-control {top: 70%;}
+canvas{
+    width: 90%;
+    margin-top: 10px;
+    border: 10px inset;
+    border-color: #0a90bf #4dbde3 #59c6e8 #019CD6;
+    background-color: #9facaa;
+}
+.controller{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.right{
+    margin-left: 30px;
 }
 </style>
-<!-- src="https://unpkg.com/jsnes/dist/jsnes.min.js" -->
-<script type="text/javascript" src="./jsnes.min.js"></script>
-<script type="text/javascript" src="./nes-embed.js"></script>
-<script>
-const link="https://yangits.github.io/data/roms/"
-window.onload = function () {
-nes_load_url("nes-canvas", link+"SuperMariowd.nes");}
-</script>
 </head>
 <body>
-    <div class="screen">
-        <canvas id="nes-canvas" width="256" height="240" style="width: 100%"></canvas>
+<canvas id="game"></canvas>
+<div class="inline">
+    <button class="btn small" key="select"></button>
+    <span class=" text-center">选择</span>
+    <button class="btn small" key="start"></button>
+    <span class="text-center">开始</span>
+</div>
+<div class="controller">
+    <div class="left">
+        <button class="btn" key="up">上</button><br>
+        <button class="btn" key="left">左</button>&emsp;&emsp;
+        <button class="btn" key="right">右</button><br>
+        <button class="btn" key="down">下</button><br>
     </div>
-    <div class="left-control">
-        <div key="up" class="direct up">上</div>
-        <div key="down" class="direct down">下</div>
-        <div key="left" class="direct left">左</div>
-        <div key="right" class="direct right">右</div>
-        <span key="select" class="ctl select">select</span>
-        <span key="start" class="ctl start">start</span>
+    <div class="right">
+        <button class="btn" key="bb">B</button>
+        <button class="btn" key="aa">A</button>
     </div>
-    <div class="right-control">
-        <div key="a" class="btn a">A</div>
-        <div key="b" class="btn b">B</div>
-    </div>
+</div>
+<script type="text/javascript" src="./jsnes.min.js"></script>
+<script>
+const link="https://yangits.github.io/data/roms/";
+window.onload = function() {nes_load_url(link+"SuperMariowd.nes");}
+const ScreenWidth = 256;
+const ScreenHeight = 240;
+const canvasGame = document.getElementById("game");
+const canvas_ctx = canvasGame.getContext("2d");
+var image = canvas_ctx.getImageData(0, 0, ScreenWidth, ScreenHeight);
+canvasGame.width=ScreenWidth;
+canvasGame.height=ScreenHeight;
+var framebuffer_u8, framebuffer_u32;
+var AudioBuffering = 512;
+var SampleMask = 4 * 1024 - 1;
+var audio_samples_L = new Float32Array(SampleMask+1);
+var audio_samples_R = new Float32Array(SampleMask+1);
+var audio_write_cursor = 0, audio_read_cursor = 0;
+var nes = new jsnes.NES({
+    onFrame: function (framebuffer_24) {
+        for (var i = 0; i < ScreenWidth * ScreenHeight; i++) {
+            framebuffer_u32[i] = 0xFF000000 | framebuffer_24[i];
+        }
+    },
+    onAudioSample: function (l, r) {
+        audio_samples_L[audio_write_cursor] = l;
+        audio_samples_R[audio_write_cursor] = r;
+        audio_write_cursor = (audio_write_cursor + 1) & SampleMask;
+    },
+});
+function onAnimationFrame() {
+    window.requestAnimationFrame(onAnimationFrame);
+        image.data.set(framebuffer_u8);
+        canvas_ctx.putImageData(image, 0, 0);
+    }
+function audio_remain() {
+    return (audio_write_cursor - audio_read_cursor) & SampleMask;
+}
+function audio_callback(event) {
+    var dst = event.outputBuffer;
+    var len = dst.length;
+    if (audio_remain() < AudioBuffering) nes.frame();
+    var dst_l = dst.getChannelData(0);
+    var dst_r = dst.getChannelData(1);
+    for (var i = 0; i < len; i++) {
+        var src_idx = (audio_read_cursor + i) & SampleMask;
+        dst_l[i] = audio_samples_L[src_idx];
+        dst_r[i] = audio_samples_R[src_idx];
+    }
+    audio_read_cursor = (audio_read_cursor + len) & SampleMask;
+}
+function nes_init() {
+    canvas_ctx.fillStyle = "black";
+    canvas_ctx.fillRect(0, 0, ScreenWidth, ScreenHeight);
+    var buffer = new ArrayBuffer(image.data.length);
+    framebuffer_u8 = new Uint8ClampedArray(buffer);
+    framebuffer_u32 = new Uint32Array(buffer);
+    var audio_ctx = new (window.AudioContext || window.webkitAudioContext)();
+    var script_processor = audio_ctx.createScriptProcessor(AudioBuffering, 0, 2);
+    script_processor.onaudioprocess = audio_callback;
+    script_processor.connect(audio_ctx.destination);
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') {
+          if (audio_ctx.state === 'running')audio_ctx.suspend();
+        } else {
+          if (audio_ctx.state === 'suspended')audio_ctx.resume();
+        }
+      });
+}
+function nes_boot(rom_data) {
+    nes.loadROM(rom_data);
+    window.requestAnimationFrame(onAnimationFrame);
+}
+function nes_load_url(path) {
+    nes_init();
+    var XML = new XMLHttpRequest();
+    XML.open("GET", path);
+    XML.overrideMimeType("text/plain; charset=x-user-defined");
+    XML.onload = function () {
+        if (this.status === 200) {
+            nes_boot(this.responseText);
+        }
+    };
+    XML.send();
+}
+document.addEventListener('keydown', (event) => {touchEvent(nes.buttonDown, event.key)});
+document.addEventListener('keyup', (event) => {touchEvent(nes.buttonUp, event.key)});
+document.addEventListener('touchstart', (event) => {
+    event.target.closest('button').classList.add('active');
+    event.preventDefault();touchEvent(nes.buttonDown, event.target.getAttribute("key"))}, {passive: false});
+document.addEventListener('touchend', (event) => {
+    event.target.closest('button').classList.remove('active');
+    touchEvent(nes.buttonUp, event.target.getAttribute("key"))}, {passive: false});
+function touchEvent(callback, event) {
+    switch (event) {
+    case "up":case "w":case "W":callback(1, jsnes.Controller.BUTTON_UP); break;
+    case "down":case "s":case "S":callback(1, jsnes.Controller.BUTTON_DOWN); break;
+    case "left":case "a":case "A":callback(1, jsnes.Controller.BUTTON_LEFT); break;
+    case "right":case "d":case "D":callback(1, jsnes.Controller.BUTTON_RIGHT); break;
+    case "aa":case "k":case "K":callback(1, jsnes.Controller.BUTTON_A); break;
+    case "bb":case "j":case "J":callback(1, jsnes.Controller.BUTTON_B); break;
+    case "select":case "Tab":callback(1, jsnes.Controller.BUTTON_SELECT); break;
+    case "start":case "Enter":callback(1, jsnes.Controller.BUTTON_START); break;
+    }
+}
+</script>
 </body>
 </html>

@@ -28,7 +28,7 @@ body{
     height: 60px;
     box-shadow:  4px 4px 8px #555555,
     -4px -4px 8px #7ed2d2;
-    margin: 0px 22px;
+    margin: 0px 20px;
 }
 .btn.small{
     width: 26px;
@@ -47,21 +47,13 @@ body{
     box-shadow:  2px 2px 4px #555555,
     -2px -2px 4px #7ed2d2;
 }
-.text-center{
-    font-size: 12px;
-}
-#screen{
+canvas{
+    background-color: #9facaa;
     margin: auto;
     margin-top: 10px;
     width: 66%;
-    border: 20px inset #000;
+    border: 20px inset;
     border-color: #0a90bf #4dbde3 #59c6e8 #019CD6;
-    background-color: #9facaa;
-}
-canvas{
-    width: 100%;
-    margin: 0;
-    padding: 0;
 }
 .controller{
     display: flex;
@@ -72,21 +64,21 @@ canvas{
 </style>
 </head>
 <body>
-<div id="screen"><canvas id="game"></canvas></div>
+<canvas id="game"></canvas>
 <div class="inline">
-    <button class="btn small" id="start"></button>
-    <span class=" text-center">开始</span>
-    <button class="btn small" id="reset"></button>
-    <span class="text-center">复位</span>
+    <button class="btn small" key="start"></button>
+    <span style="font-size: 12px;">开始</span>
+    <button class="btn small" key="reset"></button>
+    <span style="font-size: 12px;">复位</span>
 </div>
 <div class="controller">
     <div>
-        <button class="btn" id="rotate">上</button><br>
-        <button class="btn" id="left">左</button>
-        <button class="btn" id="right">右</button><br>
-        <button class="btn" id="down">下</button>
+        <button class="btn" key="rotate">上</button><br>
+        <button class="btn" key="left">左</button>
+        <button class="btn" key="right">右</button><br>
+        <button class="btn" key="down">下</button>
     </div>
-    <div><button class="btn big" id="rotate">旋转</button></div>
+    <button class="btn big" key="rotate">旋转</button>
 </div>
 <script>
 const Gamecanvas = document.getElementById('game');
@@ -276,40 +268,36 @@ function update(){
     requestAnimationFrame(update);
 }
 let isPressed = {},startTime={}
-function startclick(callback,el) {
-    callback();isPressed[el]= true;
-    function startLoop() {
-        if(!isPressed[el])return;
+function startclick(callback,key){
+    callback();isPressed[key]= true;
+    function startLoop(){
+        if(!isPressed[key])return;
         callback();setTimeout(startLoop, 20);
     }
-    if(el==="down"){startLoop();return}
-    clearTimeout(startTime[el]);
-    startTime[el]= setTimeout(startLoop, 180);
+    if(key==="down"){startLoop();return}
+    clearTimeout(startTime[key]);
+    startTime[key]= setTimeout(startLoop, 180);
 }
-function isMobile() {return typeof window.orientation !== 'undefined';}
-const buttons = document.querySelectorAll('button');
-buttons.forEach(el => {
-    el.addEventListener(isMobile()?'touchstart':'mousedown', (e) => {
-        e.preventDefault();el.classList.add('active');
-        if(el.id==="reset")resetGame();
-        if(el.id==="start")startGame();
-        if(Pause)return;
-        if(gameOver){
-            if(el.id==="left"){Level=Level>0?Level-1:15}
-            if(el.id==="right"){Level=Level<15?Level+1:0}
-            localStorage.setItem("Level",Level);
-            backdraw();draw();return};
-        if(el.id==="down"){startclick(moveDown,"down")}
-        if(el.id==="rotate"){startclick(rotatePiece,"rotate")}
-        if(el.id==="left"){startclick(moveLeft,"left")}
-        if(el.id==="right"){startclick(moveRight,"right")}
-    });
-    el.addEventListener(isMobile()?'touchend':'mouseup', ()=>{ 
-        isPressed[el.id]= false;el.classList.remove('active');
-    });
-});
 document.addEventListener('touchstart', (event) =>{
-    event.preventDefault();}, {passive:false});
+    event.target.closest('button').classList.add('active');event.preventDefault();
+    touchEvent(event.target.getAttribute("key"))}, {passive:false});
+document.addEventListener('touchend', (event) =>{
+    event.target.closest('button').classList.remove('active');
+    isPressed[event.target.getAttribute("key")]= false;});
+function touchEvent(key){
+    if(gameOver){
+        if(key==="left"){Level=Level>0?Level-1:15;}
+        if(key==="right"){Level=Level<15?Level+1:0}
+        localStorage.setItem("Level",Level);
+        backdraw();draw();};
+    switch (key){
+    case "reset":resetGame();break;
+    case "start":startGame();break;
+    case "rotate":startclick(rotatePiece,key);break;
+    case "down":startclick(moveDown,key);break;
+    case "left":startclick(moveLeft,key);break;
+    case "right":startclick(moveRight,key);break;}
+}
 loadGame();
 </script>
 </body>
