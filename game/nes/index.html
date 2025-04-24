@@ -17,8 +17,8 @@ body{
     margin: auto;
 }
 .inline{
-    width: 50%;
-    margin-left: 42%;
+    width: 70%;
+    margin-left: 33%;
 }
 .btn{
     border: 1px solid #ddc905;
@@ -35,13 +35,7 @@ body{
     height: 26px;
     margin: 5px 0px 0px 15px;
 }
-.btn.big{
-    margin-left: 15px;
-    width: 85px;
-    height: 85px;
-    box-shadow:  8px 8px 20px #555555,
-    -8px -8px 20px #7ed2d2;
-}
+
 .active{
     background: linear-gradient(145deg, #a69700, #c5b400);
     box-shadow:  2px 2px 4px #555555,
@@ -75,6 +69,8 @@ canvas{
     <span class=" text-center">选择</span>
     <button class="btn small" key="start"></button>
     <span class="text-center">开始</span>
+    <button class="btn small" key="reset"></button>
+    <span class="text-center">重置</span>
 </div>
 <div class="controller">
     <div class="left">
@@ -91,12 +87,49 @@ canvas{
 <script type="text/javascript" src="./jsnes.min.js"></script>
 <script>
 const link="https://yangits.github.io/data/roms/";
-window.onload = function() {nes_load_url(link+"SuperMariowd.nes");}
+window.onload = function() {setMenu()}
 const ScreenWidth = 256;
 const ScreenHeight = 240;
 const canvasGame = document.getElementById("game");
-const canvas_ctx = canvasGame.getContext("2d");
-var image = canvas_ctx.getImageData(0, 0, ScreenWidth, ScreenHeight);
+const Gamectx = canvasGame.getContext("2d");
+Gamectx.font = "20px Arial";Gamectx.lineWidth=3;
+Gamectx.fillStyle = '#000';Gamectx.strokeStyle = '#000';
+Gamectx.font = "20px Arial";Gamectx.lineWidth=3;
+Gamectx.fillStyle = '#000';Gamectx.strokeStyle = '#000';
+const roms=[
+    ['超级玛丽', 'SuperMario.nes'],
+    ['超级玛丽2', 'SuperMario2.nes'],
+    ['超级玛丽无敌', 'SuperMariowd.nes'],
+    ['快打旋风', 'kdxf.nes'],
+    ['松鼠大作战', 'songshu.nes'],
+    ['忍者街机', 'renzhe2.nes'],
+    ['美人鱼', 'meirenyu.nes'],
+    ['燕山坦克', 'tankeyanshan1990.nes'],
+    ['魂斗罗1-30S', 'Contra1-30S.nes'],
+    ['魂斗罗1无敌金身', 'Contra1-1wd.nes'],
+    ['魂斗罗2无限命', 'Contra1-2wd.nes'],
+    ['魂斗罗6无限命', 'Contra1-6wd.nes'],
+    ['魂斗罗7无限命', 'Contra1-7wd.nes'],
+    ['冒险岛', 'maoixandao.nes'],
+    ['冒险岛无敌', 'maoixandaowd.nes'],
+    ['挖金', 'TaoJinZhe.nes'],
+    ['炸弹人', 'zhadanren.nes'],
+    ['炸弹人无敌', 'zhadanrenwd.nes'],
+    ['敲冰块', 'Ice Climber.nes'],
+    ['西游记1', 'xiyouji.nes'],
+    ['西游记1汉化', 'xiyouji1.nes'],
+    ['雪人兄弟', 'SnowBrothers(E).nes']]
+let romdex=0,game=false;
+function setMenu(){
+    Gamectx.clearRect(0, 0, ScreenWidth, ScreenHeight);
+    Gamectx.fillStyle = "#666";
+    Gamectx.fillRect(0, 0, ScreenWidth, 35);
+    Gamectx.fillStyle = '#000';
+    for(let i=romdex;i<roms.length;i++){
+        Gamectx.fillText(i+1+"、"+roms[i][0], 10,30*(i-romdex)+25);
+    }
+}
+var image = Gamectx.getImageData(0, 0, ScreenWidth, ScreenHeight);
 var framebuffer_u8, framebuffer_u32;
 var AudioBuffering = 512;
 var SampleMask = 4 * 1024 - 1;
@@ -118,7 +151,7 @@ var nes = new jsnes.NES({
 function onAnimationFrame() {
     window.requestAnimationFrame(onAnimationFrame);
         image.data.set(framebuffer_u8);
-        canvas_ctx.putImageData(image, 0, 0);
+        Gamectx.putImageData(image, 0, 0);
     }
 function audio_remain() {
     return (audio_write_cursor - audio_read_cursor) & SampleMask;
@@ -137,8 +170,6 @@ function audio_callback(event) {
     audio_read_cursor = (audio_read_cursor + len) & SampleMask;
 }
 function nes_init() {
-    canvas_ctx.fillStyle = "black";
-    canvas_ctx.fillRect(0, 0, ScreenWidth, ScreenHeight);
     var buffer = new ArrayBuffer(image.data.length);
     framebuffer_u8 = new Uint8ClampedArray(buffer);
     framebuffer_u32 = new Uint32Array(buffer);
@@ -155,31 +186,31 @@ function nes_init() {
       });
 }
 function nes_boot(rom_data) {
-    nes.loadROM(rom_data);
+    nes_init();nes.loadROM(rom_data);
     window.requestAnimationFrame(onAnimationFrame);
 }
 function nes_load_url(path) {
-    nes_init();
     var XML = new XMLHttpRequest();
     XML.open("GET", path);
     XML.overrideMimeType("text/plain; charset=x-user-defined");
     XML.onload = function () {
         if (this.status === 200) {
             nes_boot(this.responseText);
-        }
+        }else{alert("加载失败");game=false}
     };
     XML.send();
 }
-document.addEventListener('keydown', (event) => {touchEvent(nes.buttonDown, event.key)});
+document.addEventListener('keydown', (event) => {touchEvent(nes.buttonDown, event.key);gametouch(event.key)});
 document.addEventListener('keyup', (event) => {touchEvent(nes.buttonUp, event.key)});
 document.addEventListener('touchstart', (event) => {
     event.preventDefault();event.target.closest('button').classList.add('active');
-    touchEvent(nes.buttonDown, event.target.getAttribute("key"))}, {passive: false});
+    touchEvent(nes.buttonDown, event.target.getAttribute("key")); 
+    gametouch(event.target.getAttribute("key"))}, {passive: false});
 document.addEventListener('touchend', (event) => {
     event.target.closest('button').classList.remove('active');
     touchEvent(nes.buttonUp, event.target.getAttribute("key"))}, {passive: false});
-function touchEvent(callback, event) {
-    switch (event) {
+function touchEvent(callback, key) {
+    switch (key) {
     case "up":case "w":case "W":callback(1, jsnes.Controller.BUTTON_UP); break;
     case "down":case "s":case "S":callback(1, jsnes.Controller.BUTTON_DOWN); break;
     case "left":case "a":case "A":callback(1, jsnes.Controller.BUTTON_LEFT); break;
@@ -188,6 +219,15 @@ function touchEvent(callback, event) {
     case "bb":case "j":case "J":callback(1, jsnes.Controller.BUTTON_B); break;
     case "select":case "Tab":callback(1, jsnes.Controller.BUTTON_SELECT); break;
     case "start":case "Enter":callback(1, jsnes.Controller.BUTTON_START); break;
+    }
+}
+function gametouch(key){
+    if(key==="reset"||key==="r")window.location.reload()
+    if (game)return;
+    switch (key) {
+        case "up":case "w":case "W":romdex=romdex>0?romdex-=1:0;setMenu(); break;
+        case "down":case "s":case "S":romdex=romdex<roms.length-1?romdex+=1:roms.length-1;setMenu(); break;
+        case "start":case "Enter":nes_load_url(link+roms[romdex][1]);game=true; break;
     }
 }
 </script>
