@@ -35,7 +35,6 @@ body{
     height: 26px;
     margin: 5px 0px 0px 15px;
 }
-
 .active{
     background: linear-gradient(145deg, #a69700, #c5b400);
     box-shadow:  2px 2px 4px #555555,
@@ -124,7 +123,7 @@ function setMenu(){
     }
 }
 var image = Gamectx.getImageData(0, 0, ScreenWidth, ScreenHeight);
-var framebuffer_u8, framebuffer_u32;
+var audio_ctx,framebuffer_u8, framebuffer_u32;
 var AudioBuffering = 512;
 var SampleMask = 4 * 1024 - 1;
 var audio_samples_L = new Float32Array(SampleMask+1);
@@ -143,6 +142,7 @@ var nes = new jsnes.NES({
     },
 });
 function onAnimationFrame(){
+    if (!game)return;
     window.requestAnimationFrame(onAnimationFrame);
     image.data.set(framebuffer_u8);
     Gamectx.putImageData(image, 0, 0);
@@ -167,7 +167,7 @@ function nes_init() {
     var buffer = new ArrayBuffer(image.data.length);
     framebuffer_u8 = new Uint8ClampedArray(buffer);
     framebuffer_u32 = new Uint32Array(buffer);
-    var audio_ctx = new (window.AudioContext || window.webkitAudioContext)();
+    audio_ctx = new (window.AudioContext || window.webkitAudioContext)();
     var script_processor = audio_ctx.createScriptProcessor(AudioBuffering, 0, 2);
     script_processor.onaudioprocess = audio_callback;
     script_processor.connect(audio_ctx.destination);
@@ -190,7 +190,11 @@ function nes_load_url(path) {
     XML.onload = function () {
         if (this.status === 200) {
             nes_boot(this.responseText);
-        }else{alert("加载失败");game=false}
+        }else{alert("服务器错误,rom下载失败");game=false;setMenu();return}
+    };
+    XML.onerror = function () {
+        alert("网络错误,rom下载失败");
+        game=false;setMenu();return
     };
     XML.send();
 }
@@ -204,6 +208,7 @@ document.addEventListener('touchend', (event) => {
     event.target.closest('button').classList.remove('active');
     touchEvent(nes.buttonUp, event.target.getAttribute("key"))}, {passive: false});
 function touchEvent(callback, key) {
+    if (!game)return;
     switch (key) {
     case "up":case "w":case "W":callback(1, jsnes.Controller.BUTTON_UP); break;
     case "down":case "s":case "S":callback(1, jsnes.Controller.BUTTON_DOWN); break;
@@ -216,7 +221,7 @@ function touchEvent(callback, key) {
     }
 }
 function gametouch(key){
-    if(key==="reset"||key==="r")window.location.reload()
+    if(key==="reset"||key==="r"){audio_ctx.close();game=false;setMenu();}
     if (game)return;
     switch (key) {
         case "up":case "w":case "W":romdex=romdex>0?romdex-=1:0;setMenu(); break;
