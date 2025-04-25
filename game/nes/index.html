@@ -84,7 +84,6 @@ canvas{
 <script type="text/javascript" src="./jsnes.min.js"></script>
 <script>
 const link="https://yangits.github.io/data/roms/";
-window.onload = function() {setMenu()}
 const ScreenWidth = 256;
 const ScreenHeight = 240;
 const canvasGame = document.getElementById("game");
@@ -229,6 +228,7 @@ function gametouch(key){
         case "start":case "Enter":nes_load_url(link+roms[romdex][1]);game=true; break;
     }
 }
+setMenu();
 </script>
 </body>
 </html>
