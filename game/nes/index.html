@@ -52,21 +52,19 @@ canvas{
     background-color: #9facaa;
 }
 .controller{
+    margin-top: 10px;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
 }
-.right{
-    margin-left: 30px;
-}
 </style>
 </head>
 <body>
-<canvas id="game"  width="256" height="240"></canvas>
+<canvas id="game"  width=256 height=240></canvas>
 <div class="inline">
-    <button class="btn small" key="select"></button>
-    <span class=" text-center">选择</span>
+    <!-- <button class="btn small" key="select"></button>
+    <span class=" text-center">选择</span> -->
     <button class="btn small" key="start"></button>
     <span class="text-center">开始</span>
     <button class="btn small" key="reset"></button>
@@ -78,7 +76,7 @@ canvas{
         <button class="btn" key="left">左</button>&emsp;&emsp;
         <button class="btn" key="right">右</button><br>
         <button class="btn" key="down">下</button><br>
-    </div>
+    </div>&emsp;&emsp;
     <div class="right">
         <button class="btn" key="bb">B</button>
         <button class="btn" key="aa">A</button>
@@ -93,12 +91,8 @@ const ScreenHeight = 240;
 const canvasGame = document.getElementById("game");
 const Gamectx = canvasGame.getContext("2d");
 Gamectx.font = "20px Arial";Gamectx.lineWidth=3;
-Gamectx.fillStyle = '#000';Gamectx.strokeStyle = '#000';
-Gamectx.font = "20px Arial";Gamectx.lineWidth=3;
-Gamectx.fillStyle = '#000';Gamectx.strokeStyle = '#000';
 const roms=[
     ['超级玛丽', 'SuperMario.nes'],
-    ['超级玛丽2', 'SuperMario2.nes'],
     ['超级玛丽无敌', 'SuperMariowd.nes'],
     ['快打旋风', 'kdxf.nes'],
     ['松鼠大作战', 'songshu.nes'],
@@ -148,11 +142,11 @@ var nes = new jsnes.NES({
         audio_write_cursor = (audio_write_cursor + 1) & SampleMask;
     },
 });
-function onAnimationFrame() {
+function onAnimationFrame(){
     window.requestAnimationFrame(onAnimationFrame);
-        image.data.set(framebuffer_u8);
-        Gamectx.putImageData(image, 0, 0);
-    }
+    image.data.set(framebuffer_u8);
+    Gamectx.putImageData(image, 0, 0);
+}
 function audio_remain() {
     return (audio_write_cursor - audio_read_cursor) & SampleMask;
 }
