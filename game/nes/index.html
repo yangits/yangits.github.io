@@ -62,8 +62,8 @@ canvas{
 <body>
 <canvas id="game"  width=256 height=240></canvas>
 <div class="inline">
-    <!-- <button class="btn small" key="select"></button>
-    <span class=" text-center">选择</span> -->
+    <!-- <button class="btn small" key="audio"></button>
+    <span class=" text-center">声音</span> -->
     <button class="btn small" key="start"></button>
     <span class="text-center">开始</span>
     <button class="btn small" key="reset"></button>
@@ -81,14 +81,15 @@ canvas{
         <button class="btn" key="aa">A</button>
     </div>
 </div>
-<script type="text/javascript" src="./jsnes.min.js"></script>
+</body>
+<script src="./jsnes.min.js" type="text/javascript" charset="utf-8"></script>
 <script>
 const link="https://yangits.github.io/data/roms/";
 const ScreenWidth = 256;
 const ScreenHeight = 240;
 const canvasGame = document.getElementById("game");
 const Gamectx = canvasGame.getContext("2d");
-Gamectx.font = "20px Arial";Gamectx.lineWidth=3;
+Gamectx.font = "20px Arial";
 const roms=[
     ['超级玛丽', 'SuperMario.nes'],
     ['超级玛丽无敌', 'SuperMariowd.nes'],
@@ -122,12 +123,12 @@ function setMenu(){
     }
 }
 var image = Gamectx.getImageData(0, 0, ScreenWidth, ScreenHeight);
-var audio_ctx,framebuffer_u8, framebuffer_u32;
-var AudioBuffering = 512;
-var SampleMask = 4 * 1024 - 1;
+var framebuffer_u8, framebuffer_u32;
+var AudioCont, AudioBuffe = 512;
+var SampleMask = 4*1024 - 1;
 var audio_samples_L = new Float32Array(SampleMask+1);
 var audio_samples_R = new Float32Array(SampleMask+1);
-var audio_write_cursor = 0, audio_read_cursor = 0;
+var audio_write = 0, audio_read = 0;
 var nes = new jsnes.NES({
     onFrame: function (framebuffer_24) {
         for (var i = 0; i < ScreenWidth * ScreenHeight; i++) {
@@ -135,52 +136,45 @@ var nes = new jsnes.NES({
         }
     },
     onAudioSample: function (l, r) {
-        audio_samples_L[audio_write_cursor] = l;
-        audio_samples_R[audio_write_cursor] = r;
-        audio_write_cursor = (audio_write_cursor + 1) & SampleMask;
+        audio_samples_L[audio_write] = l;
+        audio_samples_R[audio_write] = r;
+        audio_write = (audio_write + 1) & SampleMask;
     },
 });
 function onAnimationFrame(){
-    if (!game)return;
-    window.requestAnimationFrame(onAnimationFrame);
+    if (!game)return;nes.frame();
     image.data.set(framebuffer_u8);
     Gamectx.putImageData(image, 0, 0);
-}
-function audio_remain() {
-    return (audio_write_cursor - audio_read_cursor) & SampleMask;
-}
-function audio_callback(event) {
-    var dst = event.outputBuffer;
-    var len = dst.length;
-    if (audio_remain() < AudioBuffering) nes.frame();
-    var dst_l = dst.getChannelData(0);
-    var dst_r = dst.getChannelData(1);
-    for (var i = 0; i < len; i++) {
-        var src_idx = (audio_read_cursor + i) & SampleMask;
-        dst_l[i] = audio_samples_L[src_idx];
-        dst_r[i] = audio_samples_R[src_idx];
-    }
-    audio_read_cursor = (audio_read_cursor + len) & SampleMask;
+    requestAnimationFrame(onAnimationFrame);
 }
 function nes_init() {
     var buffer = new ArrayBuffer(image.data.length);
     framebuffer_u8 = new Uint8ClampedArray(buffer);
     framebuffer_u32 = new Uint32Array(buffer);
-    audio_ctx = new (window.AudioContext || window.webkitAudioContext)();
-    var script_processor = audio_ctx.createScriptProcessor(AudioBuffering, 0, 2);
-    script_processor.onaudioprocess = audio_callback;
-    script_processor.connect(audio_ctx.destination);
+    AudioCont = new (window.AudioContext || window.webkitAudioContext)();
+    var script_processor = AudioCont.createScriptProcessor(AudioBuffe, 0, 2);
+    script_processor.onaudioprocess = function (event) {
+        const outputL = event.outputBuffer.getChannelData(0);
+        const outputR = event.outputBuffer.getChannelData(1);
+        for (let i = 0; i < AudioBuffe; i++) {
+            const readIndex = (audio_read + i) & SampleMask;
+            outputL[i] = audio_samples_L[readIndex];
+            outputR[i] = audio_samples_R[readIndex];
+        }
+        audio_read = (audio_read + AudioBuffe) & SampleMask;
+    };
+    script_processor.connect(AudioCont.destination);
     document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'hidden') {
-          if (audio_ctx.state === 'running')audio_ctx.suspend();
+          if (AudioCont.state === 'running')AudioCont.suspend();
         } else {
-          if (audio_ctx.state === 'suspended')audio_ctx.resume();
+          if (AudioCont.state === 'suspended')AudioCont.resume();
         }
-      });
+    });
 }
 function nes_boot(rom_data) {
     nes_init();nes.loadROM(rom_data);
-    window.requestAnimationFrame(onAnimationFrame);
+    requestAnimationFrame(onAnimationFrame);
 }
 function nes_load_url(path) {
     var XML = new XMLHttpRequest();
@@ -220,7 +214,7 @@ function touchEvent(callback, key) {
     }
 }
 function gametouch(key){
-    if(key==="reset"||key==="r"){audio_ctx.close();game=false;setMenu();}
+    if(key==="reset"||key==="r"){AudioCont.close();game=false;setMenu();}
     if (game)return;
     switch (key) {
         case "up":case "w":case "W":romdex=romdex>0?romdex-=1:0;setMenu(); break;
@@ -230,5 +224,4 @@ function gametouch(key){
 }
 setMenu();
 </script>
-</body>
 </html>

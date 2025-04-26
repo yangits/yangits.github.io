@@ -42,10 +42,10 @@
 }
 </style>
 </head>
-<body onkeydown="doKeyDown(event)">
+<body>
 <div class="game">
 <div>
-	<select id="mapdata" onchange="iCurlevel=0;initLevel()">
+	<select id="mapdata" onchange="mapchange()">
 		<option selected>经典</option>
 		<option>简单</option>
 		<option>困难</option>
@@ -69,10 +69,9 @@
 </div>
 </div>
 </body>
-<script src="./Boxworld.js"></script>
-<script src="./answer.js"></script>
-<script src="./Microban.js"></script>
-<script src="./setlevel.js"></script>
+<script src="./Boxworld.js" type="text/javascript" charset="utf-8"></script>
+<script async src="./Microban.js" type="text/javascript" charset="utf-8"></script>
+<script async src="./setlevel.js" type="text/javascript" charset="utf-8"></script>
 <script>
 document.addEventListener('touchmove',function(e){event.preventDefault();},{passive:false});
 var msg = document.getElementById("msg");
@@ -80,7 +79,7 @@ var textsteps = document.getElementById("textsteps");
 var mapdata = document.getElementById("mapdata");
 var canvas = document.getElementById("canvas");
 var Context = canvas.getContext("2d");
-var curMap;//当前显示的地图
+var curMap,curAnswer;//当前显示的地图
 var curLevel;//当前等级原始的地图
 var iCurlevel = 0;//当前关卡数
 var moveTimes = 0;//移动次数
@@ -90,12 +89,13 @@ var timer_solve;//定时器
 var startX,startY,endX,endY;
 Context.translate(1,1);//画布基准位置
 Context.lineWidth=3;//线宽
-var n=35,a=n-2;var maps,answers;
-var levels=[],answer=[],levels_len=100;
-window.onload = function () {
-	maps=[Boxworld,Microban,setlevel];
-	answers=[Box_answer,Mic_answer,[]];
-	initLevel();
+var n=35,a=n-2,maps,answers;
+mapchange();
+function mapchange(){
+	if(mapdata.selectedIndex===0){maps=Boxworld;answers=Box_answer}
+	if(mapdata.selectedIndex===1){maps=Microban;answers=Mic_answer}
+	if(mapdata.selectedIndex===2){maps=setlevel;answers=[]}
+	iCurlevel = 0;initLevel();
 }
 function drawhui1(i,j){//墙绘制
 	Context.beginPath();
@@ -157,11 +157,10 @@ function DrawMap(level){
 			}
 		}
 	}
-	msg.innerHTML = "第" + (iCurlevel+1) +"/"+levels_len+"关 移动次数: "+ moveTimes;
+	msg.innerHTML = "第" + (iCurlevel+1) +"/"+maps.length+"关 移动次数: "+ moveTimes;
 }
 function initLevel(){//初始化游戏等级
-	levels_len=maps[mapdata.selectedIndex].length;
-	curLevel=maps[mapdata.selectedIndex][iCurlevel];
+	curLevel=maps[iCurlevel];
 	curLevel=curLevel.split("\n")
 	for (var i=0;i<curLevel.length ;i++ ){
 		curLevel[i]=curLevel[i].split("")
@@ -181,7 +180,7 @@ function GO(i){//跳转关卡
 		iCurlevel = iCurlevel + i;
 	}
 	if(iCurlevel<0){iCurlevel=0};
-	if(iCurlevel>levels_len-1){iCurlevel=levels_len-1};
+	if(iCurlevel>maps.length-1){iCurlevel=maps.length-1};
 	initLevel();//初始当前等级关卡	
 }
 function move(dir){		//小人移动
@@ -212,8 +211,8 @@ function move(dir){		//小人移动
 	if (Trygo(p1,p2)){
 		moveTimes++;DrawMap(curMap);//重绘当前更新了数据的地图
 		if (checkFinish()){//若果移动完成了进入下一关，定时器解决渲染地图后再弹窗
-			answer=answers[mapdata.selectedIndex][iCurlevel];
-			if(!answer){
+			curAnswer=answers[iCurlevel];
+			if(!curAnswer){
 				let item=localStorage.getItem(mapdata.value+"["+iCurlevel+"]");
 				if (!item){item=""};
 				if(steps.length<item.length ||item.length==0){
@@ -299,19 +298,19 @@ function back(){
 	DrawMap(curMap);steps.pop();moveTimes--;
 }
 function solve(){
-	answer=answers[mapdata.selectedIndex][iCurlevel];
-	if(!answer){
+	curAnswer=answers[iCurlevel];
+	if(!curAnswer){
 		let item=localStorage.getItem(mapdata.value+"["+iCurlevel+"]")
-		if(!item){
-			if(confirm("此关卡没有答案,是否暴力求解(小型地图及5个以下箱子)")){
-				solver_box()
-			}else{return}
-		}else{answer=item};
+		if(item){curAnswer=item
+		}else{
+			if(!confirm("此关卡没有答案,是否暴力求解(小型地图及5个以下箱子)"))return;
+			solver_box();if(!curAnswer)return;
+		};
 	}
 	initLevel();solve_step();
 	function solve_step(){
-		if (moveTimes<answer.length){
-		switch (answer.charAt(moveTimes)){
+		if (moveTimes<curAnswer.length){
+		switch (curAnswer.charAt(moveTimes)){
 			case "L": case "l": move('left');break;//墙
 			case "R": case "r": move('right');break;//小球
 			case "U": case "u": move('up');break;//箱子
@@ -321,7 +320,7 @@ function solve(){
 		}
 	}
 }
-function doKeyDown(event){//与键盘上的上下左右键关联
+document.onkeydown= function(event){//与键盘上的上下左右键关联
 	switch (event.keyCode){
 		case 37: case 65: move("left");break;//左键头
 		case 38: case 87: move("up");break;//上键头
@@ -514,7 +513,7 @@ function solver_box(){
 	const solver = new SokobanSolver(curLevel);
 	const solution = solver.solve();
 	if (solution) {
-		answer=solution.join('')
+		curAnswer=solution.join('')
 	} else {
 		alert("超时，没有找到解")
 	}
