@@ -124,8 +124,8 @@ function setMenu(){
 }
 var image = Gamectx.getImageData(0, 0, ScreenWidth, ScreenHeight);
 var framebuffer_u8, framebuffer_u32;
-var AudioCont, AudioBuffe = 512;
-var SampleMask = 4*1024 - 1;
+var AudioCont, bufferSize = 8*1024;
+var SampleMask = 8*1024 - 1;
 var audio_samples_L = new Float32Array(SampleMask+1);
 var audio_samples_R = new Float32Array(SampleMask+1);
 var audio_write = 0, audio_read = 0;
@@ -147,30 +147,48 @@ function onAnimationFrame(){
     Gamectx.putImageData(image, 0, 0);
     requestAnimationFrame(onAnimationFrame);
 }
-function nes_init() {
-    var buffer = new ArrayBuffer(image.data.length);
-    framebuffer_u8 = new Uint8ClampedArray(buffer);
-    framebuffer_u32 = new Uint32Array(buffer);
-    AudioCont = new (window.AudioContext || window.webkitAudioContext)();
-    var script_processor = AudioCont.createScriptProcessor(AudioBuffe, 0, 2);
-    script_processor.onaudioprocess = function (event) {
-        const outputL = event.outputBuffer.getChannelData(0);
-        const outputR = event.outputBuffer.getChannelData(1);
-        for (let i = 0; i < AudioBuffe; i++) {
-            const readIndex = (audio_read + i) & SampleMask;
-            outputL[i] = audio_samples_L[readIndex];
-            outputR[i] = audio_samples_R[readIndex];
-        }
-        audio_read = (audio_read + AudioBuffe) & SampleMask;
-    };
-    script_processor.connect(AudioCont.destination);
+async function nes_init() {
+    var ArBuffer = new ArrayBuffer(image.data.length);
+    framebuffer_u8 = new Uint8ClampedArray(ArBuffer);
+    framebuffer_u32 = new Uint32Array(ArBuffer);
+    AudioCont = new (window.AudioContext || window.webkitAudioContext)({sampleRate: 44100});
+    // var script_processor = AudioCont.createScriptProcessor(bufferSize, 0, 2);
+    // script_processor.onaudioprocess = function (event) {
+    //     const outputL = event.outputBuffer.getChannelData(0);
+    //     const outputR = event.outputBuffer.getChannelData(1);
+    //     for (let i = 0; i < bufferSize; i++) {
+    //         const readIndex = (audio_read + i) & SampleMask;
+    //         outputL[i] = audio_samples_L[readIndex];
+    //         outputR[i] = audio_samples_R[readIndex];
+    //     }
+    //     audio_read = (audio_read + bufferSize) & SampleMask;
+    // };
+    // script_processor.connect(AudioCont.destination);
+    startAudioLoop();
     document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'hidden') {
-          if (AudioCont.state === 'running')AudioCont.suspend();
-        } else {
-          if (AudioCont.state === 'suspended')AudioCont.resume();
-        }
-    });
+    if (document.visibilityState === 'hidden') {
+        if (AudioCont.state === 'running') AudioCont.suspend();
+    } else {
+        if (AudioCont.state === 'suspended') AudioCont.resume();}
+});
+}
+function startAudioLoop() {
+    const buffer = AudioCont.createBuffer(2, bufferSize, AudioCont.sampleRate);
+    const left = buffer.getChannelData(0);
+    const right = buffer.getChannelData(1);
+    for (let i = 0; i < bufferSize; i++) {
+      const pos = (audio_read + i) & SampleMask;
+      left[i] = audio_samples_L[pos];
+      right[i] = audio_samples_R[pos];
+    }
+    audio_read = (audio_read + bufferSize) & SampleMask;
+    const source = AudioCont.createBufferSource();
+    source.buffer = buffer;
+    source.connect(AudioCont.destination);
+    source.start(AudioCont.currentTime);
+    source.onended = () => {
+        source.disconnect();startAudioLoop()
+    };
 }
 function nes_boot(rom_data) {
     nes_init();nes.loadROM(rom_data);
