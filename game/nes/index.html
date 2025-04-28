@@ -67,14 +67,14 @@ canvas{
     user-select: none;
 }
 .joystick-handle {
-    width: 30%;
-    height: 30%;
+    width: 60px;
+    height: 60px;
     background: #ff0000;
     border-radius: 50%;
     transition:all 0.1s ease;
     position: absolute;
-    left: calc(50% - 25px);
-    top: calc(50% - 25px);
+    left: calc(50% - 30px);
+    top: calc(50% - 30px);
 }
 </style>
 </head>
@@ -115,7 +115,7 @@ const roms=[
     ['美人鱼', 'meirenyu.nes'],
     ['燕山坦克', 'tankeyanshan1990.nes'],
     ['魂斗罗1-30S', 'Contra1-30S.nes'],
-    ['魂斗罗1无敌金身', 'Contra1-1wd.nes'],
+    ['魂斗罗1无敌', 'Contra1-1wd.nes'],
     ['魂斗罗2无限命', 'Contra1-2wd.nes'],
     ['魂斗罗6无限命', 'Contra1-6wd.nes'],
     ['魂斗罗7无限命', 'Contra1-7wd.nes'],
@@ -163,12 +163,13 @@ function onAnimationFrame(){
     Gamectx.putImageData(image, 0, 0);
     requestAnimationFrame(onAnimationFrame);
 }
-async function nes_init() {
+async function nes_init(rom_data) {
     var ArBuffer = new ArrayBuffer(image.data.length);
     framebuffer_u8 = new Uint8ClampedArray(ArBuffer);
     framebuffer_u32 = new Uint32Array(ArBuffer);
     AudioCont = new (window.AudioContext || window.webkitAudioContext)({sampleRate: 44100});
-    startAudioLoop();Interval=setInterval(nes.frame, 12);
+    startAudioLoop();nes.loadROM(rom_data);
+    Interval=setInterval(nes.frame, 12);onAnimationFrame();
 }
 function startAudioLoop() {
     const buffer = AudioCont.createBuffer(2, bufferSize, AudioCont.sampleRate);
@@ -188,17 +189,13 @@ function startAudioLoop() {
         source.disconnect();startAudioLoop()
     };
 }
-function nes_boot(rom_data) {
-    nes_init();nes.loadROM(rom_data);
-    requestAnimationFrame(onAnimationFrame);
-}
 function nes_load_url(path) {
     var XML = new XMLHttpRequest();
     XML.open("GET", path);
     XML.overrideMimeType("text/plain; charset=x-user-defined");
     XML.onload = function () {
         if (this.status === 200) {
-            nes_boot(this.responseText);
+            nes_init(this.responseText);
         }else{alert("服务器错误,rom下载失败");game=false;setMenu();return}
     };
     XML.onerror = function () {
@@ -258,7 +255,7 @@ function updatePosition(e) {
     const angle = (Math.atan2(-y, x) * 180 / Math.PI + 360) % 360;
     const direction = directions.find(d => angle >= d.min && angle < d.max);
     if(lastdirection!=direction.name){
-        if(lastdirection!=null)touchEvent(nes.buttonUp, lastdirection);
+        if(lastdirection)touchEvent(nes.buttonUp, lastdirection);
         touchEvent(nes.buttonDown, direction.name);gametouch(direction.name)
         lastdirection=direction.name;
     }
