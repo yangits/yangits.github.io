@@ -57,6 +57,25 @@ canvas{
     justify-content: center;
     align-items: center;
 }
+.joystick-container {
+    width: 150px;
+    height: 150px;
+    background: #666;
+    border-radius: 50%;
+    position: relative;
+    touch-action: none;
+    user-select: none;
+}
+.joystick-handle {
+    width: 30%;
+    height: 30%;
+    background: #ff0000;
+    border-radius: 50%;
+    transition:all 0.1s ease;
+    position: absolute;
+    left: calc(50% - 25px);
+    top: calc(50% - 25px);
+}
 </style>
 </head>
 <body>
@@ -70,11 +89,8 @@ canvas{
     <span class="text-center">重置</span>
 </div>
 <div class="controller">
-    <div class="left">
-        <button class="btn" key="up">上</button><br>
-        <button class="btn" key="left">左</button>&emsp;&emsp;
-        <button class="btn" key="right">右</button><br>
-        <button class="btn" key="down">下</button><br>
+    <div  class="joystick-container" id="joystick">
+        <div class="joystick-handle" id="handle"></div>
     </div>&emsp;&emsp;
     <div class="right">
         <button class="btn" key="bb">B</button>
@@ -128,7 +144,7 @@ var AudioCont, bufferSize = 8*1024;
 var SampleMask = 8*1024 - 1;
 var audio_samples_L = new Float32Array(SampleMask+1);
 var audio_samples_R = new Float32Array(SampleMask+1);
-var audio_write = 0, audio_read = 0;
+var audio_write = 0, audio_read = 0, Interval;
 var nes = new jsnes.NES({
     onFrame: function (framebuffer_24) {
         for (var i = 0; i < ScreenWidth * ScreenHeight; i++) {
@@ -142,7 +158,7 @@ var nes = new jsnes.NES({
     },
 });
 function onAnimationFrame(){
-    if (!game)return;nes.frame();
+    if (!game)return;
     image.data.set(framebuffer_u8);
     Gamectx.putImageData(image, 0, 0);
     requestAnimationFrame(onAnimationFrame);
@@ -152,34 +168,16 @@ async function nes_init() {
     framebuffer_u8 = new Uint8ClampedArray(ArBuffer);
     framebuffer_u32 = new Uint32Array(ArBuffer);
     AudioCont = new (window.AudioContext || window.webkitAudioContext)({sampleRate: 44100});
-    // var script_processor = AudioCont.createScriptProcessor(bufferSize, 0, 2);
-    // script_processor.onaudioprocess = function (event) {
-    //     const outputL = event.outputBuffer.getChannelData(0);
-    //     const outputR = event.outputBuffer.getChannelData(1);
-    //     for (let i = 0; i < bufferSize; i++) {
-    //         const readIndex = (audio_read + i) & SampleMask;
-    //         outputL[i] = audio_samples_L[readIndex];
-    //         outputR[i] = audio_samples_R[readIndex];
-    //     }
-    //     audio_read = (audio_read + bufferSize) & SampleMask;
-    // };
-    // script_processor.connect(AudioCont.destination);
-    startAudioLoop();
-    document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'hidden') {
-        if (AudioCont.state === 'running') AudioCont.suspend();
-    } else {
-        if (AudioCont.state === 'suspended') AudioCont.resume();}
-});
+    startAudioLoop();Interval=setInterval(nes.frame, 12);
 }
 function startAudioLoop() {
     const buffer = AudioCont.createBuffer(2, bufferSize, AudioCont.sampleRate);
     const left = buffer.getChannelData(0);
     const right = buffer.getChannelData(1);
     for (let i = 0; i < bufferSize; i++) {
-      const pos = (audio_read + i) & SampleMask;
-      left[i] = audio_samples_L[pos];
-      right[i] = audio_samples_R[pos];
+        const pos = (audio_read + i) & SampleMask;
+        left[i] = audio_samples_L[pos];
+        right[i] = audio_samples_R[pos];
     }
     audio_read = (audio_read + bufferSize) & SampleMask;
     const source = AudioCont.createBufferSource();
@@ -209,15 +207,77 @@ function nes_load_url(path) {
     };
     XML.send();
 }
+const joystick = document.getElementById('joystick');
+const handle = document.getElementById('handle');
+const radius = joystick.offsetWidth / 2; // 摇杆半径
+var lastdirection = null;
+const directions = [
+    { name: 'right', min: 0, max: 22.5 },
+    { name: 'right', min: 337.5, max: 360 },
+    { name: 'rightup', min: 22.5, max: 67.5 },
+    { name: 'up', min: 67.5, max: 112.5 },
+    { name: 'leftup', min: 112.5, max: 157.5 },
+    { name: 'left', min: 157.5, max: 202.5 },
+    { name: 'leftdown', min: 202.5, max: 247.5 },
+    { name: 'down', min: 247.5, max: 292.5 },
+    { name: 'rightdown', min: 292.5, max: 337.5 }
+];
+function endDrag() {
+    handle.style.transform = "translate(0, 0)";
+    touchEvent(nes.buttonUp, lastdirection);
+    lastdirection = null;
+}
+function updatePosition(e) {
+    // 获取触摸/鼠标坐标
+    const rect = joystick.getBoundingClientRect();
+    var index,clientX,clientY
+    if(e.touches){
+        let arr=[]
+        for(let i=0;i<e.touches.length;i++){
+            let x = e.touches[i].clientX - rect.left - radius;
+            let y = e.touches[i].clientY - rect.top - radius;
+            arr[i] = Math.sqrt(x * x + y * y);
+            index=arr.indexOf(Math.min(...arr))
+        }
+        clientX=e.touches[index].clientX;
+        clientY=e.touches[index].clientY;
+    }else{
+        clientX=e.clientX;
+        clientY=e.clientY;
+    }
+    // 计算相对位置 限制摇杆移动范围
+    let x = clientX - rect.left - radius;
+    let y = clientY - rect.top - radius;
+    const distance = Math.sqrt(x * x + y * y);
+    if (distance > radius) {
+        x = x / distance * radius;
+        y = y / distance * radius;
+    }
+    // 更新摇杆位置 计算角度（0-360度） 检测方向
+    handle.style.transform = `translate(${x}px, ${y}px)`;
+    const angle = (Math.atan2(-y, x) * 180 / Math.PI + 360) % 360;
+    const direction = directions.find(d => angle >= d.min && angle < d.max);
+    if(lastdirection!=direction.name){
+        if(lastdirection!=null)touchEvent(nes.buttonUp, lastdirection);
+        touchEvent(nes.buttonDown, direction.name);gametouch(direction.name)
+        lastdirection=direction.name;
+    }
+}
+joystick.ontouchstart=updatePosition;
+joystick.ontouchmove=updatePosition;
+joystick.ontouchend=endDrag;
 document.addEventListener('keydown', (event) => {touchEvent(nes.buttonDown, event.key);gametouch(event.key)});
 document.addEventListener('keyup', (event) => {touchEvent(nes.buttonUp, event.key)});
 document.addEventListener('touchstart', (event) => {
-    event.preventDefault();event.target.closest('button').classList.add('active');
-    touchEvent(nes.buttonDown, event.target.getAttribute("key")); 
-    gametouch(event.target.getAttribute("key"))}, {passive: false});
+    event.preventDefault();key=event.target.getAttribute("key")
+    event.target.closest('button').classList.add('active');
+    touchEvent(nes.buttonDown, key); gametouch(key)
+}, {passive: false});
 document.addEventListener('touchend', (event) => {
+    key=event.target.getAttribute("key")
     event.target.closest('button').classList.remove('active');
-    touchEvent(nes.buttonUp, event.target.getAttribute("key"))}, {passive: false});
+    touchEvent(nes.buttonUp, key)
+}, {passive: false});
 function touchEvent(callback, key) {
     if (!game)return;
     switch (key) {
@@ -225,14 +285,18 @@ function touchEvent(callback, key) {
     case "down":case "s":case "S":callback(1, jsnes.Controller.BUTTON_DOWN); break;
     case "left":case "a":case "A":callback(1, jsnes.Controller.BUTTON_LEFT); break;
     case "right":case "d":case "D":callback(1, jsnes.Controller.BUTTON_RIGHT); break;
+    case "leftup":callback(1, jsnes.Controller.BUTTON_LEFT);callback(1, jsnes.Controller.BUTTON_UP); break;
+    case "leftdown":callback(1, jsnes.Controller.BUTTON_LEFT);callback(1, jsnes.Controller.BUTTON_DOWN); break;
+    case "rightup":callback(1, jsnes.Controller.BUTTON_RIGHT);callback(1, jsnes.Controller.BUTTON_UP); break;
+    case "rightdown":callback(1, jsnes.Controller.BUTTON_RIGHT);callback(1, jsnes.Controller.BUTTON_DOWN); break;  
     case "aa":case "k":case "K":callback(1, jsnes.Controller.BUTTON_A); break;
     case "bb":case "j":case "J":callback(1, jsnes.Controller.BUTTON_B); break;
-    case "select":case "Tab":callback(1, jsnes.Controller.BUTTON_SELECT); break;
+    // case "select":case "Tab":callback(1, jsnes.Controller.BUTTON_SELECT); break;
     case "start":case "Enter":callback(1, jsnes.Controller.BUTTON_START); break;
+    case "reset":case "r":case "R":AudioCont.close();game=false;clearInterval(Interval);setMenu(); break;
     }
 }
 function gametouch(key){
-    if(key==="reset"||key==="r"){AudioCont.close();game=false;setMenu();}
     if (game)return;
     switch (key) {
         case "up":case "w":case "W":romdex=romdex>0?romdex-=1:0;setMenu(); break;
