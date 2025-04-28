@@ -12,13 +12,8 @@ body{
     max-width: 500px;
     background: #019CD6;
     user-select: none;
-    overflow: hidden;
     text-align: center;
     margin: auto;
-}
-.inline{
-    width: 70%;
-    margin-left: 33%;
 }
 .btn{
     border: 1px solid #ddc905;
@@ -33,7 +28,6 @@ body{
 .btn.small{
     width: 26px;
     height: 26px;
-    margin: 5px 0px 0px 15px;
 }
 .active{
     background: linear-gradient(145deg, #a69700, #c5b400);
@@ -44,10 +38,10 @@ body{
     font-size: 12px;
 }
 canvas{
-    width: 90%;
+    width: calc(98% - 20px);
     margin-top: 10px;
     border: 10px inset;
-    border-color: #0a90bf #4dbde3 #59c6e8 #019CD6;
+    border-color: #0a90bf #4dbde3 #3ab3d8 #019CD6;
     background-color: #9facaa;
 }
 .controller{
@@ -57,19 +51,17 @@ canvas{
     justify-content: center;
     align-items: center;
 }
-.joystick-container {
-    width: 150px;
-    height: 150px;
-    background: #666;
+.left {
+    width: 180px;
+    height: 180px;
+    border: 1px inset;
     border-radius: 50%;
     position: relative;
-    touch-action: none;
-    user-select: none;
 }
-.joystick-handle {
+.joystick {
     width: 60px;
     height: 60px;
-    background: #ff0000;
+    background: red;
     border-radius: 50%;
     transition:all 0.1s ease;
     position: absolute;
@@ -80,18 +72,24 @@ canvas{
 </head>
 <body>
 <canvas id="game"  width=256 height=240></canvas>
-<div class="inline">
-    <!-- <button class="btn small" key="audio"></button>
-    <span class=" text-center">声音</span> -->
+<div style="text-align: right;margin-right: 10px;">
+    <button class="btn small" key="rocker"></button>
+    <span class=" text-center" id="rocktxt">摇杆</span>
     <button class="btn small" key="start"></button>
     <span class="text-center">开始</span>
     <button class="btn small" key="reset"></button>
     <span class="text-center">重置</span>
 </div>
 <div class="controller">
-    <div  class="joystick-container" id="joystick">
-        <div class="joystick-handle" id="handle"></div>
-    </div>&emsp;&emsp;
+    <div class="left" id="rocker" style="display: none;">
+        <button class="btn" key="up">上</button><br>
+        <button class="btn" key="left">左</button>&emsp;&emsp;
+        <button class="btn" key="right">右</button><br>
+        <button class="btn" key="down">下</button>
+    </div>
+    <div class="left" id="joystick">
+        <div class="joystick" id="handle"></div>
+    </div>&emsp;
     <div class="right">
         <button class="btn" key="bb">B</button>
         <button class="btn" key="aa">A</button>
@@ -169,7 +167,7 @@ async function nes_init(rom_data) {
     framebuffer_u32 = new Uint32Array(ArBuffer);
     AudioCont = new (window.AudioContext || window.webkitAudioContext)({sampleRate: 44100});
     startAudioLoop();nes.loadROM(rom_data);
-    Interval=setInterval(nes.frame, 12);onAnimationFrame();
+    Interval=setInterval(nes.frame, 16);onAnimationFrame();
 }
 function startAudioLoop() {
     const buffer = AudioCont.createBuffer(2, bufferSize, AudioCont.sampleRate);
@@ -205,6 +203,8 @@ function nes_load_url(path) {
     XML.send();
 }
 const joystick = document.getElementById('joystick');
+const rocker = document.getElementById('rocker');
+const rocktxt = document.getElementById('rocktxt');
 const handle = document.getElementById('handle');
 const radius = joystick.offsetWidth / 2; // 摇杆半径
 var lastdirection = null;
@@ -294,6 +294,13 @@ function touchEvent(callback, key) {
     }
 }
 function gametouch(key){
+    if(key==="rocker"||key==="z"){
+        if(rocktxt.innerText==="摇杆"){
+            rocktxt.innerText="按钮";rocker.style.display="";joystick.style.display="none"
+        }else{
+            rocktxt.innerText="摇杆";rocker.style.display="none";joystick.style.display=""
+        }
+    }
     if (game)return;
     switch (key) {
         case "up":case "w":case "W":romdex=romdex>0?romdex-=1:0;setMenu(); break;
