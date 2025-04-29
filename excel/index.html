@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电子表格</title>
+    <link href="./xspreadsheet.css" rel="stylesheet"></head>
+    <script src="./xspreadsheet.js"></script>
+</head>
+<body>
+    <div id="spreadsheet"></div>
+    <!-- <button onclick="setData()" id="bt">A</button> -->
+<script>
+    const options = {
+        mode: 'edit',  //edit/read
+        showToolbar:true,showBottomBar:true,showGrid:true,showContextmenu:true,
+        extendToolbar: {right: [{tip: '数据',el: document.getElementById('bt')}]},
+        row: {len:100},col: {len:26,width:80,2:{width: 200},},
+        style: {align: "center",bgcolor: "#fff",color: "#000",
+            border: {
+                top: ["thin", "#000"],
+                bottom: ["thin", "#000"],
+                right: ["thin", "#000"],
+                left: ["thin", "#000"]
+            }
+        }
+    }
+    x_spreadsheet.locale('zh-cn');
+    var data =[["序号","名字"],["1","张三"],["2","李四"],["3","王五"]];
+    function data_obj(data) {
+      var obj = {};
+      data.map((item, index) => {
+        obj[index] = {};
+        obj[index]["cells"] = {};
+        item.map((e, i) => {
+          obj[index]["cells"][i] = {text:e};
+        });
+      });
+      return obj;
+    }
+    var xs =x_spreadsheet('#spreadsheet',options)
+            .loadData({name:'sheet1',freeze:'A1',merges:['A1:A1'],rows:data_obj(data)})
+            .change(data => {});
+    xs.on('cell-selected', (text,cell, ri, ci) => {
+        xs.cellText(3, 3, text.text).reRender();
+        })
+    function setData(){
+        xs.cellText(2, 3, xs.cell(1, 1).text).reRender();
+    }
+</script>
+</body>
+</html>

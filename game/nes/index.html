@@ -4,7 +4,7 @@
 <meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="renderer" content="webkit">
 <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
-<title>红白机游戏厅</title>
+<title>nes游戏厅</title>
 <style>
 body{
     height: 100%;
@@ -54,7 +54,7 @@ canvas{
 .left {
     width: 180px;
     height: 180px;
-    border: 1px inset;
+    border: 1px solid black;
     border-radius: 50%;
     position: relative;
 }
@@ -166,8 +166,8 @@ async function nes_init(rom_data) {
     framebuffer_u8 = new Uint8ClampedArray(ArBuffer);
     framebuffer_u32 = new Uint32Array(ArBuffer);
     AudioCont = new (window.AudioContext || window.webkitAudioContext)({sampleRate: 44100});
-    startAudioLoop();nes.loadROM(rom_data);
-    Interval=setInterval(nes.frame, 16);onAnimationFrame();
+    Interval=setInterval(nes.frame, 16);nes.loadROM(rom_data);
+    startAudioLoop();onAnimationFrame();
 }
 function startAudioLoop() {
     const buffer = AudioCont.createBuffer(2, bufferSize, AudioCont.sampleRate);
@@ -260,21 +260,21 @@ function updatePosition(e) {
         lastdirection=direction.name;
     }
 }
-joystick.ontouchstart=updatePosition;
-joystick.ontouchmove=updatePosition;
-joystick.ontouchend=endDrag;
+joystick.addEventListener('touchstart',updatePosition);
+joystick.addEventListener('touchmove',updatePosition);
+joystick.addEventListener('touchend',endDrag);
 document.addEventListener('keydown', (event) => {touchEvent(nes.buttonDown, event.key);gametouch(event.key)});
 document.addEventListener('keyup', (event) => {touchEvent(nes.buttonUp, event.key)});
 document.addEventListener('touchstart', (event) => {
-    event.preventDefault();key=event.target.getAttribute("key")
+    event.preventDefault();key=event.target.getAttribute("key");
     event.target.closest('button').classList.add('active');
     touchEvent(nes.buttonDown, key); gametouch(key)
 }, {passive: false});
 document.addEventListener('touchend', (event) => {
-    key=event.target.getAttribute("key")
+    key=event.target.getAttribute("key");
     event.target.closest('button').classList.remove('active');
     touchEvent(nes.buttonUp, key)
-}, {passive: false});
+});
 function touchEvent(callback, key) {
     if (!game)return;
     switch (key) {
@@ -294,7 +294,7 @@ function touchEvent(callback, key) {
     }
 }
 function gametouch(key){
-    if(key==="rocker"||key==="z"){
+    if(key==="rocker"){
         if(rocktxt.innerText==="摇杆"){
             rocktxt.innerText="按钮";rocker.style.display="";joystick.style.display="none"
         }else{
