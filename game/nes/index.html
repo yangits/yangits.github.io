@@ -142,7 +142,7 @@ var AudioCont, bufferSize = 8*1024;
 var SampleMask = 8*1024 - 1;
 var audio_samples_L = new Float32Array(SampleMask+1);
 var audio_samples_R = new Float32Array(SampleMask+1);
-var audio_write = 0, audio_read = 0, Interval;
+var audio_write = 0, audio_read = 0, Interval, romObjs={};
 var nes = new jsnes.NES({
     onFrame: function (framebuffer_24) {
         for (var i = 0; i < ScreenWidth * ScreenHeight; i++) {
@@ -166,8 +166,8 @@ async function nes_init(rom_data) {
     framebuffer_u8 = new Uint8ClampedArray(ArBuffer);
     framebuffer_u32 = new Uint32Array(ArBuffer);
     AudioCont = new (window.AudioContext || window.webkitAudioContext)({sampleRate: 44100});
-    Interval=setInterval(nes.frame, 16);nes.loadROM(rom_data);
-    startAudioLoop();onAnimationFrame();
+    if(!romObjs[roms[romdex][1]]){nes.loadROM(rom_data);}else{nes.fromJSON(romObjs[roms[romdex][1]])}
+    Interval=setInterval(nes.frame, nes.frameTime);startAudioLoop();onAnimationFrame();
 }
 function startAudioLoop() {
     const buffer = AudioCont.createBuffer(2, bufferSize, AudioCont.sampleRate);
@@ -194,11 +194,11 @@ function nes_load_url(path) {
     XML.onload = function () {
         if (this.status === 200) {
             nes_init(this.responseText);
-        }else{alert("服务器错误,rom下载失败");game=false;setMenu();return}
+        }else{alert("服务器错误,rom下载失败");game=false;setMenu();}
     };
     XML.onerror = function () {
         alert("网络错误,rom下载失败");
-        game=false;setMenu();return
+        game=false;setMenu();
     };
     XML.send();
 }
@@ -290,16 +290,15 @@ function touchEvent(callback, key) {
     case "bb":case "j":case "J":callback(1, jsnes.Controller.BUTTON_B); break;
     // case "select":case "Tab":callback(1, jsnes.Controller.BUTTON_SELECT); break;
     case "start":case "Enter":callback(1, jsnes.Controller.BUTTON_START); break;
-    case "reset":case "r":case "R":AudioCont.close();game=false;clearInterval(Interval);setMenu(); break;
+    case "reset":case "r":case "R":romObjs[roms[romdex][1]]=nes.toJSON();AudioCont.close();
+        game=false;clearInterval(Interval);setMenu(); break;
     }
 }
 function gametouch(key){
     if(key==="rocker"){
         if(rocktxt.innerText==="摇杆"){
             rocktxt.innerText="按钮";rocker.style.display="";joystick.style.display="none"
-        }else{
-            rocktxt.innerText="摇杆";rocker.style.display="none";joystick.style.display=""
-        }
+        }else{rocktxt.innerText="摇杆";rocker.style.display="none";joystick.style.display=""}
     }
     if (game)return;
     switch (key) {
