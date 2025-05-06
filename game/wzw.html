@@ -181,7 +181,7 @@ function clearLines(){
     if(score>=10000*(Level+1)){Level++;downspeed=(0.8-Level*0.001)**Level*1000};
 }
 function rotatePiece(){
-    if(!currentPiece || currentPiece.shape==PIECES[0])return;
+    if(Pause || gameOver || currentPiece.shape==PIECES[0])return;
     const rotated = currentPiece.shape.map(Block => [-Block[1], Block[0]]);
     const original = currentPiece.shape;
     currentPiece.shape = rotated;
@@ -194,15 +194,15 @@ function rotatePiece(){
     currentPiece.shape = original;
 }
 function moveLeft(){
-    if (!currentPiece) return;
+    if (Pause || gameOver) return;
     if (!isCollision(currentPiece, -1, 0))currentPiece.x--
 }
 function moveRight(){
-    if (!currentPiece) return;
+    if (Pause || gameOver) return;
     if (!isCollision(currentPiece, 1, 0))currentPiece.x++;
 }
 function moveDown(){
-    if (!currentPiece) return;
+    if (Pause || gameOver) return;
     if (!isCollision(currentPiece, 0, 1)){currentPiece.y++;}
       else{downCounter=1000;}
 }
