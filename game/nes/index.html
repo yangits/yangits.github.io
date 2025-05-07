@@ -7,7 +7,6 @@
 <title>nes游戏厅</title>
 <style>
 body{
-    height: 100%;
     width: 100%;
     max-width: 500px;
     background: #019CD6;
@@ -34,9 +33,6 @@ body{
     box-shadow:  2px 2px 4px #555555,
     -2px -2px 4px #7ed2d2;
 }
-.text-center{
-    font-size: 12px;
-}
 canvas{
     width: calc(98% - 20px);
     margin-top: 10px;
@@ -45,20 +41,21 @@ canvas{
     background-color: #9facaa;
 }
 .controller{
-    margin-top: 10px;
+    width: 95%;
+    margin-left: 2%;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
-.left {
+#joystick {
     width: 180px;
     height: 180px;
     border: 1px solid black;
     border-radius: 50%;
     position: relative;
 }
-.joystick {
+#handle {
     width: 60px;
     height: 60px;
     background: red;
@@ -74,29 +71,27 @@ canvas{
 <canvas id="game"  width=256 height=240></canvas>
 <div style="text-align: right;margin-right: 10px;">
     <button class="btn small" key="rocker"></button>
-    <span class=" text-center" id="rocktxt">摇杆</span>
+    <span style="font-size: 12px;">摇杆</span>
     <button class="btn small" key="start"></button>
-    <span class="text-center">开始</span>
+    <span style="font-size: 12px;">开始</span>
     <button class="btn small" key="reset"></button>
-    <span class="text-center">重置</span>
+    <span style="font-size: 12px;">复位</span>
 </div>
 <div class="controller">
-    <div class="left" id="rocker" style="display: none;">
+    <div id="joystick">
         <button class="btn" key="up">上</button><br>
         <button class="btn" key="left">左</button>&emsp;&emsp;
         <button class="btn" key="right">右</button><br>
         <button class="btn" key="down">下</button>
+        <div id="handle"></div>
     </div>
-    <div class="left" id="joystick">
-        <div class="joystick" id="handle"></div>
-    </div>&emsp;
-    <div class="right">
+    <div>
         <button class="btn" key="bb">B</button>
         <button class="btn" key="aa">A</button>
     </div>
 </div>
 </body>
-<script src="./jsnes.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="./jsnes.min.js"></script>
 <script>
 const link="https://yangits.github.io/data/roms/";
 const ScreenWidth = 256;
@@ -108,7 +103,6 @@ const roms=[
     ['超级玛丽', 'SuperMario.nes'],
     ['超级玛丽无敌', 'SuperMariowd.nes'],
     ['快打旋风', 'kdxf.nes'],
-    ['松鼠大作战', 'songshu.nes'],
     ['忍者街机', 'renzhe2.nes'],
     ['美人鱼', 'meirenyu.nes'],
     ['燕山坦克', 'tankeyanshan1990.nes'],
@@ -119,12 +113,19 @@ const roms=[
     ['魂斗罗7无限命', 'Contra1-7wd.nes'],
     ['冒险岛', 'maoixandao.nes'],
     ['冒险岛无敌', 'maoixandaowd.nes'],
+    ['松鼠大作战', 'songshu.nes'],
+    ['松鼠大作战1', 'songshu1.nes'],
     ['挖金', 'TaoJinZhe.nes'],
     ['炸弹人', 'zhadanren.nes'],
     ['炸弹人无敌', 'zhadanrenwd.nes'],
     ['敲冰块', 'Ice Climber.nes'],
-    ['西游记1', 'xiyouji.nes'],
-    ['西游记1汉化', 'xiyouji1.nes'],
+    ['西游记', 'xiyouji.nes'],
+    ['西游记无限命', 'xiyoujiwd.nes'],
+    ['吃豆人', 'chidouren.nes'],
+    ['充气狗', 'chongqigou.nes'],
+    ['水管工玛丽', 'shuiguanmali.nes'],
+    ['象棋', 'xiangqi.nes'],
+    ['彩虹岛', 'caihong.nes'],
     ['雪人兄弟', 'SnowBrothers(E).nes']]
 let romdex=0,game=false;
 function setMenu(){
@@ -142,14 +143,14 @@ var AudioCont, bufferSize = 8*1024;
 var SampleMask = 8*1024 - 1;
 var audio_samples_L = new Float32Array(SampleMask+1);
 var audio_samples_R = new Float32Array(SampleMask+1);
-var audio_write = 0, audio_read = 0, Interval, romObjs={};
+var audio_write = 0, audio_read = 0, romObjs={};
 var nes = new jsnes.NES({
-    onFrame: function (framebuffer_24) {
+    onFrame: function (framebuffer_24){
         for (var i = 0; i < ScreenWidth * ScreenHeight; i++) {
             framebuffer_u32[i] = 0xFF000000 | framebuffer_24[i];
         }
     },
-    onAudioSample: function (l, r) {
+    onAudioSample: function (l, r){
         audio_samples_L[audio_write] = l;
         audio_samples_R[audio_write] = r;
         audio_write = (audio_write + 1) & SampleMask;
@@ -161,15 +162,16 @@ function onAnimationFrame(){
     Gamectx.putImageData(image, 0, 0);
     requestAnimationFrame(onAnimationFrame);
 }
-async function nes_init(rom_data) {
+async function nes_init(rom_data){
     var ArBuffer = new ArrayBuffer(image.data.length);
     framebuffer_u8 = new Uint8ClampedArray(ArBuffer);
     framebuffer_u32 = new Uint32Array(ArBuffer);
-    AudioCont = new (window.AudioContext || window.webkitAudioContext)({sampleRate: 44100});
+    AudioCont = new (window.AudioContext || window.webkitAudioContext)();
     if(!romObjs[roms[romdex][1]]){nes.loadROM(rom_data);}else{nes.fromJSON(romObjs[roms[romdex][1]])}
-    Interval=setInterval(nes.frame, nes.frameTime);startAudioLoop();onAnimationFrame();
+    (function loop(){if(!game)return;nes.frame();setTimeout(loop, 12);})();
+    onAnimationFrame();startAudioLoop();
 }
-function startAudioLoop() {
+function startAudioLoop(){
     const buffer = AudioCont.createBuffer(2, bufferSize, AudioCont.sampleRate);
     const left = buffer.getChannelData(0);
     const right = buffer.getChannelData(1);
@@ -187,7 +189,7 @@ function startAudioLoop() {
         source.disconnect();startAudioLoop()
     };
 }
-function nes_load_url(path) {
+function nes_load_url(path){
     var XML = new XMLHttpRequest();
     XML.open("GET", path);
     XML.overrideMimeType("text/plain; charset=x-user-defined");
@@ -203,11 +205,9 @@ function nes_load_url(path) {
     XML.send();
 }
 const joystick = document.getElementById('joystick');
-const rocker = document.getElementById('rocker');
-const rocktxt = document.getElementById('rocktxt');
 const handle = document.getElementById('handle');
 const radius = joystick.offsetWidth / 2; // 摇杆半径
-var lastdirection = null;
+var Curdir = "",rockbt=true;
 const directions = [
     { name: 'right', min: 0, max: 22.5 },
     { name: 'right', min: 337.5, max: 360 },
@@ -219,13 +219,12 @@ const directions = [
     { name: 'down', min: 247.5, max: 292.5 },
     { name: 'rightdown', min: 292.5, max: 337.5 }
 ];
-function endDrag() {
-    handle.style.transform = "translate(0, 0)";
-    touchEvent(nes.buttonUp, lastdirection);
-    lastdirection = null;
+function endDrag(){
+    if(!rockbt)return; touchEvent(nes.buttonUp, Curdir);
+    handle.style.transform = "translate(0, 0)";Curdir = "";
 }
-function updatePosition(e) {
-    // 获取触摸/鼠标坐标
+function updatePosition(e){
+    if(!rockbt)return;
     const rect = joystick.getBoundingClientRect();
     var index,clientX,clientY
     if(e.touches){
@@ -254,10 +253,9 @@ function updatePosition(e) {
     handle.style.transform = `translate(${x}px, ${y}px)`;
     const angle = (Math.atan2(-y, x) * 180 / Math.PI + 360) % 360;
     const direction = directions.find(d => angle >= d.min && angle < d.max);
-    if(lastdirection!=direction.name){
-        if(lastdirection)touchEvent(nes.buttonUp, lastdirection);
-        touchEvent(nes.buttonDown, direction.name);gametouch(direction.name)
-        lastdirection=direction.name;
+    if(Curdir!=direction.name){
+        touchEvent(nes.buttonUp, Curdir);Curdir=direction.name;
+        touchEvent(nes.buttonDown, Curdir);
     }
 }
 joystick.addEventListener('touchstart',updatePosition);
@@ -275,7 +273,7 @@ document.addEventListener('touchend', (event) => {
     event.target.closest('button').classList.remove('active');
     touchEvent(nes.buttonUp, key)
 });
-function touchEvent(callback, key) {
+function touchEvent(callback, key){
     if (!game)return;
     switch (key) {
     case "up":case "w":case "W":callback(1, jsnes.Controller.BUTTON_UP); break;
@@ -290,16 +288,11 @@ function touchEvent(callback, key) {
     case "bb":case "j":case "J":callback(1, jsnes.Controller.BUTTON_B); break;
     // case "select":case "Tab":callback(1, jsnes.Controller.BUTTON_SELECT); break;
     case "start":case "Enter":callback(1, jsnes.Controller.BUTTON_START); break;
-    case "reset":case "r":case "R":romObjs[roms[romdex][1]]=nes.toJSON();AudioCont.close();
-        game=false;clearInterval(Interval);setMenu(); break;
+    case "reset":case "r":case "R":romObjs[roms[romdex][1]]=nes.toJSON();AudioCont.close();game=false;setMenu(); break;
     }
 }
 function gametouch(key){
-    if(key==="rocker"){
-        if(rocktxt.innerText==="摇杆"){
-            rocktxt.innerText="按钮";rocker.style.display="";joystick.style.display="none"
-        }else{rocktxt.innerText="摇杆";rocker.style.display="none";joystick.style.display=""}
-    }
+    if(key==="rocker"){rockbt=rockbt?false:true;handle.style.display=rockbt?"":"none";}
     if (game)return;
     switch (key) {
         case "up":case "w":case "W":romdex=romdex>0?romdex-=1:0;setMenu(); break;
@@ -307,6 +300,6 @@ function gametouch(key){
         case "start":case "Enter":nes_load_url(link+roms[romdex][1]);game=true; break;
     }
 }
-setMenu();
+setMenu();gametouch("rocker");
 </script>
 </html>

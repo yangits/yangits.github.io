@@ -7,12 +7,10 @@
 <title>俄罗斯方块</title>
 <style>
 body{
-    height: 100%;
     width: 100%;
-    max-width: 400px;
+    max-width: 500px;
     background: #019CD6;
     user-select: none;
-    overflow: hidden;
     text-align: center;
     margin: auto;
 }
@@ -24,15 +22,13 @@ body{
     height: 60px;
     box-shadow:  4px 4px 8px #555555,
     -4px -4px 8px #7ed2d2;
-    margin: 0px 20px;
+    margin: 0px 2px;
 }
 .btn.small{
     width: 26px;
     height: 26px;
-    margin: 5px 0px 0px 15px;
 }
 .btn.big{
-    margin-left: 15px;
     width: 85px;
     height: 85px;
     box-shadow:  8px 8px 20px #555555,
@@ -45,16 +41,17 @@ body{
 }
 canvas{
     background-color: #9facaa;
-    margin: auto;
     margin-top: 10px;
     width: 66%;
     border: 20px inset;
     border-color: #0a90bf #4dbde3 #3ab3d8 #019CD6;
 }
 .controller{
+    width: 85%;
+    margin-left: 8%;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
 </style>
@@ -70,7 +67,7 @@ canvas{
 <div class="controller">
     <div>
         <button class="btn" key="rotate">上</button><br>
-        <button class="btn" key="left">左</button>
+        <button class="btn" key="left">左</button>&emsp;&emsp;
         <button class="btn" key="right">右</button><br>
         <button class="btn" key="down">下</button>
     </div>
