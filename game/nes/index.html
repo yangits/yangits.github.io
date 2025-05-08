@@ -98,7 +98,7 @@ const ScreenWidth = 256;
 const ScreenHeight = 240;
 const canvasGame = document.getElementById("game");
 const Gamectx = canvasGame.getContext("2d");
-Gamectx.font = "20px Arial";
+Gamectx.font = "16px Arial";
 const roms=[
     ['超级玛丽', 'SuperMario.nes'],
     ['超级玛丽无敌', 'SuperMariowd.nes'],
@@ -111,6 +111,7 @@ const roms=[
     ['魂斗罗2无限命', 'Contra1-2wd.nes'],
     ['魂斗罗6无限命', 'Contra1-6wd.nes'],
     ['魂斗罗7无限命', 'Contra1-7wd.nes'],
+    ['双截龙2', 'DoubleDragon2.nes'],
     ['冒险岛', 'maoixandao.nes'],
     ['冒险岛无敌', 'maoixandaowd.nes'],
     ['松鼠大作战', 'songshu.nes'],
@@ -131,10 +132,10 @@ let romdex=0,game=false;
 function setMenu(){
     Gamectx.clearRect(0, 0, ScreenWidth, ScreenHeight);
     Gamectx.fillStyle = "#666";
-    Gamectx.fillRect(0, 0, ScreenWidth, 35);
+    Gamectx.fillRect(0, 0, ScreenWidth, 28);
     Gamectx.fillStyle = '#000';
     for(let i=romdex;i<roms.length;i++){
-        Gamectx.fillText(i+1+"、"+roms[i][0], 10,30*(i-romdex)+25);
+        Gamectx.fillText(i+1+"、"+roms[i][0], 10,26*(i-romdex)+20);
     }
 }
 var image = Gamectx.getImageData(0, 0, ScreenWidth, ScreenHeight);
@@ -143,7 +144,7 @@ var AudioCont, bufferSize = 8*1024;
 var SampleMask = 8*1024 - 1;
 var audio_samples_L = new Float32Array(SampleMask+1);
 var audio_samples_R = new Float32Array(SampleMask+1);
-var audio_write = 0, audio_read = 0, romObjs={};
+var audio_write = 0, audio_read = 0, romObjs=[];
 var nes = new jsnes.NES({
     onFrame: function (framebuffer_24){
         for (var i = 0; i < ScreenWidth * ScreenHeight; i++) {
@@ -166,8 +167,8 @@ async function nes_init(rom_data){
     var ArBuffer = new ArrayBuffer(image.data.length);
     framebuffer_u8 = new Uint8ClampedArray(ArBuffer);
     framebuffer_u32 = new Uint32Array(ArBuffer);
-    AudioCont = new (window.AudioContext || window.webkitAudioContext)();
-    if(!romObjs[roms[romdex][1]]){nes.loadROM(rom_data);}else{nes.fromJSON(romObjs[roms[romdex][1]])}
+    AudioCont = new (window.AudioContext || window.webkitAudioContext)({sampleRate: 44100});
+    if(romObjs[0]!=romdex){nes.loadROM(rom_data);}else{nes.fromJSON(romObjs[1])}
     (function loop(){if(!game)return;nes.frame();setTimeout(loop, 12);})();
     onAnimationFrame();startAudioLoop();
 }
@@ -240,16 +241,14 @@ function updatePosition(e){
     }else{
         clientX=e.clientX;
         clientY=e.clientY;
-    }
-    // 计算相对位置 限制摇杆移动范围
+    }// 计算相对位置 限制摇杆移动范围
     let x = clientX - rect.left - radius;
     let y = clientY - rect.top - radius;
     const distance = Math.sqrt(x * x + y * y);
     if (distance > radius) {
         x = x / distance * radius;
         y = y / distance * radius;
-    }
-    // 更新摇杆位置 计算角度（0-360度） 检测方向
+    }// 更新摇杆位置 计算角度（0-360度） 检测方向
     handle.style.transform = `translate(${x}px, ${y}px)`;
     const angle = (Math.atan2(-y, x) * 180 / Math.PI + 360) % 360;
     const direction = directions.find(d => angle >= d.min && angle < d.max);
@@ -288,15 +287,17 @@ function touchEvent(callback, key){
     case "bb":case "j":case "J":callback(1, jsnes.Controller.BUTTON_B); break;
     // case "select":case "Tab":callback(1, jsnes.Controller.BUTTON_SELECT); break;
     case "start":case "Enter":callback(1, jsnes.Controller.BUTTON_START); break;
-    case "reset":case "r":case "R":romObjs[roms[romdex][1]]=nes.toJSON();AudioCont.close();game=false;setMenu(); break;
+    case "reset":case "r":case "R":romObjs=[romdex,nes.toJSON()];AudioCont.close();game=false;setMenu(); break;
     }
 }
 function gametouch(key){
     if(key==="rocker"){rockbt=rockbt?false:true;handle.style.display=rockbt?"":"none";}
     if (game)return;
     switch (key) {
-        case "up":case "w":case "W":romdex=romdex>0?romdex-=1:0;setMenu(); break;
-        case "down":case "s":case "S":romdex=romdex<roms.length-1?romdex+=1:roms.length-1;setMenu(); break;
+        case "up":case "w":case "W":romdex=romdex>0?romdex-=1:roms.length-1;setMenu(); break;
+        case "down":case "s":case "S":romdex=romdex<roms.length-1?romdex+=1:0;setMenu(); break;
+        case "left":case "a":case "A":romdex=romdex>4?romdex-=5:roms.length-1;setMenu(); break;
+        case "right":case "d":case "D":romdex=romdex<roms.length-5?romdex+=5:0;setMenu(); break;
         case "start":case "Enter":nes_load_url(link+roms[romdex][1]);game=true; break;
     }
 }

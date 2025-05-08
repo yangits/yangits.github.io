@@ -86,13 +86,12 @@ backcanvas.height = Block * ROWS;
 Gamectx.font = "22px Arial";Gamectx.lineWidth=3;
 Gamectx.fillStyle = '#000';Gamectx.strokeStyle = '#000';
 backctx.font = "22px Arial";backctx.lineWidth=3;
-let fpsstep=0,lastfps=Date.now(),lastTime=Infinity,downCounter= 0,fps=60;
 let currentPiece,nextPiece,arena,score,Level,best,downspeed;
-let gameOver = false,Pause=false;
+let gameOver = false,Pause=false,lastTime=Infinity;
 const PIECES = [
-[[0,0], [1,0], [0,1], [1,1]],// O
+[[0, 0], [1,0], [0,1], [1,1]],// O
 [[-1,0], [0,0], [1,0], [2,0]],// I
-[[0,0], [1,0], [-1,1], [0,1]],// S
+[[-1,1], [0,0], [1,0], [0,1]],// S
 [[-1,0], [0,0], [1,0], [0,1]],// T
 [[-1,0], [0,0], [1,0], [1,1]],// L
 [[-1,0], [0,0], [1,0], [-1,1]],// J
@@ -101,7 +100,7 @@ function createPiece(){
     const piece = PIECES[Math.floor(Math.random() * PIECES.length)];
     return {
         shape: piece,
-        x: Math.floor(COLS/2) - 1,
+        x: Math.floor(COLS/2-1),
         y: 0
     };
 }
@@ -135,8 +134,7 @@ function backdraw(){
     backctx.fillText(Level, Block * COLS+10,Block*6);
     backctx.fillText("Best", Block * COLS+10,Block*12.5);
     backctx.fillText(best, Block * COLS+10,Block*14);
-    if(Pause)backctx.fillText("PAUSE", Block * COLS+10,Block*16);
-    backctx.fillText("FPS", Block * COLS+10,Block*18);
+    if(Pause)backctx.fillText("Pause", Block * COLS+10,Block*16);
 }
 function draw(){
     Gamectx.clearRect(0, 0, Gamecanvas.width, Gamecanvas.height);
@@ -147,7 +145,6 @@ function draw(){
         currentPiece.shape.forEach(Block =>{
             drawBlock(Gamectx,currentPiece.x + Block[0], currentPiece.y + Block[1]);});
     }
-    Gamectx.fillText(fps, Block * COLS+10,Block*19.5);
 }
 function isCollision(piece, offsetX, offsetY){
     return piece.shape.some(Block => {
@@ -200,8 +197,7 @@ function moveRight(){
 }
 function moveDown(){
     if (Pause || gameOver) return;
-    if (!isCollision(currentPiece, 0, 1)){currentPiece.y++;}
-      else{downCounter=1000;}
+    if (!isCollision(currentPiece, 0, 1)){currentPiece.y++;}else{lastTime=0;}
 }
 function clearItem(){
     localStorage.removeItem("arena");
@@ -222,14 +218,14 @@ function loadGame(){
         JSON.parse(localStorage.getItem("arena")):
         Array(ROWS).fill().map(() => Array(COLS).fill(0));
     score = Itemval("score",0);Level=Itemval("Level",0);best=Itemval("best",0);
-    downCounter=0;downspeed=(0.8-Level*0.001)**Level*1000;
+    downspeed=(0.8-Level*0.001)**Level*1000;
     currentPiece = createPiece();
     nextPiece =  createPiece();
     backdraw();update();
 }
 function startGame(){
     if(gameOver){
-        gameOver = false;loadGame();
+        gameOver = false;lastTime = Date.now();loadGame();
     }else{
         Pause=Pause?false:true;
         backdraw();update();
@@ -239,12 +235,7 @@ function resetGame(){
     Pause=false;gameOver = true;clearItem();loadGame();
 }
 function update(){
-    downCounter += Date.now()-lastTime;
-    lastTime = Date.now();fpsstep++;
-    if(fpsstep>60){
-        fps = Math.round(1000/(Date.now()-lastfps)*fpsstep);
-        lastfps=Date.now();fpsstep=0;}
-    if(downCounter > downspeed){
+    if(Date.now()-lastTime > downspeed){
         if(!isCollision(currentPiece, 0, 1)){
             currentPiece.y++;
         }else{
@@ -254,8 +245,7 @@ function update(){
             nextPiece = createPiece();
             saveItem();backdraw();
             if (isCollision(currentPiece, 0, 0))resetGame();
-        }
-        downCounter = 0;
+        }lastTime = Date.now();
     }
     draw();if(Pause || gameOver)return;
     requestAnimationFrame(update);
