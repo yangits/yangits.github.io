@@ -42,7 +42,7 @@ canvas{
 }
 .controller{
     width: 95%;
-    margin-left: 2%;
+    margin: 10px 2%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -72,6 +72,8 @@ canvas{
 <div style="text-align: right;margin-right: 10px;">
     <button class="btn small" key="rocker"></button>
     <span style="font-size: 12px;">摇杆</span>
+    <button class="btn small" key="select"></button>
+    <span style="font-size: 12px;">选择</span>    
     <button class="btn small" key="start"></button>
     <span style="font-size: 12px;">开始</span>
     <button class="btn small" key="reset"></button>
@@ -191,16 +193,18 @@ function startAudioLoop(){
     };
 }
 function nes_load_url(path){
+    Gamectx.clearRect(0, 0, ScreenWidth, ScreenHeight);
+    Gamectx.fillText("等待下载nes...", 10,20);
     var XML = new XMLHttpRequest();
     XML.open("GET", path);
     XML.overrideMimeType("text/plain; charset=x-user-defined");
     XML.onload = function () {
         if (this.status === 200) {
             nes_init(this.responseText);
-        }else{alert("服务器错误,rom下载失败");game=false;setMenu();}
+        }else{alert("服务器错误,nes下载失败");game=false;setMenu();}
     };
     XML.onerror = function () {
-        alert("网络错误,rom下载失败");
+        alert("网络错误,nes下载失败");
         game=false;setMenu();
     };
     XML.send();
@@ -285,7 +289,7 @@ function touchEvent(callback, key){
     case "rightdown":callback(1, jsnes.Controller.BUTTON_RIGHT);callback(1, jsnes.Controller.BUTTON_DOWN); break;  
     case "aa":case "k":case "K":callback(1, jsnes.Controller.BUTTON_A); break;
     case "bb":case "j":case "J":callback(1, jsnes.Controller.BUTTON_B); break;
-    // case "select":case "Tab":callback(1, jsnes.Controller.BUTTON_SELECT); break;
+    case "select":case "Tab":callback(1, jsnes.Controller.BUTTON_SELECT); break;
     case "start":case "Enter":callback(1, jsnes.Controller.BUTTON_START); break;
     case "reset":case "r":case "R":romObjs=[romdex,nes.toJSON()];AudioCont.close();game=false;setMenu(); break;
     }
