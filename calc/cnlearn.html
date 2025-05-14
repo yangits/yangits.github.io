@@ -84,7 +84,7 @@ function char_audio(){
 	var char_pinyin =char_cn.spell("array",'tone',"flat");
 	function plays(){
 		if (i<char_pinyin.length){
-			myAudio.src="https://yangits.github.io/data/voice/"+char_pinyin[i].replace("0","5")+".mp3";
+			myAudio.src="https://yangitsdata.pages.dev/voice/"+char_pinyin[i].replace("0","5")+".mp3";
 			myAudio.load(); myAudio.play();
 		}
 		i++;

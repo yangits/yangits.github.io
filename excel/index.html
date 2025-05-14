@@ -41,9 +41,9 @@
     var xs =x_spreadsheet('#spreadsheet',options)
             .loadData({name:'sheet1',freeze:'A1',merges:['A1:A1'],rows:data_obj(data)})
             .change(data => {});
-    xs.on('cell-selected', (text,cell, ri, ci) => {
-        xs.cellText(3, 3, text.text).reRender();
-        })
+    // xs.on('cell-selected', (text,cell, ri, ci) => {
+    //     xs.cellText(3, 3, text.text).reRender();
+    //     })
     function setData(){
         xs.cellText(2, 3, xs.cell(1, 1).text).reRender();
     }
