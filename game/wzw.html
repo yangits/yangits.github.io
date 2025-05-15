@@ -267,6 +267,9 @@ document.addEventListener('touchstart', (event) =>{
 document.addEventListener('touchend', (event) =>{
     event.target.closest('button').classList.remove('active');
     isPressed[event.target.getAttribute("key")]= false;});
+document.addEventListener('touchcancel', (event) =>{
+    event.target.closest('button').classList.remove('active');
+    isPressed[event.target.getAttribute("key")]= false;});
 function touchEvent(key){
     if(gameOver){
         if(key==="left"){Level=Level>0?Level-1:15;}

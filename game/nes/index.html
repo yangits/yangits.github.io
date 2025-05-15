@@ -274,6 +274,11 @@ document.addEventListener('touchend', (event) => {
     event.target.closest('button').classList.remove('active');
     touchEvent(nes.buttonUp, key)
 });
+document.addEventListener('touchcancel', (event) => {
+    key=event.target.getAttribute("key");
+    event.target.closest('button').classList.remove('active');
+    touchEvent(nes.buttonUp, key)
+});
 function touchEvent(callback, key){
     if (!game)return;
     switch (key) {
