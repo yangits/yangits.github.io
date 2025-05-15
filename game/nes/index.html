@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="renderer" content="webkit">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
 <title>nes游戏厅</title>
 <style>
@@ -131,7 +130,7 @@ const roms=[
     ['彩虹岛', 'caihong.nes'],
     ['雪人兄弟', 'SnowBrothers(E).nes']]
 let romdex=0,game=false;
-function setMenu(){
+function setMenu(){game=false;
     Gamectx.clearRect(0, 0, ScreenWidth, ScreenHeight);
     Gamectx.fillStyle = "#666";
     Gamectx.fillRect(0, 0, ScreenWidth, 28);
@@ -165,12 +164,11 @@ function onAnimationFrame(){
     Gamectx.putImageData(image, 0, 0);
     requestAnimationFrame(onAnimationFrame);
 }
-async function nes_init(rom_data){
+function nes_init(){
     var ArBuffer = new ArrayBuffer(image.data.length);
     framebuffer_u8 = new Uint8ClampedArray(ArBuffer);
     framebuffer_u32 = new Uint32Array(ArBuffer);
     AudioCont = new (window.AudioContext || window.webkitAudioContext)({sampleRate: 44100});
-    if(romObjs[0]!=romdex){nes.loadROM(rom_data);}else{nes.fromJSON(romObjs[1])}
     (function loop(){if(!game)return;nes.frame();setTimeout(loop, 12);})();
     onAnimationFrame();startAudioLoop();
 }
@@ -193,40 +191,40 @@ function startAudioLoop(){
     };
 }
 function nes_load_url(path){
+    if(romObjs[0]===romdex){nes.fromJSON(romObjs[1]);nes_init();return}
     Gamectx.clearRect(0, 0, ScreenWidth, ScreenHeight);
     Gamectx.fillText("等待下载nes...", 10,20);
     var XML = new XMLHttpRequest();
     XML.open("GET", path);
     XML.overrideMimeType("text/plain; charset=x-user-defined");
-    XML.onload = function () {
+    XML.onload = function (){
         if (this.status === 200) {
-            nes_init(this.responseText);
-        }else{alert("服务器错误,nes下载失败");game=false;setMenu();}
+            nes.loadROM(this.responseText);nes_init();
+        }else{alert("服务器错误,nes下载失败");setMenu();}
     };
-    XML.onerror = function () {
-        alert("网络错误,nes下载失败");
-        game=false;setMenu();
+    XML.onerror = function (){
+        alert("网络错误,nes下载失败");setMenu();
     };
     XML.send();
 }
 const joystick = document.getElementById('joystick');
 const handle = document.getElementById('handle');
 const radius = joystick.offsetWidth / 2; // 摇杆半径
-var Curdir = "",rockbt=true;
+var Curkey = "",rockbt=true;
 const directions = [
-    { name: 'right', min: 0, max: 22.5 },
-    { name: 'right', min: 337.5, max: 360 },
-    { name: 'rightup', min: 22.5, max: 67.5 },
-    { name: 'up', min: 67.5, max: 112.5 },
-    { name: 'leftup', min: 112.5, max: 157.5 },
-    { name: 'left', min: 157.5, max: 202.5 },
-    { name: 'leftdown', min: 202.5, max: 247.5 },
-    { name: 'down', min: 247.5, max: 292.5 },
-    { name: 'rightdown', min: 292.5, max: 337.5 }
+    { key: 'right', min: 0, max: 22.5 },
+    { key: 'right', min: 337.5, max: 360 },
+    { key: 'rightup', min: 22.5, max: 67.5 },
+    { key: 'up', min: 67.5, max: 112.5 },
+    { key: 'leftup', min: 112.5, max: 157.5 },
+    { key: 'left', min: 157.5, max: 202.5 },
+    { key: 'leftdown', min: 202.5, max: 247.5 },
+    { key: 'down', min: 247.5, max: 292.5 },
+    { key: 'rightdown', min: 292.5, max: 337.5 }
 ];
 function endDrag(){
-    if(!rockbt)return; touchEvent(nes.buttonUp, Curdir);
-    handle.style.transform = "translate(0, 0)";Curdir = "";
+    if(!rockbt)return; touchEvent(nes.buttonUp, Curkey);
+    handle.style.transform = "translate(0, 0)";Curkey = "";
 }
 function updatePosition(e){
     if(!rockbt)return;
@@ -256,9 +254,9 @@ function updatePosition(e){
     handle.style.transform = `translate(${x}px, ${y}px)`;
     const angle = (Math.atan2(-y, x) * 180 / Math.PI + 360) % 360;
     const direction = directions.find(d => angle >= d.min && angle < d.max);
-    if(Curdir!=direction.name){
-        touchEvent(nes.buttonUp, Curdir);Curdir=direction.name;
-        touchEvent(nes.buttonDown, Curdir);
+    if(Curkey!=direction.key){
+        touchEvent(nes.buttonUp, Curkey);Curkey=direction.key;
+        touchEvent(nes.buttonDown, Curkey);
     }
 }
 joystick.addEventListener('touchstart',updatePosition);
@@ -291,7 +289,7 @@ function touchEvent(callback, key){
     case "bb":case "j":case "J":callback(1, jsnes.Controller.BUTTON_B); break;
     case "select":case "Tab":callback(1, jsnes.Controller.BUTTON_SELECT); break;
     case "start":case "Enter":callback(1, jsnes.Controller.BUTTON_START); break;
-    case "reset":case "r":case "R":romObjs=[romdex,nes.toJSON()];AudioCont.close();game=false;setMenu(); break;
+    case "reset":case "r":case "R":romObjs=[romdex,nes.toJSON()];AudioCont.close();setMenu(); break;
     }
 }
 function gametouch(key){
@@ -300,9 +298,9 @@ function gametouch(key){
     switch (key) {
         case "up":case "w":case "W":romdex=romdex>0?romdex-=1:roms.length-1;setMenu(); break;
         case "down":case "s":case "S":romdex=romdex<roms.length-1?romdex+=1:0;setMenu(); break;
-        case "left":case "a":case "A":romdex=romdex>4?romdex-=5:roms.length-1;setMenu(); break;
-        case "right":case "d":case "D":romdex=romdex<roms.length-5?romdex+=5:0;setMenu(); break;
-        case "start":case "Enter":nes_load_url(link+roms[romdex][1]);game=true; break;
+        case "left":case "a":case "A":romdex=romdex>4?romdex-=5:0;setMenu(); break;
+        case "right":case "d":case "D":romdex=romdex<roms.length-5?romdex+=5:roms.length-1;setMenu(); break;
+        case "start":case "Enter":game=true;nes_load_url(link+roms[romdex][1]); break;
     }
 }
 setMenu();gametouch("rocker");
