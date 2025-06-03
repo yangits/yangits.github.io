@@ -130,13 +130,13 @@ function writeHtml(map) {
 function changeClearMineNum() {
     if (clearMineNum === ((col * row) - num)) {
         var allNum = 0;clearInterval(stopTime)
+        alert('你成功啦~！！晚上吃肉~~！');
         var stop = setInterval(function () {
             table[allNum].style.background = 'lightblue';
             table[allNum].style.color="transparent";allNum++;
             if (allNum >= table.length) {
                 clearInterval(stop);
-                setTimeout(()=>{alert('你成功啦~！！晚上吃肉~~！');
-                initializeGame(row, col, num)},50);
+                setTimeout(()=>{initializeGame(row, col, num)},50);
             }
         }, 0)
     }
