@@ -53,14 +53,21 @@ var drawText = function() {
     }}
     imgCtx.rotate(-45 * 3.14 / 180);
 };
-function Background(tolerance,rgb) {
-  const imageData = imgCtx.getImageData(0, 0, canvas.width, canvas.height);
-  var data = imageData.data;
-  for (let i = 0; i < data.length; i += 4) {
-    const diff = Math.sqrt((data[i] - 255)**2 +(data[i+1] - 255)**2 +(data[i+2] - 255)**2) / 441.672; // 归一化到0-1范围
-    if (diff <= tolerance) [data[i],data[i+1],data[i+2]] = rgb;
-  }
-  imgCtx.putImageData(imageData, 0, 0);
+function Background(rgb){
+    var imageData=imgCtx.getImageData(0, 0, canvas.width, canvas.height);
+    var data = imageData.data;
+    const visited = new Array(data.length/4).fill(false);
+    const queue = [0];
+    while(queue.length > 0){
+        const i = queue.shift();
+        if (i < 0 || i >= data.length || visited[i / 4]||
+            Math.sqrt((data[i] -255)**2 +(data[i+1] - 255)**2 +(data[i+2] - 255)**2) / 441.672 > 0.3)
+            continue;
+        visited[i / 4] = true;
+        [data[i],data[i+1],data[i+2]] = rgb;
+        queue.push(i-4, i+4, i+canvas.width*4);
+    }
+    imgCtx.putImageData(imageData, 0, 0);
 }
 image.addEventListener('change', function() {
     file = image.files[0];if (!file)return;
