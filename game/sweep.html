@@ -169,7 +169,8 @@ function show(x,y) {
     if (table[x*col+y].innerText !== '9') {
         makeWhite(x,y);autoFlag(x, y);
         if (clearMineNum === ((col * row) - num)){
-            setTimeout(()=>{game=false;alert('你成功啦~');},5)
+            setTimeout(()=>{clearInterval(stopTime);
+                game=false;alert('你成功啦~');},5)
         }
     } else{
         for(let i=0;i < table.length;i++){
@@ -179,7 +180,8 @@ function show(x,y) {
                 table[i].innerText = '💣';
             }
         }
-        setTimeout(()=>{game=false;alert('游戏失败')},5);
+        setTimeout(()=>{clearInterval(stopTime);
+            game=false;alert('游戏失败')},5);
     }
 }
 // 清除画面，然后写入新的画面
@@ -190,7 +192,6 @@ function initializeGame(row, col, num) {
     time.innerText = 0;clearMineNum = 0;
     clearInterval(stopTime);game=true;
     stopTime = setInterval(function () {
-        if(!game)clearInterval(stopTime);
         time.innerText -= -1;
     }, 1000)
     writeHtml(SweepMap(row, col, num));

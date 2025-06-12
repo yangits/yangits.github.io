@@ -39,12 +39,6 @@ input {
   border-radius: 5px;
   margin: 10px;
   border: 3px solid mediumblue;
-}
-.input0{
-  background: white;
-  color: mediumblue;
-}
-.input1{
   background: mediumblue;
   color: white;
 }
@@ -62,9 +56,9 @@ button{
 </head>
 <body>
 <div class="topbt">
-  <input class="input0" id="easybt" type="button" value="简单" onclick="easy();gameStart()" checked>
-  <input class="input1" id="hardbt" type="button" value="困难" onclick="hard();gameStart()">
-  <input class="input1" id="disgustbt" type="button" value="大师" onclick="disgust();gameStart()">
+  <input id="easybt" type="button" value="变易" onclick="change_dif(-1)" checked>
+  <input id="hardbt" type="button" value="难度3" onclick="gameStart()">
+  <input id="disgustbt" type="button" value="变难" onclick="change_dif(1)">
 </div>
 <b id="timer"></b>
 <div id="sudoku"></div>
@@ -104,6 +98,10 @@ button{
 <script>
 var a = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 var difficulty = 3;
+function change_dif(n){
+  difficulty =(n>0?difficulty<9:difficulty>0)?difficulty+n:difficulty;
+  hardbt.value='难度'+difficulty;gameStart();
+}
 var sudoku = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -115,17 +113,7 @@ var sudoku = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
-var flagnum = [
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0]
-];
+var flagnum = copy(sudoku);
 var sudoku0 = [];
 var answer = [];
 var table = [[], [], [], [], [], [], [], [], []];
@@ -382,27 +370,6 @@ function createGame() {
     }
   }
   sudoku0=copy(sudoku)
-}
-// 设置难度为简答
-function easy() {
-  difficulty = 3;
-  easybt.className="input0"
-  hardbt.className="input1"
-  disgustbt.className="input1"
-}
-//设置难度为困难
-function hard() {
-  difficulty = 5;
-  easybt.className="input1"
-  hardbt.className="input0"
-  disgustbt.className="input1"
-}
-// 设置难度为变态
-function disgust() {
-  difficulty = 7;
-  easybt.className="input1"
-  hardbt.className="input1"
-  disgustbt.className="input0"
 }
 // 查看答案
 function showAnswer() {
