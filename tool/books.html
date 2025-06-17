@@ -18,21 +18,28 @@
   margin: auto;
   word-wrap: break-word;
   word-break: break-all;
-  text-shadow: 10px 10px 10px #ff0000;
+  text-shadow: 10px 10px 10px #f00;
   max-width: 260px;
   margin-top: 50px;
 }
 .page{
   position: fixed; 
-  width: 100%;
+  width: calc(100% - 4px);
   height: 100%;
   backface-visibility: hidden;
+  border: 2px solid #8a713a;
+  background: linear-gradient(135deg, #2c1b47 0%, #1e1437 100%);
+  border-radius: 10px ;
+  box-shadow: 
+    0 0 30px rgba(174, 142, 56, 0.4),
+    0 20px 60px rgba(0, 0, 0, 0.7),
+    inset 0 0 30px rgba(0, 0, 0, 0.6);
 }
 .front{
   transform: rotateY(0deg);
 }
 .back{
-  transform: rotateY(-180deg);
+  transform: rotateY(180deg);
 }
 .book {
   position: relative;
@@ -42,7 +49,6 @@
   height: 480px;
   margin: auto;
   margin-top: 20px;
-  background-color: black;
 }
 </style>
 <body>
@@ -71,7 +77,7 @@
       "寻找一个指路人","能让你快乐的那个决定","着眼未来","不要等了","不要被情绪左右","不要做得太过分","改变自己","这是一个机会","问自己什么事最重要的","不要忧虑","你必须弥补这个缺点","忽略了一件显而易见的事","别太赶了","还有别的选择","不好忽视自己的力量","尽在掌握之中","无论怎样天塌不下来","这件事会给你带来极大的乐趣","无需纠结","老天也许在给你准备惊喜","是好的","这是最佳选择之一","没有更好的选择","铸造自己的辉煌","不一定","是个很好的想法","无尽的可能性","请谨慎考虑后果","这是一个明智的投资","可以从过去的经验中学习","请利用自己的优势","证明自己的潜力和价值","这是一个有潜力的想法","可以期待的未来","转移你的注意力","下一页才是你的人生答案"]
   function answer(){
     document.getElementById('txtpage').innerText=lines[Math.floor(Math.random()*412)]
-    document.getElementById('book').classList.add('back');
+    document.getElementById('book').style.add('back');
   }
   function re(){
     document.getElementById('book').classList.remove('back');
